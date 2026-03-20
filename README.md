@@ -35,8 +35,13 @@ npx skills add JoggAI-Tech/jogg-skills
 ### Local setup
 
 1. Copy `skills/jogg-lip-sync/.env.example` to `skills/jogg-lip-sync/.env`.
-2. Fill in `JOGG_API_KEY`.
+2. Fill in `JOGG_API_KEY`. 
 3. Ensure `curl` and `jq` are available in your shell.
+
+Get `JOGG_API_KEY`:
+
+- Buy an API plan: https://www.jogg.ai/api-pricing/
+- See how to find your API key: https://docs.jogg.ai/api-reference/v2/QuickStart/GettingStarted
 
 ### Example prompts
 
