@@ -28,7 +28,6 @@ Default env file:
 
 ## Required Inputs
 
-- `JOGG_API_KEY`
 - video input: URL or local file path
 - audio input: URL or local file path
 
