@@ -11,11 +11,6 @@ This repository is initialized as an Agent Skills project based on the Agent Ski
       SKILL.md
       run.sh
       .env.example
-    jogg-skill-template/
-      SKILL.md
-      scripts/
-      references/
-      assets/
 ```
 
 ## How to add a new skill
@@ -34,7 +29,6 @@ This repository is initialized as an Agent Skills project based on the Agent Ski
 
 ## Current scaffold
 
-- `jogg-skill-template` is a reusable template you can copy and adapt into domain-specific skills for JoggAI.
 - `jogg-lip-sync` is a runnable skill for creating or checking Jogg lip sync tasks with video and audio inputs.
 
 ## jogg-lip-sync
