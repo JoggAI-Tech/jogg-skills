@@ -1,6 +1,6 @@
 ---
 name: jogg-lip-sync
-description: Runs Jogg lip sync tasks with video and audio inputs, reuses existing tasks when possible, and polls task status until completion when needed. Use when the user wants to generate or check a lip sync result from video and audio.
+description: Runs Jogg lip sync using video and audio inputs, reuses tasks when available, and monitors status until completion. Use to generate or check lip sync results.
 license: Proprietary
 compatibility: Requires curl, jq, a local shell environment, and JOGG_API_KEY to call the Jogg API.
 metadata: { "author": "JoggAI", "version": "0.1.0", "openclaw": { "emoji": "🎙️", "requires": { "bins": ["curl", "jq"], "env": ["JOGG_API_KEY"] }, "primaryEnv": "JOGG_API_KEY", "os": ["darwin", "linux"], "install": [ { "id": "brew-jq", "kind": "brew", "formula": "jq", "bins": ["jq"], "label": "Install jq (brew)", "os": ["darwin", "linux"] } ] } }
