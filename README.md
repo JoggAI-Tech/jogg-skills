@@ -6,6 +6,10 @@ This repository is initialized as an Agent Skills project based on the Agent Ski
 
 ```text
 skills/
+  jogg-api/
+    SKILL.md
+    scripts/jogg-v2.sh
+    references/
   jogg-lip-sync/
     SKILL.md
     run.sh
@@ -22,7 +26,23 @@ npx skills add JoggAI-Tech/jogg-skills
 
 ## Current scaffold
 
+- `jogg-api` is the main JoggAI v2 skill for endpoint execution and workflow routing.
 - `jogg-lip-sync` is a runnable skill for creating or checking Jogg lip sync tasks with video and audio inputs.
+
+## jogg-api
+
+`jogg-api` is organized at `skills/jogg-api/` and includes:
+
+- `SKILL.md` for intent routing across JoggAI v2 APIs and workflows
+- `scripts/jogg-v2.sh` as the unified runtime
+- `references/endpoints.md` for endpoint lookup
+- `references/workflows.md` for workflow lookup
+
+### Local setup
+
+1. Copy `skills/jogg-api/.env.example` to `skills/jogg-api/.env`.
+2. Fill in `JOGG_API_KEY`.
+3. Ensure `curl` and `jq` are available in your shell.
 
 ## jogg-lip-sync
 
