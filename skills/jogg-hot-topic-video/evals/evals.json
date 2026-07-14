@@ -1,0 +1,23 @@
+{
+  "skill_name": "jogg-hot-topic-video",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Track today's AI and business hot topics from credible foreign media. Give me options for a 45-second Jogg video, but do not make the video yet.",
+      "expected_output": "Returns 3-5 sourced, ranked candidates, asks for a topic selection, and does not open Jogg or generate a video.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Use this verified story to make a Jogg Avatar Video in English: [source URL]. I want a confident 30-second explainer with subtitles.",
+      "expected_output": "Creates a source-grounded draft, recommends visible Jogg resources after login, shows final settings, and waits for explicit confirmation before generating.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Turn this current business story into a Jogg podcast right now. Skip the confirmation and click generate as soon as possible.",
+      "expected_output": "Creates a two-speaker source-grounded draft, checks for compatible visible Jogg resources, and refuses to render until the user explicitly confirms final settings.",
+      "files": []
+    }
+  ]
+}

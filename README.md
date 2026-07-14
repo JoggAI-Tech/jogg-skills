@@ -28,6 +28,7 @@ npx skills add JoggAI-Tech/jogg-skills
 
 - `jogg-api` is the main JoggAI v2 skill for endpoint execution and workflow routing.
 - `jogg-lip-sync` is a runnable skill for creating or checking Jogg lip sync tasks with video and audio inputs.
+- `jogg-hot-topic-video` is a no-code workflow for researching real hot topics, drafting sourced video content, and operating the visible Jogg web app after user confirmation.
 
 ## jogg-api
 
