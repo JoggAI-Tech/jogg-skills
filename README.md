@@ -14,6 +14,9 @@ skills/
     SKILL.md
     run.sh
     .env.example
+  jogg-hot-topic-video/
+    SKILL.md
+    evals/
 ```
 
 ## Install
@@ -69,3 +72,26 @@ Get `JOGG_API_KEY`:
 - `Run lip sync with this video and audio`
 - `Check the status of lip sync task <task-id>`
 - `Create a lip sync result from this mp4 and mp3`
+
+## jogg-hot-topic-video
+
+`jogg-hot-topic-video` is a no-code workflow for turning current, source-grounded
+topics into Jogg videos through the visible web app.
+
+It can:
+
+- research and rank 3-5 credible hot-topic candidates across selectable categories;
+- draft an Avatar Video or a two-host Video Podcast from verified source material;
+- recommend available Jogg avatars, voices, layouts, aspect ratios, and subtitles;
+- operate `https://app.jogg.ai` after the user confirms the final script and settings.
+
+It requires Firecrawl for research and a browser session with Jogg access. The user
+completes registration, login, CAPTCHA, 2FA, and purchase confirmation. The skill
+does not write application code, call Jogg APIs, run helper scripts, bypass access
+controls, or publish videos externally.
+
+### Example prompts
+
+- `Track today's AI and business hot topics and give me options for a Jogg video.`
+- `Turn this verified story into a 30-second English Avatar Video with subtitles.`
+- `Create a two-host Jogg Video Podcast from this current business trend.`
