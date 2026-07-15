@@ -134,4 +134,4 @@ run_happy_path
 run_failure_path
 run_timeout_path
 run_no_avatar_path
-printf 'video-studio mock tests passed\n'
+printf 'smart-slides mock tests passed\n'

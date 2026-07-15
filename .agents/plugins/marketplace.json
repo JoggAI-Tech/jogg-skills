@@ -5,10 +5,10 @@
   },
   "plugins": [
     {
-      "name": "video-studio",
+      "name": "smart-slides",
       "source": {
         "source": "local",
-        "path": "./plugins/video-studio"
+        "path": "./plugins/smart-slides"
       },
       "policy": {
         "installation": "AVAILABLE",

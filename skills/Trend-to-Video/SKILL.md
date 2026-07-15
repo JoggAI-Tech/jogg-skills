@@ -1,10 +1,10 @@
 ---
-name: jogg-hot-topic-video
+name: trend-to-video
 description: Use when the user wants to turn current hot topics, breaking news, or authoritative media stories into a Jogg Avatar Video or Video Podcast by researching real sources, drafting content, and operating app.jogg.ai in a browser. Use for requests such as "track hot topics", "make a news video in Jogg", "turn this trend into an avatar video", or "create a Jogg video podcast".
 compatibility: Requires Firecrawl for web research and a browser session with access to app.jogg.ai. The user must complete login, CAPTCHA, 2FA, and any purchase confirmation.
 ---
 
-# Jogg Hot Topic Video
+# trend-to-video
 
 Create a source-grounded Jogg video through content generation and visible browser actions only. This skill does not write application code, call Jogg APIs, use scripts, or publish content to social platforms.
 
@@ -86,22 +86,44 @@ Navigate to `https://app.jogg.ai` with the browser.
 - Recommend available assets using the selected language, topic tone, visible resource labels, and existing user preferences.
 - For Video Podcast, select exactly two compatible presenters and two distinct voices. If no pair is available, recommend Avatar Video rather than inventing resources.
 
-### 5. Confirm before generation
+#### Avatar Video: visible-browser workflow
 
-Show the final settings in chat before clicking Generate:
+Use this path for a confirmed one-presenter topic. Follow the labels currently visible in Jogg rather than assuming a saved URL, CSS selector, or a fixed list of assets.
+
+1. From Home, select **Create Video**, then **Avatar Video**. Use **Video Podcast** only when the approved draft needs a two-person dialogue; do not force a one-person script into that workflow.
+2. In **Select Avatar**, choose **Public Avatars** or **My Avatars** as appropriate. Use the visible category filters such as Business, Studio, Education, or News to narrow the list. Prefer a presenter whose visible setting and attire fit the topic; retain the exact visible avatar label for the final confirmation.
+3. Choose the target ratio before picking the presenter: use **9:16** for vertical social video and **16:9** for landscape. Confirm the selected ratio visually before continuing.
+4. After selecting an avatar, wait until the **Edit Script** step is visibly active. The screen should show the avatar preview, the script editor, the subtitles control, and the voice selector. If the UI has not transitioned, inspect the current screen rather than re-clicking a stale card.
+5. Use the **Script** editor for the approved source-grounded draft. Do not use **AI Writer** or **Randomize** to replace or expand a fact-checked script. Use **Upload Audio** only when the user explicitly supplies and approves a narration file.
+6. Open the visible voice selector and inspect **Public Voices** and **My Voices**. Filter for the approved script language, then choose a compatible voice based on the visible language, gender, age, and use-case labels. For Simplified Chinese, require a voice visibly marked `Chinese`, `Standard`, or `Chinese (Mandarin, Simplified)`; record its exact name. Do not leave an English default voice selected for a Chinese script.
+7. Set subtitles deliberately. The subtitles switch may be off by default. Verify its visible enabled state after changing it; if a hidden native control does not respond, use the visible switch container once and inspect the resulting state instead of retrying the hidden input.
+8. Check the editor counter and duration constraint before proceeding. Keep short-form drafts within the requested target duration even though the UI may allow substantially longer scripts (the observed editor exposes a 13,800-character / 15-minute maximum).
+9. After the user has approved the script and editor settings, select **Generate**. This opens the **Render Video** preflight dialog; it does not yet create the render job.
+10. In **Render Video**, set the **Filename** to the user-approved title. Verify the final **Aspect Ratio** (`9:16`, `16:9`, or `1:1`), output **Format**, and **JoggAI Watermark** state. Do not silently enable or disable the watermark, or substitute a filename, format, or ratio. The visible **Render** button is the action that creates the task.
+
+Treat resource selection and the Render Video dialog as configuration only. Do not paste an unapproved script, click **Generate**, click **Render**, or accept an upgrade/payment prompt while inspecting options. Preserve the current editor state or preflight dialog for handoff when the user has not given the final rendering confirmation.
+
+### 5. Confirm before rendering
+
+Show the final settings in chat before clicking Render:
 
 - format and title;
 - selected avatar(s) and voice(s);
 - script language, duration, aspect ratio, subtitles, and visible template/layout;
+- Render Video filename, output format, and watermark state;
 - source links used for the factual draft.
 
-The user must explicitly confirm the final settings. Do not render, regenerate, or publish based only on an earlier topic choice.
+Include the exact visible avatar and voice labels, selected aspect ratio, subtitle state, and the final script text. Explain that **Generate** opens a preflight dialog, while clicking **Render** in that dialog creates the Jogg render job and may consume account credits or trigger an upgrade/payment flow.
+
+The user must explicitly confirm the final settings and the **Render** action in the current workflow. An earlier topic approval, script approval, permission to browse/select resources, or approval to open the preflight dialog is not permission to render, regenerate, or publish.
 
 ### 6. Operate Jogg and report the result
 
-After confirmation, enter the approved script and settings in the visible Jogg UI, then start generation.
+After confirmation, enter the approved script and settings in the visible Jogg UI, open the Render Video preflight dialog, then select **Render**.
 
-- Wait by checking the visible project/task status; do not claim a video exists until Jogg shows a completed result.
+- Jogg may route to **Projects** after the task starts. In **Recent Creations**, identify the newly created card by its visible filename, recency, or matching thumbnail. Do not infer task status from an older card with a similar avatar.
+- Read the visible progress overlay on the new card, including percentage and estimated time. Check the same card for progress rather than creating another task while it is still processing.
+- Do not claim a video exists until Jogg shows a completed result. If the card shows **Failed**, report the visible error/status and ask before using **Try again**, since retrying can create another render job.
 - If the browser session disconnects, reconnect and resume from the existing project instead of recreating it.
 - On completion, return the Jogg project/result link, title, selected format, selected resources, and source links.
 - If generation fails, report the visible error and preserve the approved script/settings for a targeted retry.

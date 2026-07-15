@@ -14,7 +14,7 @@ skills/
     SKILL.md
     run.sh
     .env.example
-  jogg-hot-topic-video/
+  trend-to-video/
     SKILL.md
     evals/
 ```
@@ -31,7 +31,7 @@ npx skills add JoggAI-Tech/jogg-skills
 
 - `jogg-api` is the main JoggAI v2 skill for endpoint execution and workflow routing.
 - `jogg-lip-sync` is a runnable skill for creating or checking Jogg lip sync tasks with video and audio inputs.
-- `jogg-hot-topic-video` is a no-code workflow for researching real hot topics, drafting sourced video content, and operating the visible Jogg web app after user confirmation.
+- `trend-to-video` is a no-code workflow for researching real hot topics, drafting sourced video content, and operating the visible Jogg web app after user confirmation.
 
 ## jogg-api
 
@@ -73,9 +73,9 @@ Get `JOGG_API_KEY`:
 - `Check the status of lip sync task <task-id>`
 - `Create a lip sync result from this mp4 and mp3`
 
-## jogg-hot-topic-video
+## trend-to-video
 
-`jogg-hot-topic-video` is a no-code workflow for turning current, source-grounded
+`trend-to-video` is a no-code workflow for turning current, source-grounded
 topics into Jogg videos through the visible web app.
 
 It can:

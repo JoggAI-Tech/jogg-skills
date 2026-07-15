@@ -1,0 +1,26 @@
+{
+  "name": "smart-slides",
+  "version": "0.1.0+codex.20260715075633",
+  "description": "Create long-form smart-slides videos with Jogg talking-avatar opening and closing shots.",
+  "author": {
+    "name": "Local developer"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "smart-slides",
+    "shortDescription": "Produce Jogg-powered smart-slides videos locally.",
+    "longDescription": "Orchestrates local Jogg and Podcastor Video Studio services to create a planned, storyboarded, B-roll-led video with Jogg avatar scenes.",
+    "developerName": "Local developer",
+    "category": "Creativity",
+    "capabilities": [
+      "Write",
+      "Network",
+      "Interactive"
+    ],
+    "defaultPrompt": [
+      "Use smart-slides to create a 10 minute Chinese video with Jogg avatars only at the opening and closing.",
+      "Use smart-slides to check the status of my video run.",
+      "Use smart-slides to resume my incomplete video render."
+    ]
+  }
+}

@@ -1,12 +1,11 @@
 ---
-name: video-studio
-description: Create a long-form Video Studio project through local Podcastor and Jogg services. Use when the user asks to generate, continue, check, preview, or render a Video Studio video with Jogg talking avatars, B-roll, HTML/MG, or a final MP4.
+name: smart-slides
+description: Create a long-form smart-slides project through local Podcastor and Jogg services. Use when the user asks to generate, continue, check, preview, or render a smart-slides video with Jogg talking avatars, B-roll, HTML/MG, or a final MP4.
 license: Proprietary
-compatibility: Requires curl, jq, ffmpeg, a local shell, locally runnable Jogg and Podcastor source trees, and a valid Jogg web token or OpenAPI key.
 metadata: { "author": "JoggAI", "version": "0.1.0", "openclaw": { "requires": { "bins": ["curl", "jq", "ffmpeg"] }, "os": ["darwin", "linux"] } }
 ---
 
-# Video Studio
+# smart-slides
 
 Use this skill to turn a content request into a Jogg-assisted Video Studio MP4.
 
