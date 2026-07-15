@@ -1,0 +1,20 @@
+{
+  "name": "jogg-skills",
+  "interface": {
+    "displayName": "Jogg Skills"
+  },
+  "plugins": [
+    {
+      "name": "video-studio",
+      "source": {
+        "source": "local",
+        "path": "./plugins/video-studio"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Creativity"
+    }
+  ]
+}
