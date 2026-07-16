@@ -1,15 +1,15 @@
 {
   "name": "smart-slides",
-  "version": "0.1.0+codex.20260715075633",
-  "description": "Create long-form smart-slides videos with Jogg talking-avatar opening and closing shots.",
+  "version": "0.1.0+codex.20260716075915",
+  "description": "Create, edit, preview, and render standalone smart-slides videos locally with Jogg assets.",
   "author": {
     "name": "Local developer"
   },
   "skills": "./skills/",
   "interface": {
-    "displayName": "smart-slides",
-    "shortDescription": "Produce Jogg-powered smart-slides videos locally.",
-    "longDescription": "Orchestrates local Jogg and Podcastor Video Studio services to create a planned, storyboarded, B-roll-led video with Jogg avatar scenes.",
+    "displayName": "Smart Slides",
+    "shortDescription": "Build and render Jogg-powered smart slides locally.",
+    "longDescription": "Runs an extracted Video Studio editor and renderer locally, using Jogg for per-shot speech and selected avatar scenes plus optional Pexels or Pixabay B-roll.",
     "developerName": "Local developer",
     "category": "Creativity",
     "capabilities": [
@@ -18,9 +18,9 @@
       "Interactive"
     ],
     "defaultPrompt": [
-      "Use smart-slides to create a 10 minute Chinese video with Jogg avatars only at the opening and closing.",
-      "Use smart-slides to check the status of my video run.",
-      "Use smart-slides to resume my incomplete video render."
+      "\u751f\u6210\u4e00\u4e2a 10 \u5206\u949f\u89c6\u9891\uff0c\u6570\u5b57\u4eba\u53ea\u51fa\u73b0\u5728\u5f00\u573a\u548c\u7ed3\u5c3e\u3002",
+      "\u6253\u5f00\u5e76\u7f16\u8f91\u6211\u7684 Smart Slides \u9879\u76ee\u3002",
+      "\u7ee7\u7eed\u672a\u5b8c\u6210\u7684\u672c\u5730\u89c6\u9891\u6e32\u67d3\u3002"
     ]
   }
 }

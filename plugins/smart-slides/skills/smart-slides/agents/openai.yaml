@@ -1,0 +1,7 @@
+interface:
+  display_name: "Smart Slides"
+  short_description: "Create and render editable Jogg videos locally"
+  default_prompt: "Use $smart-slides to create a 10-minute Chinese video with the avatar only in the opening and closing shots."
+
+policy:
+  allow_implicit_invocation: true

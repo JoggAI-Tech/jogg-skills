@@ -1,86 +1,89 @@
 ---
 name: smart-slides
-description: Create a long-form smart-slides project through local Podcastor and Jogg services. Use when the user asks to generate, continue, check, preview, or render a smart-slides video with Jogg talking avatars, B-roll, HTML/MG, or a final MP4.
-license: Proprietary
-metadata: { "author": "JoggAI", "version": "0.1.0", "openclaw": { "requires": { "bins": ["curl", "jq", "ffmpeg"] }, "os": ["darwin", "linux"] } }
+description: Use when the user asks to create, continue, inspect, edit, preview, import, or render a long-form smart-slides or Video Studio video with Jogg voices, talking avatars, B-roll, HTML/MG, subtitles, BGM, or a local MP4.
 ---
 
-# smart-slides
+# Smart Slides
 
-Use this skill to turn a content request into a Jogg-assisted Video Studio MP4.
+Create and edit the existing Video Studio project format without a Podcastor source checkout or cloud renderer. Use `<plugin-root>/scripts/smart-slides.sh` for lifecycle operations.
 
-Run all operations through:
+## Interpret The Request
+
+Extract:
+
+- `topic`: required subject or source brief.
+- `duration_seconds`: convert minutes to seconds; default long-form requests to `600`.
+- `avatar_mode`: map user wording to `none`, `opening`, `opening_closing`, or `all`.
+- avatar persona: explicit avatar/voice IDs win. Otherwise infer professional/social, gender, and age from the subject.
+
+For an unspecified Chinese voice, choose the first available Chinese female voice. For an unspecified avatar, choose a public landscape avatar and progressively relax style, age, then gender filters if no candidate is available.
+
+## Generate Planning
+
+Read [planning-contracts.md](references/planning-contracts.md) before authoring a plan and [html-mg-contract.md](references/html-mg-contract.md) before authoring HTML/MG. These contracts are extracted from Podcastor's Video Studio planner at the source commit recorded in `extraction-manifest.json`.
+
+Before starting a new run, Codex must author a planning JSON and pass it with `--planning-file`. Persist it under `~/.codex/smart-slides/plans/` so a blocked or interrupted run can reuse it. Include the existing project fields `producer_analysis`, `production_requirement_document`, `creative_plan`, `script`, `script_director`, `director_document`, and non-empty `scene_groups`. Every shot needs topic-specific narration and render intent. The local normalizer validates scene durations, render contracts, and HTML/MG fields. Do not call an external LLM API.
+
+Never start paid generation with deterministic fallback prose. Without a planning file, the runner returns `blocked_planning` before project creation or Jogg submission. Author the missing plan, then continue the same run with `resume --run-id ... --planning-file ...`.
+
+## Run
+
+Preflight checks local tools, starts the bundled loopback-only API, and starts Jogg only when it is not already reachable:
 
 ```bash
-bash "scripts/video-studio.sh"
+bash "<plugin-root>/scripts/smart-slides.sh" preflight
 ```
 
-## User Intent
-
-Extract these values from the request:
-
-- `topic`: the requested subject. Required.
-- `duration`: convert minutes to seconds. Default to `600` seconds for a long video.
-- `avatar_mode`: `none`, `opening`, `opening_closing`, or `all`. Map “only at the opening and ending” to `opening_closing`.
-- `avatar_profile`: infer `style`, `gender`, and `age` from the content when possible. Explicit user preferences always win.
-
-For Chinese requests without an explicit voice, use the default Chinese female voice. For an avatar without an explicit persona, recommend a public landscape avatar based on the content:
-
-- Finance, technology, education, health, policy, or news: `professional`, adult.
-- Lifestyle, travel, fashion, beauty, food, or entertainment: `social`, young adult.
-- Use gender only when the user or content clearly requires it; otherwise use `female` to match the default voice.
-
-## Required Configuration
-
-The runner uses these defaults:
+Create a 10-minute project:
 
 ```bash
-export JOGG_REPO="/Users/cds-dn-137/Documents/golang/jogg-backend-srv"
-export PODCASTOR_REPO="/Users/cds-dn-137/Documents/golang/operation-Podcastor"
-export JOGG_BASE_URL="http://127.0.0.1:8000"
-export PODCASTOR_BASE_URL="http://127.0.0.1:8001"
-```
-
-Authenticate with either:
-
-- `JOGG_API_KEY`: an existing local Jogg OpenAPI access key.
-- `JOGG_WEB_TOKEN`: the local Jogg browser JWT. The runner exchanges it in memory through `/openapi_key`; it does not write the token or key to disk.
-
-Optional overrides: `JOGG_DEFAULT_AVATAR_ID`, `JOGG_DEFAULT_VOICE_ID`, `PODCASTOR_ENV_FILE`, `VIDEO_STUDIO_HERMES_REPO`, `JOGG_START_CMD`, and `PODCASTOR_START_CMD`.
-
-## Commands
-
-Preflight starts missing local services and verifies the available prerequisites:
-
-```bash
-bash "scripts/video-studio.sh" preflight
-```
-
-Create a video:
-
-```bash
-bash "scripts/video-studio.sh" run \
+bash "<plugin-root>/scripts/smart-slides.sh" run \
   --topic "人工智能如何改变制造业" \
   --duration-seconds 600 \
   --avatar-mode opening_closing \
   --avatar-style professional \
   --avatar-gender female \
-  --avatar-age adult
+  --avatar-age adult \
+  --planning-file "/absolute/path/to/plan.json"
 ```
 
-Check or resume a returned run ID:
+Use the returned ID for lifecycle actions:
 
 ```bash
-bash "scripts/video-studio.sh" status --run-id "vs-..."
-bash "scripts/video-studio.sh" resume --run-id "vs-..."
+bash "<plugin-root>/scripts/smart-slides.sh" status --run-id "ss-..."
+bash "<plugin-root>/scripts/smart-slides.sh" preview --run-id "ss-..."
+bash "<plugin-root>/scripts/smart-slides.sh" render --run-id "ss-..."
+bash "<plugin-root>/scripts/smart-slides.sh" resume --run-id "ss-..."
+bash "<plugin-root>/scripts/smart-slides.sh" resume --run-id "ss-..." --planning-file "/absolute/path/to/plan.json"
 ```
 
-## Execution Rules
+Import an existing Video Studio project JSON without schema migration:
 
-- Run `preflight` before `run` when local services may not already be running.
-- Never call Jogg or Podcastor with ad hoc commands when the runner supports the requested operation.
-- Treat JSON on stdout as the operation result. Progress and errors are on stderr.
-- Do not print, store, summarize, or expose `JOGG_WEB_TOKEN` or `JOGG_API_KEY`.
-- Avatar videos are generated only for selected shots. They are stripped of audio before upload to Podcastor, and `avatar_enabled` is disabled so the Hermes global avatar does not appear elsewhere.
-- If a poll limit is reached, return the `run_id`; use `resume` rather than submitting a second external task.
-- A `waiting_render_worker` result is an environment problem, not a completed video.
+```bash
+bash "<plugin-root>/scripts/smart-slides.sh" import --file "/absolute/path/project.json"
+```
+
+Open `editor_url` to edit the timeline, B-roll, HTML/MG, avatar scope, narration overrides, and BGM. Open `composition_preview_url` for the extracted composition preview. `final_video_url` is a local MP4.
+
+## Jogg And Sound
+
+Read [jogg-endpoints.md](references/jogg-endpoints.md) for request shapes and [jogg-workflows.md](references/jogg-workflows.md) for polling.
+
+- Every shot uses `/open/v2/create_video_from_avatar` with `voice.type="script"`.
+- There is no standalone TTS request.
+- FFmpeg extracts audio from every completed Jogg video.
+- Only `avatar_mode` target shots retain a muted avatar video. Non-target Jogg video images are deleted after audio extraction.
+- A saved `video_id` is a paid-task checkpoint. Always use `resume`; never resubmit it.
+- A `submission_unknown` task means Jogg may have accepted the paid POST but its response was lost. Stop and report `blocked_jogg_recovery`; never clear or resubmit that task automatically.
+
+## Authentication
+
+Use either `JOGG_API_KEY` or `JOGG_WEB_TOKEN`. The web token reads `/openapi_key` and only calls `/openapi_key/generate` when no key exists. Credentials stay in process memory and never enter run state or stdout.
+
+## Boundaries
+
+Read [runtime-boundary.md](references/runtime-boundary.md). The only business network requests allowed are Jogg and explicitly configured Pexels/Pixabay requests. Never call Podcastor remote APIs, Hermes, COS, DeepSeek, SiliconFlow, another LLM API, standalone TTS, a remote renderer, or a runtime CDN.
+
+Stdout is redacted JSON. Progress goes to stderr. A `blocked_planning`, `waiting_jogg`, `blocked_broll`, or `waiting_render` result is resumable and must be returned with its `run_id`. For `blocked_planning`, create the contract-compliant JSON before resuming; do not enable deterministic fallbacks for a user run.
+
+Rendering requires a locally available HyperFrames `0.7.59`. The runner uses `npx --no-install hyperframes@0.7.59` or `SMART_SLIDES_HYPERFRAMES_BIN`; do not allow npm installation or runtime package downloads.
