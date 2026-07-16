@@ -1,6 +1,6 @@
 # Jogg API Workflow Index
 
-These workflows mirror the existing `jogg-api` guides. Smart Slides uses the local `/open/v2` prefix and implements the bounded avatar-video polling in `scripts/smart-slides.sh` so run checkpoints include every shot's `video_id`.
+These workflows mirror the existing `jogg-api` guides. Smart Slides uses the public `https://api.jogg.ai/v2` API and implements bounded avatar-video polling in `scripts/smart-slides.sh` so run checkpoints include every shot's `video_id`.
 
 ## `upload-media`
 

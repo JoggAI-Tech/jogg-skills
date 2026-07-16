@@ -12,7 +12,7 @@ The plugin ships a source snapshot of Video Studio and does not import Podcastor
 
 ## Allowed Requests
 
-- Local Jogg identity/OpenAPI key, voices, avatars, avatar video submission/status, and Jogg result download.
+- Public Jogg OpenAPI voices, avatars, avatar video submission/status, and Jogg result download through `https://api.jogg.ai`.
 - Pexels and Pixabay search/download only when their keys are configured and material is requested.
 - Package/browser installation during explicit preflight setup is tooling setup, not a video business API.
 

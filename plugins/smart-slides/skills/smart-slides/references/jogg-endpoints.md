@@ -1,6 +1,6 @@
 # Jogg API Endpoint Index
 
-This reference is copied from the existing `jogg-api` skill. Its canonical paths use `/v2`; the local Jogg backend mounts the same operations under `/open/v2`. Smart Slides only uses voices, public avatars, `create_video_from_avatar`, and `avatar_video/{id}`.
+This reference is copied from the existing `jogg-api` skill. Smart Slides calls the public `https://api.jogg.ai/v2` API directly. It only uses voices, public avatars, `create_video_from_avatar`, and `avatar_video/{id}`.
 
 Smart Slides always sends `voice.type="script"`. It never calls a standalone TTS operation or the custom-audio workflow.
 

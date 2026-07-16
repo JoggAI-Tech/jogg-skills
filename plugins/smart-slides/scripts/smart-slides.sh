@@ -29,14 +29,14 @@ load_env_file() {
 load_env_file "$PLUGIN_ROOT/.env"
 load_env_file "$HOME/.codex/smart-slides/.env"
 
-: "${JOGG_REPO:=/Users/cds-dn-137/Documents/golang/jogg-backend-srv}"
-: "${JOGG_BASE_URL:=http://127.0.0.1:8000}"
+: "${JOGG_BASE_URL:=https://api.jogg.ai}"
 : "${SMART_SLIDES_HOME:=$HOME/.codex/smart-slides}"
 : "${SMART_SLIDES_DATA_DIR:=$SMART_SLIDES_HOME/data}"
 : "${SMART_SLIDES_STATE_DIR:=$SMART_SLIDES_HOME/runs}"
 : "${SMART_SLIDES_SERVICE_FILE:=$SMART_SLIDES_HOME/service.json}"
 : "${SMART_SLIDES_TOOL_DIR:=$SMART_SLIDES_HOME/bin}"
 : "${SMART_SLIDES_JOGG_POLL_INTERVAL_SECONDS:=10}"
+: "${SMART_SLIDES_JOGG_DOWNLOAD_MAX_SECONDS:=120}"
 : "${SMART_SLIDES_RENDER_POLL_INTERVAL_SECONDS:=5}"
 : "${SMART_SLIDES_MAX_JOGG_WAIT_SECONDS:=1800}"
 : "${SMART_SLIDES_MAX_RENDER_WAIT_SECONDS:=7200}"
@@ -178,7 +178,7 @@ jogg_submit_request() {
   local body=$1 body_file
   body_file=$(mktemp)
   if ! HTTP_STATUS=$(curl -sS -o "$body_file" -w '%{http_code}' --connect-timeout 10 --max-time 180 \
-    -X POST "${JOGG_BASE_URL%/}/open/v2/create_video_from_avatar" \
+    -X POST "${JOGG_BASE_URL%/}/v2/create_video_from_avatar" \
     -H "X-Api-Key: $JOGG_EFFECTIVE_API_KEY" -H 'Content-Type: application/json' --data "$body"); then
     HTTP_STATUS=000
     HTTP_BODY=''
@@ -193,7 +193,6 @@ jogg_submit_request() {
 
 http_status() { curl -sS -o /dev/null -w '%{http_code}' --connect-timeout 2 --max-time 4 "$1" 2>/dev/null || true; }
 local_service_ready() { [[ "$(http_status "${SMART_SLIDES_BASE_URL%/}/health")" =~ ^2[0-9][0-9]$ ]]; }
-jogg_reachable() { [[ "$(http_status "${JOGG_BASE_URL%/}/openapi_key")" =~ ^(200|401|403|405)$ ]]; }
 
 find_free_port() {
   python3 - <<'PY'
@@ -247,21 +246,6 @@ start_local_service() {
   jq -n --arg base_url "$SMART_SLIDES_BASE_URL" --argjson pid "$pid" '{base_url:$base_url,pid:$pid}' > "$SMART_SLIDES_SERVICE_FILE"
 }
 
-start_jogg_if_needed() {
-  jogg_reachable && return 0
-  [[ -d "$JOGG_REPO" ]] || die "Jogg is not reachable and JOGG_REPO does not exist"
-  mkdir -p "$SMART_SLIDES_HOME/logs"
-  log "starting local Jogg service"
-  if [[ -n "${JOGG_START_CMD:-}" ]]; then
-    (cd "$JOGG_REPO" && exec /bin/bash -lc "$JOGG_START_CMD") > "$SMART_SLIDES_HOME/logs/jogg.log" 2>&1 &
-  else
-    (cd "$JOGG_REPO" && exec go run .) > "$SMART_SLIDES_HOME/logs/jogg.log" 2>&1 &
-  fi
-  local attempt
-  for attempt in $(seq 1 60); do jogg_reachable && return 0; sleep 1; done
-  die "Jogg did not become ready; see $SMART_SLIDES_HOME/logs/jogg.log"
-}
-
 openapi_response_ok() {
   [[ "$HTTP_STATUS" =~ ^2[0-9][0-9]$ ]] && [[ "$(jq -r '(.code // 0) == 0' <<< "$HTTP_BODY")" == true ]]
 }
@@ -269,7 +253,7 @@ openapi_response_ok() {
 validate_jogg_api_key() {
   local candidate=$1
   [[ -n "$candidate" ]] || return 1
-  request GET "${JOGG_BASE_URL%/}/open/v2/voices?language=chinese&gender=female&page=1&page_size=1" '' "X-Api-Key: $candidate"
+  request GET "${JOGG_BASE_URL%/}/v2/voices?language=chinese&gender=female&page=1&page_size=1" '' "X-Api-Key: $candidate"
   if openapi_response_ok; then
     JOGG_EFFECTIVE_API_KEY=$candidate
     return 0
@@ -280,20 +264,13 @@ validate_jogg_api_key() {
 
 resolve_jogg_api_key() {
   [[ -n "$JOGG_EFFECTIVE_API_KEY" ]] && return
-  if [[ -n "${JOGG_API_KEY:-}" ]] && validate_jogg_api_key "$JOGG_API_KEY"; then return; fi
-  [[ -z "${JOGG_API_KEY:-}" ]] || log "configured Jogg OpenAPI key was rejected; trying the browser-login token"
-  [[ -n "${JOGG_WEB_TOKEN:-}" ]] || die "Jogg OpenAPI key is invalid. Sign in to Jogg again, then set a fresh JOGG_WEB_TOKEN or JOGG_API_KEY."
-  request GET "${JOGG_BASE_URL%/}/openapi_key" '' "Authorization: Bearer $JOGG_WEB_TOKEN"
-  openapi_response_ok || die "Jogg browser-login token is expired or invalid. Sign in again, then update JOGG_WEB_TOKEN."
-  local access_key
-  access_key=$(jq -r '.data.access_key // .access_key // empty' <<< "$HTTP_BODY")
-  if [[ -z "$access_key" ]]; then
-    request POST "${JOGG_BASE_URL%/}/openapi_key/generate" '' "Authorization: Bearer $JOGG_WEB_TOKEN"
-    openapi_response_ok || die "Jogg browser-login token cannot generate an OpenAPI key. Sign in again, then update JOGG_WEB_TOKEN."
-    access_key=$(jq -r '.data.access_key // .access_key // empty' <<< "$HTTP_BODY")
+  if [[ -z "${JOGG_API_KEY:-}" ]]; then
+    if [[ -n "${JOGG_WEB_TOKEN:-}" ]]; then
+      die "JOGG_WEB_TOKEN cannot authenticate the public Jogg API. Set JOGG_API_KEY from the Jogg OpenAPI dashboard."
+    fi
+    die "JOGG_API_KEY is required for ${JOGG_BASE_URL%/}. Create an OpenAPI key in Jogg, then add it to ~/.codex/smart-slides/.env."
   fi
-  [[ -n "$access_key" ]] || die "Jogg did not return an OpenAPI key. Sign in again, then update JOGG_WEB_TOKEN."
-  validate_jogg_api_key "$access_key" || die "Jogg returned an OpenAPI key without /open/v2 permission. Sign in again, then retry."
+  validate_jogg_api_key "$JOGG_API_KEY" || die "Jogg rejected JOGG_API_KEY at ${JOGG_BASE_URL%/}. Check the key and its API entitlement."
 }
 
 resolve_profile() {
@@ -303,7 +280,7 @@ resolve_profile() {
   [[ -n "$saved_voice" ]] && VOICE_ID=$saved_voice
   [[ -n "$saved_avatar" ]] && AVATAR_ID=$saved_avatar
   if [[ -z "$VOICE_ID" ]]; then
-    jogg_request GET '/open/v2/voices?language=chinese&gender=female&page=1&page_size=20'
+    jogg_request GET '/v2/voices?language=chinese&gender=female&page=1&page_size=20'
     VOICE_ID=$(jq -r '(.data.voices // .voices // []) | map(.voice_id // .id // empty) | map(select(length>0)) | .[0] // empty' <<< "$HTTP_BODY")
   fi
   [[ -n "$VOICE_ID" ]] || die "Jogg has no available Chinese female voice"
@@ -315,7 +292,7 @@ resolve_profile() {
       "aspect_ratio=landscape"
     )
     for query in "${queries[@]}"; do
-      jogg_request GET "/open/v2/avatars/public?$query&page=1&page_size=20"
+      jogg_request GET "/v2/avatars/public?$query&page=1&page_size=20"
       candidate=$(jq -r '(.data.avatars // .avatars // []) | map(.id // .avatar_id // empty) | map(select(tostring|length>0)) | .[0] // empty' <<< "$HTTP_BODY")
       [[ -z "$candidate" ]] || { AVATAR_ID=$candidate; break; }
     done
@@ -433,7 +410,7 @@ wait_for_jogg_video() {
   local shot_id=$1 video_id=$2 started now status url
   started=$(date +%s)
   while :; do
-    jogg_request GET "/open/v2/avatar_video/$video_id"
+    jogg_request GET "/v2/avatar_video/$video_id"
     status=$(jq -r '.data.status // .status // empty' <<< "$HTTP_BODY" | tr '[:upper:]' '[:lower:]')
     url=$(jq -r '.data.video_url // .video_url // empty' <<< "$HTTP_BODY")
     state_mutate '.jogg_tasks[$shot].status=$status' --arg shot "$shot_id" --arg status "$status"
@@ -453,6 +430,22 @@ path_data_url() {
   printf '/data/%s' "${path#"$SMART_SLIDES_DATA_DIR/"}"
 }
 
+download_jogg_result() {
+  local shot_id=$1 video_url=$2 destination=$3 attempt delay
+  for attempt in 1 2 3 4 5; do
+    if curl -fsSL --connect-timeout 15 --max-time "$SMART_SLIDES_JOGG_DOWNLOAD_MAX_SECONDS" "$video_url" -o "$destination.part"; then
+      mv "$destination.part" "$destination"
+      return 0
+    fi
+    rm -f "$destination.part"
+    [[ "$attempt" == 5 ]] && break
+    delay=$((attempt * 5))
+    log "Jogg result for $shot_id is not downloadable yet; retrying in ${delay}s"
+    sleep "$delay"
+  done
+  return 1
+}
+
 realize_jogg_asset() {
   local shot_id=$1 duration=$2 video_url=$3 project_id target source audio avatar_dir
   project_id=$(state_get '.project_id')
@@ -462,7 +455,7 @@ realize_jogg_asset() {
   audio="$avatar_dir/$shot_id-voice.m4a"
   target=$(jq -r --arg id "$shot_id" '.avatar_shot_ids|index($id)!=null' "$STATE_PATH")
   log "downloading Jogg result for $shot_id"
-  curl -fsSL --connect-timeout 15 --max-time 900 "$video_url" -o "$source" || die "could not download Jogg result for $shot_id"
+  download_jogg_result "$shot_id" "$video_url" "$source" || die "could not download Jogg result for $shot_id"
   ffmpeg -y -v error -i "$source" -vn -c:a aac -b:a 192k "$audio" || die "could not extract Jogg audio for $shot_id"
   if [[ "$target" == true ]]; then
     local avatar="$avatar_dir/$shot_id-avatar.mp4"
@@ -668,7 +661,7 @@ ensure_render() {
 run_until_preview() {
   start_local_service
   ensure_planning || return $?
-  start_jogg_if_needed; resolve_jogg_api_key; resolve_profile
+  resolve_jogg_api_key; resolve_profile
   ensure_jogg_assets || return $?
   ensure_broll || return $?
   ensure_preview
@@ -739,7 +732,7 @@ main() {
   mkdir -p "$SMART_SLIDES_HOME" "$SMART_SLIDES_DATA_DIR" "$SMART_SLIDES_STATE_DIR"
   case "$ACTION" in
     preflight)
-      ensure_local_renderer; start_local_service; start_jogg_if_needed; resolve_jogg_api_key
+      ensure_local_renderer; start_local_service; resolve_jogg_api_key
       jq -n --arg local "$SMART_SLIDES_BASE_URL" --arg jogg "$JOGG_BASE_URL" --arg data "$SMART_SLIDES_DATA_DIR" '{status:"ready",local_base_url:$local,jogg_base_url:$jogg,data_dir:$data,ffprobe_available:true}' ;;
     run)
       parse_run_args "$@"; [[ -n "$TOPIC" ]] || die '--topic is required'; [[ "$DURATION_SECONDS" =~ ^[0-9]+$ ]] || die 'duration must be an integer'
@@ -749,7 +742,7 @@ main() {
     resume)
       parse_resume_args "$@"; acquire_run_lock
       if [[ -n "$RESUME_PLANNING_FILE" ]]; then
-        state_mutate '.planning_file=$planning_file | .planning_applied=false | .error=""' --arg planning_file "$RESUME_PLANNING_FILE"
+        state_mutate '.planning_file=$planning_file | .planning_applied=false | .avatar_shot_ids=[] | .error=""' --arg planning_file "$RESUME_PLANNING_FILE"
       fi
       if run_until_preview && ensure_render; then emit_state; else handle_checkpoint "$?"; fi ;;
     preview)

@@ -80,18 +80,18 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         self.fixture.record("GET", self.path, dict(self.headers))
-        if path.startswith("/open/v2/") and self.headers.get("X-Api-Key") != "mock-openapi-key":
+        if path.startswith("/v2/") and self.headers.get("X-Api-Key") != "mock-openapi-key":
             self.send_json({"code": 10105, "msg": "Invalid API key"}, 401)
             return
         if path == "/health":
             self.send_json({"status": "ok", "service": "smart-slides"})
         elif path == "/openapi_key":
             self.send_json({"code": 0, "data": {"access_key": "mock-openapi-key"}})
-        elif path == "/open/v2/voices":
+        elif path == "/v2/voices":
             self.send_json({"code": 0, "data": {"voices": [{"voice_id": "zh-female-1"}]}})
-        elif path == "/open/v2/avatars/public":
+        elif path == "/v2/avatars/public":
             self.send_json({"code": 0, "data": {"avatars": [{"id": 7}]}})
-        elif path.startswith("/open/v2/avatar_video/"):
+        elif path.startswith("/v2/avatar_video/"):
             video_id = path.rsplit("/", 1)[-1]
             status = self.fixture.avatar_status
             self.send_json({"code": 0, "data": {"video_id": video_id, "status": status, "video_url": f"http://{self.headers['Host']}/files/{video_id}.mp4" if status == "completed" else ""}})
@@ -121,14 +121,14 @@ class Handler(BaseHTTPRequestHandler):
         body = self.read_body()
         self.fixture.record("POST", self.path, dict(self.headers), body)
         fixture = self.fixture
-        if path.startswith("/open/v2/") and self.headers.get("X-Api-Key") != "mock-openapi-key":
+        if path.startswith("/v2/") and self.headers.get("X-Api-Key") != "mock-openapi-key":
             self.send_json({"code": 10105, "msg": "Invalid API key"}, 401)
             return
         if path == "/openapi_key/generate":
             self.send_json({"code": 0, "data": {"access_key": "mock-openapi-key"}})
-        elif path == "/open/v2/create_video_from_avatar":
+        elif path == "/v2/create_video_from_avatar":
             payload = json.loads(body)
-            creates = [item for item in fixture.requests if item["path"] == "/open/v2/create_video_from_avatar"]
+            creates = [item for item in fixture.requests if item["path"] == "/v2/create_video_from_avatar"]
             if payload.get("voice", {}).get("type") != "script" or payload.get("caption") is not False:
                 self.send_json({"code": 1, "msg": "invalid avatar request"}, 400)
                 return

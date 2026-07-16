@@ -48,7 +48,8 @@ configure_paths() {
   export SMART_SLIDES_HOME="$TMP_DIR/home-$suffix"
   export SMART_SLIDES_STATE_DIR="$SMART_SLIDES_HOME/runs"
   export SMART_SLIDES_DATA_DIR="$SMART_SLIDES_HOME/data"
-  export JOGG_WEB_TOKEN=web-token
+  export JOGG_API_KEY=mock-openapi-key
+  unset JOGG_WEB_TOKEN
   export SMART_SLIDES_ALLOW_DETERMINISTIC_FALLBACK=1
 }
 
@@ -61,7 +62,7 @@ planning_required_path() {
   [[ "$(jq -r '.stage' <<< "$result")" == blocked_planning ]] || fail 'run without planning was not blocked'
   [[ -z "$(jq -r '.project_id' "$state")" ]] || fail 'blocked planning created a project'
   if [[ -f "$TMP_DIR/requests.json" ]]; then
-    creates=$(jq '[.[]|select(.path=="/open/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
+    creates=$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
     [[ "$creates" == 0 ]] || fail 'blocked planning submitted a paid Jogg task'
   fi
 
@@ -83,7 +84,7 @@ planning_required_path() {
   [[ "$(jq -r '.planning_file' "$state")" == "$plan" ]] || fail 'resume did not persist the planning file'
   [[ "$(jq -r '.planning_applied' "$state")" == true ]] || fail 'resume did not apply the planning file'
   jq -e '[.[]|select(.path|endswith("/planning-state"))]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'planning file was not sent to the local API'
-  jq -e '[.[]|select(.path=="/open/v2/create_video_from_avatar")|.body|fromjson|select(.voice.script=="planned opening")]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'planned narration did not reach Jogg'
+  jq -e '[.[]|select(.path=="/v2/create_video_from_avatar")|.body|fromjson|select(.voice.script=="planned opening")]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'planned narration did not reach Jogg'
   stop_mock
 }
 
@@ -92,6 +93,7 @@ happy_path() {
   local preflight result run_id creates_before creates_after works_before works_after state busy_result busy_status edited_result lock_plan
   preflight=$(bash "$RUNNER" preflight)
   [[ "$(jq -r '.status' <<< "$preflight")" == ready ]] || fail 'preflight failed'
+  jq -e '[.[]|select(.path|test("^/openapi_key"))]|length==0' "$TMP_DIR/requests.json" >/dev/null || fail 'public API mode attempted browser-token key exchange'
   result=$(bash "$RUNNER" run --topic '测试主题' --duration-seconds 600 --avatar-mode opening_closing)
   run_id=$(jq -r '.run_id' <<< "$result"); state="$SMART_SLIDES_STATE_DIR/$run_id.json"
   [[ "$(jq -r '.stage' <<< "$result")" == completed ]] || fail 'happy path did not complete'
@@ -100,13 +102,13 @@ happy_path() {
   jq -e '[.jogg_tasks[].audio_path|select(length>0)]|length==3' "$state" >/dev/null || fail 'every shot must have extracted audio'
   jq -e '[.jogg_tasks[].avatar_path|select(length>0)]|length==2' "$state" >/dev/null || fail 'only opening and closing should retain avatar video'
   ! rg -q 'web-token|mock-openapi-key' "$state" || fail 'secret leaked into state'
-  jq -e '[.[]|select(.path=="/open/v2/create_video_from_avatar")]|length==3' "$TMP_DIR/requests.json" >/dev/null || fail 'wrong Jogg create count'
-  jq -e '[.[]|select(.path=="/open/v2/create_video_from_avatar")|.body|fromjson|select(.voice.type=="script")]|length==3' "$TMP_DIR/requests.json" >/dev/null || fail 'Jogg did not use script voice'
+  jq -e '[.[]|select(.path=="/v2/create_video_from_avatar")]|length==3' "$TMP_DIR/requests.json" >/dev/null || fail 'wrong Jogg create count'
+  jq -e '[.[]|select(.path=="/v2/create_video_from_avatar")|.body|fromjson|select(.voice.type=="script")]|length==3' "$TMP_DIR/requests.json" >/dev/null || fail 'Jogg did not use script voice'
   jq -e '[.[]|select(.path|test("tts";"i"))]|length==0' "$TMP_DIR/requests.json" >/dev/null || fail 'standalone TTS was requested'
   jq -e '[.[]|select(.path=="/api/v1/video-studio/projects/project-1/editor-state")|.body|fromjson|select((.voice_assets_by_shot|length)==3 and (.avatar_assets_by_shot|length)==2 and .avatar_enabled==false)]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'editor state asset maps are wrong'
   jq -e '[.[]|select(.path=="/api/v1/video-studio/projects/project-1/shots/shot-02/broll-assets")]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'middle B-roll was not downloaded'
   jq -e '[.[]|select(.path|test("shots/(shot-01|shot-03)/broll-assets"))]|length==0' "$TMP_DIR/requests.json" >/dev/null || fail 'avatar shots downloaded B-roll'
-  creates_before=$(jq '[.[]|select(.path=="/open/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
+  creates_before=$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
   works_before=$(jq '[.[]|select(.path|endswith("/projects/project-1/works"))]|length' "$TMP_DIR/requests.json")
 
   lock_plan="$TMP_DIR/locked-plan.json"
@@ -121,7 +123,7 @@ happy_path() {
   [[ "$(jq -r '.status' <<< "$busy_result")" == busy ]] || fail 'locked resume did not return busy JSON'
   [[ "$(jq -r '.stage' "$state")" == completed ]] || fail 'locked resume changed the persisted run stage'
   [[ -z "$(jq -r '.planning_file' "$state")" ]] || fail 'locked resume changed the planning file before acquiring the lock'
-  [[ "$(jq '[.[]|select(.path=="/open/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")" == "$creates_before" ]] || fail 'locked resume duplicated a paid Jogg task'
+  [[ "$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")" == "$creates_before" ]] || fail 'locked resume duplicated a paid Jogg task'
   set +e
   busy_result=$(bash "$RUNNER" status --run-id "$run_id" 2>/dev/null)
   busy_status=$?
@@ -130,7 +132,7 @@ happy_path() {
   rm -rf "$state.lock"
 
   bash "$RUNNER" resume --run-id "$run_id" >/dev/null
-  creates_after=$(jq '[.[]|select(.path=="/open/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
+  creates_after=$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
   works_after=$(jq '[.[]|select(.path|endswith("/projects/project-1/works"))]|length' "$TMP_DIR/requests.json")
   [[ "$creates_before" == "$creates_after" ]] || fail 'resume duplicated paid Jogg tasks'
   [[ "$works_before" == "$works_after" ]] || fail 'resume duplicated local work'
@@ -152,21 +154,21 @@ happy_path() {
   local avatar_path
   avatar_path=$(jq -r '.jogg_tasks["shot-01"].avatar_path' "$state")
   rm -f "$avatar_path"
-  creates_before=$(jq '[.[]|select(.path=="/open/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
+  creates_before=$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
   bash "$RUNNER" resume --run-id "$run_id" >/dev/null
   [[ -f "$avatar_path" ]] || fail 'resume did not restore a missing target avatar file'
-  creates_after=$(jq '[.[]|select(.path=="/open/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
+  creates_after=$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
   [[ "$creates_before" == "$creates_after" ]] || fail 'missing avatar recovery submitted a duplicate paid Jogg task'
 
   curl -fsS -X PATCH "$SMART_SLIDES_BASE_URL/api/v1/video-studio/projects/project-1/editor-state" \
     -H 'Content-Type: application/json' --data '{"shot_scripts":{"shot-02":"编辑后的中段口播"}}' >/dev/null
   edited_result=$(bash "$RUNNER" resume --run-id "$run_id")
   [[ "$(jq -r '.stage' <<< "$edited_result")" == completed ]] || fail 'edited narration did not complete'
-  creates_after=$(jq '[.[]|select(.path=="/open/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
+  creates_after=$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
   works_after=$(jq '[.[]|select(.path|endswith("/projects/project-1/works"))]|length' "$TMP_DIR/requests.json")
   [[ "$creates_after" == $((creates_before + 1)) ]] || fail 'edited narration did not regenerate exactly one Jogg task'
   [[ "$works_after" == $((works_before + 1)) ]] || fail 'edited narration did not create a fresh local work'
-  jq -e '[.[]|select(.path=="/open/v2/create_video_from_avatar")|.body|fromjson|select(.voice.script=="编辑后的中段口播")]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'edited narration did not reach Jogg'
+  jq -e '[.[]|select(.path=="/v2/create_video_from_avatar")|.body|fromjson|select(.voice.script=="编辑后的中段口播")]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'edited narration did not reach Jogg'
 
   creates_before=$creates_after
   jq 'del(.jogg_tasks["shot-03"].script_hash)' "$state" > "$state.tmp"; mv "$state.tmp" "$state"
@@ -174,9 +176,9 @@ happy_path() {
     -H 'Content-Type: application/json' --data '{"shot_scripts":{"shot-02":"编辑后的中段口播","shot-03":"升级前编辑的结尾口播"}}' >/dev/null
   edited_result=$(bash "$RUNNER" resume --run-id "$run_id")
   [[ "$(jq -r '.stage' <<< "$edited_result")" == completed ]] || fail 'legacy narration edit did not complete'
-  creates_after=$(jq '[.[]|select(.path=="/open/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
+  creates_after=$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
   [[ "$creates_after" == $((creates_before + 1)) ]] || fail 'legacy task without script hash silently reused stale audio'
-  jq -e '[.[]|select(.path=="/open/v2/create_video_from_avatar")|.body|fromjson|select(.voice.script=="升级前编辑的结尾口播")]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'legacy narration edit did not reach Jogg'
+  jq -e '[.[]|select(.path=="/v2/create_video_from_avatar")|.body|fromjson|select(.voice.script=="升级前编辑的结尾口播")]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'legacy narration edit did not reach Jogg'
   stop_mock
 }
 
@@ -196,12 +198,12 @@ timeout_path() {
   run_id=$(jq -r '.run_id' <<< "$result"); state="$SMART_SLIDES_STATE_DIR/$run_id.json"
   [[ "$(jq -r '.stage' <<< "$result")" == waiting_jogg ]] || fail 'timeout is not resumable'
   jq -e '.jogg_tasks["shot-01"].video_id|length>0' "$state" >/dev/null || fail 'timeout lost video id'
-  creates_before=$(jq '[.[]|select(.path=="/open/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
+  creates_before=$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
   jq '.jogg_tasks["shot-01"] |= (.video_id="" | .status="submission_unknown")' "$state" > "$state.tmp"
   mv "$state.tmp" "$state"
   result=$(bash "$RUNNER" resume --run-id "$run_id")
   [[ "$(jq -r '.stage' <<< "$result")" == blocked_jogg_recovery ]] || fail 'unknown Jogg submission was not blocked'
-  creates_after=$(jq '[.[]|select(.path=="/open/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
+  creates_after=$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
   [[ "$creates_before" == "$creates_after" ]] || fail 'unknown Jogg submission was automatically resubmitted'
   unset SMART_SLIDES_MAX_JOGG_WAIT_SECONDS; stop_mock
 }

@@ -28,7 +28,7 @@ Never start paid generation with deterministic fallback prose. Without a plannin
 
 ## Run
 
-Preflight checks local tools, starts the bundled loopback-only API, and starts Jogg only when it is not already reachable:
+Preflight checks local tools, starts the bundled loopback-only API, and validates the configured public Jogg OpenAPI key:
 
 ```bash
 bash "<plugin-root>/scripts/smart-slides.sh" preflight
@@ -69,7 +69,7 @@ Open `editor_url` to edit the timeline, B-roll, HTML/MG, avatar scope, narration
 
 Read [jogg-endpoints.md](references/jogg-endpoints.md) for request shapes and [jogg-workflows.md](references/jogg-workflows.md) for polling.
 
-- Every shot uses `/open/v2/create_video_from_avatar` with `voice.type="script"`.
+- Every shot uses `/v2/create_video_from_avatar` with `voice.type="script"`.
 - There is no standalone TTS request.
 - FFmpeg extracts audio from every completed Jogg video.
 - Only `avatar_mode` target shots retain a muted avatar video. Non-target Jogg video images are deleted after audio extraction.
@@ -78,7 +78,7 @@ Read [jogg-endpoints.md](references/jogg-endpoints.md) for request shapes and [j
 
 ## Authentication
 
-Use either `JOGG_API_KEY` or `JOGG_WEB_TOKEN`. The web token reads `/openapi_key` and only calls `/openapi_key/generate` when no key exists. Credentials stay in process memory and never enter run state or stdout.
+Set `JOGG_API_KEY` from the Jogg OpenAPI dashboard. Smart Slides calls `https://api.jogg.ai/v2/...` with `X-Api-Key`; browser-session tokens are not accepted as a substitute. Credentials stay in process memory and never enter run state or stdout.
 
 ## Boundaries
 

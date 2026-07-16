@@ -8,13 +8,15 @@ The only video business requests are Jogg plus optional Pexels/Pixabay material 
 
 Required commands: `curl`, `jq`, `ffmpeg`, `ffprobe`, and local Google Chrome or Chromium. Set `SMART_SLIDES_CHROME_BIN` only when Chrome is not installed in its standard location. The renderer does not install packages or use a remote render service at runtime.
 
-Configure either `JOGG_API_KEY` or `JOGG_WEB_TOKEN` in the environment or `~/.codex/smart-slides/.env`. A web token is exchanged for an OpenAPI key in memory. Neither credential is saved or printed.
+Configure `JOGG_API_KEY` from the Jogg OpenAPI dashboard in the environment or `~/.codex/smart-slides/.env`. Smart Slides calls `https://api.jogg.ai/v2/...` directly; a browser-session token is not a public OpenAPI credential. The key is neither saved in run state nor printed.
 
 ```bash
 bash scripts/smart-slides.sh preflight
 ```
 
-Preflight creates a local Python environment if needed, starts the bundled FastAPI on a free loopback port, and starts Jogg only if it is not already reachable.
+Preflight creates a local Python environment if needed, starts the bundled FastAPI on a free loopback port, and validates the configured Jogg OpenAPI key before any paid request.
+
+Jogg result downloads are retried locally when the CDN is briefly unavailable. Set `SMART_SLIDES_JOGG_DOWNLOAD_MAX_SECONDS` only to tune the per-attempt download limit; retries always reuse the saved Jogg `video_id`.
 
 ## Example
 
