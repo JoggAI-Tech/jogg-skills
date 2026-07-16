@@ -235,11 +235,9 @@ start_local_service() {
   python_bin=$(ensure_python_runtime)
   mkdir -p "$SMART_SLIDES_HOME/logs" "$SMART_SLIDES_DATA_DIR"
   log "starting bundled Video Studio at $SMART_SLIDES_BASE_URL"
-  (
-    export PYTHONPATH="$RUNTIME_ROOT"
-    export SMART_SLIDES_DATA_DIR
-    exec "$python_bin" -m uvicorn backend.main:app --host 127.0.0.1 --port "$port"
-  ) > "$SMART_SLIDES_HOME/logs/service.log" 2>&1 &
+  nohup env PYTHONPATH="$RUNTIME_ROOT" SMART_SLIDES_DATA_DIR="$SMART_SLIDES_DATA_DIR" \
+    "$python_bin" -m uvicorn backend.main:app --host 127.0.0.1 --port "$port" \
+    > "$SMART_SLIDES_HOME/logs/service.log" 2>&1 < /dev/null &
   local pid=$! attempt
   for attempt in $(seq 1 60); do local_service_ready && break; sleep 0.5; done
   local_service_ready || die "bundled Video Studio did not start; see $SMART_SLIDES_HOME/logs/service.log"

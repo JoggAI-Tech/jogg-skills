@@ -68,15 +68,22 @@ class LocalApiTest(unittest.TestCase):
         self.assertEqual(video_studio_works.validate_project_for_work(project)["status"], "passed")
 
         avatar_url = "/data/video_studio_assets/avatar-opening.mp4"
+        voice_url = "/data/video_studio_assets/voice-opening.m4a"
         patched = self.client.patch(
             f"/api/v1/video-studio/projects/{project_id}/editor-state",
-            json={"avatar_enabled": False, "avatar_assets_by_shot": {shots[0]["id"]: {"asset_url": avatar_url, "muted": True}}},
+            json={
+                "avatar_enabled": False,
+                "avatar_assets_by_shot": {shots[0]["id"]: {"asset_url": avatar_url, "muted": True}},
+                "voice_assets_by_shot": {shots[0]["id"]: {"asset_url": voice_url}},
+            },
         )
         self.assertEqual(patched.status_code, 200, patched.text)
         preview = self.client.post(f"/api/v1/video-studio/projects/{project_id}/composition-preview")
         self.assertEqual(preview.status_code, 200, preview.text)
         document = self.client.get(f"/api/v1/video-studio/projects/{project_id}/composition-preview.html").text
         self.assertIn(f'<video src="{avatar_url}"', document)
+        self.assertIn(f'<audio class="voice-audio" data-shot-id="{shots[0]["id"]}" src="{voice_url}"', document)
+        self.assertIn("function activeVoice()", document)
 
     def test_planning_state_scales_codex_contracts_to_project_duration(self) -> None:
         project = self.client.post(

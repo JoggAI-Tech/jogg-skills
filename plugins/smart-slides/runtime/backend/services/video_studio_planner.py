@@ -2715,6 +2715,7 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
     editor_state = project.get("editor_state") if isinstance(project.get("editor_state"), dict) else {}
     selected_broll = editor_state.get("selected_broll_by_shot") if isinstance(editor_state.get("selected_broll_by_shot"), dict) else {}
     scripts = editor_state.get("shot_scripts") if isinstance(editor_state.get("shot_scripts"), dict) else {}
+    voice_assets = editor_state.get("voice_assets_by_shot") if isinstance(editor_state.get("voice_assets_by_shot"), dict) else {}
     html_design_overrides = editor_state.get("html_design_overrides") if isinstance(editor_state.get("html_design_overrides"), dict) else {}
     avatar_enabled = bool(editor_state.get("avatar_enabled", True))
     bgm_enabled = bool(editor_state.get("bgm_enabled", True))
@@ -2737,6 +2738,14 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
         info = shot.get("information_layer") if isinstance(shot.get("information_layer"), dict) else {}
         title = str(shot.get("title") or f"分镜 {index}")
         media_markup = _player_media_markup(asset_url, str(option.get("title") or title))
+        voice_asset = voice_assets.get(shot_id) if isinstance(voice_assets.get(shot_id), dict) else {}
+        voice_url = str(voice_asset.get("asset_url") or voice_asset.get("url") or "")
+        voice_markup = (
+            f'<audio class="voice-audio" data-shot-id="{html.escape(shot_id, quote=True)}" '
+            f'src="{html.escape(voice_url, quote=True)}" preload="auto"></audio>'
+            if voice_url
+            else ""
+        )
         fallback_markup = ""
         if not media_markup:
             fallback_markup = f"""
@@ -2764,6 +2773,7 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
             f"""
             <section class="scene{' scene--html' if html_enabled else ''}" data-index="{index}">
               <div class="media">{media_markup}{fallback_markup}</div>
+              {voice_markup}
               <div class="grade"></div>
               {html_overlay}
               {f'<div class="avatar">人</div>' if avatar_enabled else ''}
@@ -2860,14 +2870,21 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
     let bgmCrossfadeTimer = null;
     let bgmMonitorTimer = null;
     function activeVideo() {{ return scenes[current]?.querySelector('video'); }}
+    function activeVoice() {{ return scenes[current]?.querySelector('audio.voice-audio'); }}
     function syncVideos() {{
       scenes.forEach((scene, index) => {{
         const video = scene.querySelector('video');
-        if (!video) return;
-        if (index !== current || !playing) video.pause();
+        const voice = scene.querySelector('audio.voice-audio');
+        if (video && (index !== current || !playing)) video.pause();
+        if (voice && (index !== current || !playing)) {{
+          voice.pause();
+          voice.currentTime = 0;
+        }}
       }});
       const video = activeVideo();
       if (video && playing) video.play().catch(() => {{}});
+      const voice = activeVoice();
+      if (voice && playing) voice.play().catch(() => {{}});
     }}
     function clearBgmTimers() {{
       if (bgmCrossfadeTimer) window.clearInterval(bgmCrossfadeTimer);
