@@ -1,7 +1,7 @@
 ---
 name: trend-to-video
 description: Use when the user wants to turn current hot topics, breaking news, or authoritative media stories into a Jogg Avatar Video or Video Podcast by researching real sources, drafting content, and operating app.jogg.ai in a browser. Use for requests such as "track hot topics", "make a news video in Jogg", "turn this trend into an avatar video", or "create a Jogg video podcast".
-compatibility: Requires Firecrawl for web research and a browser session with access to app.jogg.ai. The user must complete login, CAPTCHA, 2FA, and any purchase confirmation.
+compatibility: Requires Firecrawl for web research, browser:control-in-app-browser for visible Jogg UI actions, and a browser session with access to app.jogg.ai. The user must complete login, CAPTCHA, 2FA, and any purchase confirmation.
 ---
 
 # trend-to-video
@@ -16,6 +16,37 @@ Use this skill for current-topic videos in Jogg:
 - `Video Podcast`: exactly two presenters discussing a comparison, tension, or two complementary views.
 
 Do not use it to implement Jogg product features, create integrations, invoke APIs, bypass paywalls, or automate social publishing.
+
+## Capability Routing and Automation
+
+Use the strongest available capability for each part of the workflow:
+
+- **REQUIRED SUB-SKILL:** Use `firecrawl` for current-topic discovery and source verification. Do not replace it with guessed facts or unverified search snippets.
+- **REQUIRED SUB-SKILL:** Use `browser:control-in-app-browser` for `app.jogg.ai`. Operate the visible page, reuse the existing signed-in tab and project, and inspect the UI after every state-changing action.
+- **Interaction priority:** For material choices such as topic selection, format changes, final Render confirmation, and retrying a failed job, call `request_user_input` first whenever the tool is available in the current mode. Do not print the tool payload as chat text and do not continue until its result is returned.
+- **JSON fallback:** Only when `request_user_input` is unavailable, output the equivalent machine-readable JSON object as plain text and stop. Wait for the user to answer before taking the associated action. Use the tool-compatible shape with an outer `questions` array; do not add unsupported `isOther` or `isSecret` fields.
+
+Fallback example:
+
+```json
+{
+  "questions": [
+    {
+      "id": "render_action",
+      "header": "Render",
+      "question": "是否确认创建渲染任务？",
+      "options": [
+        { "label": "确认渲染", "description": "按当前设置启动渲染。" },
+        { "label": "继续修改", "description": "保留设置，不创建任务。" }
+      ]
+    }
+  ]
+}
+```
+
+When the user requests automation or says to continue, automatically complete all already-approved, reversible steps: source research, candidate ranking, script drafting, visible navigation, resource filtering, approved script entry, settings selection, and progress monitoring. Do not ask redundant confirmations for those steps. Pause only for credentials, CAPTCHA/2FA, payment or upgrade prompts, unsupported file-picker actions, the final external Render action, or a retry that could create another job.
+
+Do not invent a `compose-use` or `browser-use` tool when it is not listed by the runtime. Content composition is handled in this Skill; browser automation is delegated to the browser sub-skill. A Skill cannot grant permissions that the runtime or user has not provided.
 
 ## Defaults
 
@@ -101,6 +132,19 @@ Use this path for a confirmed one-presenter topic. Follow the labels currently v
 9. After the user has approved the script and editor settings, select **Generate**. This opens the **Render Video** preflight dialog; it does not yet create the render job.
 10. In **Render Video**, set the **Filename** to the user-approved title. Verify the final **Aspect Ratio** (`9:16`, `16:9`, or `1:1`), output **Format**, and **JoggAI Watermark** state. Do not silently enable or disable the watermark, or substitute a filename, format, or ratio. The visible **Render** button is the action that creates the task.
 
+#### Video Podcast: visible-browser workflow
+
+Use this path only when the approved topic benefits from two presenters. Jogg v1 supports exactly two hosts, so keep the dialogue as alternating `A:` and `B:` lines and do not invent a third speaker.
+
+1. From Home, select **Create Video**, then **Video Podcast**. Confirm that the page is the Podcast workspace before entering content.
+2. In the upload panel, use **Click to Upload** for the approved two-speaker script. The visible panel accepts PDF, DOCX, or TXT scripts up to 20 MB; it also accepts MP3 or WAV audio up to 100 MB. Use a generated TXT/DOCX/PDF when the source-grounded script is already approved. Treat audio-to-script conversion as a transcript draft that must be checked against the approved facts.
+3. After the file card appears, verify the filename and choose **Next** to confirm the upload. If **Convert to script** is offered for an audio file, do not assume the conversion is accurate; wait for the progress result and review the resulting dialogue before continuing.
+4. Wait for the visible **Generating Podcast Script...** progress state to finish. It may show a percentage and a one-to-two-minute estimate. Do not click Next repeatedly, upload a duplicate, or call the result complete while this parsing step is still running.
+5. Choose the visible podcast presentation: **Talk Show**, **Two-Shot**, or **Split Screen**. Match the selection to the approved tone and layout, and record the exact visible choice for final confirmation.
+6. In the resource panel, choose the visible avatar scope (**All**, **Public Avatar**, or **My Podcast Avatar**) and the available ratio (the Podcast workflow commonly exposes **16:9**). Select exactly two compatible presenters.
+7. Set both voice selectors independently. Choose two distinct voices with visible language compatibility and record the exact names. Do not leave one selector empty, reuse an incompatible language, or assume labels such as `Ted Audiob` or `Gabe Commer` are available in every account.
+8. Review the full dialogue, both presenter assignments, both voices, presentation layout, ratio, and any visible subtitle or watermark setting. The Podcast **Render** button may be directly visible rather than behind the Avatar Video preflight dialog; treat it as the external render action and require the final confirmation before clicking it.
+
 Treat resource selection and the Render Video dialog as configuration only. Do not paste an unapproved script, click **Generate**, click **Render**, or accept an upgrade/payment prompt while inspecting options. Preserve the current editor state or preflight dialog for handoff when the user has not given the final rendering confirmation.
 
 ### 5. Confirm before rendering
@@ -111,6 +155,7 @@ Show the final settings in chat before clicking Render:
 - selected avatar(s) and voice(s);
 - script language, duration, aspect ratio, subtitles, and visible template/layout;
 - Render Video filename, output format, and watermark state;
+- for Video Podcast, the uploaded file, upload/parse status, presentation mode, both avatar labels, and both voice labels;
 - source links used for the factual draft.
 
 Include the exact visible avatar and voice labels, selected aspect ratio, subtitle state, and the final script text. Explain that **Generate** opens a preflight dialog, while clicking **Render** in that dialog creates the Jogg render job and may consume account credits or trigger an upgrade/payment flow.
@@ -122,6 +167,7 @@ The user must explicitly confirm the final settings and the **Render** action in
 After confirmation, enter the approved script and settings in the visible Jogg UI, open the Render Video preflight dialog, then select **Render**.
 
 - Jogg may route to **Projects** after the task starts. In **Recent Creations**, identify the newly created card by its visible filename, recency, or matching thumbnail. Do not infer task status from an older card with a similar avatar.
+- For Video Podcast, distinguish the **Generating Podcast Script...** percentage from the later Projects render percentage. The first is script/audio parsing; the second is the video render task.
 - Read the visible progress overlay on the new card, including percentage and estimated time. Check the same card for progress rather than creating another task while it is still processing.
 - Do not claim a video exists until Jogg shows a completed result. If the card shows **Failed**, report the visible error/status and ask before using **Try again**, since retrying can create another render job.
 - If the browser session disconnects, reconnect and resume from the existing project instead of recreating it.
