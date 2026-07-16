@@ -69,6 +69,7 @@ check_adapted() {
 check_snapshot backend/services/video_studio_store.py runtime/backend/services/video_studio_store.py
 check_snapshot backend/services/video_studio_mg_design.py runtime/backend/services/video_studio_mg_design.py
 check_snapshot backend/services/video_studio_mg_templates.py runtime/backend/services/video_studio_mg_templates.py
+check_snapshot backend/services/video_studio_ppt_visual_assets.py runtime/backend/services/video_studio_ppt_visual_assets.py
 check_snapshot frontend/src/features/video-studio/model.ts runtime/frontend/src/features/video-studio/model.ts
 check_snapshot frontend/src/features/video-studio/model.test.ts runtime/frontend/src/features/video-studio/model.test.ts
 check_snapshot frontend/src/features/video-studio/htmlEditor.ts runtime/frontend/src/features/video-studio/htmlEditor.ts

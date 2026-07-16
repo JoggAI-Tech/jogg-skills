@@ -1,8 +1,10 @@
 export type VideoStudioFormat = 'short' | 'long';
 export type VideoStudioWorkflowStageId = 'topic' | 'producer' | 'requirements' | 'creative_plan' | 'script' | 'format' | 'director_doc' | 'storyboard' | 'editor';
 export type VideoStudioProductionFormat = 'broll' | 'broll_html';
-export type VideoStudioSceneRole = 'broll_backdrop_overlay' | 'full_broll';
-export type VideoStudioVisualRole = 'hybrid_broll_html' | 'broll_primary';
+export type VideoStudioScriptStyle = 'adaptive_podcast' | 'storytelling_podcast' | 'debate_podcast';
+export type VideoStudioLanguage = 'zh' | 'en';
+export type VideoStudioSceneRole = 'broll_backdrop_overlay' | 'full_broll' | 'avatar_only';
+export type VideoStudioVisualRole = 'hybrid_broll_html' | 'broll_primary' | 'avatar_primary';
 export type VideoStudioMgVisualSystem = 'metric' | 'causal' | 'route' | 'timeline' | 'comparison' | string;
 export type VideoStudioEditorTimelineLayerId = 'overview' | 'html' | 'broll';
 export type VideoStudioEditorSideToolId = 'avatar' | 'bgm';
@@ -31,6 +33,11 @@ export interface VideoStudioHtmlGenerationStatusInput {
   finished_at?: string;
   total?: number;
   completed?: number;
+  current_clip_id?: string;
+  completed_clip_id?: string;
+  failed_clip_id?: string;
+  message?: string;
+  manual_regeneration?: boolean;
 }
 
 export interface VideoStudioHtmlGenerationUiState {
@@ -101,6 +108,24 @@ export function videoStudioProjectUrlWithId(currentHref: string, projectId: stri
   const url = new URL(currentHref);
   url.searchParams.set('project_id', projectId);
   return url.toString();
+}
+
+/**
+ * Project polling returns a fresh editor state. Keep the shot a user is
+ * currently previewing unless that shot was actually removed from the plan.
+ */
+export function resolveVideoStudioSelectedShotId({
+  currentShotId,
+  persistedShotId,
+  shotIds,
+}: {
+  currentShotId?: string;
+  persistedShotId?: string;
+  shotIds: string[];
+}): string {
+  if (currentShotId && shotIds.includes(currentShotId)) return currentShotId;
+  if (persistedShotId && shotIds.includes(persistedShotId)) return persistedShotId;
+  return shotIds[0] ?? '';
 }
 
 export interface VideoStudioProductionOption {
@@ -443,6 +468,8 @@ export interface VideoStudioHtmlDesign {
     label?: string;
   }>;
   design_contract?: VideoStudioMgDesignContract;
+  custom_html?: string;
+  custom_css?: string;
 }
 
 export interface VideoStudioDesignPlanScene {
@@ -968,6 +995,42 @@ export interface VideoStudioAuditLogItem {
   details: Record<string, unknown>;
 }
 
+export interface VideoStudioChangeSet {
+  id: string;
+  base_revision_id: string;
+  status: 'preview_ready' | 'confirmed' | 'discarded' | string;
+  user_message: string;
+  patch: Record<string, unknown>;
+  summary: string;
+  field_changes: Array<Record<string, unknown>>;
+  invalidated_stages: string[];
+  retained_stages: string[];
+  earliest_stage: string;
+  estimated_generation_tasks: string[];
+  created_at: string;
+  confirmed_at?: string | null;
+  discarded_at?: string | null;
+}
+
+export interface VideoStudioRevision {
+  id: string;
+  parent_revision_id: string;
+  status: 'published' | string;
+  created_at: string;
+  created_by: string;
+  change_set_id?: string;
+  snapshot: Record<string, unknown>;
+  workflow_state: Record<string, VideoStudioWorkflowStatus>;
+}
+
+export interface VideoStudioRevisionState {
+  version: string;
+  published_revision_id: string;
+  pending_change_set_id: string;
+  revisions: VideoStudioRevision[];
+  change_sets: VideoStudioChangeSet[];
+}
+
 export interface VideoStudioEditorState {
   selected_shot_id: string;
   shot_scripts: Record<string, string>;
@@ -1033,12 +1096,90 @@ export interface VideoStudioEditorAssetStatus {
     error?: string;
     started_at?: string;
     finished_at?: string;
+    total?: number;
+    completed?: number;
+    current_clip_id?: string;
+    completed_clip_id?: string;
+    failed_clip_id?: string;
+    message?: string;
+    manual_regeneration?: boolean;
   };
+}
+
+export interface VideoStudioHtmlClipGenerationMetric {
+  clip_id: string;
+  state: 'queued' | 'running' | 'ready' | 'failed' | 'cached' | string;
+  error?: string;
+  started_at?: string;
+  finished_at?: string;
+  duration_seconds?: number | null;
+  model?: string;
+  prompt_tokens?: number | null;
+  completion_tokens?: number | null;
+  total_tokens?: number | null;
+}
+
+export interface VideoStudioHtmlGenerationDraft {
+  clip_metrics?: Record<string, VideoStudioHtmlClipGenerationMetric>;
+  failures_by_clip_id?: Record<string, { clip_id?: string; error?: string }>;
+  failed_clip_id?: string;
+  manual_regeneration?: { clip_id?: string; prompt?: string; reference?: string };
+}
+
+export interface VideoStudioHtmlClipUiState {
+  state: string;
+  label: string;
+  tone: 'pending' | 'ready' | 'failed' | 'empty';
+  error: string;
+  canRetry: boolean;
+}
+
+export function resolveVideoStudioHtmlClipState({
+  clipId,
+  metric,
+  failedClipId,
+  failureError,
+  globalError,
+}: {
+  clipId: string;
+  metric?: VideoStudioHtmlClipGenerationMetric;
+  failedClipId?: string;
+  failureError?: string;
+  globalError?: string;
+}): VideoStudioHtmlClipUiState {
+  const metricHasNewerTerminalOrActiveState = ['queued', 'running', 'ready', 'cached'].includes(metric?.state ?? '');
+  const isFailed = metric?.state === 'failed' || (failedClipId === clipId && !metricHasNewerTerminalOrActiveState);
+  if (isFailed) {
+    return {
+      state: 'failed',
+      label: 'AI HTML 生成失败',
+      tone: 'failed',
+      error: metric?.error || failureError || globalError || 'AI HTML 生成失败',
+      canRetry: true,
+    };
+  }
+  if (metric?.state === 'queued') {
+    return { state: 'queued', label: 'AI HTML 已入队', tone: 'pending', error: '', canRetry: false };
+  }
+  if (metric?.state === 'running') {
+    return { state: 'running', label: 'AI HTML 生成中', tone: 'pending', error: '', canRetry: false };
+  }
+  if (metric?.state === 'ready' || metric?.state === 'cached') {
+    return { state: 'ready', label: 'AI HTML 已生成', tone: 'ready', error: '', canRetry: false };
+  }
+  return { state: metric?.state || 'idle', label: 'AI HTML 未生成', tone: 'empty', error: '', canRetry: false };
 }
 
 export type VideoStudioDesignPlanSceneOverride = Partial<Omit<VideoStudioDesignPlanScene, 'scene_design_spec'>> & {
   scene_design_spec?: Partial<VideoStudioDesignPlanScene['scene_design_spec']>;
 };
+
+export function mergeVideoStudioHtmlDesignOverrides(
+  persisted: Record<string, VideoStudioDesignPlanSceneOverride> = {},
+  local: Record<string, VideoStudioDesignPlanSceneOverride> = {},
+): Record<string, VideoStudioDesignPlanSceneOverride> {
+  return { ...persisted, ...local };
+}
 
 export interface VideoStudioProject {
   id: string;
@@ -1047,6 +1188,8 @@ export interface VideoStudioProject {
   format: VideoStudioFormat;
   production_format: VideoStudioProductionFormat;
   target_duration_seconds?: number;
+  script_style?: VideoStudioScriptStyle | string;
+  language?: VideoStudioLanguage | string;
   stage: VideoStudioWorkflowStageId;
   canvas_profile?: VideoStudioCanvasProfile;
   data_governance?: VideoStudioDataGovernance;
@@ -1074,7 +1217,9 @@ export interface VideoStudioProject {
   final_video_url?: string;
   editor_state: VideoStudioEditorState;
   editor_asset_status?: VideoStudioEditorAssetStatus;
+  html_generation_draft?: VideoStudioHtmlGenerationDraft;
   audit_log?: VideoStudioAuditLogItem[];
+  revision_state?: VideoStudioRevisionState;
   created_at: string;
   updated_at: string;
 }

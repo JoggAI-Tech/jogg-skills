@@ -4,7 +4,7 @@ import threading
 import uuid
 from copy import deepcopy
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
+from typing import Any, Callable, Dict, List, Optional
 
 
 def _now_iso() -> str:
@@ -15,6 +15,27 @@ PROJECT_SCHEMA_VERSION = "video_studio_project_v2"
 DATA_GOVERNANCE_VERSION = "video_studio_data_governance_v1"
 ASSET_LAYER_VERSION = "video_studio_asset_layer_v1"
 MG_LAYER_VERSION = "video_studio_mg_layer_v1"
+REVISION_STATE_VERSION = "video_studio_revisions_v1"
+REVISION_SNAPSHOT_FIELDS = (
+    "topic",
+    "format",
+    "production_format",
+    "target_duration_seconds",
+    "script_style",
+    "language",
+    "network_enabled",
+    "selected_production_option",
+    "producer_analysis",
+    "production_requirement_document",
+    "creative_plan",
+    "script",
+    "script_director",
+    "director_document",
+    "scene_groups",
+    "creative_direction",
+    "asset_direction",
+    "mg_direction",
+)
 CANVAS_PROFILE = {
     "id": "landscape_16_9",
     "aspect_ratio": "16:9",
@@ -48,6 +69,19 @@ WORKFLOW_DEPENDENCIES = {
     "preview": ["assets", "mg"],
     "render": ["preview"],
 }
+CHANGE_ROOT_STAGE = {
+    "topic": "producer",
+    "narrative_focus": "producer",
+    "network_enabled": "producer",
+    "target_duration_seconds": "requirements",
+    "script_style": "requirements",
+    "language": "requirements",
+    "selected_production_option": "requirements",
+    "production_format": "requirements",
+    "creative_direction": "creative_plan",
+    "asset_direction": "assets",
+    "mg_direction": "mg",
+}
 _STORE_LOCK = threading.RLock()
 
 STAGE_TO_WORKFLOW_KEY = {
@@ -75,6 +109,44 @@ def _default_workflow_state(now: str) -> Dict[str, Any]:
         }
         for key in WORKFLOW_KEYS
     }
+
+
+def _revision_snapshot(project: Dict[str, Any]) -> Dict[str, Any]:
+    return {field: deepcopy(project.get(field)) for field in REVISION_SNAPSHOT_FIELDS}
+
+
+def _default_revision_state(project: Dict[str, Any], now: str) -> Dict[str, Any]:
+    return {
+        "version": REVISION_STATE_VERSION,
+        "published_revision_id": "rev-001",
+        "pending_change_set_id": "",
+        "revisions": [
+            {
+                "id": "rev-001",
+                "parent_revision_id": "",
+                "status": "published",
+                "created_at": now,
+                "created_by": "project_created",
+                "change_set_id": "",
+                "snapshot": _revision_snapshot(project),
+                "workflow_state": deepcopy(project.get("workflow_state") or {}),
+            }
+        ],
+        "change_sets": [],
+    }
+
+
+def _sync_published_revision(project: Dict[str, Any]) -> None:
+    revision_state = project.get("revision_state")
+    if not isinstance(revision_state, dict):
+        return
+    published_id = str(revision_state.get("published_revision_id") or "")
+    revisions = revision_state.get("revisions") if isinstance(revision_state.get("revisions"), list) else []
+    for revision in revisions:
+        if isinstance(revision, dict) and str(revision.get("id") or "") == published_id:
+            revision["snapshot"] = _revision_snapshot(project)
+            revision["workflow_state"] = deepcopy(project.get("workflow_state") or {})
+            break
 
 
 def _default_data_governance(now: str) -> Dict[str, Any]:
@@ -245,6 +317,16 @@ def _mark_stale(project: Dict[str, Any], keys: list[str]) -> None:
         _mark_status(project, key, "stale")
 
 
+def workflow_change_impact(patch: Dict[str, Any]) -> tuple[list[str], list[str], str]:
+    roots = [CHANGE_ROOT_STAGE[key] for key in patch if key in CHANGE_ROOT_STAGE]
+    if not roots:
+        return [], list(WORKFLOW_KEYS), ""
+    first_root = min(roots, key=WORKFLOW_KEYS.index)
+    start_index = WORKFLOW_KEYS.index(first_root)
+    invalidated = WORKFLOW_KEYS[start_index:]
+    return invalidated, WORKFLOW_KEYS[:start_index], first_root
+
+
 def ensure_project_governance(project: Dict[str, Any]) -> Dict[str, Any]:
     now = str(project.get("created_at") or _now_iso())
     normalized = deepcopy(project)
@@ -257,6 +339,13 @@ def ensure_project_governance(project: Dict[str, Any]) -> Dict[str, Any]:
     normalized["data_governance"]["schema_versions"]["asset_manifest"] = "video_studio_asset_manifest_v1"
     normalized["data_governance"]["updated_at"] = str(normalized.get("updated_at") or _now_iso())
     normalized["target_duration_seconds"] = max(60, min(1800, int(normalized.get("target_duration_seconds") or 180)))
+    normalized["script_style"] = str(normalized.get("script_style") or "adaptive_podcast")
+    if normalized["script_style"] not in {"adaptive_podcast", "storytelling_podcast", "debate_podcast"}:
+        normalized["script_style"] = "adaptive_podcast"
+    normalized["language"] = str(normalized.get("language") or "zh")
+    if normalized["language"] not in {"zh", "en"}:
+        normalized["language"] = "zh"
+    normalized["network_enabled"] = bool(normalized.get("network_enabled") or normalized.get("web_search"))
 
     workflow_state = normalized.get("workflow_state") if isinstance(normalized.get("workflow_state"), dict) else {}
     defaults = _default_workflow_state(now)
@@ -293,7 +382,7 @@ def ensure_project_governance(project: Dict[str, Any]) -> Dict[str, Any]:
     editor_state.setdefault("mg_design_doc_overrides", {})
     editor_state.setdefault("selected_bgm_track_id", "")
     editor_state.setdefault("selected_bgm_track", None)
-    editor_state.setdefault("bgm_volume", 0.35)
+    editor_state.setdefault("bgm_volume", 0.01)
     normalized["editor_state"] = editor_state
     normalized.setdefault("render_layer", _default_render_layer())
     normalized["render_layer"]["canvas_profile_id"] = CANVAS_PROFILE["id"]
@@ -377,14 +466,29 @@ class VideoStudioStore:
 
     def _save(self, data: Dict[str, Any]) -> None:
         os.makedirs(self.data_dir, exist_ok=True)
-        tmp = self.projects_file + ".tmp"
-        with open(tmp, "w", encoding="utf-8") as f:
-            json.dump(data, f, ensure_ascii=False, indent=2)
-        os.replace(tmp, self.projects_file)
+        tmp = f"{self.projects_file}.tmp.{os.getpid()}.{threading.get_ident()}.{uuid.uuid4().hex}"
+        try:
+            with open(tmp, "w", encoding="utf-8") as f:
+                json.dump(data, f, ensure_ascii=False, indent=2)
+            os.replace(tmp, self.projects_file)
+        finally:
+            if os.path.exists(tmp):
+                os.remove(tmp)
 
-    def create_project(self, topic: str, format: str, production_format: str, target_duration_seconds: int = 180) -> Dict[str, Any]:
+    def create_project(
+        self,
+        topic: str,
+        format: str,
+        production_format: str,
+        target_duration_seconds: int = 180,
+        script_style: str = "adaptive_podcast",
+        language: str = "zh",
+        network_enabled: bool = False,
+    ) -> Dict[str, Any]:
         now = _now_iso()
         safe_duration = max(60, min(1800, int(target_duration_seconds or 180)))
+        safe_script_style = script_style if script_style in {"adaptive_podcast", "storytelling_podcast", "debate_podcast"} else "adaptive_podcast"
+        safe_language = language if language in {"zh", "en"} else "zh"
         project = {
             "id": str(uuid.uuid4()),
             "project_schema_version": PROJECT_SCHEMA_VERSION,
@@ -392,6 +496,9 @@ class VideoStudioStore:
             "format": format,
             "production_format": production_format,
             "target_duration_seconds": safe_duration,
+            "script_style": safe_script_style,
+            "language": safe_language,
+            "network_enabled": bool(network_enabled),
             "stage": "topic",
             "canvas_profile": deepcopy(CANVAS_PROFILE),
             "data_governance": _default_data_governance(now),
@@ -421,7 +528,7 @@ class VideoStudioStore:
                 "mg_design_doc_overrides": {},
                 "avatar_enabled": True,
                 "bgm_enabled": True,
-                "bgm_volume": 0.35,
+                "bgm_volume": 0.01,
                 "selected_bgm_track_id": "",
                 "selected_bgm_track": None,
             },
@@ -429,6 +536,7 @@ class VideoStudioStore:
             "updated_at": now,
             "audit_log": [],
         }
+        project["revision_state"] = _default_revision_state(project, now)
         _append_audit(project, "project_created", source="system", details={"format": format, "production_format": production_format})
         with _STORE_LOCK:
             data = self._load()
@@ -472,9 +580,182 @@ class VideoStudioStore:
                     current = ensure_project_governance(project)
                     merged = ensure_project_governance({**current, **patch, "updated_at": _now_iso()})
                     _apply_governance_transition(merged, patch)
+                    _sync_published_revision(merged)
                     merged["data_governance"]["updated_at"] = str(merged.get("updated_at") or _now_iso())
                     projects[index] = merged
                     data["projects"] = projects
                     self._save(data)
                     return merged
+        raise KeyError("Project not found")
+
+    def mutate_project(self, project_id: str, mutator: Callable[[Dict[str, Any]], Dict[str, Any]]) -> Dict[str, Any]:
+        """Apply a patch derived from the latest project while holding the store lock."""
+        with _STORE_LOCK:
+            data = self._load()
+            projects = data.get("projects") or []
+            for index, project in enumerate(projects):
+                if project.get("id") != project_id:
+                    continue
+                current = ensure_project_governance(project)
+                patch = mutator(deepcopy(current))
+                merged = ensure_project_governance({**current, **patch, "updated_at": _now_iso()})
+                _apply_governance_transition(merged, patch)
+                _sync_published_revision(merged)
+                merged["data_governance"]["updated_at"] = str(merged.get("updated_at") or _now_iso())
+                projects[index] = merged
+                data["projects"] = projects
+                self._save(data)
+                return merged
+        raise KeyError("Project not found")
+
+    def preview_change_set(self, project_id: str, *, user_message: str, parsed_change: Dict[str, Any]) -> tuple[Dict[str, Any], Dict[str, Any]]:
+        with _STORE_LOCK:
+            data = self._load()
+            for index, raw_project in enumerate(data.get("projects") or []):
+                if not isinstance(raw_project, dict) or raw_project.get("id") != project_id:
+                    continue
+                project = ensure_project_governance(raw_project)
+                revision_state = project.get("revision_state")
+                if not isinstance(revision_state, dict):
+                    raise ValueError("该项目创建于对话式版本功能发布前，暂不支持对话修改")
+                change_sets = revision_state.get("change_sets") if isinstance(revision_state.get("change_sets"), list) else []
+                for change_set in change_sets:
+                    if isinstance(change_set, dict) and change_set.get("status") == "preview_ready":
+                        change_set["status"] = "discarded"
+                        change_set["discarded_at"] = _now_iso()
+                patch = parsed_change.get("patch") if isinstance(parsed_change.get("patch"), dict) else {}
+                invalidated, retained, earliest_stage = workflow_change_impact(patch)
+                if not earliest_stage and str(parsed_change.get("next_stage") or "") in WORKFLOW_KEYS:
+                    earliest_stage = str(parsed_change["next_stage"])
+                    invalidated = [earliest_stage]
+                    retained = [stage for stage in WORKFLOW_KEYS if stage != earliest_stage]
+                change_set = {
+                    "id": f"change-{uuid.uuid4().hex[:12]}",
+                    "base_revision_id": str(revision_state.get("published_revision_id") or ""),
+                    "status": "preview_ready",
+                    "user_message": user_message,
+                    "patch": deepcopy(patch),
+                    "summary": str(parsed_change.get("summary") or ""),
+                    "field_changes": deepcopy(parsed_change.get("field_changes") or []),
+                    "invalidated_stages": invalidated,
+                    "retained_stages": retained,
+                    "earliest_stage": earliest_stage,
+                    "estimated_generation_tasks": deepcopy(parsed_change.get("estimated_generation_tasks") or invalidated),
+                    "created_at": _now_iso(),
+                    "confirmed_at": None,
+                    "discarded_at": None,
+                }
+                revision_state["change_sets"] = [*change_sets, change_set][-40:]
+                revision_state["pending_change_set_id"] = change_set["id"]
+                project["revision_state"] = revision_state
+                project["updated_at"] = _now_iso()
+                projects = data.get("projects") or []
+                projects[index] = project
+                data["projects"] = projects
+                self._save(data)
+                return project, change_set
+        raise KeyError("Project not found")
+
+    def discard_change_set(self, project_id: str, change_set_id: str) -> Dict[str, Any]:
+        with _STORE_LOCK:
+            data = self._load()
+            for index, raw_project in enumerate(data.get("projects") or []):
+                if not isinstance(raw_project, dict) or raw_project.get("id") != project_id:
+                    continue
+                project = ensure_project_governance(raw_project)
+                revision_state = project.get("revision_state") if isinstance(project.get("revision_state"), dict) else {}
+                for change_set in revision_state.get("change_sets") or []:
+                    if isinstance(change_set, dict) and change_set.get("id") == change_set_id:
+                        if change_set.get("status") != "preview_ready":
+                            raise ValueError("该修改预览已不可操作")
+                        change_set["status"] = "discarded"
+                        change_set["discarded_at"] = _now_iso()
+                        revision_state["pending_change_set_id"] = ""
+                        project["revision_state"] = revision_state
+                        project["updated_at"] = _now_iso()
+                        data["projects"][index] = project
+                        self._save(data)
+                        return project
+                raise KeyError("Change set not found")
+        raise KeyError("Project not found")
+
+    def confirm_change_set(self, project_id: str, change_set_id: str) -> tuple[Dict[str, Any], Dict[str, Any]]:
+        with _STORE_LOCK:
+            data = self._load()
+            for index, raw_project in enumerate(data.get("projects") or []):
+                if not isinstance(raw_project, dict) or raw_project.get("id") != project_id:
+                    continue
+                project = ensure_project_governance(raw_project)
+                revision_state = project.get("revision_state") if isinstance(project.get("revision_state"), dict) else {}
+                change_set = next((item for item in revision_state.get("change_sets") or [] if isinstance(item, dict) and item.get("id") == change_set_id), None)
+                if not isinstance(change_set, dict) or change_set.get("status") != "preview_ready":
+                    raise ValueError("该修改预览已不可操作")
+                if change_set.get("base_revision_id") != revision_state.get("published_revision_id"):
+                    raise ValueError("项目版本已变化，请重新生成修改预览")
+                patch = change_set.get("patch") if isinstance(change_set.get("patch"), dict) else {}
+                merged = ensure_project_governance({**project, **deepcopy(patch), "updated_at": _now_iso()})
+                invalidated = [stage for stage in change_set.get("invalidated_stages") or [] if stage in WORKFLOW_KEYS]
+                _mark_stale(merged, invalidated)
+                if change_set.get("earliest_stage"):
+                    merged["stage"] = str(change_set["earliest_stage"])
+                next_revision_id = f"rev-{len(revision_state.get('revisions') or []) + 1:03d}"
+                change_set["status"] = "confirmed"
+                change_set["confirmed_at"] = _now_iso()
+                revision_state["pending_change_set_id"] = ""
+                revision_state["published_revision_id"] = next_revision_id
+                revision_state["revisions"] = [
+                    *(revision_state.get("revisions") or []),
+                    {
+                        "id": next_revision_id,
+                        "parent_revision_id": str(change_set.get("base_revision_id") or ""),
+                        "status": "published",
+                        "created_at": _now_iso(),
+                        "created_by": "user_confirmation",
+                        "change_set_id": change_set_id,
+                        "snapshot": _revision_snapshot(merged),
+                        "workflow_state": deepcopy(merged.get("workflow_state") or {}),
+                    },
+                ]
+                merged["revision_state"] = revision_state
+                _append_audit(merged, "change_set_confirmed", source="user", details={"change_set_id": change_set_id, "revision_id": next_revision_id})
+                data["projects"][index] = merged
+                self._save(data)
+                return merged, change_set
+        raise KeyError("Project not found")
+
+    def restore_revision(self, project_id: str, revision_id: str) -> Dict[str, Any]:
+        with _STORE_LOCK:
+            data = self._load()
+            for index, raw_project in enumerate(data.get("projects") or []):
+                if not isinstance(raw_project, dict) or raw_project.get("id") != project_id:
+                    continue
+                project = ensure_project_governance(raw_project)
+                revision_state = project.get("revision_state") if isinstance(project.get("revision_state"), dict) else {}
+                source = next((item for item in revision_state.get("revisions") or [] if isinstance(item, dict) and item.get("id") == revision_id), None)
+                if not isinstance(source, dict):
+                    raise KeyError("Revision not found")
+                snapshot = source.get("snapshot") if isinstance(source.get("snapshot"), dict) else {}
+                restored = ensure_project_governance({**project, **deepcopy(snapshot), "updated_at": _now_iso()})
+                parent_revision_id = str(revision_state.get("published_revision_id") or "")
+                next_revision_id = f"rev-{len(revision_state.get('revisions') or []) + 1:03d}"
+                revision_state["published_revision_id"] = next_revision_id
+                revision_state["pending_change_set_id"] = ""
+                revision_state["revisions"] = [
+                    *(revision_state.get("revisions") or []),
+                    {
+                        "id": next_revision_id,
+                        "parent_revision_id": parent_revision_id,
+                        "status": "published",
+                        "created_at": _now_iso(),
+                        "created_by": "revision_restore",
+                        "change_set_id": "",
+                        "snapshot": _revision_snapshot(restored),
+                        "workflow_state": deepcopy(restored.get("workflow_state") or {}),
+                    },
+                ]
+                restored["revision_state"] = revision_state
+                _append_audit(restored, "revision_restored", source="user", details={"source_revision_id": revision_id, "revision_id": next_revision_id})
+                data["projects"][index] = restored
+                self._save(data)
+                return restored
         raise KeyError("Project not found")

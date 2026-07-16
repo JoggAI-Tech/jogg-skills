@@ -1,6 +1,6 @@
 # Video Studio Planning Contracts
 
-Source: `backend/services/video_studio_planner.py` at Podcastor commit `57317cb688139c5336d51126fe624cb984b65d28`.
+Source: `backend/services/video_studio_planner.py` at Podcastor commit `1d154ee8b5f9c3198018c1cb410295b0164db346`.
 
 Use these existing contracts when Codex prepares `--planning-file`. Keep the project topic literal and keep `target_duration_seconds` between 60 and 1800.
 
@@ -66,6 +66,22 @@ For each scene, provide:
     "one_learning_point": "",
     "visual_system": "causal",
     "main_visual_metaphor": "",
+    "visual_recipe": {
+      "composition_id": "causal_spine",
+      "hero_device_id": "semantic_icon_cluster",
+      "material_id": "editorial_color_field",
+      "motion_id": "directional_build_lock",
+      "originality_note": "content-specific original translation"
+    },
+    "composition": {
+      "animation_type": "self_contained_html",
+      "layout": "directional_path",
+      "hero_frame": {"kind": "large semantic subject", "x": 72, "y": 96, "w": 1776, "h": 760},
+      "typography": {"headline_scale": "display", "headline_min_px": 64, "supporting_min_px": 28},
+      "visual_primitives": ["path", "node", "icon"],
+      "icon_semantics": ["concept A", "concept B"],
+      "motion_choreography": "establish the subject, build the relationship, lock the conclusion"
+    },
     "visual_fx": {"fx_pack_id": "none", "intensity": "low", "opacity": 0.18, "usage": ""},
     "logic_chain": [],
     "supporting_metric": {},
@@ -78,7 +94,7 @@ For each scene, provide:
 
 Search queries are for Pexels/Pixabay: one visible scene, 3-8 words, no narration sentences, no causal explanation, and distinct shot semantics. `duration_seconds` equals the scene's voiceover duration.
 
-Use one visual system from `metric`, `causal`, `route`, `timeline`, `comparison`, or `reveal`; one main visual metaphor; one learning point; and no more than three visible text blocks. `visual_fx` adds texture only and never carries meaning.
+Use one visual system from `metric`, `causal`, `route`, `timeline`, `comparison`, or `reveal`; one main visual metaphor; one learning point; and no more than three visible text blocks. Select the PPT-derived `visual_recipe` and full-frame `composition` here in the MG director layer, following [mg-director-visual-contract.md](mg-director-visual-contract.md). `visual_fx` adds texture only and never carries meaning.
 
 ## Storyboard
 
@@ -87,7 +103,7 @@ Use one visual system from `metric`, `causal`, `route`, `timeline`, `comparison`
 - `title`, `narration`, and `duration_seconds`.
 - `broll_prompt` and `asset_search_plan`.
 - `scene_role`: `broll_backdrop_overlay` or `full_broll`.
-- `visual_role`, `information_layer`, and `mg_director`.
+- `visual_role`, `information_layer`, and the exact director-selected `mg_director.visual_recipe` and `mg_director.composition`.
 - `html_render_strategy` and `html_design` for information-layer shots.
 
 The local API runs the extracted `normalize_scene_groups()` and `build_render_contract_package()` when `scene_groups` is patched. Do not manually fabricate `render_manifest`, `director_timeline`, or derived layers when the normalizer can produce them.

@@ -4,6 +4,7 @@ import {
   videoStudioEditorTimelineLayers,
   videoStudioHtmlGenerationUiState,
   videoStudioProjectUrlWithId,
+  resolveVideoStudioSelectedShotId,
   videoStudioWorkflowStages,
 } from './model.ts';
 
@@ -102,6 +103,24 @@ if (projectUrl !== 'http://127.0.0.1:5174/tools/video-studio?foo=bar&project_id=
 const replacedProjectUrl = videoStudioProjectUrlWithId('http://127.0.0.1:5174/tools/video-studio?project_id=old', 'project-456');
 if (replacedProjectUrl !== 'http://127.0.0.1:5174/tools/video-studio?project_id=project-456') {
   throw new Error('project URL should replace stale project_id');
+}
+
+const refreshedSelectedShot = resolveVideoStudioSelectedShotId({
+  currentShotId: 'shot-02',
+  persistedShotId: 'shot-01',
+  shotIds: ['shot-01', 'shot-02', 'shot-03'],
+});
+if (refreshedSelectedShot !== 'shot-02') {
+  throw new Error('project polling must keep the currently previewed shot when it still exists');
+}
+
+const missingSelectedShot = resolveVideoStudioSelectedShotId({
+  currentShotId: 'removed-shot',
+  persistedShotId: 'shot-03',
+  shotIds: ['shot-01', 'shot-02', 'shot-03'],
+});
+if (missingSelectedShot !== 'shot-03') {
+  throw new Error('project polling should recover to the persisted shot only when the current shot is unavailable');
 }
 
 const brollOnlyManifest = createVideoStudioManifest({

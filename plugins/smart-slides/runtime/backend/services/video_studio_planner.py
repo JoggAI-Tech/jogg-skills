@@ -12,6 +12,10 @@ import re
 from copy import deepcopy
 from typing import Any, Dict, List
 from backend.services.video_studio_mg_design import instantiate_mg_design_doc
+from backend.services.video_studio_ppt_visual_assets import (
+    ppt_visual_contract_art_direction,
+    ppt_visual_language_catalog_prompt,
+)
 
 BROLL_BACKDROP = "broll_backdrop_overlay"
 
@@ -19,7 +23,10 @@ BROLL_BACKDROP = "broll_backdrop_overlay"
 FULL_BROLL = "full_broll"
 
 
-VALID_SCENE_ROLES = {BROLL_BACKDROP, FULL_BROLL}
+AVATAR_ONLY = "avatar_only"
+
+
+VALID_SCENE_ROLES = {BROLL_BACKDROP, FULL_BROLL, AVATAR_ONLY}
 
 
 VALID_OVERLAY_TYPES = {"metric_callout", "route_trace", "causal_chain", "keyword_stamp", "field_labels"}
@@ -76,13 +83,16 @@ DEFAULT_RENDER_HEIGHT = 1080
 MAX_CREATIVE_PLAN_SCENES = 12
 
 
+MAX_STORYBOARD_SHOT_DURATION_SECONDS = 15
+
+
 DOCUMENTARY_OVERLAY_ART_DIRECTION = (
-    "Art direction: cinematic documentary transparent overlay, not a webpage. "
-    "Use one dominant full-frame visual structure, SVG paths, thin measurement lines, partial frames, coordinate ticks, scan motion, "
-    "translucent investigative/satellite textures, semantic color, and restrained data labels. "
-    "The primary visual must occupy the middle safe canvas and remain readable when paused over B-roll. "
-    "Avoid cards, dashboard UI, rounded panels, buttons, navigation, decorative blobs, generic glassmorphism, "
-    "and full-page sections."
+    "Art direction: cinematic documentary transparent overlay with composited editorial foreground, not a webpage. "
+    "Use one dominant editorial stage with a large visual mass, bold color field, cut-paper or ink-like mask, and a complete self-contained 16:9 composition. "
+    "SVG paths, measurement lines, partial frames, coordinate ticks and scan motion are secondary accents, never the main picture. "
+    "The primary visual must occupy the middle safe canvas and remain readable as a standalone HTML frame. "
+    "Avoid cards, dashboard UI, rounded panels, buttons, navigation, decorative blobs, generic glassmorphism, repeated grids, "
+    "and line-only diagrams."
 )
 
 
@@ -198,19 +208,26 @@ def generate_storyboard_from_creative_plan(
                 continue
             duration = _positive_int(unit.get("duration_seconds"), _positive_int(asset_plan.get("duration_seconds"), 7))
             unit_id = str(unit.get("id") or f"script-{unit_index:02d}")
-            has_mg_for_unit = production_format == "broll_html" and _mg_director_enabled(mg_director) and (not mg_unit_ids or unit_id in mg_unit_ids)
-            scene_role = BROLL_BACKDROP if has_mg_for_unit else FULL_BROLL
+            is_avatar_only = _is_avatar_only_voiceover_unit(scene, unit, unit_index, len(units), production_format)
+            has_mg_for_unit = (
+                not is_avatar_only
+                and production_format == "broll_html"
+                and _mg_director_enabled(mg_director)
+                and (not mg_unit_ids or unit_id in mg_unit_ids)
+            )
+            scene_role = AVATAR_ONLY if is_avatar_only else (BROLL_BACKDROP if has_mg_for_unit else FULL_BROLL)
             if has_mg_for_unit:
                 mg_shot_indexes.append(len(shots) + 1)
+            broll_prompt = "" if is_avatar_only else _asset_prompt_from_plan(asset_plan, narration)
             shots.append({
                 "title": str(unit.get("title") or scene.get("title") or f"分镜 {scene_index}-{unit_index}"),
                 "narration": narration,
                 "duration_seconds": duration,
-                "broll_prompt": _asset_prompt_from_plan(asset_plan, narration),
+                "broll_prompt": broll_prompt,
                 "scene_role": scene_role,
                 "visual_role": _visual_role_for_scene_role(scene_role),
                 "information_layer": _information_layer_from_mg_director(scene, mg_director, narration) if has_mg_for_unit else {},
-                "asset_search_plan": asset_plan,
+                "asset_search_plan": {} if is_avatar_only else asset_plan,
                 "mg_director": mg_director if has_mg_for_unit else {},
                 "creative_scene_id": str(scene.get("id") or f"scene-{scene_index:02d}"),
                 "voiceover_unit_id": unit_id,
@@ -478,6 +495,42 @@ def _normalize_html_motion_director(value: Any, topic: str) -> Dict[str, Any]:
     }
 
 
+def _split_storyboard_shot_duration(duration_seconds: int) -> List[int]:
+    part_count = max(1, (duration_seconds + MAX_STORYBOARD_SHOT_DURATION_SECONDS - 1) // MAX_STORYBOARD_SHOT_DURATION_SECONDS)
+    base_duration, remainder = divmod(duration_seconds, part_count)
+    return [base_duration + (1 if index < remainder else 0) for index in range(part_count)]
+
+
+def _split_storyboard_narration(narration: str, part_count: int) -> List[str]:
+    if part_count <= 1:
+        return [narration]
+
+    length = len(narration)
+    boundaries: List[int] = []
+    previous = 0
+    preferred_boundaries = {
+        index + 1
+        for index, character in enumerate(narration)
+        if character in "。！？!?；;，,、：:\n" or character.isspace()
+    }
+    for part_index in range(1, part_count):
+        remaining_parts = part_count - part_index
+        minimum = previous + 1
+        maximum = length - remaining_parts
+        target = round(length * part_index / part_count)
+        candidates = [position for position in preferred_boundaries if minimum <= position <= maximum]
+        boundary = min(candidates, key=lambda position: (abs(position - target), position)) if candidates else max(minimum, min(maximum, target))
+        boundaries.append(boundary)
+        previous = boundary
+
+    chunks: List[str] = []
+    start = 0
+    for boundary in [*boundaries, length]:
+        chunks.append(narration[start:boundary])
+        start = boundary
+    return chunks
+
+
 def normalize_scene_groups(groups: List[Any], production_format: str, director_document: Dict[str, Any] | None = None) -> List[Dict[str, Any]]:
     normalized_groups: List[Dict[str, Any]] = []
     shot_counter = 1
@@ -487,37 +540,66 @@ def normalize_scene_groups(groups: List[Any], production_format: str, director_d
         raw_shots = raw_group.get("shots") if isinstance(raw_group.get("shots"), list) else []
         shots: List[Dict[str, Any]] = []
         local_ids: List[str] = []
+        source_shot_ids: List[List[str]] = []
         for raw_shot in raw_shots:
             if not isinstance(raw_shot, dict):
+                source_shot_ids.append([])
                 continue
-            shot_id = f"shot-{shot_counter:02d}"
             duration = _positive_int(raw_shot.get("duration_seconds"), 6)
-            prompt = str(raw_shot.get("broll_prompt") or raw_shot.get("description") or raw_shot.get("visual_description") or "").strip()
             narration = str(raw_shot.get("narration") or raw_shot.get("script") or "").strip()
-            if not narration or not prompt:
-                continue
             scene_role = _scene_role_for_shot(raw_shot, production_format, shot_counter)
+            prompt = str(raw_shot.get("broll_prompt") or raw_shot.get("description") or raw_shot.get("visual_description") or "").strip()
+            if scene_role == AVATAR_ONLY and not prompt:
+                prompt = "纯数字人口播，不使用 B-roll 素材"
+            if not narration or (scene_role != AVATAR_ONLY and not prompt):
+                source_shot_ids.append([])
+                continue
             visual_role = _visual_role_for_scene_role(scene_role)
-            creator_mg_pattern = _creator_mg_pattern_for_shot(raw_shot, shot_id, narration, prompt, scene_role)
-            shots.append(
-                {
-                    "id": shot_id,
-                    "title": str(raw_shot.get("title") or f"分镜 {shot_counter}"),
-                    "narration": narration,
-                    "duration_seconds": duration,
-                    "broll_prompt": prompt,
-                    "scene_role": scene_role,
-                    "visual_role": visual_role,
-                    "creative_scene_id": str(raw_shot.get("creative_scene_id") or ""),
-                    "asset_search_plan": raw_shot.get("asset_search_plan") if isinstance(raw_shot.get("asset_search_plan"), dict) else {},
-                    "mg_director": raw_shot.get("mg_director") if isinstance(raw_shot.get("mg_director"), dict) else {},
-                    "information_layer": _information_layer_for_shot(raw_shot, shot_id, narration, prompt, scene_role),
-                    "creator_mg_pattern": creator_mg_pattern,
-                    "broll_options": _broll_options(shot_id, prompt, duration, raw_shot.get("asset_search_plan") if isinstance(raw_shot.get("asset_search_plan"), dict) else None),
-                }
+            raw_mg_director = raw_shot.get("mg_director") if isinstance(raw_shot.get("mg_director"), dict) else {}
+            has_directed_mg = bool(
+                raw_mg_director.get("version")
+                or raw_mg_director.get("screen_slots")
+                or raw_mg_director.get("composition")
             )
-            local_ids.append(shot_id)
-            shot_counter += 1
+            voiceover_unit_id = str(raw_shot.get("voiceover_unit_id") or "")
+            split_durations = _split_storyboard_shot_duration(duration)
+            split_narrations = _split_storyboard_narration(narration, len(split_durations))
+            split_ids: List[str] = []
+            for split_narration, split_duration in zip(split_narrations, split_durations):
+                shot_id = f"shot-{shot_counter:02d}"
+                mg_director = (
+                    _normalize_mg_director(
+                        raw_mg_director,
+                        raw_shot,
+                        production_format,
+                        [{"id": voiceover_unit_id or shot_id, "text": split_narration, "duration_seconds": split_duration}],
+                    )
+                    if has_directed_mg
+                    else raw_mg_director
+                )
+                creator_mg_pattern = _creator_mg_pattern_for_shot(raw_shot, shot_id, split_narration, prompt, scene_role)
+                shots.append(
+                    {
+                        "id": shot_id,
+                        "title": str(raw_shot.get("title") or f"分镜 {shot_counter}"),
+                        "narration": split_narration,
+                        "duration_seconds": split_duration,
+                        "broll_prompt": prompt,
+                        "scene_role": scene_role,
+                        "visual_role": visual_role,
+                        "creative_scene_id": str(raw_shot.get("creative_scene_id") or ""),
+                        "voiceover_unit_id": voiceover_unit_id,
+                        "asset_search_plan": raw_shot.get("asset_search_plan") if isinstance(raw_shot.get("asset_search_plan"), dict) else {},
+                        "mg_director": mg_director,
+                        "information_layer": _information_layer_for_shot(raw_shot, shot_id, split_narration, prompt, scene_role),
+                        "creator_mg_pattern": creator_mg_pattern,
+                        "broll_options": [] if scene_role == AVATAR_ONLY else _broll_options(shot_id, prompt, split_duration, raw_shot.get("asset_search_plan") if isinstance(raw_shot.get("asset_search_plan"), dict) else None),
+                    }
+                )
+                split_ids.append(shot_id)
+                local_ids.append(shot_id)
+                shot_counter += 1
+            source_shot_ids.append(split_ids)
         if not shots:
             continue
         html_layers: List[Dict[str, Any]] = []
@@ -529,17 +611,41 @@ def normalize_scene_groups(groups: List[Any], production_format: str, director_d
                 shot_ids = []
                 for item in indexes:
                     index = _positive_int(item, 0)
-                    if 1 <= index <= len(local_ids):
-                        shot_ids.append(local_ids[index - 1])
+                    if 1 <= index <= len(source_shot_ids):
+                        shot_ids.extend(source_shot_ids[index - 1])
+                shot_ids = list(dict.fromkeys(shot_ids))
                 if not shot_ids:
                     shot_ids = local_ids[:1]
+                layer_voiceover = [
+                    {"id": str(shot.get("id") or ""), "text": str(shot.get("narration") or ""), "duration_seconds": shot.get("duration_seconds")}
+                    for shot in shots
+                    if str(shot.get("id") or "") in shot_ids
+                ]
+                layer_source = raw_layer.get("mg_director") if isinstance(raw_layer.get("mg_director"), dict) else {}
+                if not layer_source and shots:
+                    layer_source = shots[0].get("mg_director") if isinstance(shots[0].get("mg_director"), dict) else {}
+                has_directed_layer_mg = bool(
+                    layer_source.get("version")
+                    or layer_source.get("screen_slots")
+                    or layer_source.get("composition")
+                )
+                layer_mg_director = (
+                    _normalize_mg_director(
+                        layer_source,
+                        {"title": raw_layer.get("title") or raw_group.get("title") or "信息层", "director_note": raw_layer.get("description") or ""},
+                        production_format,
+                        layer_voiceover,
+                    )
+                    if has_directed_layer_mg
+                    else layer_source
+                )
                 html_layers.append(
                     {
                         "id": f"html-layer-{group_index:02d}-{layer_index:02d}",
                         "title": str(raw_layer.get("title") or "信息层"),
                         "shot_ids": shot_ids,
                         "description": str(raw_layer.get("description") or ""),
-                        "mg_director": raw_layer.get("mg_director") if isinstance(raw_layer.get("mg_director"), dict) else {},
+                        "mg_director": layer_mg_director,
                         "style": raw_layer.get("style") if isinstance(raw_layer.get("style"), dict) else {
                             "palette": ["#14B8A6", "#0F172A", "#F8FAFC"],
                             "typography": "醒目标题 + 简短说明",
@@ -559,8 +665,112 @@ def normalize_scene_groups(groups: List[Any], production_format: str, director_d
         )
     if not normalized_groups:
         raise VideoStudioGenerationError("视频生成模型返回的分镜缺少可用 shots")
+    normalized_groups = _enforce_avatar_only_storyboard_balance(normalized_groups, production_format)
+    normalized_groups = _enforce_full_broll_storyboard_balance(normalized_groups, production_format)
     normalized_groups = _hydrate_group_timing(normalized_groups, director_document)
     return normalized_groups
+
+
+def _enforce_avatar_only_storyboard_balance(
+    groups: List[Dict[str, Any]],
+    production_format: str,
+) -> List[Dict[str, Any]]:
+    """Guarantee a deliberate presenter beat instead of trusting a soft LLM instruction."""
+    if production_format != "broll_html":
+        return groups
+    flattened = [
+        shot
+        for group in groups
+        if isinstance(group, dict)
+        for shot in (group.get("shots") or [])
+        if isinstance(shot, dict)
+    ]
+    if len(flattened) < 4 or any(str(shot.get("scene_role") or "") == AVATAR_ONLY for shot in flattened):
+        return groups
+
+    # Prefer a non-MG bridge; if the model made every scene MG, use the middle
+    # beat so the presenter creates a real narrative reset rather than opening
+    # or ending on an arbitrary visual interruption.
+    candidates = [shot for shot in flattened if str(shot.get("scene_role") or "") == FULL_BROLL]
+    target = candidates[len(candidates) // 2] if candidates else flattened[len(flattened) // 2]
+    target_id = str(target.get("id") or "")
+    for group in groups:
+        if not isinstance(group, dict):
+            continue
+        for shot in group.get("shots") or []:
+            if not isinstance(shot, dict) or str(shot.get("id") or "") != target_id:
+                continue
+            shot.update({
+                "scene_role": AVATAR_ONLY,
+                "visual_role": "avatar_primary",
+                "broll_prompt": "纯数字人口播，不使用 B-roll 素材",
+                "asset_search_plan": {},
+                "broll_options": [],
+                "information_layer": {},
+                "mg_director": {},
+                "creator_mg_pattern": {},
+                "avatar_only_source": "storyboard_balance_guard",
+            })
+        layers = group.get("html_layers") if isinstance(group.get("html_layers"), list) else []
+        group["html_layers"] = [
+            {**layer, "shot_ids": [shot_id for shot_id in (layer.get("shot_ids") or []) if str(shot_id) != target_id]}
+            for layer in layers
+            if isinstance(layer, dict) and any(str(shot_id) != target_id for shot_id in (layer.get("shot_ids") or []))
+        ]
+    return groups
+
+
+def _enforce_full_broll_storyboard_balance(
+    groups: List[Dict[str, Any]],
+    production_format: str,
+) -> List[Dict[str, Any]]:
+    """Keep visual breathing room: HTML/MG is an explanation layer, not wallpaper."""
+    if production_format != "broll_html":
+        return groups
+    flattened = [
+        shot
+        for group in groups
+        if isinstance(group, dict)
+        for shot in (group.get("shots") or [])
+        if isinstance(shot, dict)
+    ]
+    broll_candidates = [shot for shot in flattened if str(shot.get("scene_role") or "") == BROLL_BACKDROP]
+    if len(broll_candidates) < 4:
+        return groups
+    required_plain = max(1, min(3, round(len(flattened) * 0.25)))
+    existing_plain = sum(str(shot.get("scene_role") or "") == FULL_BROLL for shot in flattened)
+    if existing_plain >= required_plain:
+        return groups
+
+    needed = required_plain - existing_plain
+    # Spread plain B-roll through the middle/late narrative instead of taking
+    # the hook or the final conclusion away from the MG director.
+    candidate_indices = [
+        min(len(broll_candidates) - 1, max(0, round((index + 1) * len(broll_candidates) / (needed + 1)) - 1))
+        for index in range(needed)
+    ]
+    target_ids = {str(broll_candidates[index].get("id") or "") for index in candidate_indices}
+    for group in groups:
+        if not isinstance(group, dict):
+            continue
+        for shot in group.get("shots") or []:
+            if not isinstance(shot, dict) or str(shot.get("id") or "") not in target_ids:
+                continue
+            shot.update({
+                "scene_role": FULL_BROLL,
+                "visual_role": "broll_primary",
+                "information_layer": {},
+                "mg_director": {},
+                "creator_mg_pattern": {},
+                "full_broll_source": "storyboard_balance_guard",
+            })
+        layers = group.get("html_layers") if isinstance(group.get("html_layers"), list) else []
+        group["html_layers"] = [
+            {**layer, "shot_ids": [shot_id for shot_id in (layer.get("shot_ids") or []) if str(shot_id) not in target_ids]}
+            for layer in layers
+            if isinstance(layer, dict) and any(str(shot_id) not in target_ids for shot_id in (layer.get("shot_ids") or []))
+        ]
+    return groups
 
 
 def build_render_contract_package(
@@ -650,6 +860,13 @@ def is_current_bespoke_html_asset(asset: Dict[str, Any]) -> bool:
     )
 
 
+def _self_contained_html_direction(value: Any) -> str:
+    text = _short_text(value, 180)
+    if re.search(r"(?i)b[ -]?roll|aperture|framed.?evidence|证据开窗|素材开窗|媒体框|画面框", text):
+        return "HTML 独立完成完整 16:9 构图，以主视觉推进关系并锁定结论，不依赖外部素材。"
+    return text
+
+
 def _sanitize_custom_html_fragment(raw_html: str) -> str:
     text = raw_html.strip()
     text = re.sub(r"(?is)<!doctype[^>]*>", "", text)
@@ -673,6 +890,21 @@ def _sanitize_custom_css(raw_css: str) -> str:
     text = re.sub(r"(?is)expression\s*\([^)]*\)", "", text)
     text = re.sub(r"(?is)javascript:", "", text)
     return text.strip()
+
+
+def _activate_bespoke_html_layers(custom_html: str) -> str:
+    """Give state-driven model animations a visible initial runtime state."""
+    def activate(match: re.Match[str]) -> str:
+        attributes = match.group(2)
+        if re.search(r"(?i)\bdata-state\s*=", attributes):
+            return match.group(0)
+        return f'<{match.group(1)}{attributes} data-state="active">'
+
+    return re.sub(
+        r"(?is)<([a-z][\w:-]*)([^>]*\bdata-ai-generated-html\s*=\s*(['\"])true\3[^>]*)>",
+        activate,
+        custom_html,
+    )
 
 
 def _flatten_shots(scene_groups: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
@@ -744,10 +976,11 @@ def _director_timeline_item(shot: Dict[str, Any]) -> Dict[str, Any]:
             "scene_role": scene_role,
             "query": str(shot.get("broll_prompt") or ""),
             "duration_seconds": _positive_float(shot.get("duration_seconds"), 6.0),
+            "enabled": scene_role != AVATAR_ONLY,
         },
         "avatar": {
-            "layout": "host_right",
-            "position": "host_right",
+            "layout": "center_stage" if scene_role == AVATAR_ONLY else "host_right",
+            "position": "center_stage" if scene_role == AVATAR_ONLY else "host_right",
             "visible": True,
         },
         "information_layer": _manifest_information_layer(shot) if uses_html else {},
@@ -851,16 +1084,18 @@ def _scene_plan_v2_for_shot(shot: Dict[str, Any], *, width: int, height: int) ->
     end_s = _positive_float(shot.get("end_seconds"), start_s + _positive_float(shot.get("duration_seconds"), 6.0))
     avatar_rect = _avatar_rect(width, height)
     subtitle_rect = _subtitle_rect(width, height, avatar_rect)
-    layers: List[Dict[str, Any]] = [
-        {
-            "id": "broll",
-            "kind": "broll",
-            "rect_px": [0, 0, width, height],
-            "feather_px": 0,
-            "blend": "normal",
-            "grade": "natural",
-        }
-    ]
+    layers: List[Dict[str, Any]] = []
+    if scene_role != AVATAR_ONLY:
+        layers.append(
+            {
+                "id": "broll",
+                "kind": "broll",
+                "rect_px": [0, 0, width, height],
+                "feather_px": 0,
+                "blend": "normal",
+                "grade": "natural",
+            }
+        )
     if _shot_uses_html(shot):
         layers.extend([
             {
@@ -885,7 +1120,7 @@ def _scene_plan_v2_for_shot(shot: Dict[str, Any], *, width: int, height: int) ->
             "kind": "avatar",
             "rect_px": avatar_rect,
             "shape": "circle",
-            "layout": "host_right",
+            "layout": "center_stage" if scene_role == AVATAR_ONLY else "host_right",
             "visible": True,
         },
         {
@@ -1177,6 +1412,8 @@ def _metric_from_text(text: str) -> str:
 
 
 def _scene_type_for_information_layer(info: Dict[str, Any], scene_role: str) -> str:
+    if scene_role == AVATAR_ONLY:
+        return "avatar_only"
     if scene_role == FULL_BROLL:
         return "full_broll"
     overlay_type = str(info.get("overlay_type") or "")
@@ -1552,7 +1789,11 @@ def _attach_render_contract(shot: Dict[str, Any], start_seconds: float, html_dir
                 "bespoke_html_prompt": "",
                 "visual_groups": _visual_groups(scene_role, info),
                 "timeline_elements": _timeline_elements(str(shot.get("id") or ""), start_seconds, end_seconds, scene_role, str(shot.get("visual_role") or "broll_primary")),
-                "html_contract_summary": "纯 B-roll 镜头：不生成 HTML 信息层，只保留素材、数字人和字幕轨。" if scene_role != BROLL_BACKDROP else "缺少 MG 导演：不生成 HTML 信息层。",
+                "html_contract_summary": (
+                    "纯数字人镜头：不生成 B-roll/HTML，只保留数字人口播和字幕轨。"
+                    if scene_role == AVATAR_ONLY
+                    else ("纯 B-roll 镜头：不生成 HTML 信息层，只保留素材、数字人和字幕轨。" if scene_role != BROLL_BACKDROP else "缺少 MG 导演：不生成 HTML 信息层。")
+                ),
             }
         )
         return
@@ -2228,6 +2469,7 @@ def _bespoke_html_prompt_for_shot(
     micro_beats: List[Dict[str, Any]],
 ) -> str:
     mg_director = shot.get("mg_director") if isinstance(shot.get("mg_director"), dict) else {}
+    visual_recipe_contract = ppt_visual_contract_art_direction(mg_director.get("visual_recipe"))
     return (
         "生成单个分镜的 HTML 信息层，不要生成完整页面。"
         f"{DOCUMENTARY_OVERLAY_ART_DIRECTION}"
@@ -2237,8 +2479,9 @@ def _bespoke_html_prompt_for_shot(
         f"Overlay Mode：{html_design.get('overlay_mode') or ''}。"
         f"单一学习点：{html_design.get('one_learning_point') or ''}。"
         f"主视觉想法：{html_design.get('central_visual_idea') or ''}。"
+        f"MG导演视觉语法合同：{visual_recipe_contract}。"
         f"屏幕文字策略：{html_design.get('screen_text_policy') or ''}。"
-        f"MG导演：{json.dumps({'story_goal': mg_director.get('story_goal'), 'core_question': mg_director.get('core_question'), 'one_learning_point': mg_director.get('one_learning_point'), 'visual_system': mg_director.get('visual_system'), 'main_visual_metaphor': mg_director.get('main_visual_metaphor'), 'visual_fx': mg_director.get('visual_fx'), 'html_brief': mg_director.get('html_brief')}, ensure_ascii=False)}。"
+        f"MG导演：{json.dumps({'story_goal': mg_director.get('story_goal'), 'core_question': mg_director.get('core_question'), 'one_learning_point': mg_director.get('one_learning_point'), 'visual_system': mg_director.get('visual_system'), 'main_visual_metaphor': mg_director.get('main_visual_metaphor'), 'visual_recipe': mg_director.get('visual_recipe'), 'visual_fx': mg_director.get('visual_fx'), 'html_brief': mg_director.get('html_brief')}, ensure_ascii=False)}。"
         f"导演逻辑链：{json.dumps(mg_director.get('logic_chain') if isinstance(mg_director.get('logic_chain'), list) else [], ensure_ascii=False)}。"
         f"导演时间轴：{json.dumps(mg_director.get('timeline') if isinstance(mg_director.get('timeline'), list) else [], ensure_ascii=False)}。"
         f"MG屏幕文案：{json.dumps(html_design.get('content_slots') or [], ensure_ascii=False)}。"
@@ -2247,9 +2490,9 @@ def _bespoke_html_prompt_for_shot(
         f"高级动效建议：{json.dumps(html_design.get('advanced_effects') or [], ensure_ascii=False)}。"
         f"动效序列：{json.dumps(html_design.get('motion_sequence') or [], ensure_ascii=False)}。"
         f"时间点：{json.dumps(micro_beats, ensure_ascii=False)}。"
-        "MG导演层是唯一语义来源；工程合同只负责画布、安全区、selector 和输出格式，不决定表达内容。"
-        "visual_fx 只负责渐变/水墨/粒子/扫描/颗粒等质感层；它不能新增语义、不能替代 visual_system、不能生成遮挡 B-roll 的大面积色块。"
-        "按 1920x1080 画布生成透明或半透明叠加层，CSS 使用百分比、vmin/vw/vh、clamp 适配 iframe。"
+        "MG导演层是唯一语义与视觉决策来源；工程合同只负责画布、安全区、selector 和输出格式，不决定表达内容。HTML 层不得重新选择 PPT 视觉语法。"
+        "visual_fx 只负责渐变/水墨/粒子/扫描/颗粒等质感层；它不能新增语义、不能替代 visual_system。主视觉允许使用 45%-90% 画面的纯色色场、纸张/墨迹遮罩或大型几何主体，HTML 必须独立完成完整构图。"
+        "按 1920x1080 alpha 画布生成叠加层，CSS 使用百分比、vmin/vw/vh、clamp 适配 iframe；元素可以不透明，但不得铺满整张画布。"
         "不要重排到左上角，不要做通用卡片网格。右侧主体区域可以使用；只避开底部字幕条和右下角小的数字人 host_right 矩形及 16-24px 缓冲区。"
         "完整语义用于理解，屏幕文字必须优先使用“MG屏幕文案”里的短 content_slots，不要主动扩写或补充复杂信息。"
         "输出必须可被渲染器作为透明叠加层消费，优先用 HTML/CSS/SVG 画插画和文字动效，CSS 动画使用 timeline 变量；不要把整个右侧当作数字人安全区。"
@@ -2313,18 +2556,22 @@ def _composition_beats(info: Dict[str, Any], micro_beats: List[Dict[str, Any]]) 
 
 def _visual_groups(scene_role: str, info: Dict[str, Any]) -> List[Dict[str, Any]]:
     uses_html = scene_role == BROLL_BACKDROP and bool(info.get("enabled"))
-    groups = [
-        {
-            "id": "broll",
-            "layer": "broll",
-            "role": "backdrop" if uses_html else "primary",
-            "layout": "full_frame",
-        },
+    groups: List[Dict[str, Any]] = []
+    if scene_role != AVATAR_ONLY:
+        groups.append(
+            {
+                "id": "broll",
+                "layer": "broll",
+                "role": "backdrop" if uses_html else "primary",
+                "layout": "full_frame",
+            }
+        )
+    groups.extend([
         {
             "id": "avatar",
             "layer": "avatar",
-            "role": "presenter",
-            "layout": "host_right",
+            "role": "primary_presenter" if scene_role == AVATAR_ONLY else "presenter",
+            "layout": "center_stage" if scene_role == AVATAR_ONLY else "host_right",
         },
         {
             "id": "caption",
@@ -2332,7 +2579,7 @@ def _visual_groups(scene_role: str, info: Dict[str, Any]) -> List[Dict[str, Any]
             "role": "subtitle",
             "layout": "bottom_safe_area",
         },
-    ]
+    ])
     if uses_html:
         groups.insert(
             1,
@@ -2358,14 +2605,16 @@ def _timeline_elements(scene_id: str, start_seconds: float, end_seconds: float, 
         "visual_role": visual_role,
         "scene_role": scene_role,
     }
-    elements: List[Dict[str, Any]] = [
-        {
-            **base,
-            "id": f"scene:{scene_id}:broll",
-            "type": "broll",
-            "track_index": TIMELINE_TRACKS["broll"],
-        }
-    ]
+    elements: List[Dict[str, Any]] = []
+    if scene_role != AVATAR_ONLY:
+        elements.append(
+            {
+                **base,
+                "id": f"scene:{scene_id}:broll",
+                "type": "broll",
+                "track_index": TIMELINE_TRACKS["broll"],
+            }
+        )
     if visual_role == "hybrid_broll_html":
         elements.append(
             {
@@ -2382,7 +2631,7 @@ def _timeline_elements(scene_id: str, start_seconds: float, end_seconds: float, 
                 "id": f"scene:{scene_id}:avatar",
                 "type": "avatar",
                 "track_index": TIMELINE_TRACKS["avatar"],
-                "layout": "host_right",
+                "layout": "center_stage" if scene_role == AVATAR_ONLY else "host_right",
             },
             {
                 **base,
@@ -2469,7 +2718,7 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
     html_design_overrides = editor_state.get("html_design_overrides") if isinstance(editor_state.get("html_design_overrides"), dict) else {}
     avatar_enabled = bool(editor_state.get("avatar_enabled", True))
     bgm_enabled = bool(editor_state.get("bgm_enabled", True))
-    bgm_volume = max(0.0, min(1.0, _positive_float(editor_state.get("bgm_volume"), 0.35)))
+    bgm_volume = max(0.0, min(1.0, _positive_float(editor_state.get("bgm_volume"), 0.01)))
     selected_bgm_track = editor_state.get("selected_bgm_track") if isinstance(editor_state.get("selected_bgm_track"), dict) else {}
     bgm_url = str(selected_bgm_track.get("asset_url") or "") if bgm_enabled else ""
     bgm_title = str(selected_bgm_track.get("title") or "BGM") if bgm_url else ""
@@ -2516,7 +2765,6 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
             <section class="scene{' scene--html' if html_enabled else ''}" data-index="{index}">
               <div class="media">{media_markup}{fallback_markup}</div>
               <div class="grade"></div>
-              <div class="scene-title">{html.escape(title)}</div>
               {html_overlay}
               {f'<div class="avatar">人</div>' if avatar_enabled else ''}
               <div class="caption">{html.escape(narration)}</div>
@@ -2550,7 +2798,6 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
     .scene--html .media-empty {{ opacity: .32; filter: saturate(.82); }}
     .scene--html .media-empty span, .scene--html .media-empty strong, .scene--html .media-empty p {{ opacity: .28; }}
     .grade {{ position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.54)); }}
-    .scene-title {{ position: absolute; left: 24px; top: 22px; padding: 8px 12px; border-radius: 8px; background: rgba(0,0,0,.38); font-size: 13px; font-weight: 900; backdrop-filter: blur(8px); }}
     .info-layer {{ position: absolute; inset: 0; text-align: left; pointer-events: none; animation: layerIn .7s ease both; }}
     .custom-html-frame {{ width: 100%; height: 100%; border: 0; display: block; background: transparent; }}
     {_mg_visual_system_css()}
@@ -2780,7 +3027,7 @@ def _html_layer_markup_for_preview(
 
 
 def _custom_html_iframe_markup(html_design: Dict[str, Any]) -> str:
-    custom_html = str(html_design.get("custom_html") or "").strip()
+    custom_html = _activate_bespoke_html_layers(str(html_design.get("custom_html") or "").strip())
     custom_css = str(html_design.get("custom_css") or "").strip()
     if not custom_html and not custom_css:
         return ""
@@ -3856,13 +4103,49 @@ def _scene_role_for_shot(raw_shot: Dict[str, Any], production_format: str, shot_
     if raw in VALID_SCENE_ROLES:
         return raw
     raw_visual = str(raw_shot.get("visual_role") or "").strip()
+    if raw_visual == "avatar_primary":
+        return AVATAR_ONLY
     if raw_visual == "broll_primary":
         return FULL_BROLL
     return FULL_BROLL
 
 
 def _visual_role_for_scene_role(scene_role: str) -> str:
+    if scene_role == AVATAR_ONLY:
+        return "avatar_primary"
     return "broll_primary" if scene_role == FULL_BROLL else "hybrid_broll_html"
+
+
+def _is_avatar_only_voiceover_unit(
+    scene: Dict[str, Any],
+    unit: Dict[str, Any],
+    unit_index: int,
+    unit_count: int,
+    production_format: str,
+) -> bool:
+    if production_format != "broll_html":
+        return False
+    raw_role = str(unit.get("scene_role") or unit.get("visual_mode") or scene.get("scene_role") or scene.get("visual_mode") or "").strip()
+    raw_visual = str(unit.get("visual_role") or scene.get("visual_role") or "").strip()
+    if raw_role == AVATAR_ONLY or raw_visual == "avatar_primary":
+        return True
+    text = " ".join(
+        str(value or "")
+        for value in [
+            unit.get("title"),
+            unit.get("text"),
+            scene.get("title"),
+            scene.get("scene_type"),
+            scene.get("director_note"),
+        ]
+    )
+    if re.search(r"(纯数字人|数字人口播|讲解员出镜|主持人口播|口播观点|观点开场|总结判断|结尾判断)", text):
+        return True
+    if unit_count >= 3 and unit_index == 1 and re.search(r"(先说结论|先给结论|口播开场|观点开场|讲解员开场|主持人开场)", text):
+        return True
+    if unit_count >= 3 and unit_index == unit_count and re.search(r"(数字人总结|口播总结|总结判断|结尾判断|主持人收束|讲解员收束)", text):
+        return True
+    return False
 
 
 def _information_layer_for_shot(
@@ -4183,6 +4466,17 @@ def _normalize_mg_director(
             ]
         ),
     )
+    composition = _normalize_mg_composition(
+        raw.get("composition"),
+        visual_system,
+        semantic_text=" ".join(
+            [
+                str(raw_scene.get("title") or ""),
+                str(raw.get("main_visual_metaphor") or ""),
+                str(raw.get("one_learning_point") or ""),
+            ]
+        ),
+    )
     logic_chain = []
     for index, item in enumerate(raw.get("logic_chain") if isinstance(raw.get("logic_chain"), list) else [], start=1):
         if not isinstance(item, dict):
@@ -4248,6 +4542,8 @@ def _normalize_mg_director(
         "one_learning_point": _short_text(raw.get("one_learning_point") or "", 90),
         "visual_system": visual_system,
         "main_visual_metaphor": _short_text(raw.get("main_visual_metaphor") or "", 120),
+        "visual_recipe": raw.get("visual_recipe") if isinstance(raw.get("visual_recipe"), dict) else {},
+        "composition": composition,
         "visual_fx": visual_fx,
         "logic_chain": logic_chain,
         "supporting_metric": {
@@ -4309,6 +4605,127 @@ def _normalize_mg_visual_fx(value: Any, visual_system: str, semantic_text: str =
         "opacity": round(min(max(opacity, 0.0), 0.32), 3),
         "usage": usage,
     }
+
+
+def _normalize_mg_composition(value: Any, visual_system: str, *, semantic_text: str = "") -> Dict[str, Any]:
+    """Normalize the director's composition contract without turning it into a template.
+
+    The director chooses the visual mechanism and spatial hierarchy. The HTML
+    model still authors the actual SVG/CSS, but it no longer has to guess what
+    should dominate the standalone HTML frame.
+    """
+    raw = value if isinstance(value, dict) else {}
+    defaults = {
+        "metric": ("single_focus", "metric_stage", (72, 96, 1776, 760), ["metric", "gauge", "icon"]),
+        "causal": ("directional_path", "causal_spine", (72, 96, 1776, 760), ["path", "node", "icon"]),
+        "route": ("directional_path", "map_path", (72, 84, 1776, 780), ["path", "map", "pin"]),
+        "timeline": ("editorial_timeline", "timeline_stage", (72, 96, 1776, 760), ["axis", "event", "shape"]),
+        "comparison": ("contrast_stage", "contrast_split", (72, 84, 1776, 780), ["divider", "contrast_field", "icon"]),
+        "reveal": ("single_focus", "reveal_mask", (72, 84, 1776, 780), ["mask", "focus_ring", "icon"]),
+    }
+    default_layout, default_kind, default_hero, default_primitives = defaults.get(
+        visual_system, defaults["comparison"]
+    )
+    animation_type = "self_contained_html"
+    layout = str(raw.get("layout") or default_layout).strip().lower()
+    if layout not in {"single_focus", "asymmetric_split", "editorial_timeline", "directional_path", "evidence_frame", "contrast_stage"}:
+        layout = default_layout
+    hero_raw = raw.get("hero_frame") if isinstance(raw.get("hero_frame"), dict) else {}
+
+    def rect(source: Dict[str, Any], fallback: tuple[int, int, int, int]) -> Dict[str, int]:
+        x = int(max(0, min(1800, _positive_float(source.get("x"), fallback[0]))))
+        y = int(max(0, min(984, _positive_float(source.get("y"), fallback[1]))))
+        w = int(max(120, min(1920 - x, _positive_float(source.get("w"), fallback[2]))))
+        h = int(max(96, min(1080 - y, _positive_float(source.get("h"), fallback[3]))))
+        return {"x": x, "y": y, "w": w, "h": h}
+
+    primitives = [
+        str(item).strip().lower()
+        for item in (raw.get("visual_primitives") if isinstance(raw.get("visual_primitives"), list) else default_primitives)
+        if str(item).strip()
+    ]
+    allowed_primitives = {"icon", "path", "node", "metric", "gauge", "map", "pin", "axis", "event", "media_frame", "divider", "contrast_field", "mask", "focus_ring", "shape"}
+    primitives = [("shape" if item == "media_frame" else item) for item in primitives if item in allowed_primitives][:5] or default_primitives
+    icon_semantics = [
+        _screen_text_phrase(item, limit=14)
+        for item in (raw.get("icon_semantics") if isinstance(raw.get("icon_semantics"), list) else [])
+        if _screen_text_phrase(item, limit=14) and len(_screen_text_phrase(item, limit=14)) <= 10
+    ][:3]
+    if "icon" in primitives and not icon_semantics:
+        icon_semantics = _icon_semantics_for_composition(semantic_text, visual_system)
+    typography = raw.get("typography") if isinstance(raw.get("typography"), dict) else {}
+    hero_frame = rect(hero_raw, default_hero)
+    # A composition contract is allowed to be expressive, but its hero cannot
+    # be a decorative corner object. Grow undersized director coordinates while
+    # preserving their center and aspect ratio.
+    min_coverage = 0.52
+    hero_area = hero_frame["w"] * hero_frame["h"]
+    target_area = int(DEFAULT_RENDER_WIDTH * DEFAULT_RENDER_HEIGHT * min_coverage)
+    if hero_area < target_area:
+        ratio = hero_frame["w"] / max(1, hero_frame["h"])
+        target_w = min(1680, max(880, int((target_area * ratio) ** 0.5) + 1))
+        target_h = min(820, max(420, int(target_w / max(0.2, ratio)) + 1))
+        center_x = hero_frame["x"] + hero_frame["w"] / 2
+        center_y = hero_frame["y"] + hero_frame["h"] / 2
+        hero_frame = {
+            "x": int(max(0, min(DEFAULT_RENDER_WIDTH - target_w, center_x - target_w / 2))),
+            "y": int(max(0, min(DEFAULT_RENDER_HEIGHT - target_h, center_y - target_h / 2))),
+            "w": target_w,
+            "h": target_h,
+        }
+    if hero_frame["w"] * hero_frame["h"] < target_area:
+        target_w = min(1776, max(hero_frame["w"], int(target_area / max(1, hero_frame["h"])) + 1))
+        center_x = hero_frame["x"] + hero_frame["w"] / 2
+        hero_frame["x"] = int(max(0, min(DEFAULT_RENDER_WIDTH - target_w, center_x - target_w / 2)))
+        hero_frame["w"] = target_w
+    hero_frame["coverage_percent"] = round(hero_frame["w"] * hero_frame["h"] / (DEFAULT_RENDER_WIDTH * DEFAULT_RENDER_HEIGHT) * 100, 1)
+    return {
+        "version": "mg_composition_v1",
+        "animation_type": animation_type,
+        "layout": layout,
+        "hero_frame": {
+            "kind": _short_text(hero_raw.get("kind") or default_kind, 32),
+            **hero_frame,
+        },
+        "content_mode": "self_contained_html",
+        "typography": {
+            "headline_scale": "display" if str(typography.get("headline_scale") or "display") not in {"display", "large"} else str(typography.get("headline_scale") or "display"),
+            "headline_min_px": int(max(48, min(128, _positive_float(typography.get("headline_min_px"), 64)))),
+            "supporting_min_px": int(max(22, min(56, _positive_float(typography.get("supporting_min_px"), 28)))),
+        },
+        "visual_primitives": primitives,
+        "icon_semantics": icon_semantics,
+        "motion_choreography": _self_contained_html_direction(raw.get("motion_choreography")) or "先建立主视觉，再推进关系，最后锁定结论。",
+    }
+
+
+def _icon_semantics_for_composition(semantic_text: str, visual_system: str) -> List[str]:
+    """Return drawable concepts, never narration fragments, for inline SVG icons."""
+    text = str(semantic_text or "").lower()
+    rules = [
+        ("资本流", ("资本", "融资", "注资", "投资", "估值")),
+        ("芯片算力", ("芯片", "算力", "gpu", "服务器", "计算")),
+        ("云模型", ("模型", "ai", "大模型", "云", "openai", "anthropic")),
+        ("公司主体", ("微软", "谷歌", "亚马逊", "meta", "苹果", "巨头", "公司")),
+        ("数据网络", ("数据", "网络", "连接", "生态", "平台")),
+        ("竞争对峙", ("竞争", "对峙", "围猎", "战", "博弈")),
+        ("时间节点", ("时间", "年份", "季度", "阶段", "历程")),
+        ("空间路径", ("地图", "路线", "流向", "路径", "区域")),
+    ]
+    selected = [label for label, signals in rules if any(signal in text for signal in signals)]
+    if visual_system == "timeline":
+        selected.append("时间节点")
+    elif visual_system == "route":
+        selected.append("空间路径")
+    elif visual_system == "causal":
+        selected.append("因果箭头")
+    elif visual_system == "comparison":
+        selected.append("竞争对峙")
+    seen: List[str] = []
+    for item in selected:
+        if item not in seen:
+            seen.append(item)
+    return seen[:3] or ["核心概念", "关系路径"]
 
 
 def _default_mg_visual_fx_usage(fx_pack_id: str) -> str:

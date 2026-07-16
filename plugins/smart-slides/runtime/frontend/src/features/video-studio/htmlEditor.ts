@@ -60,6 +60,48 @@ export const htmlMotionPresets: Array<{ value: HtmlEditableBlockMotion; label: s
   { value: 'none', label: '无' },
 ];
 
+export function activateGeneratedHtmlLayers(htmlSource: string) {
+  return htmlSource.replace(
+    /<([a-z][\w:-]*)([^>]*\bdata-ai-generated-html=(['"])true\3[^>]*)>/gi,
+    (tag, tagName: string, attributes: string) => {
+      if (/\bdata-state\s*=/.test(attributes)) return tag;
+      return `<${tagName}${attributes} data-state="active">`;
+    },
+  );
+}
+
+export function resolveHtmlPreviewSource({
+  overrideHtml,
+  overrideCss,
+  generatedHtml,
+  generatedCss,
+  defaultHtml,
+  defaultCss,
+}: {
+  overrideHtml?: string;
+  overrideCss?: string;
+  generatedHtml?: string;
+  generatedCss?: string;
+  defaultHtml: string;
+  defaultCss: string;
+}): { html: string; css: string; source: 'override' | 'generated' | 'default' } {
+  const hasOverride = Boolean(overrideHtml?.trim() || overrideCss?.trim());
+  const hasGenerated = Boolean(generatedHtml?.trim() || generatedCss?.trim());
+  const generatedFallbackHtml = generatedHtml?.trim() ? generatedHtml : defaultHtml;
+  const generatedFallbackCss = generatedCss?.trim() ? generatedCss : defaultCss;
+  if (hasOverride) {
+    return {
+      html: overrideHtml?.trim() ? overrideHtml : generatedFallbackHtml,
+      css: overrideCss?.trim() ? overrideCss : generatedFallbackCss,
+      source: 'override',
+    };
+  }
+  if (hasGenerated) {
+    return { html: generatedFallbackHtml, css: generatedFallbackCss, source: 'generated' };
+  }
+  return { html: defaultHtml, css: defaultCss, source: 'default' };
+}
+
 const htmlLayerAdjustStart = '/* hermes-html-layer-adjust:start */';
 const htmlLayerAdjustEnd = '/* hermes-html-layer-adjust:end */';
 const htmlBlockAdjustStart = '/* hermes-html-block-adjust:start */';
@@ -109,7 +151,11 @@ function decodeHtmlText(value: string) {
 export function ensureHtmlEditableBlocks(htmlSource: string) {
   if (htmlSource.includes(`data-ai-edit-block=`)) {
     const existingBlockCount = (htmlSource.match(/data-ai-edit-block=/g) ?? []).length;
-    return normalizeHtmlEditableBlockTags(ensureHtmlVisualEditableBlocks(htmlSource, existingBlockCount));
+    // Generated overlays frequently label their SVG groups but omit the text
+    // nodes. Do not let a single existing visual marker disable text editing.
+    return normalizeHtmlEditableBlockTags(
+      ensureHtmlVisualEditableBlocks(ensureHtmlTextElementEditableBlocks(htmlSource, existingBlockCount), existingBlockCount),
+    );
   }
   const segments = extractHtmlTextSegments(htmlSource);
   let nextHtml = htmlSource;
@@ -120,6 +166,22 @@ export function ensureHtmlEditableBlocks(htmlSource: string) {
     nextHtml = `${nextHtml.slice(0, segment.index)}${wrapped}${nextHtml.slice(segment.index + segment.text.length)}`;
   });
   return normalizeHtmlEditableBlockTags(ensureHtmlVisualEditableBlocks(nextHtml, segments.length));
+}
+
+function ensureHtmlTextElementEditableBlocks(htmlSource: string, existingBlockCount: number) {
+  let textIndex = 0;
+  return htmlSource.replace(
+    /<(h[1-6]|p|span|strong|b|em|label|li|text)(\s[^<>]*?)?>(\s*[^<>{}][^<>]*?)<\/\1>/gi,
+    (match, tagName: string, attrs = '', text: string) => {
+      if (/data-ai-edit-block=(['"]).*?\1/i.test(attrs)) return match;
+      const visibleText = text.replace(/\s+/g, ' ').trim();
+      if (!visibleText || /^[;:,.，。！？、\s]+$/.test(visibleText)) return match;
+      textIndex += 1;
+      const blockId = `text-${existingBlockCount + textIndex}`;
+      const nextAttrs = ensureClassName(attrs || '', htmlEditableBlockClass);
+      return `<${tagName}${nextAttrs} data-ai-edit-block="${blockId}" data-ai-edit-kind="text" data-ai-edit-name="文字 ${textIndex}">${text}</${tagName}>`;
+    },
+  );
 }
 
 function ensureClassName(attrSource: string, className: string) {
@@ -152,7 +214,7 @@ function normalizeHtmlEditableBlockTags(htmlSource: string) {
         nextAttrs = `${nextAttrs} data-ai-edit-kind="${visualTag ? 'visual' : 'text'}"`;
       }
       if (!/\sdata-ai-edit-name=(["']).*?\1/i.test(nextAttrs)) {
-        nextAttrs = `${nextAttrs} data-ai-edit-name="${visualTag ? visualBlockName(tagName, nextId) : nextId}"`;
+        nextAttrs = `${nextAttrs} data-ai-edit-name="${visualBlockName(tagName, nextId)}"`;
       }
       return `<${tagName}${nextAttrs}${selfClosing ? ' /' : ''}>`;
     },
@@ -184,6 +246,14 @@ function readAttr(attrs: string, name: string) {
 }
 
 function visualBlockName(tagName: string, id: string) {
+  const normalizedId = id.toLowerCase();
+  if (normalizedId.includes('headline')) return '主标题';
+  if (normalizedId.includes('takeaway') || normalizedId.includes('verdict')) return '结论';
+  if (normalizedId.includes('field') || normalizedId.includes('background')) return '背景色场';
+  if (normalizedId.includes('scan')) return '扫描线';
+  if (normalizedId.includes('tear') || normalizedId.includes('divider')) return '画面分界';
+  if (normalizedId.includes('tick') || normalizedId.includes('measure')) return '测量刻度';
+  if (normalizedId.includes('mass') || normalizedId.includes('hero')) return '主视觉图形';
   const tag = tagName.toLowerCase();
   if (tag === 'path' || tag === 'polyline' || tag === 'line') return '路径 / 线条';
   if (tag === 'circle' || tag === 'ellipse') return '节点 / 圆点';
@@ -194,14 +264,16 @@ function visualBlockName(tagName: string, id: string) {
 
 export function extractHtmlEditableBlocks(htmlSource: string, cssSource: string): HtmlEditableBlock[] {
   const blocks: HtmlEditableBlock[] = [];
-  const matcher = new RegExp(`<([a-z][\\w:-]*)([^>]*data-ai-edit-block=(["'])(.*?)\\3[^>]*)>([\\s\\S]*?)(?:<\\/\\1>)?`, 'gi');
+  const matcher = new RegExp(`<([a-z][\\w:-]*)([^>]*data-ai-edit-block=(["'])(.*?)\\3[^>]*)>`, 'gi');
   let match: RegExpExecArray | null;
   while ((match = matcher.exec(htmlSource)) !== null) {
     const tagName = match[1].toLowerCase();
     const attrs = match[2] ?? '';
     const id = match[4];
     const kind = (readAttr(attrs, 'data-ai-edit-kind') === 'visual' || visualEditableTags.has(tagName) ? 'visual' : 'text') as HtmlEditableBlockKind;
-    const rawText = (match[5] ?? '').replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+    const closingIndex = htmlSource.toLowerCase().indexOf(`</${tagName}>`, matcher.lastIndex);
+    const innerHtml = closingIndex >= 0 ? htmlSource.slice(matcher.lastIndex, closingIndex) : '';
+    const rawText = innerHtml.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
     if (!id) continue;
     const escapedId = escapeRegExp(id);
     const selectorPattern = new RegExp(`\\.${htmlEditableBlockClass}\\[data-ai-edit-block=["']${escapedId}["']\\]\\s*\\{([\\s\\S]*?)\\}`, 'i');
@@ -237,7 +309,19 @@ export function extractHtmlEditableBlocks(htmlSource: string, cssSource: string)
       motionDuration: readNumber('--ai-block-motion-duration', 0.58, 0.05, 12),
     });
   }
-  return blocks.slice(0, 16);
+  // AI HTML often declares a large SVG before its headline/metric text. Keeping
+  // the first N nodes made visible copy impossible to select because the list
+  // was consumed by background paths. Preserve text and semantic groups first.
+  return blocks
+    .sort((left, right) => {
+      const priority = (block: HtmlEditableBlock) => {
+        if (block.kind === 'text') return 0;
+        if (!/^visual-\d+$/i.test(block.id)) return 1;
+        return 2;
+      };
+      return priority(left) - priority(right);
+    })
+    .slice(0, 28);
 }
 
 export function extractHtmlAdjustedBlockIds(cssSource: string) {
@@ -291,17 +375,17 @@ export function upsertHtmlBlockAdjustCss(cssSource: string, blocks: HtmlEditable
       if (block.kind === 'visual') {
         const lineLike = ['path', 'polyline', 'line'].includes(block.tagName);
         const visualPaint = lineLike ? `stroke:var(--ai-block-color)!important;fill:none!important;stroke-width:max(2px,calc(var(--ai-block-height) / 18))!important;` : `fill:var(--ai-block-color)!important;stroke:var(--ai-block-color)!important;`;
-        return `.${htmlEditableBlockClass}[data-ai-edit-block="${block.id}"]{--ai-block-x:${x}px;--ai-block-y:${y}px;--ai-block-width:${width}px;--ai-block-height:${height}px;--ai-block-rotate:${rotate}deg;--ai-block-z:${zIndex};--ai-block-font-size:${fontSize};--ai-block-opacity:${opacity};--ai-block-color:${color};--ai-block-motion:${motion};--ai-block-motion-start:${motionStart};--ai-block-motion-duration:${motionDuration}s;--ai-block-locked:${block.locked ? 1 : 0};opacity:var(--ai-block-opacity)!important;visibility:${block.hidden ? 'hidden' : 'visible'}!important;z-index:var(--ai-block-z)!important;transform-box:fill-box!important;transform-origin:center!important;transform:translate3d(var(--ai-block-x),var(--ai-block-y),0) rotate(var(--ai-block-rotate)) scale(calc(var(--ai-block-font-size) / 100))!important;${visualPaint}filter:drop-shadow(0 0 calc(var(--ai-block-height) / 12) color-mix(in srgb,var(--ai-block-color),transparent 55%));animation:${animation};animation-delay:${motionStart}s;animation-duration:${motionDuration}s;}`;
+        return `.${htmlEditableBlockClass}[data-ai-edit-block="${block.id}"]{--ai-block-x:${x}px;--ai-block-y:${y}px;--ai-block-width:${width}px;--ai-block-height:${height}px;--ai-block-rotate:${rotate}deg;--ai-block-z:${zIndex};--ai-block-font-size:${fontSize};--ai-block-opacity:${opacity};--ai-block-color:${color};--ai-block-motion:${motion};--ai-block-motion-start:${motionStart};--ai-block-motion-duration:${motionDuration}s;--ai-block-locked:${block.locked ? 1 : 0};opacity:var(--ai-block-opacity)!important;visibility:${block.hidden ? 'hidden' : 'visible'}!important;z-index:var(--ai-block-z)!important;transform-box:fill-box!important;transform-origin:center!important;translate:var(--ai-block-x) var(--ai-block-y)!important;rotate:var(--ai-block-rotate)!important;scale:calc(var(--ai-block-font-size) / 100)!important;${visualPaint}filter:drop-shadow(0 0 calc(var(--ai-block-height) / 12) color-mix(in srgb,var(--ai-block-color),transparent 55%));animation:${animation};animation-delay:${motionStart}s;animation-duration:${motionDuration}s;}`;
       }
-      return `.${htmlEditableBlockClass}[data-ai-edit-block="${block.id}"]{--ai-block-x:${x}px;--ai-block-y:${y}px;--ai-block-width:${width}px;--ai-block-height:${height}px;--ai-block-rotate:${rotate}deg;--ai-block-z:${zIndex};--ai-block-font-size:${fontSize};--ai-block-opacity:${opacity};--ai-block-color:${color};--ai-block-motion:${motion};--ai-block-motion-start:${motionStart};--ai-block-motion-duration:${motionDuration}s;--ai-block-locked:${block.locked ? 1 : 0};display:inline-flex!important;align-items:center!important;position:relative!important;box-sizing:border-box!important;min-width:0!important;max-width:var(--ai-block-width)!important;min-height:0!important;color:var(--ai-block-color)!important;font-size:calc(1em * var(--ai-block-font-size) / 100)!important;opacity:var(--ai-block-opacity)!important;visibility:${block.hidden ? 'hidden' : 'visible'}!important;z-index:var(--ai-block-z)!important;transform:translate3d(var(--ai-block-x),var(--ai-block-y),0) rotate(var(--ai-block-rotate))!important;animation:${animation};animation-delay:${motionStart}s;animation-duration:${motionDuration}s;}`;
+      return `.${htmlEditableBlockClass}[data-ai-edit-block="${block.id}"]{--ai-block-x:${x}px;--ai-block-y:${y}px;--ai-block-width:${width}px;--ai-block-height:${height}px;--ai-block-rotate:${rotate}deg;--ai-block-z:${zIndex};--ai-block-font-size:${fontSize};--ai-block-opacity:${opacity};--ai-block-color:${color};--ai-block-motion:${motion};--ai-block-motion-start:${motionStart};--ai-block-motion-duration:${motionDuration}s;--ai-block-locked:${block.locked ? 1 : 0};box-sizing:border-box!important;color:var(--ai-block-color)!important;opacity:var(--ai-block-opacity)!important;visibility:${block.hidden ? 'hidden' : 'visible'}!important;z-index:var(--ai-block-z)!important;transform-origin:center!important;translate:var(--ai-block-x) var(--ai-block-y)!important;rotate:var(--ai-block-rotate)!important;scale:calc(var(--ai-block-font-size) / 100)!important;animation:${animation};animation-delay:${motionStart}s;animation-duration:${motionDuration}s;}`;
     })
     .join('\n');
-  const baseCss = `.${htmlEditableBlockClass}{will-change:transform,opacity,color;font:inherit;pointer-events:auto}
+  const baseCss = `.${htmlEditableBlockClass}{will-change:translate,scale,opacity,color;pointer-events:auto}
 @keyframes aiBlockFade{from{opacity:0}to{opacity:var(--ai-block-opacity,1)}}
-@keyframes aiBlockSlide{from{opacity:0;transform:translate3d(calc(var(--ai-block-x,0px) - 34px),calc(var(--ai-block-y,0px) + 18px),0) rotate(var(--ai-block-rotate,0deg))}to{opacity:var(--ai-block-opacity,1);transform:translate3d(var(--ai-block-x,0px),var(--ai-block-y,0px),0) rotate(var(--ai-block-rotate,0deg))}}
-@keyframes aiBlockRise{from{opacity:0;transform:translate3d(var(--ai-block-x,0px),calc(var(--ai-block-y,0px) + 42px),0) rotate(var(--ai-block-rotate,0deg))}to{opacity:var(--ai-block-opacity,1);transform:translate3d(var(--ai-block-x,0px),var(--ai-block-y,0px),0) rotate(var(--ai-block-rotate,0deg))}}
+@keyframes aiBlockSlide{from{opacity:0;clip-path:inset(0 0 0 20%)}to{opacity:var(--ai-block-opacity,1);clip-path:inset(0 0 0 0)}}
+@keyframes aiBlockRise{from{opacity:0;clip-path:inset(18% 0 0 0)}to{opacity:var(--ai-block-opacity,1);clip-path:inset(0 0 0 0)}}
 @keyframes aiBlockWipe{from{opacity:var(--ai-block-opacity,1);clip-path:inset(0 100% 0 0)}to{opacity:var(--ai-block-opacity,1);clip-path:inset(0 0 0 0)}}
-@keyframes aiBlockPop{from{opacity:0;transform:translate3d(var(--ai-block-x,0px),var(--ai-block-y,0px),0) rotate(var(--ai-block-rotate,0deg)) scale(.86)}to{opacity:var(--ai-block-opacity,1);transform:translate3d(var(--ai-block-x,0px),var(--ai-block-y,0px),0) rotate(var(--ai-block-rotate,0deg)) scale(1)}}
+@keyframes aiBlockPop{from{opacity:0;filter:blur(5px)}to{opacity:var(--ai-block-opacity,1);filter:blur(0)}}
 @keyframes aiBlockScan{0%{opacity:0;clip-path:inset(0 100% 0 0)}100%{opacity:var(--ai-block-opacity,1);clip-path:inset(0 0 0 0)}}`;
   const block = `${htmlBlockAdjustStart}\n${baseCss}\n${blockCss}\n${htmlBlockAdjustEnd}`;
   return `${cssSource.replace(matcher, '').trim()}\n\n${block}`.trim();
@@ -361,17 +445,18 @@ export function upsertHtmlLayerAdjustCss(cssSource: string, adjust: HtmlLayerAdj
   };
   const block = `${htmlLayerAdjustStart}
 .${htmlLayerAdjustClass} {
-  --ai-layer-x: ${nextAdjust.x}px;
-  --ai-layer-y: ${nextAdjust.y}px;
+  --ai-layer-x: ${Number(((nextAdjust.x / 1920) * 100).toFixed(4))}%;
+  --ai-layer-y: ${Number(((nextAdjust.y / 1080) * 100).toFixed(4))}%;
   --ai-layer-scale: ${nextAdjust.scale};
   --ai-layer-opacity: ${nextAdjust.opacity};
   --ai-layer-mask-color: ${nextAdjust.maskColor};
   --ai-layer-mask-opacity: ${nextAdjust.maskOpacity};
   --ai-layer-mask-height: ${nextAdjust.maskHeight}%;
-  position: relative !important;
+  position: absolute !important;
   transform: translate3d(var(--ai-layer-x), var(--ai-layer-y), 0) scale(var(--ai-layer-scale)) !important;
   transform-origin: center center !important;
   opacity: var(--ai-layer-opacity) !important;
+  isolation: isolate;
 }
 .${htmlLayerAdjustClass}::after {
   content: "";
@@ -383,7 +468,15 @@ export function upsertHtmlLayerAdjustCss(cssSource: string, adjust: HtmlLayerAdj
   pointer-events: none;
   background: linear-gradient(0deg, var(--ai-layer-mask-color), transparent);
   opacity: var(--ai-layer-mask-opacity);
-  z-index: 999;
+  z-index: 0;
+}
+:where(.${htmlLayerAdjustClass} > :not(svg):not(g):not(path):not(polyline):not(line):not(circle):not(ellipse):not(rect):not(polygon):not(defs):not(style):not(script)) {
+  position: relative;
+  z-index: 1;
+}
+:where(.${htmlLayerAdjustClass} > svg) {
+  position: relative;
+  z-index: 1;
 }
 ${htmlLayerAdjustEnd}`;
   const blockMatcher = new RegExp(`${escapeRegExp(htmlLayerAdjustStart)}[\\s\\S]*?${escapeRegExp(htmlLayerAdjustEnd)}`, 'm');
