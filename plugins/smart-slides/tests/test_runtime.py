@@ -16,7 +16,7 @@ from fastapi.testclient import TestClient
 from backend.api import video_studio
 from backend.main import app
 from backend.services import video_studio_broll, video_studio_works
-from render import hyperframes_adapter
+from render import ffmpeg_adapter
 
 
 class LocalApiTest(unittest.TestCase):
@@ -116,7 +116,7 @@ class LocalApiTest(unittest.TestCase):
         store = video_studio._works_store()
         work = store.create_work(project, preview_artifact_url=str(project.get("composition_preview_url") or ""))
         output = {"url": f"/data/video_studio_outputs/{project_id}/{work['id']}.mp4", "duration_seconds": 60}
-        hyperframes_adapter._update_project_output(project_id, work["id"], output, self.temp_dir)
+        ffmpeg_adapter._update_project_output(project_id, work["id"], output, self.temp_dir)
         store.update_work(work["id"], {"status": "success", "output": output})
         resumed = self.client.post(f"/api/v1/video-studio/projects/{project_id}/works")
         self.assertEqual(resumed.status_code, 200, resumed.text)
@@ -132,7 +132,7 @@ class LocalApiTest(unittest.TestCase):
             json={"bgm_enabled": True, "bgm_volume": 0.42},
         )
         self.assertEqual(response.status_code, 200, response.text)
-        with patch.object(hyperframes_adapter, "start_render_async"):
+        with patch.object(ffmpeg_adapter, "start_render_async"):
             created = self.client.post(f"/api/v1/video-studio/projects/{project_id}/works")
         self.assertEqual(created.status_code, 200, created.text)
         current = created.json()["work"]
@@ -150,7 +150,7 @@ class LocalApiTest(unittest.TestCase):
         )
         self.assertEqual(response.status_code, 200, response.text)
         store.update_work(stale["id"], {"status": "success", "output": {"url": "/data/stale.mp4"}})
-        with patch.object(hyperframes_adapter, "start_render_async"):
+        with patch.object(ffmpeg_adapter, "start_render_async"):
             created = self.client.post(f"/api/v1/video-studio/projects/{project_id}/works")
         self.assertEqual(created.status_code, 200, created.text)
         current = created.json()["work"]
@@ -180,7 +180,7 @@ class LocalApiTest(unittest.TestCase):
         self.assertEqual(fetched["id"], fixture["id"])
 
 
-class HyperFramesAdapterTest(unittest.TestCase):
+class LocalFfmpegAdapterTest(unittest.TestCase):
     def setUp(self) -> None:
         self.temp_dir = Path(tempfile.mkdtemp(prefix="smart-slides-render-"))
         self.data_dir = self.temp_dir / "data"
@@ -201,7 +201,7 @@ class HyperFramesAdapterTest(unittest.TestCase):
     def tearDown(self) -> None:
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
-    def test_builds_offline_composition_with_audio_for_all_and_avatar_for_one(self) -> None:
+    def test_renders_podcastor_snapshot_with_audio_for_all_and_avatar_for_one(self) -> None:
         snapshot = {
             "scene_groups": [{"shots": [
                 {"id": "shot-1", "title": "开场", "narration": "开场介绍。", "duration_seconds": 1, "html_design": {"custom_html": "<h2>开场</h2>", "custom_css": "h2{color:#fff}"}, "broll_options": []},
@@ -216,43 +216,26 @@ class HyperFramesAdapterTest(unittest.TestCase):
                 "bgm_enabled": False,
             },
         }
-        old_skip = os.environ.get("SMART_SLIDES_SKIP_TRANSCRIPTION")
-        os.environ["SMART_SLIDES_SKIP_TRANSCRIPTION"] = "1"
+        output = self.temp_dir / "result.mp4"
+        old_skip = os.environ.get("SMART_SLIDES_SKIP_BROWSER_RASTERIZER")
+        os.environ["SMART_SLIDES_SKIP_BROWSER_RASTERIZER"] = "1"
         try:
-            manifest = hyperframes_adapter.build_composition(snapshot, str(self.work_dir), str(self.data_dir))
+            manifest = ffmpeg_adapter.render_snapshot(snapshot, str(self.work_dir), str(self.data_dir), str(output))
         finally:
             if old_skip is None:
-                os.environ.pop("SMART_SLIDES_SKIP_TRANSCRIPTION", None)
+                os.environ.pop("SMART_SLIDES_SKIP_BROWSER_RASTERIZER", None)
             else:
-                os.environ["SMART_SLIDES_SKIP_TRANSCRIPTION"] = old_skip
+                os.environ["SMART_SLIDES_SKIP_BROWSER_RASTERIZER"] = old_skip
         self.assertEqual([item["avatar_visual"] for item in manifest["shots"]], [True, False])
         self.assertTrue((self.work_dir / "narration.m4a").is_file())
-        self.assertTrue((self.work_dir / "transcript.json").is_file())
-        transcript = (self.work_dir / "transcript.json").read_text(encoding="utf-8")
-        self.assertIn("编辑后的正文口播", transcript)
-        self.assertNotIn("正文信息", transcript)
-        document = (self.work_dir / "index.html").read_text(encoding="utf-8")
-        self.assertIn('voice', json.dumps(snapshot["editor_state"]))
-        self.assertNotIn("https://", document)
-        self.assertNotIn("http://", document)
-        self.assertIn("./gsap.min.js", document)
+        captions = (self.work_dir / "captions.srt").read_text(encoding="utf-8")
+        self.assertIn("编辑后的正文口播", captions)
+        self.assertNotIn("正文信息", captions)
+        self.assertEqual(manifest["backend"], "local_ffmpeg")
+        self.assertTrue(output.is_file())
         subprocess.run(["ffmpeg", "-v", "error", "-i", str(self.work_dir / "narration.m4a"), "-f", "null", "-"], check=True)
 
-    def test_render_command_override_produces_local_mp4(self) -> None:
-        output = self.temp_dir / "result.mp4"
-        old = os.environ.get("SMART_SLIDES_RENDER_COMMAND")
-        os.environ["SMART_SLIDES_RENDER_COMMAND"] = 'ffmpeg -y -v error -f lavfi -i "color=c=black:s=320x180:r=24:d=1" -c:v libx264 -pix_fmt yuv420p "$SMART_SLIDES_OUTPUT"'
-        try:
-            hyperframes_adapter._run_render_command(self.work_dir, output)
-        finally:
-            if old is None:
-                os.environ.pop("SMART_SLIDES_RENDER_COMMAND", None)
-            else:
-                os.environ["SMART_SLIDES_RENDER_COMMAND"] = old
-        self.assertGreater(output.stat().st_size, 1000)
-        subprocess.run(["ffmpeg", "-v", "error", "-i", str(output), "-f", "null", "-"], check=True)
-
-    def test_default_hyperframes_path_renders_without_package_install(self) -> None:
+    def test_local_ffmpeg_render_has_video_and_audio_without_external_composer(self) -> None:
         snapshot = {
             "scene_groups": [{"shots": [{
                 "id": "shot-1", "title": "开场", "narration": "本地渲染。", "duration_seconds": 1,
@@ -264,31 +247,37 @@ class HyperFramesAdapterTest(unittest.TestCase):
                 "selected_broll_by_shot": {}, "html_design_overrides": {}, "bgm_enabled": False,
             },
         }
-        output = self.temp_dir / "hyperframes-result.mp4"
-        old_skip = os.environ.get("SMART_SLIDES_SKIP_TRANSCRIPTION")
-        old_override = os.environ.pop("SMART_SLIDES_RENDER_COMMAND", None)
-        os.environ["SMART_SLIDES_SKIP_TRANSCRIPTION"] = "1"
+        output = self.temp_dir / "ffmpeg-result.mp4"
+        old_skip = os.environ.get("SMART_SLIDES_SKIP_BROWSER_RASTERIZER")
+        os.environ["SMART_SLIDES_SKIP_BROWSER_RASTERIZER"] = "1"
         try:
-            hyperframes_adapter.build_composition(snapshot, str(self.work_dir), str(self.data_dir))
-            prefix = hyperframes_adapter._hyperframes_prefix()
-            self.assertNotIn("--yes", prefix)
-            self.assertIn("--no-install", prefix)
-            hyperframes_adapter._run_render_command(self.work_dir, output)
+            ffmpeg_adapter.render_snapshot(snapshot, str(self.work_dir), str(self.data_dir), str(output))
         finally:
             if old_skip is None:
-                os.environ.pop("SMART_SLIDES_SKIP_TRANSCRIPTION", None)
+                os.environ.pop("SMART_SLIDES_SKIP_BROWSER_RASTERIZER", None)
             else:
-                os.environ["SMART_SLIDES_SKIP_TRANSCRIPTION"] = old_skip
-            if old_override is not None:
-                os.environ["SMART_SLIDES_RENDER_COMMAND"] = old_override
+                os.environ["SMART_SLIDES_SKIP_BROWSER_RASTERIZER"] = old_skip
         self.assertGreater(output.stat().st_size, 1000)
-        render_env = hyperframes_adapter._render_env()
         probe = subprocess.run(
             ["ffprobe", "-v", "error", "-show_entries", "stream=codec_type", "-of", "json", str(output)],
-            check=True, capture_output=True, text=True, env=render_env,
+            check=True, capture_output=True, text=True, env=ffmpeg_adapter._render_env(),
         )
         stream_types = {item["codec_type"] for item in json.loads(probe.stdout)["streams"]}
         self.assertEqual(stream_types, {"audio", "video"})
+
+    def test_rasterizes_original_podcastor_mg_preview_in_local_chrome(self) -> None:
+        shot = {
+            "id": "shot-mg", "title": "核心指标", "narration": "核心指标正在上升。", "duration_seconds": 1,
+            "scene_role": "broll_backdrop_overlay",
+            "information_layer": {"enabled": True, "overlay_type": "metric_callout", "keyword": "核心指标", "primary_fact": "增长 42%", "takeaway": "基础设施成为重心"},
+            "mg_director": {"enabled": True, "visual_system": "metric", "main_visual_metaphor": "核心数字放大"},
+            "html_design": {"custom_html": "<main class=\"ai-mg-layer\"><strong>42%</strong></main>", "custom_css": ".ai-mg-layer{position:absolute;inset:0;display:grid;place-items:center;background:rgba(4,18,38,.75);font-size:180px;color:#fff}"},
+        }
+        snapshot = {"topic": "编辑器叠层", "scene_groups": [{"shots": [shot]}], "editor_state": {"html_design_overrides": {}}}
+        overlay = ffmpeg_adapter._render_overlay_png(snapshot, shot, self.work_dir)
+        self.assertTrue(overlay)
+        self.assertGreater(Path(overlay).stat().st_size, 1000)
+        subprocess.run(["ffmpeg", "-v", "error", "-i", overlay, "-f", "null", "-"], check=True, env=ffmpeg_adapter._render_env())
 
 
 class NetworkBoundaryTest(unittest.TestCase):
@@ -319,7 +308,7 @@ class NetworkBoundaryTest(unittest.TestCase):
         self.assertEqual(requested_hosts, ["videos.pexels.com"])
 
     def test_html_sanitizer_removes_remote_and_embedded_runtime_content(self) -> None:
-        cleaned = hyperframes_adapter._safe_html(
+        cleaned = ffmpeg_adapter._safe_html(
             '<script src="//cdn.example/x.js"></script><iframe src=https://example.com></iframe>'
             '<img src="//example.com/a.png" onload=fetch("//example.com")><div style="background:url(//example.com/x)">safe</div>'
         )

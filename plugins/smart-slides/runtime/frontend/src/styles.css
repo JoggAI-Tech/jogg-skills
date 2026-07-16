@@ -234,6 +234,9 @@ button {
   z-index: 2;
   pointer-events: none;
 }
+.preview-stage > iframe.composition-preview {
+  pointer-events: auto;
+}
 .stage-caption {
   position: absolute;
   z-index: 3;

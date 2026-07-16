@@ -18,7 +18,7 @@ from backend.services import video_studio_planner
 from backend.services.video_studio_mg_design import normalize_mg_design_doc
 from backend.services.video_studio_store import VideoStudioStore, ensure_project_governance
 from backend.services.video_studio_works import VideoStudioWorksStore, work_matches_project_snapshot
-from render import hyperframes_adapter
+from render import ffmpeg_adapter
 
 
 router = APIRouter(prefix="/api/v1/video-studio", tags=["video-studio"])
@@ -609,7 +609,7 @@ def create_work(project_id: str) -> Dict[str, object]:
         )
     work = existing or store.create_work(project, preview_artifact_url=str(project.get("composition_preview_url") or ""))
     if work.get("status") != "failed":
-        hyperframes_adapter.start_render_async(work, store, DATA_DIR)
+        ffmpeg_adapter.start_render_async(work, store, DATA_DIR)
         work = store.get_work(str(work["id"])) or work
     return {"work": work}
 
@@ -634,5 +634,5 @@ def resume_work(work_id: str) -> Dict[str, object]:
     if not work:
         raise HTTPException(status_code=404, detail="Work not found")
     if str(work.get("status") or "") in {"queued", "rendering"}:
-        hyperframes_adapter.start_render_async(work, store, DATA_DIR)
+        ffmpeg_adapter.start_render_async(work, store, DATA_DIR)
     return {"work": store.get_work(work_id) or work}

@@ -104,6 +104,17 @@ def main() -> int:
         chunks.append("".join(source_lines[node.lineno - 1 : node.end_lineno]).rstrip() + "\n\n\n")
 
     output = "".join(chunks).rstrip() + "\n"
+    # The source names its historical cloud/HyperFrames composition fields.
+    # The standalone plugin executes the same editor contract with local
+    # Chrome rasterization and FFmpeg, so preserve the contract shape while
+    # giving the local renderer an accurate identifier.
+    output = (
+        output
+        .replace("HyperFrames 模板", "Podcastor 编辑器模板")
+        .replace("hyperframes_overlay_v1", "podcastor_editor_overlay_v1")
+        .replace("hyperframes_template_fallback", "podcastor_editor_template_fallback")
+        .replace("hyperframes_template_primary", "podcastor_editor_template_primary")
+    )
     forbidden = ("call_video_studio_llm", "api.siliconflow", "api.deepseek", "VIDEO_STUDIO_HTML_LLM")
     leaked = [token for token in forbidden if token in output]
     if leaked:

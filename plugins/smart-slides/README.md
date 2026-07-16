@@ -2,11 +2,11 @@
 
 Smart Slides is an extracted, standalone Video Studio runtime. It preserves Podcastor's project schema, local editor state, B-roll/MG services, composition preview, render manifest, and work snapshot without requiring the Podcastor repository after installation.
 
-The only video business requests are Jogg plus optional Pexels/Pixabay material downloads. Planning is authored by Codex from the extracted Podcastor contracts and passed to the local runner as JSON. Rendering runs in local Chrome with HyperFrames and local FFmpeg. Extracted deterministic planner helpers remain available only for source-parity and test fixtures through `SMART_SLIDES_ALLOW_DETERMINISTIC_FALLBACK=1`; they are not a user-generation path.
+The only video business requests are Jogg plus optional Pexels/Pixabay material downloads. Planning is authored by Codex from the extracted Podcastor contracts and passed to the local runner as JSON. The original Podcastor Video Studio preview/editor contract drives local Chrome HTML/MG rasterization, and FFmpeg performs final composition. Extracted deterministic planner helpers remain available only for source-parity and test fixtures through `SMART_SLIDES_ALLOW_DETERMINISTIC_FALLBACK=1`; they are not a user-generation path.
 
 ## Setup
 
-Required commands: `curl`, `jq`, `ffmpeg`, `ffprobe`, `node`, and a local HyperFrames `0.7.59` installation. The default resolver uses `npx --no-install hyperframes@0.7.59`; it never downloads a package at render time. Set `SMART_SLIDES_HYPERFRAMES_BIN` to an executable path when HyperFrames is installed elsewhere.
+Required commands: `curl`, `jq`, `ffmpeg`, `ffprobe`, and local Google Chrome or Chromium. Set `SMART_SLIDES_CHROME_BIN` only when Chrome is not installed in its standard location. The renderer does not install packages or use a remote render service at runtime.
 
 Configure either `JOGG_API_KEY` or `JOGG_WEB_TOKEN` in the environment or `~/.codex/smart-slides/.env`. A web token is exchanged for an OpenAPI key in memory. Neither credential is saved or printed.
 

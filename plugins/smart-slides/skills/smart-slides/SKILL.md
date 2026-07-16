@@ -86,4 +86,4 @@ Read [runtime-boundary.md](references/runtime-boundary.md). The only business ne
 
 Stdout is redacted JSON. Progress goes to stderr. A `blocked_planning`, `waiting_jogg`, `blocked_broll`, or `waiting_render` result is resumable and must be returned with its `run_id`. For `blocked_planning`, create the contract-compliant JSON before resuming; do not enable deterministic fallbacks for a user run.
 
-Rendering requires a locally available HyperFrames `0.7.59`. The runner uses `npx --no-install hyperframes@0.7.59` or `SMART_SLIDES_HYPERFRAMES_BIN`; do not allow npm installation or runtime package downloads.
+Rendering uses the extracted Podcastor Video Studio preview/editor contract. Local Chrome rasterizes only the project-selected HTML/MG layer, then FFmpeg composes it with local B-roll, Jogg video/audio, subtitles, and BGM. Require `ffmpeg`, `ffprobe`, and local Chrome or Chromium; configure `SMART_SLIDES_CHROME_BIN` only when needed. Do not install packages or use a remote renderer at runtime.

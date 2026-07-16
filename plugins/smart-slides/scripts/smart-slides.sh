@@ -82,19 +82,11 @@ EOF
 
 require_bin() { command -v "$1" >/dev/null 2>&1 || die "missing required binary: $1"; }
 
-ensure_hyperframes_runtime() {
-  local version=''
-  require_bin node
-  if [[ -n "${SMART_SLIDES_HYPERFRAMES_BIN:-}" ]]; then
-    [[ -x "$SMART_SLIDES_HYPERFRAMES_BIN" ]] || die "SMART_SLIDES_HYPERFRAMES_BIN is not executable"
-    version=$("$SMART_SLIDES_HYPERFRAMES_BIN" --version 2>/dev/null || true)
-  elif command -v hyperframes >/dev/null 2>&1; then
-    version=$(hyperframes --version 2>/dev/null || true)
-  else
-    require_bin npx
-    version=$(npx --no-install hyperframes@0.7.59 --version 2>/dev/null || true)
-  fi
-  [[ "$version" == 0.7.59 ]] || die "local HyperFrames 0.7.59 is required (found: ${version:-none})"
+ensure_local_renderer() {
+  local python_bin
+  python_bin=$(ensure_python_runtime)
+  PYTHONPATH="$RUNTIME_ROOT" "$python_bin" -c 'from render.ffmpeg_adapter import ensure_renderer_available; ensure_renderer_available()' \
+    || die "local FFmpeg renderer is not ready"
 }
 
 set_stage() {
@@ -270,19 +262,38 @@ start_jogg_if_needed() {
   die "Jogg did not become ready; see $SMART_SLIDES_HOME/logs/jogg.log"
 }
 
+openapi_response_ok() {
+  [[ "$HTTP_STATUS" =~ ^2[0-9][0-9]$ ]] && [[ "$(jq -r '(.code // 0) == 0' <<< "$HTTP_BODY")" == true ]]
+}
+
+validate_jogg_api_key() {
+  local candidate=$1
+  [[ -n "$candidate" ]] || return 1
+  request GET "${JOGG_BASE_URL%/}/open/v2/voices?language=chinese&gender=female&page=1&page_size=1" '' "X-Api-Key: $candidate"
+  if openapi_response_ok; then
+    JOGG_EFFECTIVE_API_KEY=$candidate
+    return 0
+  fi
+  JOGG_EFFECTIVE_API_KEY=''
+  return 1
+}
+
 resolve_jogg_api_key() {
   [[ -n "$JOGG_EFFECTIVE_API_KEY" ]] && return
-  if [[ -n "${JOGG_API_KEY:-}" ]]; then JOGG_EFFECTIVE_API_KEY=$JOGG_API_KEY; return; fi
-  [[ -n "${JOGG_WEB_TOKEN:-}" ]] || die "set JOGG_API_KEY or JOGG_WEB_TOKEN after signing in to Jogg"
+  if [[ -n "${JOGG_API_KEY:-}" ]] && validate_jogg_api_key "$JOGG_API_KEY"; then return; fi
+  [[ -z "${JOGG_API_KEY:-}" ]] || log "configured Jogg OpenAPI key was rejected; trying the browser-login token"
+  [[ -n "${JOGG_WEB_TOKEN:-}" ]] || die "Jogg OpenAPI key is invalid. Sign in to Jogg again, then set a fresh JOGG_WEB_TOKEN or JOGG_API_KEY."
   request GET "${JOGG_BASE_URL%/}/openapi_key" '' "Authorization: Bearer $JOGG_WEB_TOKEN"
-  [[ "$HTTP_STATUS" =~ ^2[0-9][0-9]$ ]] || die "Jogg login token could not read an OpenAPI key"
-  JOGG_EFFECTIVE_API_KEY=$(jq -r '.data.access_key // .access_key // empty' <<< "$HTTP_BODY")
-  if [[ -z "$JOGG_EFFECTIVE_API_KEY" ]]; then
+  openapi_response_ok || die "Jogg browser-login token is expired or invalid. Sign in again, then update JOGG_WEB_TOKEN."
+  local access_key
+  access_key=$(jq -r '.data.access_key // .access_key // empty' <<< "$HTTP_BODY")
+  if [[ -z "$access_key" ]]; then
     request POST "${JOGG_BASE_URL%/}/openapi_key/generate" '' "Authorization: Bearer $JOGG_WEB_TOKEN"
-    [[ "$HTTP_STATUS" =~ ^2[0-9][0-9]$ ]] || die "Jogg could not generate an OpenAPI key"
-    JOGG_EFFECTIVE_API_KEY=$(jq -r '.data.access_key // .access_key // empty' <<< "$HTTP_BODY")
+    openapi_response_ok || die "Jogg browser-login token cannot generate an OpenAPI key. Sign in again, then update JOGG_WEB_TOKEN."
+    access_key=$(jq -r '.data.access_key // .access_key // empty' <<< "$HTTP_BODY")
   fi
-  [[ -n "$JOGG_EFFECTIVE_API_KEY" ]] || die "Jogg did not return an OpenAPI key"
+  [[ -n "$access_key" ]] || die "Jogg did not return an OpenAPI key. Sign in again, then update JOGG_WEB_TOKEN."
+  validate_jogg_api_key "$access_key" || die "Jogg returned an OpenAPI key without /open/v2 permission. Sign in again, then retry."
 }
 
 resolve_profile() {
@@ -616,7 +627,7 @@ wait_for_render() {
 
 ensure_render() {
   local project_id work_id result project_fingerprint render_fingerprint work_snapshot snapshot_fingerprint
-  ensure_hyperframes_runtime
+  ensure_local_renderer
   project_id=$(state_get '.project_id'); work_id=$(state_get '.work_id')
   fetch_project
   project_fingerprint=$(project_render_fingerprint)
@@ -728,7 +739,7 @@ main() {
   mkdir -p "$SMART_SLIDES_HOME" "$SMART_SLIDES_DATA_DIR" "$SMART_SLIDES_STATE_DIR"
   case "$ACTION" in
     preflight)
-      ensure_hyperframes_runtime; start_local_service; start_jogg_if_needed; resolve_jogg_api_key
+      ensure_local_renderer; start_local_service; start_jogg_if_needed; resolve_jogg_api_key
       jq -n --arg local "$SMART_SLIDES_BASE_URL" --arg jogg "$JOGG_BASE_URL" --arg data "$SMART_SLIDES_DATA_DIR" '{status:"ready",local_base_url:$local,jogg_base_url:$jogg,data_dir:$data,ffprobe_available:true}' ;;
     run)
       parse_run_args "$@"; [[ -n "$TOPIC" ]] || die '--topic is required'; [[ "$DURATION_SECONDS" =~ ^[0-9]+$ ]] || die 'duration must be an integer'
@@ -745,7 +756,7 @@ main() {
       parse_run_id "$@"; acquire_run_lock
       if run_until_preview; then emit_state; else handle_checkpoint "$?"; fi ;;
     render)
-      parse_run_id "$@"; acquire_run_lock; ensure_hyperframes_runtime; start_local_service
+      parse_run_id "$@"; acquire_run_lock; ensure_local_renderer; start_local_service
       if ensure_render; then emit_state; else handle_checkpoint "$?"; fi ;;
     status)
       parse_run_id "$@"; acquire_run_lock; refresh_status; emit_state ;;

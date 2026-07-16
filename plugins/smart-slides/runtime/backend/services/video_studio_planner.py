@@ -391,7 +391,7 @@ def normalize_requirement_document(
         "html_mg_direction": {
             "render_strategy": render_strategy,
             "template_policy": str(html_mg.get("template_policy") or ("templates_as_primary" if render_strategy == "template" else "templates_as_fallback")),
-            "style": str(html_mg.get("style") or "插画化信息图 + 关键文字动效，HyperFrames 模板作为兜底。"),
+            "style": str(html_mg.get("style") or "插画化信息图 + 关键文字动效，Podcastor 编辑器模板作为兜底。"),
             "palette": _string_list(html_mg.get("palette"), ["#22D3EE", "#F8FAFC", "#0F172A"]),
             "typography": str(html_mg.get("typography") or "无衬线粗标题 + 短句说明"),
             "icon_style": str(html_mg.get("icon_style") or "线性图标、少量高亮节点"),
@@ -817,7 +817,7 @@ def build_render_contract_package(
         "script": str(script or ""),
         "production_format": production_format,
         "resolution": f"{width}x{height}",
-        "composer": "hyperframes_overlay_v1" if production_format == "broll_html" else "broll_only_v1",
+        "composer": "podcastor_editor_overlay_v1" if production_format == "broll_html" else "broll_only_v1",
         "template_strategy": _template_strategy_summary(director_document),
         "scenes": [_render_scene_for_shot(shot) for shot in shots],
         "information_layer": information_layer,
@@ -1222,7 +1222,7 @@ def _mg_clip_for_shot(shot: Dict[str, Any]) -> Dict[str, Any]:
         "end": round(start + duration, 3),
         "status": "ready",
         "render_strategy": str(shot.get("html_render_strategy") or "llm_bespoke_html"),
-        "template_strategy": "hyperframes_template_fallback" if str(shot.get("html_render_strategy") or "") != "template" else "hyperframes_template_primary",
+        "template_strategy": "podcastor_editor_template_fallback" if str(shot.get("html_render_strategy") or "") != "template" else "podcastor_editor_template_primary",
         "mg_template": template_id or fallback_id or MG_TEMPLATE_BY_OVERLAY_TYPE.get(overlay_type, "profile_board"),
         "template_family": str(shot.get("template_family") or visual_system),
         "overlay_type": overlay_type,
@@ -2655,7 +2655,7 @@ def _html_contract_summary(shot: Dict[str, Any] | None) -> str:
     ]
     strategy = str(shot.get("html_render_strategy") or "llm_bespoke_html")
     if strategy == "template":
-        strategy_text = f"HyperFrames 模板 {shot.get('template_id')}"
+        strategy_text = f"Podcastor 编辑器模板 {shot.get('template_id')}"
     else:
         strategy_text = f"插画 HTML 计划，模板兜底 {shot.get('template_fallback_id') or 'none'}"
     return (

@@ -85,6 +85,7 @@ export function EditorApp() {
   const [work, setWork] = useState<VideoStudioWork | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [shotPlaybackSeconds, setShotPlaybackSeconds] = useState(0);
+  const [previewNonce, setPreviewNonce] = useState(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const shots = useMemo(() => shotsFor(project), [project]);
@@ -97,6 +98,9 @@ export function EditorApp() {
   const broll = project && selectedShot ? selectedBroll(project, selectedShot) : undefined;
   const visualUrl = avatarAsset?.asset_url || broll?.asset_url || '';
   const htmlSource = project && selectedShot ? htmlSourceFor(project, selectedShot) : { custom_html: '', custom_css: '' };
+  const compositionPreviewUrl = project?.composition_preview_url
+    ? `${project.composition_preview_url}${project.composition_preview_url.includes('?') ? '&' : '?'}v=${previewNonce}`
+    : '';
 
   const loadProject = async () => {
     setBusy(true);
@@ -221,8 +225,7 @@ export function EditorApp() {
     setBusy(true); setStatus('正在生成本地合成预览');
     try {
       const response = await videoStudioApi.createCompositionPreview(project.id);
-      setProject(response.project); setStatus('本地预览已刷新');
-      window.open(response.preview_url, '_blank', 'noopener,noreferrer');
+      setProject(response.project); setPreviewNonce((value) => value + 1); setStatus('已按 Podcastor 编辑器合同刷新合成预览');
     } catch (error) { setStatus(error instanceof Error ? error.message : '预览生成失败'); }
     finally { setBusy(false); }
   };
@@ -248,7 +251,7 @@ export function EditorApp() {
         <div className="project-title"><h1>{project.topic}</h1><p>{shots.length} 个分镜 · {formatTime(duration)} · {project.production_format}</p></div>
         <div className="commands">
           <button className="icon-command" title="刷新项目" onClick={() => void loadProject()}><RefreshCw size={18} /></button>
-          <button className="command secondary" onClick={() => void createPreview()}><MonitorPlay size={17} />预览</button>
+          <button className="command secondary" onClick={() => void createPreview()}><MonitorPlay size={17} />刷新预览</button>
           <button className="command" onClick={() => void createRender()}><Film size={17} />渲染 MP4</button>
         </div>
       </header>
@@ -275,12 +278,9 @@ export function EditorApp() {
             <button className="icon-command" title="下一分镜" disabled={selectedIndex >= shots.length - 1} onClick={() => selectShot(shots[selectedIndex + 1].id)}><ChevronRight size={18} /></button>
           </div>
           <div className="preview-stage">
-            {visualUrl ? (visualUrl.match(/\.(png|jpe?g|webp)(\?|$)/i) ? <img src={visualUrl} alt="" /> : <video ref={videoRef} src={visualUrl} muted playsInline onTimeUpdate={(event) => setShotPlaybackSeconds(event.currentTarget.currentTime)} onEnded={() => setIsPlaying(false)} />) : <div className="missing-media"><ImagePlus size={34} /><span>等待本地画面素材</span></div>}
-            {htmlSource.custom_html && <iframe title="HTML/MG 信息层" sandbox="" srcDoc={previewDocument(htmlSource)} />}
-            <div className="stage-caption">{project.editor_state.shot_scripts[selectedShot?.id ?? ''] || selectedShot?.narration}</div>
-            {avatarAsset && <div className="avatar-flag"><UserRound size={15} />Jogg 数字人</div>}
+            {compositionPreviewUrl ? <iframe className="composition-preview" title="Podcastor 合成预览" src={compositionPreviewUrl} /> : <div className="missing-media"><ImagePlus size={34} /><span>刷新后生成 Podcastor 合成预览</span></div>}
           </div>
-          <div className="transport"><button className="icon-command" title={isPlaying ? '暂停当前素材' : '播放当前素材'} disabled={!visualUrl || Boolean(visualUrl.match(/\.(png|jpe?g|webp)(\?|$)/i))} onClick={() => void togglePlayback()}>{isPlaying ? <Pause size={18} /> : <Play size={18} />}</button><span>{formatTime(shotStartSeconds + shotPlaybackSeconds)}</span><div className="transport-line"><i style={{ width: `${Math.min(100, ((shotStartSeconds + shotPlaybackSeconds) / Math.max(1, duration)) * 100)}%` }} /></div><span>{formatTime(duration)}</span></div>
+          <div className="transport"><button className="icon-command" title="刷新原项目合成预览" onClick={() => void createPreview()}><RefreshCw size={18} /></button><span>合成预览</span><div className="transport-line"><i style={{ width: `${((selectedIndex + 1) / Math.max(1, shots.length)) * 100}%` }} /></div><span>{String(selectedIndex + 1).padStart(2, '0')} / {String(shots.length).padStart(2, '0')}</span></div>
         </section>
 
         <aside className="inspector">

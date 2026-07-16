@@ -80,6 +80,9 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         self.fixture.record("GET", self.path, dict(self.headers))
+        if path.startswith("/open/v2/") and self.headers.get("X-Api-Key") != "mock-openapi-key":
+            self.send_json({"code": 10105, "msg": "Invalid API key"}, 401)
+            return
         if path == "/health":
             self.send_json({"status": "ok", "service": "smart-slides"})
         elif path == "/openapi_key":
@@ -118,6 +121,9 @@ class Handler(BaseHTTPRequestHandler):
         body = self.read_body()
         self.fixture.record("POST", self.path, dict(self.headers), body)
         fixture = self.fixture
+        if path.startswith("/open/v2/") and self.headers.get("X-Api-Key") != "mock-openapi-key":
+            self.send_json({"code": 10105, "msg": "Invalid API key"}, 401)
+            return
         if path == "/openapi_key/generate":
             self.send_json({"code": 0, "data": {"access_key": "mock-openapi-key"}})
         elif path == "/open/v2/create_video_from_avatar":

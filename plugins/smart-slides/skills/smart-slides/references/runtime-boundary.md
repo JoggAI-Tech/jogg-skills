@@ -7,8 +7,8 @@ The plugin ships a source snapshot of Video Studio and does not import Podcastor
 - FastAPI listens only on a free `127.0.0.1` port.
 - The static editor and `/api/v1/video-studio` share that origin.
 - Projects, run state, assets, render snapshots, subtitles, previews, works, and MP4 files live under `~/.codex/smart-slides/`.
-- HyperFrames 0.7.59 renders in local Chrome; FFmpeg performs audio extraction and final media assembly.
-- GSAP 3.14.2 is bundled locally. Runtime compositions do not fetch a CDN script.
+- The extracted Podcastor editor and `build_composition_preview_html()` produce the source-of-truth preview and HTML/MG contract.
+- Local Chrome rasterizes the selected HTML/MG layer; FFmpeg composes local B-roll, retained Jogg avatar video, Jogg narration audio, captions, and BGM into the MP4.
 
 ## Allowed Requests
 

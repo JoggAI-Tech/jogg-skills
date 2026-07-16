@@ -240,7 +240,7 @@ class VideoStudioWorksStore:
                     "message": (
                         "作品验证失败，未进入渲染队列。"
                         if status == "failed"
-                        else "作品已创建，等待本机 HyperFrames 和 FFmpeg 渲染。"
+                        else "作品已创建，等待本机 Podcastor 编辑器合同和 FFmpeg 渲染。"
                     ),
                 }
             ],
