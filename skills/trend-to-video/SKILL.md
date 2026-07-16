@@ -24,25 +24,8 @@ Use the strongest available capability for each part of the workflow:
 - **REQUIRED SUB-SKILL:** Use `firecrawl` for current-topic discovery and source verification. Do not replace it with guessed facts or unverified search snippets.
 - **REQUIRED SUB-SKILL:** Use `browser:control-in-app-browser` for `app.jogg.ai`. Operate the visible page, reuse the existing signed-in tab and project, and inspect the UI after every state-changing action.
 - **Interaction priority:** For material choices such as topic selection, format changes, final Render confirmation, and retrying a failed job, call `request_user_input` first whenever the tool is available in the current mode. Do not print the tool payload as chat text and do not continue until its result is returned.
-- **JSON fallback:** Only when `request_user_input` is unavailable, output the equivalent machine-readable JSON object as plain text and stop. Wait for the user to answer before taking the associated action. Use the tool-compatible shape with an outer `questions` array; do not add unsupported `isOther` or `isSecret` fields.
-
-Fallback example:
-
-```json
-{
-  "questions": [
-    {
-      "id": "render_action",
-      "header": "Render",
-      "question": "是否确认创建渲染任务？",
-      "options": [
-        { "label": "确认渲染", "description": "按当前设置启动渲染。" },
-        { "label": "继续修改", "description": "保留设置，不创建任务。" }
-      ]
-    }
-  ]
-}
-```
+- **Fallback:** If `request_user_input` is unavailable or fails, ask the equivalent question in normal concise chat and wait for the user's answer. Do not emit a JSON payload as a substitute.
+- **Batch decisions:** Combine related blocking decisions into one request whenever possible. Prefer one `request_user_input` call per workflow stage, with no more than three tightly related questions, instead of a sequence of single-question interruptions. Do not ask for information already present in the user's brief or visible Jogg state.
 
 When the user requests automation or says to continue, automatically complete all already-approved, reversible steps: source research, candidate ranking, script drafting, visible navigation, resource filtering, approved script entry, settings selection, and progress monitoring. Do not ask redundant confirmations for those steps. Pause only for credentials, CAPTCHA/2FA, payment or upgrade prompts, unsupported file-picker actions, the final external Render action, or a retry that could create another job.
 
@@ -171,7 +154,8 @@ After confirmation, enter the approved script and settings in the visible Jogg U
 - Read the visible progress overlay on the new card, including percentage and estimated time. Check the same card for progress rather than creating another task while it is still processing.
 - Do not claim a video exists until Jogg shows a completed result. If the card shows **Failed**, report the visible error/status and ask before using **Try again**, since retrying can create another render job.
 - If the browser session disconnects, reconnect and resume from the existing project instead of recreating it.
-- On completion, return the Jogg project/result link, title, selected format, selected resources, and source links.
+- On completion, open the completed project card or its visible result/share surface and extract the actual rendered video URL exposed by Jogg. Check these sources in order: the result card's visible anchor or download-link `href`; a visible preview/download control; the rendered `<video>` element's `src`; a nested `<source>` element's `src`; and a **Copy media link** or equivalent control followed by reading the copied link. Prefer a real Jogg `https` asset/share URL over a temporary `blob:` or `data:` URL. Return that asset/result link, title, selected format, selected resources, and source links.
+- Do not return `tab.url()`, the current `Projects` page URL, or the editor URL as the video link. If Jogg exposes only a project card and no actual video/share link, say that the render is complete but the video link is not visible; never fabricate a URL or infer one from route patterns.
 - If generation fails, report the visible error and preserve the approved script/settings for a targeted retry.
 
 ## Non-negotiable Boundaries
