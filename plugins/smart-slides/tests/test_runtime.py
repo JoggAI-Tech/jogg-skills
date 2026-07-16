@@ -16,6 +16,7 @@ from fastapi.testclient import TestClient
 from backend.api import video_studio
 from backend.main import app
 from backend.services import video_studio_broll, video_studio_works
+from backend import main as smart_slides_main
 from render import ffmpeg_adapter
 
 
@@ -40,6 +41,26 @@ class LocalApiTest(unittest.TestCase):
             response = self.client.post(f"/api/v1/video-studio/projects/{project['id']}/{endpoint}")
             self.assertEqual(response.status_code, 200, response.text)
         return self.client.get(f"/api/v1/video-studio/projects/{project['id']}").json()["project"]
+
+    def test_runtime_env_loader_preserves_explicit_environment(self) -> None:
+        env_file = Path(self.temp_dir) / "runtime.env"
+        env_file.write_text("SMART_SLIDES_ENV_TEST=from-file\nSMART_SLIDES_ALREADY_SET=from-file\n", encoding="utf-8")
+        old_test = os.environ.pop("SMART_SLIDES_ENV_TEST", None)
+        old_set = os.environ.get("SMART_SLIDES_ALREADY_SET")
+        os.environ["SMART_SLIDES_ALREADY_SET"] = "from-process"
+        try:
+            smart_slides_main._load_env_file(env_file)
+            self.assertEqual(os.environ["SMART_SLIDES_ENV_TEST"], "from-file")
+            self.assertEqual(os.environ["SMART_SLIDES_ALREADY_SET"], "from-process")
+        finally:
+            if old_test is None:
+                os.environ.pop("SMART_SLIDES_ENV_TEST", None)
+            else:
+                os.environ["SMART_SLIDES_ENV_TEST"] = old_test
+            if old_set is None:
+                os.environ.pop("SMART_SLIDES_ALREADY_SET", None)
+            else:
+                os.environ["SMART_SLIDES_ALREADY_SET"] = old_set
 
     def test_project_contract_and_planning_fallbacks(self) -> None:
         response = self.client.post(
@@ -116,6 +137,171 @@ class LocalApiTest(unittest.TestCase):
         shots = [shot for group in updated["scene_groups"] for shot in group["shots"]]
         self.assertEqual(sum(unit["duration_seconds"] for unit in creative_units), 600)
         self.assertEqual(sum(shot["duration_seconds"] for shot in shots), 600)
+
+    def test_planning_state_preserves_and_validates_codex_bespoke_html(self) -> None:
+        project = self.client.post(
+            "/api/v1/video-studio/projects",
+            json={"topic": "AI 科技热点", "format": "long", "production_format": "broll_html", "target_duration_seconds": 60},
+        ).json()["project"]
+        payload = {
+            "scene_groups": [{
+                "title": "资本流向",
+                "shots": [{
+                    "title": "基础设施重估",
+                    "narration": "资本正在从应用层流向芯片和云计算基础设施。",
+                    "duration_seconds": 8,
+                    "broll_prompt": "AI data center infrastructure",
+                    "scene_role": "broll_backdrop_overlay",
+                    "mg_director": {
+                        "version": "mg_director_v1",
+                        "enabled": True,
+                        "render_strategy": "llm_bespoke_html",
+                        "visual_system": "causal",
+                        "story_goal": "说明资本从应用层转向基础设施。",
+                        "one_learning_point": "资本正在向算力基础设施集中。",
+                        "main_visual_metaphor": "资本沿芯片和云计算路径向核心收紧。",
+                        "visual_recipe": {
+                            "composition_id": "causal_spine",
+                            "hero_device_id": "semantic_icon_cluster",
+                            "material_id": "luminous_data",
+                            "motion_id": "directional_build_lock",
+                            "originality_note": "把资本传导原创为向核心收紧的折返路径。",
+                        },
+                        "composition": {
+                            "animation_type": "self_contained_html",
+                            "layout": "directional_path",
+                            "hero_frame": {"kind": "资本路径", "x": 100, "y": 150, "w": 1320, "h": 620},
+                            "typography": {"headline_scale": "display", "headline_min_px": 72, "supporting_min_px": 30},
+                            "visual_primitives": ["path", "node", "icon"],
+                            "icon_semantics": ["云计算", "芯片", "资金"],
+                            "motion_choreography": "路径先出现，节点依次点亮，最后锁定基础设施。",
+                        },
+                        "screen_slots": [
+                            {"role": "headline", "text": "资本流向"},
+                            {"role": "takeaway", "text": "基础设施成为重心"},
+                        ],
+                    },
+                    "html_design": {
+                        "custom_html": (
+                            '<main class="ai-mg-layer" data-ai-generated-html="true"><svg viewBox="0 0 1920 1080">'
+                            '<path data-ai-edit-block="capital-path" data-ai-edit-kind="visual" d="M180 520 L880 280 L1440 620" stroke="#a3e635" stroke-width="28" fill="none"/>'
+                            '<g data-ai-edit-block="icon-chip" data-ai-edit-kind="visual"><rect x="700" y="180" width="180" height="180" fill="#67e8f9"/></g>'
+                            '<g data-ai-edit-block="icon-cloud" data-ai-edit-kind="visual"><circle cx="1360" cy="620" r="90" fill="#a3e635"/></g>'
+                            '<text class="title" x="140" y="120" font-size="72">资本流向</text>'
+                            '<text x="140" y="780" font-size="36">基础设施成为重心</text></svg></main>'
+                        ),
+                        "custom_css": ".ai-mg-layer{position:absolute;inset:0;color:#fff}.title{font-size:64px}",
+                        "edit_schema": {"editable_text_selectors": [".title"]},
+                    },
+                }],
+                "html_layers": [{"title": "资本流向", "shot_indexes": [1]}],
+            }],
+        }
+        response = self.client.patch(f"/api/v1/video-studio/projects/{project['id']}/planning-state", json=payload)
+        self.assertEqual(response.status_code, 200, response.text)
+        shot = response.json()["project"]["scene_groups"][0]["shots"][0]
+        self.assertEqual(shot["html_design"]["ai_html_generation"]["source"], "codex_local_bespoke_html")
+        self.assertIn("position:absolute!important", shot["html_design"]["custom_css"])
+        preview = self.client.post(f"/api/v1/video-studio/projects/{project['id']}/composition-preview")
+        self.assertEqual(preview.status_code, 200, preview.text)
+        document = self.client.get(f"/api/v1/video-studio/projects/{project['id']}/composition-preview.html").text
+        self.assertIn("custom-html-frame", document)
+        self.assertNotIn("MG视觉系统", document)
+
+    def test_mg_html_patch_preserves_existing_broll(self) -> None:
+        project = self.client.post(
+            "/api/v1/video-studio/projects",
+            json={"topic": "MG 局部刷新", "format": "long", "production_format": "broll_html", "target_duration_seconds": 60},
+        ).json()["project"]
+        shot = {
+            "id": "shot-mg", "title": "局部刷新", "narration": "展示局部刷新。", "duration_seconds": 8,
+            "scene_role": "broll_backdrop_overlay",
+            "information_layer": {"enabled": True, "type": "metric", "keyword": "局部刷新"},
+            "html_render_strategy": "llm_bespoke_html",
+            "broll_options": [{"id": "stock", "provider": "pexels", "provider_id": "stock-1", "asset_path": "/tmp/stock.mp4"}],
+        }
+        video_studio._store().update_project(project["id"], {"scene_groups": [{"title": "MG", "shots": [shot]}]})
+        response = self.client.patch(
+            f"/api/v1/video-studio/projects/{project['id']}/mg-html",
+            json={"html_design_by_shot": {"shot-mg": {
+                "custom_html": (
+                    '<main class="ai-mg-layer" data-ai-generated-html="true"><svg viewBox="0 0 1920 1080">'
+                    '<path data-ai-edit-block="flow" data-ai-edit-kind="visual" d="M180 520H1500" stroke="#2dd4bf" stroke-width="64"/>'
+                    '<circle data-ai-edit-block="node-a" data-ai-edit-kind="visual" cx="480" cy="520" r="120" fill="#f4c95d"/>'
+                    '<circle data-ai-edit-block="node-b" data-ai-edit-kind="visual" cx="1320" cy="520" r="120" fill="#e7f0f7"/>'
+                    '<text class="title" x="160" y="220" font-size="72">局部刷新</text></svg></main>'
+                ),
+                "custom_css": ".ai-mg-layer{position:absolute;inset:0}.title{fill:#fff}",
+                "edit_schema": {"editable_text_selectors": [".title"]},
+            }}},
+        )
+        self.assertEqual(response.status_code, 200, response.text)
+        updated = response.json()["project"]["scene_groups"][0]["shots"][0]
+        self.assertEqual(updated["broll_options"][0]["id"], "stock")
+        self.assertIn("data-ai-generated-html", updated["html_design"]["custom_html"])
+        self.assertEqual(response.json()["updated_shot_ids"], ["shot-mg"])
+
+    def test_prepare_editor_assets_excludes_already_selected_broll(self) -> None:
+        project = self.client.post(
+            "/api/v1/video-studio/projects",
+            json={"topic": "素材去重", "format": "long", "production_format": "broll", "target_duration_seconds": 60},
+        ).json()["project"]
+        groups = [{"title": "素材", "shots": [
+            {"id": "shot-1", "title": "一", "narration": "一。", "duration_seconds": 8, "broll_prompt": "factory exterior"},
+            {"id": "shot-2", "title": "二", "narration": "二。", "duration_seconds": 8, "broll_prompt": "factory worker closeup"},
+        ]}]
+        video_studio._store().update_project(project["id"], {"scene_groups": groups})
+        calls: list[tuple[str, set[tuple[str, str]]]] = []
+
+        def fake_realize(shot: dict, **kwargs: object) -> list[dict]:
+            calls.append((str(shot["id"]), set(kwargs.get("excluded_asset_keys") or set())))
+            provider_id = "asset-1" if shot["id"] == "shot-1" else "asset-2"
+            return [{
+                "id": f"{shot['id']}-{provider_id}", "provider": "pexels", "provider_id": provider_id,
+                "duration_seconds": 12, "asset_url": f"/data/{provider_id}.mp4", "asset_path": f"/tmp/{provider_id}.mp4",
+            }]
+
+        with patch.object(video_studio_broll, "realize_broll_options", side_effect=fake_realize):
+            response = self.client.post(f"/api/v1/video-studio/projects/{project['id']}/prepare-editor-assets")
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(calls[0][1], set())
+        self.assertIn(("pexels", "asset-1"), calls[1][1])
+        selected = response.json()["project"]["editor_state"]["selected_broll_by_shot"]
+        self.assertEqual(selected, {"shot-1": "shot-1-asset-1", "shot-2": "shot-2-asset-2"})
+
+    def test_refresh_broll_preserves_avatar_voice_and_local_uploads(self) -> None:
+        project = self.client.post(
+            "/api/v1/video-studio/projects",
+            json={"topic": "素材刷新", "format": "long", "production_format": "broll", "target_duration_seconds": 60},
+        ).json()["project"]
+        project_id = project["id"]
+        groups = [{"title": "素材", "shots": [
+            {"id": "shot-avatar", "title": "开场", "narration": "开场。", "duration_seconds": 8, "broll_options": [{"id": "avatar", "asset_path": "/tmp/avatar.mp4"}]},
+            {"id": "shot-stock", "title": "库存", "narration": "库存。", "duration_seconds": 8, "broll_options": [{"id": "stock", "provider": "pexels", "provider_id": "1", "asset_path": "/tmp/stock.mp4"}]},
+            {"id": "shot-local", "title": "上传", "narration": "上传。", "duration_seconds": 8, "broll_options": [{"id": "local", "asset_path": "/tmp/local.mp4"}]},
+        ]}]
+        video_studio._store().update_project(project_id, {
+            "scene_groups": groups,
+            "editor_state": {
+                "avatar_assets_by_shot": {"shot-avatar": {"asset_path": "/tmp/avatar.mp4"}},
+                "voice_assets_by_shot": {"shot-avatar": {"asset_path": "/tmp/avatar.wav"}},
+                "selected_broll_by_shot": {"shot-avatar": "avatar", "shot-stock": "stock", "shot-local": "local"},
+            },
+        })
+
+        response = self.client.post(f"/api/v1/video-studio/projects/{project_id}/refresh-broll")
+        self.assertEqual(response.status_code, 200, response.text)
+        updated = response.json()["project"]
+        shots = {shot["id"]: shot for group in updated["scene_groups"] for shot in group["shots"]}
+        self.assertEqual(response.json()["refreshed_shot_ids"], ["shot-stock"])
+        self.assertEqual(shots["shot-avatar"]["broll_options"][0]["id"], "avatar")
+        self.assertEqual(shots["shot-stock"]["broll_options"], [])
+        self.assertEqual(shots["shot-local"]["broll_options"][0]["id"], "local")
+        state = updated["editor_state"]
+        self.assertIn("shot-avatar", state["avatar_assets_by_shot"])
+        self.assertIn("shot-avatar", state["voice_assets_by_shot"])
+        self.assertNotIn("shot-stock", state["selected_broll_by_shot"])
+        self.assertEqual(state["selected_broll_by_shot"]["shot-local"], "local")
 
     def test_completed_work_is_reused_after_project_output_update(self) -> None:
         project = self._ready_project("Work 复用")
@@ -272,6 +458,21 @@ class LocalFfmpegAdapterTest(unittest.TestCase):
         stream_types = {item["codec_type"] for item in json.loads(probe.stdout)["streams"]}
         self.assertEqual(stream_types, {"audio", "video"})
 
+    def test_blocks_render_when_jogg_voice_would_leave_a_silent_tail(self) -> None:
+        snapshot = {
+            "scene_groups": [{"shots": [{
+                "id": "shot-short-voice", "title": "短旁白", "narration": "短旁白。", "duration_seconds": 3,
+                "broll_options": [{"id": "broll", "asset_path": str(self.video)}],
+            }]}],
+            "editor_state": {
+                "voice_assets_by_shot": {"shot-short-voice": {"path": str(self.audio)}},
+                "selected_broll_by_shot": {"shot-short-voice": "broll"},
+                "bgm_enabled": False,
+            },
+        }
+        with self.assertRaisesRegex(RuntimeError, "padding silence"):
+            ffmpeg_adapter.render_snapshot(snapshot, str(self.work_dir), str(self.data_dir), str(self.temp_dir / "blocked.mp4"))
+
     def test_rasterizes_original_podcastor_mg_preview_in_local_chrome(self) -> None:
         shot = {
             "id": "shot-mg", "title": "核心指标", "narration": "核心指标正在上升。", "duration_seconds": 1,
@@ -286,8 +487,38 @@ class LocalFfmpegAdapterTest(unittest.TestCase):
         self.assertGreater(Path(overlay).stat().st_size, 1000)
         subprocess.run(["ffmpeg", "-v", "error", "-i", overlay, "-f", "null", "-"], check=True, env=ffmpeg_adapter._render_env())
 
+    def test_broll_video_is_not_looped_to_fill_a_scene(self) -> None:
+        output = self.work_dir / "scene.mp4"
+        with patch.object(ffmpeg_adapter.subprocess, "run") as run:
+            ffmpeg_adapter._render_scene("/tmp/source-broll.mp4", "", 8, output)
+        command = run.call_args.args[0]
+        self.assertNotIn("-stream_loop", command)
+        self.assertIn("tpad=stop_mode=clone:stop_duration=8.000", " ".join(command))
+
 
 class NetworkBoundaryTest(unittest.TestCase):
+    def test_broll_realization_rejects_used_and_short_candidates(self) -> None:
+        candidates = [
+            {"id": "reused", "provider": "pexels", "provider_id": "asset-1", "duration_seconds": 12},
+            {"id": "short", "provider": "pexels", "provider_id": "asset-2", "duration_seconds": 4},
+            {"id": "fresh", "provider": "pixabay", "provider_id": "asset-3", "duration_seconds": 12},
+        ]
+        downloaded: list[str] = []
+
+        def fake_download(candidate: dict, **_: object) -> dict:
+            downloaded.append(str(candidate["provider_id"]))
+            return {**candidate, "asset_path": "/tmp/asset-3.mp4"}
+
+        with patch.object(video_studio_broll, "search_broll_candidates", return_value=candidates):
+            with patch.object(video_studio_broll, "_download_candidate", side_effect=fake_download):
+                options = video_studio_broll.realize_broll_options(
+                    {"id": "shot-3", "duration_seconds": 8, "broll_prompt": "factory worker"},
+                    project_id="project",
+                    excluded_asset_keys={("pexels", "asset-1")},
+                )
+        self.assertEqual(downloaded, ["asset-3"])
+        self.assertEqual(options[0]["provider_id"], "asset-3")
+
     def test_broll_rejects_unapproved_provider_before_request(self) -> None:
         with self.assertRaises(video_studio_broll.BrollAssetError):
             video_studio_broll.download_broll_candidate(

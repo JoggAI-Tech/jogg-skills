@@ -1,6 +1,33 @@
 import os
 from pathlib import Path
 
+
+def _load_env_file(path: Path) -> None:
+    """Load local runtime configuration without overriding process settings."""
+    if not path.is_file():
+        return
+    try:
+        lines = path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return
+    for raw_line in lines:
+        line = raw_line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, value = line.removeprefix("export ").split("=", 1)
+        key = key.strip()
+        value = value.strip()
+        if not key or not key.replace("_", "a").isalnum() or not (key[0].isalpha() or key[0] == "_"):
+            continue
+        if value.startswith(('"', "'")) and value.endswith(value[:1]) and len(value) >= 2:
+            value = value[1:-1]
+        os.environ.setdefault(key, value)
+
+
+_PLUGIN_ROOT = Path(__file__).resolve().parents[2]
+_load_env_file(_PLUGIN_ROOT / ".env")
+_load_env_file(Path.home() / ".codex" / "smart-slides" / ".env")
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles

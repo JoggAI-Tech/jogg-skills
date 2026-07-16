@@ -46,6 +46,30 @@ def _compact_query(value: Any, *, max_length: int = 72, max_terms: int = 9) -> s
     return compacted
 
 
+def broll_asset_key(candidate: Dict[str, Any]) -> tuple[str, str]:
+    """Return a stable project-wide identity for a B-roll source."""
+    provider = str(candidate.get("provider") or "local").strip().lower()
+    identity = str(
+        candidate.get("provider_id")
+        or candidate.get("source_url")
+        or candidate.get("download_url")
+        or candidate.get("asset_path")
+        or candidate.get("asset_url")
+        or candidate.get("id")
+        or ""
+    ).strip()
+    return provider, identity
+
+
+def candidate_covers_duration(candidate: Dict[str, Any], target_duration_seconds: float) -> bool:
+    """Require a source clip that can cover its shot without video looping."""
+    try:
+        available = float(candidate.get("duration_seconds") or 0)
+    except (TypeError, ValueError):
+        return False
+    return available + 0.25 >= max(0.1, float(target_duration_seconds or 0))
+
+
 def _append_query(queries: List[str], seen: set[str], value: Any) -> None:
     for part in re.split(r"(?:[、，]+|以及|和)", str(value or "")):
         query = _compact_query(part)
@@ -424,6 +448,8 @@ def search_broll_candidates(
     query: str = "",
     per_page: int = 8,
     providers: List[str] | None = None,
+    excluded_asset_keys: set[tuple[str, str]] | None = None,
+    minimum_duration_seconds: float = 0,
 ) -> List[Dict[str, Any]]:
     if not _api_key("PEXELS_API_KEY") and not _api_key("PIXABAY_API_KEY"):
         raise BrollAssetError("未配置免费素材 API Key：请配置 PEXELS_API_KEY 或 PIXABAY_API_KEY")
@@ -448,7 +474,7 @@ def search_broll_candidates(
     provider_quota = max(1, per_page if provider_count <= 1 else math.ceil(per_page / provider_count))
     candidate_queries = [base_query] if query else _candidate_queries({**shot, "broll_prompt": base_query})
     for candidate_query in candidate_queries:
-        if len(candidates) >= per_page * 2:
+        if len(candidates) >= per_page * 4:
             break
         if can_use_pexels:
             try:
@@ -479,19 +505,28 @@ def search_broll_candidates(
             except (httpx.HTTPError, ValueError) as exc:
                 errors.append(f"Pixabay 检索失败({candidate_query})：{str(exc).splitlines()[0]}")
 
+    excluded = excluded_asset_keys or set()
     deduped = []
     seen = set()
     for candidate in candidates:
-        key = (candidate.get("provider"), candidate.get("provider_id"))
+        key = broll_asset_key(candidate)
         if key in seen:
             continue
         seen.add(key)
+        if key in excluded:
+            continue
+        if minimum_duration_seconds and not candidate_covers_duration(candidate, minimum_duration_seconds):
+            continue
         deduped.append(candidate)
         if len(deduped) >= per_page:
             break
 
     if not deduped:
         suffix = f"；{'；'.join(errors)}" if errors else ""
+        if minimum_duration_seconds or excluded:
+            raise BrollAssetError(
+                f"没有检索到不重复且可覆盖 {minimum_duration_seconds:.1f} 秒镜头的免费 B-roll 素材：{base_query}{suffix}"
+            )
         raise BrollAssetError(f"没有检索到可下载的免费 B-roll 素材：{base_query}{suffix}")
 
     return deduped
@@ -516,13 +551,30 @@ def download_broll_candidate(candidate: Dict[str, Any], *, project_id: str, shot
     return _download_candidate(candidate, project_id=project_id, shot_id=shot_id)
 
 
-def realize_broll_options(shot: Dict[str, Any], *, project_id: str, per_page: int = 8) -> List[Dict[str, Any]]:
-    candidates = search_broll_candidates(shot, per_page=per_page)
+def realize_broll_options(
+    shot: Dict[str, Any],
+    *,
+    project_id: str,
+    per_page: int = 8,
+    excluded_asset_keys: set[tuple[str, str]] | None = None,
+) -> List[Dict[str, Any]]:
+    target_duration = max(0.1, float(shot.get("duration_seconds") or 0))
+    candidates = search_broll_candidates(
+        shot,
+        per_page=per_page,
+        excluded_asset_keys=excluded_asset_keys,
+        minimum_duration_seconds=target_duration,
+    )
 
     realized = []
     errors: List[str] = []
     shot_id = str(shot.get("id") or "")
+    excluded = excluded_asset_keys or set()
     for candidate in candidates:
+        if broll_asset_key(candidate) in excluded:
+            continue
+        if not candidate_covers_duration(candidate, target_duration):
+            continue
         try:
             realized.append(_download_candidate(candidate, project_id=project_id, shot_id=shot_id))
             break

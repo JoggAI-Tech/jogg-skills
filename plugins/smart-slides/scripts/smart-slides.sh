@@ -73,6 +73,7 @@ usage:
   smart-slides.sh resume --run-id RUN_ID [--planning-file PLAN.json]
   smart-slides.sh status --run-id RUN_ID
   smart-slides.sh preview --run-id RUN_ID
+  smart-slides.sh refresh-broll --run-id RUN_ID
   smart-slides.sh render --run-id RUN_ID
   smart-slides.sh import --file PROJECT.json [--avatar-mode MODE]
 
@@ -577,6 +578,19 @@ ensure_broll() {
   set_stage broll_ready
 }
 
+refresh_broll() {
+  local project_id
+  start_local_service
+  project_id=$(state_get '.project_id')
+  [[ -n "$project_id" ]] || die "run state has no project_id"
+  log "clearing provider B-roll for explicit refresh"
+  local_api_request POST "/projects/$project_id/refresh-broll"
+  state_mutate '.stage="broll_refreshing" | .composition_preview_url="" | .preview_project_fingerprint="" | .work_id="" | .render_project_fingerprint="" | .final_video_url="" | .error=""'
+  ensure_broll
+  ensure_preview
+  emit_state
+}
+
 ensure_preview() {
   local project_id preview project_fingerprint saved_fingerprint
   project_id=$(state_get '.project_id')
@@ -746,6 +760,9 @@ main() {
     preview)
       parse_run_id "$@"; acquire_run_lock
       if run_until_preview; then emit_state; else handle_checkpoint "$?"; fi ;;
+    refresh-broll)
+      parse_run_id "$@"; acquire_run_lock
+      refresh_broll ;;
     render)
       parse_run_id "$@"; acquire_run_lock; ensure_local_renderer; start_local_service
       if ensure_render; then emit_state; else handle_checkpoint "$?"; fi ;;

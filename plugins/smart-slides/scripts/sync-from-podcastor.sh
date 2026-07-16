@@ -70,6 +70,8 @@ check_snapshot backend/services/video_studio_store.py runtime/backend/services/v
 check_snapshot backend/services/video_studio_mg_design.py runtime/backend/services/video_studio_mg_design.py
 check_snapshot backend/services/video_studio_mg_templates.py runtime/backend/services/video_studio_mg_templates.py
 check_snapshot backend/services/video_studio_ppt_visual_assets.py runtime/backend/services/video_studio_ppt_visual_assets.py
+check_snapshot docs/mg-visual-system/MG-VISUAL-STANDARD-v1.md skills/smart-slides/references/MG-VISUAL-STANDARD-v1.md
+check_snapshot docs/mg-visual-system/README.md skills/smart-slides/references/mg-visual-system-README.md
 check_snapshot frontend/src/features/video-studio/model.ts runtime/frontend/src/features/video-studio/model.ts
 check_snapshot frontend/src/features/video-studio/model.test.ts runtime/frontend/src/features/video-studio/model.test.ts
 check_snapshot frontend/src/features/video-studio/htmlEditor.ts runtime/frontend/src/features/video-studio/htmlEditor.ts

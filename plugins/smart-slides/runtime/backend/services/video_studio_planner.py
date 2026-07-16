@@ -112,6 +112,14 @@ DOCUMENTARY_OVERLAY_HERMES_CONTRACT = (
 )
 
 
+BESPOKE_HTML_OUTPUT_LIMITS = {
+    "custom_html_chars": 3200,
+    "custom_css_chars": 5200,
+    "max_keyframes": 5,
+    "max_visible_text_blocks": 3,
+}
+
+
 BESPOKE_HTML_VALIDATION_VERSION = "bespoke_html_validation_v2"
 
 
@@ -860,11 +868,483 @@ def is_current_bespoke_html_asset(asset: Dict[str, Any]) -> bool:
     )
 
 
+def _html_overlay_contract_for_clip(topic: str, clip: Dict[str, Any], bound_shots: List[Dict[str, Any]]) -> Dict[str, Any]:
+    provided_shot_ids = [str(shot.get("id") or "") for shot in bound_shots if str(shot.get("id") or "")]
+    total_duration = round(sum(_positive_float(shot.get("duration_seconds"), 6.0) for shot in bound_shots), 2)
+    clip_mg_director = clip.get("mg_director") if isinstance(clip.get("mg_director"), dict) else {}
+    if not _mg_director_enabled(clip_mg_director):
+        raise VideoStudioGenerationError("缺少 MG 导演层，不能生成 AI HTML")
+    visual_system = _normalize_mg_visual_system(clip_mg_director.get("visual_system")) or "comparison"
+    composition = _normalize_mg_composition(
+        clip_mg_director.get("composition"),
+        visual_system,
+        semantic_text=" ".join(
+            str(clip_mg_director.get(key) or "")
+            for key in ("story_goal", "one_learning_point", "main_visual_metaphor")
+        ),
+    )
+    slots: List[Dict[str, Any]] = []
+    timeline: List[Dict[str, Any]] = []
+    director_slots = _html_content_slots_from_mg_director(clip_mg_director)
+    for slot in director_slots:
+        slots.append(
+            {
+                "shot_id": ",".join(provided_shot_ids),
+                "role": str(slot.get("role") or ""),
+                "label": _short_text(slot.get("label") or "", 16),
+                "text": _short_text(slot.get("text") or "", 42),
+            }
+        )
+    for item in _html_motion_sequence_from_mg_director(clip_mg_director):
+        timeline.append({**item, "shot_id": ",".join(provided_shot_ids)})
+    if not slots:
+        raise VideoStudioGenerationError("MG 导演层缺少 screen_slots，不能生成 AI HTML")
+    unique_slots: List[Dict[str, Any]] = []
+    seen_slot_keys: set[str] = set()
+    for slot in slots:
+        key = _screen_text_key(f"{slot.get('role')}|{slot.get('label')}|{slot.get('text')}")
+        if not key or key in seen_slot_keys:
+            continue
+        seen_slot_keys.add(key)
+        unique_slots.append(slot)
+        if len(unique_slots) >= 8:
+            break
+    return {
+        "version": "html_overlay_contract_v1",
+        "topic": _short_text(topic, 64),
+        "clip_id": str(clip.get("id") or ""),
+        "visual_system": visual_system,
+        "bound_shots": provided_shot_ids,
+        "duration_seconds": total_duration,
+        "mg_director": {
+            "version": str(clip_mg_director.get("version") or ""),
+            "story_goal": _short_text(clip_mg_director.get("story_goal") or "", 120),
+            "core_question": _short_text(clip_mg_director.get("core_question") or "", 90),
+            "one_learning_point": _short_text(clip_mg_director.get("one_learning_point") or "", 90),
+            "main_visual_metaphor": _short_text(clip_mg_director.get("main_visual_metaphor") or "", 120),
+            "logic_chain": clip_mg_director.get("logic_chain") if isinstance(clip_mg_director.get("logic_chain"), list) else [],
+            "supporting_metric": clip_mg_director.get("supporting_metric") if isinstance(clip_mg_director.get("supporting_metric"), dict) else {},
+            "html_brief": _short_text(clip_mg_director.get("html_brief") or "", 180),
+        },
+        "canvas": {"width": DEFAULT_RENDER_WIDTH, "height": DEFAULT_RENDER_HEIGHT, "aspect_ratio": "16:9"},
+        "safe_areas": {
+            "subtitle_bottom_percent": 16,
+            "avatar_host_right": {
+                "landscape_width_percent": 12,
+                "portrait_width_percent": 17,
+                "min_px": 120,
+                "max_width_percent": 22,
+                "examples": {
+                    "1920x1080": _avatar_rect(1920, 1080),
+                    "1280x720": _avatar_rect(1280, 720),
+                    "1080x1920": _avatar_rect(1080, 1920),
+                },
+            },
+        },
+        "output_limits": {
+            **BESPOKE_HTML_OUTPUT_LIMITS,
+        },
+        "visual_quality_rules": [
+            "aigc_bespoke_visual_first_not_template_instance",
+            "one_dominant_visual_metaphor_only",
+            "primary_visual_anchor_must_be_visible_at_first_glance",
+            "main_structure_uses_middle_safe_canvas_not_bottom_strip_or_corner",
+            "screen_text_short_and_non_redundant_max_three_major_blocks",
+            "standalone_html_composition_does_not_depend_on_broll_or_external_media",
+            "foreground_visual_mass_occupies_52_to_90_percent_not_a_collection_of_thin_lines",
+            "every_text_block_must_be_readable_at_1920x1080_with_no_micro_labels",
+            "all_absolute_html_elements_must_remain_inside_the_1920x1080_canvas",
+            "svg_uses_viewbox_0_0_1920_1080_and_keeps_all_visible_geometry_inside_that_viewbox",
+            "avoid_card_grid_dashboard_and_generic_panel_composition",
+        ],
+        "html_canvas": {
+            "alpha_canvas": True,
+            "self_contained": True,
+            "foreground_coverage_percent": "52-90",
+            "allowed_foreground": ["solid_color_field", "cut_paper_mask", "ink_or_archival_texture", "large_hero_shape"],
+            "forbidden_foreground": ["reserved_broll_aperture", "empty_media_frame", "half_canvas_blank", "repeated_grid", "line_only_main_visual"],
+        },
+        "composition_rules": _composition_rules_for_visual_system(visual_system),
+        "composition": composition,
+        "editing_contract": {
+            "visible_text": "direct block/kind/name + editable_blocks; ancestor does not count",
+        },
+        "slots": unique_slots,
+        "timeline": timeline[:10],
+        "allowed_freedom": [
+            "主视觉隐喻、SVG/HTML 构图、语义颜色、扫描/测量/路径动效可以自由设计",
+            "工程边界、画布、安全区、文本来源、selector 和输出长度不能自由更改",
+        ],
+    }
+
+
+def _composition_rules_for_visual_system(visual_system: str) -> Dict[str, Any]:
+    rules = {
+        "metric": {
+            "primary_structure": "large_metric_anchor",
+            "must_include": ["one_large_number_or_keyword", "measurement_axis_or_threshold", "semantic_change_path", "short_takeaway"],
+            "avoid": ["small KPI cards", "dashboard tiles", "bottom-only chart"],
+        },
+        "causal": {
+            "primary_structure": "directional_causal_path",
+            "must_include": ["3_to_4_nodes_max", "clear_arrow_direction", "current_node_highlight", "effect_lockup"],
+            "avoid": ["unordered node cloud", "dense mind map", "equal-weight cards"],
+        },
+        "route": {
+            "primary_structure": "map_or_spatial_trace",
+            "must_include": ["dominant_path_line", "2_to_4_anchor_points", "coordinate_ticks", "moving_focus_marker"],
+            "avoid": ["tiny map inset", "decorative location pins", "route hidden behind text"],
+        },
+        "timeline": {
+            "primary_structure": "mid_canvas_timeline",
+            "must_include": ["large_axis_in_middle_third", "stage_markers", "turning_point_emphasis", "final_takeaway"],
+            "avoid": ["thin bottom strip", "too many years", "timeline as footer"],
+        },
+        "comparison": {
+            "primary_structure": "before_after_or_split_comparison",
+            "must_include": ["strong_divider_or_scan_bar", "left_right_semantic_color", "one_difference_anchor", "short_verdict"],
+            "avoid": ["two generic cards", "table-like dashboard", "equal text columns"],
+        },
+        "reveal": {
+            "primary_structure": "scan_or_mask_reveal",
+            "must_include": ["large_scan_area", "evidence_reveal_motion", "focus_frame", "late_takeaway"],
+            "avoid": ["pure opacity fade", "decorative scanning only", "hidden tiny evidence"],
+        },
+    }
+    return rules.get(visual_system, rules["comparison"])
+
+
+def _bespoke_html_asset_prompt(
+    topic: str,
+    clip: Dict[str, Any],
+    bound_shots: List[Dict[str, Any]],
+    *,
+    compact_retry: bool = False,
+    simple_retry: bool = False,
+    composition_retry: bool = False,
+    composition_feedback: str = "",
+) -> str:
+    shot_payload = []
+    provided_shot_ids = [str(shot.get("id") or "") for shot in bound_shots if str(shot.get("id") or "")]
+    total_provided_duration = round(sum(_positive_float(shot.get("duration_seconds"), 6.0) for shot in bound_shots), 2)
+    clip_payload = _compact_mg_clip_for_html_prompt(clip, provided_shot_ids, total_provided_duration)
+    overlay_contract = _html_overlay_contract_for_clip(topic, clip, bound_shots)
+    mg_director = clip.get("mg_director") if isinstance(clip.get("mg_director"), dict) else {}
+    visual_recipe_contract = ppt_visual_contract_art_direction(mg_director.get("visual_recipe"))
+    composition = overlay_contract.get("composition") if isinstance(overlay_contract.get("composition"), dict) else {}
+    hero_frame = composition.get("hero_frame") if isinstance(composition.get("hero_frame"), dict) else {}
+    primitives = composition.get("visual_primitives") if isinstance(composition.get("visual_primitives"), list) else []
+    icon_semantics = composition.get("icon_semantics") if isinstance(composition.get("icon_semantics"), list) else []
+    composition_retry_block = ""
+    if composition_retry:
+        composition_retry_block = f"""
+视觉重绘反馈（最高优先级）：上一版代码已经通过工程安全检查，但没有实现 MG 构图合同。
+- 失败原因：{composition_feedback or "主视觉没有形成足够明确的画面主体"}
+- 从头重画，不得复用上一版的网格、散点、细线或小图标排布。
+- 先让 hero_frame 内出现一个完整的大对象/大关系，再安排标题与结论。路径类必须是有宽度、色场、带状轨迹或大号符号组，而不是发丝线；图标要有足够尺寸并连接到主关系上。
+- 这不是“把小圆点放大”：每个 icon_semantics 都必须对应一个可见、可编辑的语义图标组。请使用至少两个独立的 `<g data-ai-edit-block="icon-语义名" data-ai-edit-kind="visual">...</g>`（例如 `icon-capital`、`icon-chip`）；每组在 1920x1080 画布上至少约 120px x 120px，并直接参与主路径、对比或因果关系。
+- 禁止用 `mg-grid`、重复网格、棋子散点、装饰圆点或仅有文字标签冒充图标。图标本身必须是能辨认的内联 SVG 轮廓/剪影/符号，并由主视觉关系连接。
+- SVG 必须使用 `viewBox="0 0 1920 1080"`；所有 x/y/cx/cy 坐标、path 控制点和 translate 位移都必须在画布内，禁止负数坐标、负百分比 left/right/top/bottom，禁止让 clip-path 或 transform 把可见主体推出画布。
+- 在输出前自行核对：`data-ai-edit-block` 中至少有两个以 `icon-` 开头的块；没有任何负坐标；暂停在最后一帧时，主视觉仍是画面第一眼最明显的对象。
+"""
+    for shot in bound_shots:
+        mg_director = clip.get("mg_director") if isinstance(clip.get("mg_director"), dict) else {}
+        shot_payload.append(
+            {
+                "id": str(shot.get("id") or ""),
+                "title": _short_text(shot.get("title") or "", 48),
+                "duration_seconds": _positive_float(shot.get("duration_seconds"), 6.0),
+                "visual_task": _html_visual_task_for_prompt(shot, clip),
+                "visible_screen_text": _compact_content_slots(_html_content_slots_from_mg_director(mg_director)),
+                "motion_actions": _compact_motion_items(
+                    _html_motion_sequence_from_mg_director(mg_director),
+                    limit=5,
+                ),
+            }
+        )
+    compact_retry_block = ""
+    if simple_retry:
+        compact_retry_block = """
+
+AI SIMPLE RETRY MODE（最高优先级）：
+- 前两次 HTML 生成失败；这次只生成最小但可用的 AI HTML，不允许切换模板。
+- 只保留 1 个主视觉范式、1 个 SVG 或 CSS 图形、1 个主标题、1 个短标签、1 句结论。
+- custom_html 必须小于 900 字符；custom_css 必须小于 1800 字符。
+- DOM 元素最多 10 个；SVG 基础图形最多 5 个；最多 1 个 @keyframes。
+- 不做复杂纹理、不做多层卡片、不做多个信息块阵列。
+- 如果语义复杂，只表达 one_learning_point，不扩写其他内容。
+"""
+    elif compact_retry:
+        compact_retry_block = """
+
+COMPACT RETRY MODE（最高优先级）：
+- 上一次标准 HTML 生成过长或 JSON 不完整；这次必须输出短小、完整、可解析的 JSON。
+- 仍然由你直接设计和绘制 HTML/CSS/SVG，不允许改成模板说明或只返回参数。
+- 使用 custom_html/custom_css raw 字段，JSON 字符串必须正确转义。
+- custom_html 必须是一行 minified HTML fragment；custom_css 必须是一行 minified CSS。
+- custom_html 解码前后目标小于 1400 字符；custom_css 目标小于 3200 字符。
+- DOM 元素最多 18 个；SVG path/line/circle/polyline 总数最多 8 个；禁止 defs/marker/filter/mask/pattern。
+- 最多 1 个 SVG；最多 1 个 @keyframes；最多 3 个 animation 声明。
+- 不要生成复杂长 path；每个 d 属性目标小于 220 字符。
+- 只保留主视觉、主标题、1 个标签、1 句结论；删除所有装饰性细节。
+- 同一个视觉隐喻必须清楚，但宁可简洁，也不要完整铺满画面。
+
+COMPACT 输出协议：
+{
+  "html_asset": {
+    "custom_html": "<main class=\\"ai-mg-layer ai-mg-layer--compact\\" data-ai-generated-html=\\"true\\"><svg ...></svg><b>短标题</b><em>短结论</em></main>",
+    "custom_css": ".ai-mg-layer--compact{position:absolute;inset:0;background:transparent;color:white;pointer-events:none}...",
+    "layout_summary": "compact retry：说明主视觉范式和安全区避让",
+    "edit_schema": {
+      "editable_text_selectors": [".selector"],
+      "editable_position_selectors": [".selector"],
+      "editable_motion_selectors": [".selector"],
+      "editable_blocks": [
+        {
+          "id": "visual-flow-path",
+          "name": "资金流路径",
+          "type": "visual_path",
+          "selector": "[data-ai-edit-block='visual-flow-path']",
+          "controls": ["x", "y", "scale", "opacity", "color", "stroke_width", "motion"]
+        }
+      ],
+      "editable_style_controls": ["color", "opacity", "scale", "font_size"],
+      "safe_area": "16:9 full frame, bottom subtitle safe area, host_right avatar safe area"
+    }
+  }
+}
+"""
+    return f"""
+请为长视频生成真正可渲染的 AI HTML 信息层，输出最终透明叠加层的 HTML/CSS 源码。
+
+最高优先级：MG 构图执行合同。先按此合同画出暂停帧，再考虑所有其他艺术指导：
+- animation_type：{composition.get("animation_type")}
+- layout：{composition.get("layout")}
+- hero_frame={json.dumps(hero_frame, ensure_ascii=False)} 是实际可见主体的坐标与面积，禁止只在其中画细线、散点或小字。
+- self_contained_html：独立完成 16:9 构图，禁止 B-roll 开窗、空媒体框和半幅空白。
+- 视觉原子：{json.dumps(primitives, ensure_ascii=False)}；图标语义：{json.dumps(icon_semantics, ensure_ascii=False)}。图标用大号内联 SVG 参与路径/对比，不能写成小标签或散点。
+- single_focus 只能有一个大型主体，不得用网格替代；directional_path 的主路径必须穿过 hero_frame；contrast_stage 的分界与色场必须占据 hero_frame。
+- 主视觉不是背景纹理。网格、扫描线、颗粒只能以低透明度附着在主视觉上；它们不得代替主视觉。
+{composition_retry_block}
+
+{DOCUMENTARY_OVERLAY_ART_DIRECTION}
+
+MG 导演已经确定本段视觉语法。严格执行以下组合合同，把它原创实现为 HTML/CSS/SVG 成片；不得再次选配方：
+{visual_recipe_contract}
+
+工作方式：
+- AIGC 主路径：你正在直接创作这一段成片要用的 HTML/CSS/SVG 视觉层，不是在选择、填写、改写或实例化模板。
+- 模板只允许作为失败兜底；本次 AI HTML 输出不得引用模板库的结构、字段、命名、版式或模块数量。
+- 不得使用 template_id、template_family、mg_template、template_strategy 作为视觉依据，也不要输出模板参数、模板说明或组件配置。
+- 你可以自由设计视觉诗意、构图、SVG 路径、透明纹理和动效，但不能自由更改工程边界。
+- 工程边界由 HTML overlay contract 决定：画布、安全区、slots、timeline、输出长度、selector 和文本来源都必须服从 contract。
+- composition 是本段 MG 的构图合同：必须按它的 animation_type、layout、hero_frame 和 visual_primitives 实现，不要自行把大主体缩成角落装饰，也不要把它替换成卡片网格。
+- 不要从长口播扩写页面；只把 contract.slots 变成短标题、短标签和一句结论。
+
+执行导演视觉决策，不要重新设计语义结构：
+- 先按 visual_recipe 和 composition 形成一个暂停帧也成立的纪录片信息图，再把它实现成工程可渲染的 HTML/CSS/SVG。
+- main_visual_metaphor 和 visual_recipe 是唯一主结构；不得改选其他对比、路径、时间线、因果链、地图或指标结构。
+- 画面第一眼要能看出这个主结构：例如左右对比就是一条清晰分界线和两侧语义变化；路径就是一条主路径和少量锚点；因果链就是一个方向明确的节点流。
+- 图标/符号可以作为主视觉的一部分：用少量语义明确的内联 SVG 图标、轮廓或剪影承载“公司、资本、芯片、人物、地点、制度”等概念；图标必须参与关系或动效，不能变成一排装饰小图标。
+- 只围绕一个学习点组织画面：主标题说明问题或结论，主视觉承载关系，少量标签解释证据，最后一句结论锁定记忆点。
+- 这是 alpha WebM 内的前景合成，不等于必须全透明：可以用 45%-70% 画面的实体纯色色场、档案纸块、墨迹遮罩或大型几何主体承载主视觉。
+- HTML 可用透明或实体色场，但各区域必须自行完成表达；禁止留空等待 B-roll 补齐。
+- 细线、网格、坐标刻度、扫描线只能作为 10%-20% 的辅助质感，不能成为主视觉，也不能在画面上重复铺满。
+- 主视觉必须使用中部安全画布的主要面积：大约横向 62%-86%、纵向 38%-64%，不能把核心表达压缩在中下部、左上角或某个小区域。
+- 主标题建议位于上方 8%-18% 的安全区域，字号使用 clamp，1920x1080 下视觉效果不小于 44px；关键结论不小于 30px；局部标签不小于 18px。
+- 如果是时间线/折线/路径，不要做成一条贴近底部的细线；轴线应进入画面中部，关键节点、标签和焦点环要足够大，让用户不认真看也能理解。
+- 色场、纯色遮罩和档案质感必须像剪辑镜头中的美术前景，而不是半透明 dashboard 背景；它们应有明确的硬边、裁切边或不规则边界。
+
+输入数据：
+主题：{topic}
+MG Clip：{json.dumps(clip_payload, ensure_ascii=False)}
+HTML overlay contract：{json.dumps(overlay_contract, ensure_ascii=False)}
+覆盖分镜执行 brief：{json.dumps(shot_payload, ensure_ascii=False)}
+已提供分镜 ID：{json.dumps(provided_shot_ids, ensure_ascii=False)}
+已提供分镜总时长：{total_provided_duration} 秒
+
+用户再生成要求：
+- regeneration_prompt：{json.dumps(str(clip.get("regeneration_prompt") or ""), ensure_ascii=False)}
+- user_reference：{json.dumps(str(clip.get("user_reference") or ""), ensure_ascii=False)}
+- 如果用户参考描述了视觉风格、构图或动效，要优先吸收为视觉方向；但不得增加合同之外的长屏幕文字，不得违反画布、安全区、可编辑块和 JSON 输出协议。
+
+数据使用顺序：
+- MG director 是唯一语义来源，决定讲什么、用什么主视觉范式、哪些短文案可上屏、时间轴怎么走。
+- HTML overlay contract 只提供工程协议：画布、安全区、slots/timeline 的已归一化副本、输出格式、selector、长度和安全边界；不得改变 MG director 的语义。
+- 屏幕文字优先使用 HTML overlay contract.slots / visible_screen_text；content slots 没有的信息不要主动补充到屏幕上。
+- visual_task 只用于选择视觉隐喻和画面关系；不要把长语义逐条搬到屏幕上。
+- 如果 MG Clip 的 bound_shots 包含多个分镜，按一个连续 overlay 设计完整时间轴，不要在分镜边界重启整套动画。
+
+数据一致性：
+- MG Clip.bound_shots 必须和覆盖分镜数组一致。不要为未提供的 shot 编造内容。
+- 如果 bound_shots 中的某个 shot 没有出现在覆盖分镜里，只基于已提供分镜生成 overlay，并在 layout_summary 中说明未使用缺失 shot。
+- timeline.end_s 应以已提供分镜的总时长为准；不要凭空扩展动画内容。
+- 如果 MG Clip.timeline 和已提供分镜总时长冲突，优先使用已提供分镜总时长。
+
+画布和安全区：
+- 按 1920x1080 设计，但 CSS 使用百分比、vmin/vw/vh、clamp 适配 iframe。
+- 画布本身必须可输出 alpha；元素可以是透明、半透明或不透明，但构图不能依赖 alpha 下方出现任何特定素材。
+- 底部约 16% 是字幕安全区，不放主要信息。
+- 数字人安全区使用 host_right：横版为画布宽度 12%，竖版为画布宽度 17%，最小 120px，最大 22% width，位于右下角，右边距约 3.5% width，底边距约 3.5% height。
+- 1920x1080 host_right 为 [1623, 812, 1853, 1042]；1280x720 host_right 为 [1081, 541, 1235, 695]；1080x1920 host_right 为 [858, 1669, 1042, 1853]。
+- HTML 信息层不得在 host_right 本体区域放置文字、大数字、关键节点；host_right 外扩 16-24px 的缓冲区不放主要文字，只允许低透明度纹理或连接线经过。
+- 右侧主体区域可以使用；不要把整个右侧当作数字人安全区，只有右下角 host_right 小矩形及缓冲区需要避让。
+- 同时可见的主要文字块最多 3 个。
+- 最多 1 个主标题、1 个主视觉、1-2 个短标签、1 句结论。
+- 主视觉范围内的文字必须服务于结构关系，不要堆成小字注释；低于 18px 的文字只能作为坐标刻度或装饰性来源标签。
+
+输出协议：
+{DOCUMENTARY_OVERLAY_HERMES_CONTRACT}
+
+只输出严格 JSON：
+{{
+  "html_asset": {{
+    "custom_html": "<main class=\\"ai-mg-layer ai-mg-layer--comparison\\" data-ai-generated-html=\\"true\\">HTML fragment only</main>",
+    "custom_css": ".ai-mg-layer--comparison{{position:absolute;inset:0;background:transparent;pointer-events:none}}",
+    "layout_summary": "一句话说明布局如何使用画面主体区域，并避开字幕和右下角 host_right 小数字人框",
+    "edit_schema": {{
+      "editable_text_selectors": ["可编辑文字选择器"],
+      "editable_position_selectors": ["可编辑位置/缩放选择器"],
+      "editable_motion_selectors": ["可编辑动效选择器"],
+      "editable_blocks": [
+        {{
+          "id": "唯一短 id，必须和 data-ai-edit-block 一致",
+          "name": "给用户看的对象名，例如 资金流黄条 / 关键节点 / 扫描分界线",
+          "type": "text | visual_path | visual_node | visual_shape | visual_group",
+          "selector": "[data-ai-edit-block='同一个 id']",
+          "controls": ["x", "y", "scale", "opacity", "color", "stroke_width", "motion"]
+        }}
+      ],
+      "editable_style_controls": ["color", "opacity", "scale", "font_size"],
+      "safe_area": "16:9 full frame, bottom subtitle safe area, host_right avatar safe area"
+    }}
+  }}
+}}
+
+硬性要求：
+- layout_summary 必须写明选择的主视觉范式，以及如何避开字幕和右下角 host_right 小数字人框。
+- custom_html 不得包含 html/head/body/style/script/iframe/link/meta。
+- custom_css 不得使用外链、@import、url()、JS。
+- CSS 选择器必须限制在根容器 class 内，避免污染宿主页面。
+- HTML/CSS 中不得隐藏或注入额外长文本，包括 aria-label、data-*、title、注释、CSS content。
+- 所有可见或不可见的语义文本都必须来自 HTML overlay contract.slots / visible_screen_text 的短文案，必要的 class/id 命名除外。
+- edit_schema 中列出的所有 selector 必须真实存在于 HTML 或 CSS 中；每个可见文字元素自身须声明唯一 block/kind="text"/name 并逐一进入 editable_blocks（祖先标记不算），开放 text/x/y/color/opacity/font_size/motion。
+- 主要主路径、黄条、扫描线、节点和形状组使用 data-ai-edit-kind="visual" 并进入 editable_blocks，支持位置、缩放、颜色、透明度和动效。
+- 对 SVG 视觉对象，优先把 data-ai-edit-block 标在 path/polyline/line/circle/rect/g 上；不要只标在整个 svg 根节点上，除非它确实是一个不可拆分的整体。
+- custom_html/custom_css 是 raw JSON 字符串，必须正确转义换行、引号、反斜杠。
+- custom_html 目标控制在 {BESPOKE_HTML_OUTPUT_LIMITS["custom_html_chars"]} 字符以内，custom_css 目标控制在 {BESPOKE_HTML_OUTPUT_LIMITS["custom_css_chars"]} 字符以内；不要用注释、空行或重复 DOM 撑长度。
+- 不要为了凑数量创建卡片。
+- 避免使用 dashboard/card 命名作为视觉方向；这是纪录片信息图层，不是业务后台页面。
+- 完整语义用于理解、构图和事实选择；屏幕文字必须重新提炼为短标签、短标题和一句结论，不要照搬长口播。
+- 禁止重复表达同一事实：同一个指标、标题或结论只能出现一次。
+- 禁止把主视觉做成下三分之一小字条、底部时间线、小角落装饰或低矮卡片；主视觉必须在画布中部形成第一眼可见的大结构。
+- 关键数字、关键判断或主标题必须有一个成为视觉锚点，1920x1080 下主锚点等效字号不小于 44px，不能依赖用户仔细看小字理解内容。
+- 所有可读标签在 1920x1080 下不得小于 18px；SVG 的 text font-size 不得小于 18。坐标刻度若确有必要可降至 16，但最多 4 个且不得承载核心信息。
+- 所有可见元素必须完全落在 1920x1080 画布内：CSS absolute 的 left/top/right/bottom 不得把元素推出边界；SVG 必须使用 viewBox="0 0 1920 1080"，所有可见 x/y/cx/cy 与路径端点都必须在该范围内。不得依赖 overflow:hidden 截掉主体或文字。
+- 输出前自行检查暂停帧：主标题、主视觉和结论必须一眼可读；若需要缩小文字才能塞下内容，删除次要信息而不是缩小字号。
+- 使用纪录片信息图语言：大面积色场、裁切蒙版、档案纸/墨迹质感、大型语义几何、局部 SVG 路径和少量坐标刻度；避免把网格、扫描线、细框和连接线堆成主画面。
+- composition.animation_type 固定为 self_contained_html；主视觉必须用大号图标/符号、路径、数据、HTML 内部证据对象或色场完成，不能用空白背景、空媒体框或几行文字代替。
+- SVG 图形优先用少量 path/line/circle/text 组合，不要生成大段复杂 SVG；同类扫描线或纹理用 CSS repeating-linear-gradient 实现，不要复制多个 DOM。
+- 需要根据 HTML overlay contract.mg_director / slots / timeline 做视觉：指标用测量标尺，因果用节点和箭头，路径用线和锚点，时间线用轨道，对比用左右结构，揭示用扫描/遮罩。
+- 文字必须短，所有 long narration 只能抽取关键词，不允许整段塞进画面。
+- CSS 动画要围绕 motion_sequence 的 at_s/target/action 设计，优先复用通用 keyframes、animation-delay 和 CSS 变量；不要为每个元素单独新建 keyframes。
+- CSS 目标最多 {BESPOKE_HTML_OUTPUT_LIMITS["max_keyframes"]} 个 keyframes；class 名保持短但语义清晰；禁止 HTML/CSS 注释。
+- 不允许输出解释、markdown 或代码块；不要输出 <style>，CSS 必须只放在 custom_css 里。
+{compact_retry_block}
+"""
+
+
+def _compact_mg_clip_for_html_prompt(clip: Dict[str, Any], provided_shot_ids: List[str], duration_seconds: float) -> Dict[str, Any]:
+    raw_timeline = clip.get("timeline") if isinstance(clip.get("timeline"), dict) else {}
+    mg_director = clip.get("mg_director") if isinstance(clip.get("mg_director"), dict) else {}
+    visual_system = str(mg_director.get("visual_system") or clip.get("visual_system") or "comparison")
+    return {
+        "id": str(clip.get("id") or ""),
+        "title": _short_text(clip.get("title") or "", 64),
+        "render_strategy": str(clip.get("render_strategy") or "llm_bespoke_html"),
+        "regeneration_prompt": _short_text(clip.get("regeneration_prompt") or clip.get("design_prompt") or "", 240),
+        "user_reference": _short_text(clip.get("user_reference") or "", 360),
+        "visual_system": visual_system,
+        "mg_director": {
+            "story_goal": _short_text(mg_director.get("story_goal") or "", 120),
+            "core_question": _short_text(mg_director.get("core_question") or "", 90),
+            "one_learning_point": _short_text(mg_director.get("one_learning_point") or "", 90),
+            "main_visual_metaphor": _short_text(mg_director.get("main_visual_metaphor") or "", 120),
+            "html_brief": _self_contained_html_direction(mg_director.get("html_brief")),
+        },
+        "bound_shots": provided_shot_ids,
+        "timeline": {
+            "start_s": _positive_float(raw_timeline.get("start_s"), 0.0) if raw_timeline else 0.0,
+            "end_s": duration_seconds,
+        },
+    }
+
+
+def _html_visual_task_for_prompt(shot: Dict[str, Any], clip: Dict[str, Any]) -> Dict[str, Any]:
+    mg_director = clip.get("mg_director") if isinstance(clip.get("mg_director"), dict) else {}
+    visual_system = str(mg_director.get("visual_system") or "comparison")
+    learning_point = mg_director.get("one_learning_point") or ""
+    visual_goal = mg_director.get("html_brief") or mg_director.get("main_visual_metaphor") or mg_director.get("story_goal") or ""
+    return {
+        "visual_system": visual_system,
+        "overlay_mode": "documentary",
+        "one_learning_point": _short_text(learning_point, 72),
+        "visual_goal": _constrain_html_visual_goal(visual_goal, visual_system),
+        "core_question": _short_text(mg_director.get("core_question") or "", 72),
+        "logic_chain": mg_director.get("logic_chain") if isinstance(mg_director.get("logic_chain"), list) else [],
+        "material_hint": _short_text(shot.get("title") or "", 48),
+    }
+
+
+def _constrain_html_visual_goal(value: Any, visual_system: str) -> str:
+    text = _short_text(value, 120)
+    text = re.sub(r"(超大|巨大|巨型|满屏|铺满画面|占满画面|占据画面中央|占据中央)", "", text)
+    if visual_system == "metric":
+        text += "；主数字只能作为测量标尺或指标标签，不得独占画面。"
+    if not text.strip():
+        return "围绕一个清晰学习点制作透明纪录片信息图。"
+    return _short_text(text, 150)
+
+
 def _self_contained_html_direction(value: Any) -> str:
     text = _short_text(value, 180)
     if re.search(r"(?i)b[ -]?roll|aperture|framed.?evidence|证据开窗|素材开窗|媒体框|画面框", text):
         return "HTML 独立完成完整 16:9 构图，以主视觉推进关系并锁定结论，不依赖外部素材。"
     return text
+
+
+def _compact_content_slots(value: Any, *, limit: int = 5) -> List[Dict[str, Any]]:
+    slots = value if isinstance(value, list) else []
+    compacted: List[Dict[str, Any]] = []
+    for item in slots[:limit]:
+        if not isinstance(item, dict):
+            continue
+        entry = {
+            "role": str(item.get("role") or ""),
+            "text": _short_text(item.get("text") or "", 42),
+        }
+        label = _short_text(item.get("label") or "", 16)
+        if label:
+            entry["label"] = label
+        if entry["role"] or entry["text"] or label:
+            compacted.append(entry)
+    return compacted
+
+
+def _compact_motion_items(value: Any, *, limit: int = 6) -> List[Dict[str, Any]]:
+    items = value if isinstance(value, list) else []
+    compacted: List[Dict[str, Any]] = []
+    for item in items[:limit]:
+        if not isinstance(item, dict):
+            continue
+        compacted.append({
+            "at_s": item.get("at_s") if item.get("at_s") is not None else item.get("start_s"),
+            "target": str(item.get("target") or ""),
+            "action": _short_text(item.get("action") or item.get("motion") or "", 36),
+            "duration_s": item.get("duration_s"),
+            "text": _short_text(item.get("text") or "", 36),
+        })
+    return compacted
 
 
 def _sanitize_custom_html_fragment(raw_html: str) -> str:
@@ -882,6 +1362,13 @@ def _sanitize_custom_html_fragment(raw_html: str) -> str:
     return text.strip()
 
 
+def _minify_custom_html_fragment(raw_html: str) -> str:
+    text = re.sub(r"(?is)<!--.*?-->", "", raw_html or "")
+    text = re.sub(r">\s+<", "><", text)
+    text = re.sub(r"\s{2,}", " ", text)
+    return text.strip()
+
+
 def _sanitize_custom_css(raw_css: str) -> str:
     text = raw_css.strip()
     text = re.sub(r"(?is)<style\b[^>]*>|</style>", "", text)
@@ -890,6 +1377,41 @@ def _sanitize_custom_css(raw_css: str) -> str:
     text = re.sub(r"(?is)expression\s*\([^)]*\)", "", text)
     text = re.sub(r"(?is)javascript:", "", text)
     return text.strip()
+
+
+def _minify_custom_css(raw_css: str) -> str:
+    text = re.sub(r"(?is)/\*.*?\*/", "", raw_css or "")
+    text = re.sub(r"\s+", " ", text)
+    text = re.sub(r"\s*([{}:;,>+~])\s*", r"\1", text)
+    text = re.sub(r";}", "}", text)
+    return text.strip()
+
+
+def _normalize_bespoke_html_font_sizes(custom_html: str, custom_css: str) -> tuple[str, str]:
+    """Keep model-authored text inside the readable 16:9 frame range."""
+    def normalize(match: re.Match[str]) -> str:
+        try:
+            value = float(match.group(2))
+        except (TypeError, ValueError):
+            return match.group(0)
+        if 18 <= value <= 160:
+            return match.group(0)
+        return f"{match.group(1)}{18 if value < 18 else 160}{match.group(3)}"
+
+    def normalize_clamp(match: re.Match[str]) -> str:
+        minimum = min(160.0, max(18.0, float(match.group(2))))
+        preferred = min(8.0, max(1.0, float(match.group(3))))
+        maximum = min(160.0, max(minimum, float(match.group(5))))
+        return f"{match.group(1)}{minimum:g}px,{preferred:g}{match.group(4)},{maximum:g}px{match.group(6)}"
+
+    html_text = re.sub(r"(?is)(font-size\s*=\s*['\"])(\d+(?:\.\d+)?)(['\"])", normalize, custom_html)
+    css_text = re.sub(
+        r"(?is)(font-size\s*:\s*clamp\(\s*)(\d+(?:\.\d+)?)px\s*,\s*(\d+(?:\.\d+)?)(vw|vmin)\s*,\s*(\d+(?:\.\d+)?)px(\s*\))",
+        normalize_clamp,
+        custom_css,
+    )
+    css_text = re.sub(r"(?is)(font-size\s*:\s*)(\d+(?:\.\d+)?)(px\b)", normalize, css_text)
+    return html_text, css_text
 
 
 def _activate_bespoke_html_layers(custom_html: str) -> str:
@@ -905,6 +1427,390 @@ def _activate_bespoke_html_layers(custom_html: str) -> str:
         activate,
         custom_html,
     )
+
+
+def _validate_bespoke_html_asset(
+    *,
+    custom_html: str,
+    custom_css: str,
+    edit_schema: Dict[str, Any],
+    overlay_contract: Dict[str, Any],
+) -> Dict[str, Any]:
+    errors: List[str] = []
+    warnings: List[str] = []
+    limits = overlay_contract.get("output_limits") if isinstance(overlay_contract.get("output_limits"), dict) else {}
+    bound_shot_count = max(1, len(overlay_contract.get("bound_shots") if isinstance(overlay_contract.get("bound_shots"), list) else []))
+    duration_seconds = _positive_float(overlay_contract.get("duration_seconds"), 8.0)
+    complexity_multiplier = min(2.4, max(1.0, 1.0 + (bound_shot_count - 1) * 0.35 + max(0.0, duration_seconds - 8.0) / 40.0))
+    html_limit = int((limits.get("custom_html_chars") or 1800) * complexity_multiplier)
+    css_limit = int((limits.get("custom_css_chars") or 5200) * complexity_multiplier)
+    max_keyframes = int((limits.get("max_keyframes") or 3) + max(0, bound_shot_count - 1))
+    if len(custom_html) > html_limit:
+        warnings.append(f"custom_html 超过目标预算 {html_limit} 字符，建议后续压缩")
+    if len(custom_css) > css_limit + len(_base_bespoke_html_css(str(overlay_contract.get("visual_system") or "comparison"))):
+        warnings.append(f"custom_css 超过目标预算 {css_limit} 字符，建议后续压缩")
+    if re.search(r"(?is)</?(?:html|head|body|style|script|iframe|link|meta|object|embed)\b", custom_html):
+        errors.append("custom_html 包含禁用标签")
+    if re.search(r"(?is)@import|url\s*\(|javascript:|expression\s*\(", custom_css):
+        errors.append("custom_css 包含外链或脚本风险")
+    css_quality_errors = _bespoke_css_quality_errors(custom_css)
+    if css_quality_errors:
+        css_budget_warnings = [error for error in css_quality_errors if error.startswith("custom_css 字号超过安全上限")]
+        css_hard_errors = [error for error in css_quality_errors if error not in css_budget_warnings]
+        errors.extend(css_hard_errors[:4])
+        warnings.extend(css_budget_warnings[:2])
+    if 'data-ai-generated-html="true"' not in custom_html:
+        errors.append("custom_html 缺少 data-ai-generated-html 根标识")
+    if "ai-mg-layer" not in custom_html:
+        warnings.append("custom_html 未使用 ai-mg-layer 根容器，已由后端包装")
+    keyframe_count = len(re.findall(r"@keyframes\b", custom_css, flags=re.I))
+    if keyframe_count > max_keyframes:
+        warnings.append(f"CSS keyframes 超过目标预算 {max_keyframes} 个，建议复用动画")
+    if re.search(r"(?is)<!--|/\*", custom_html) or re.search(r"(?is)/\*", custom_css):
+        warnings.append("HTML/CSS 包含注释，建议减少隐藏文本和无效 token")
+    if re.search(r"(?is)\s(?:aria-label|title|data-[\w-]+)\s*=\s*(['\"])[^'\"]{24,}\1", custom_html):
+        warnings.append("HTML 属性里存在较长隐藏文本")
+    if re.search(r"(?is)\bcontent\s*:\s*(['\"])[^'\"]{12,}\1", custom_css):
+        warnings.append("CSS content 中存在文本")
+
+    visible_texts = _visible_texts_from_html(custom_html)
+    max_text_blocks = int(limits.get("max_visible_text_blocks") or 3)
+    if len([text for text in visible_texts if len(_screen_text_key(text)) >= 2]) > max_text_blocks + 2:
+        warnings.append("可见文字块偏多，可能影响 B-roll 可见性")
+    allowed_text_keys = {
+        _screen_text_key(str(slot.get("text") or ""))
+        for slot in overlay_contract.get("slots", [])
+        if isinstance(slot, dict) and str(slot.get("text") or "").strip()
+    }
+    allowed_text_keys.update(
+        _screen_text_key(str(slot.get("label") or ""))
+        for slot in overlay_contract.get("slots", [])
+        if isinstance(slot, dict) and str(slot.get("label") or "").strip()
+    )
+    unexpected_texts = [
+        text for text in visible_texts
+        if (
+            len(_screen_text_key(text)) >= 4
+            and allowed_text_keys
+            and not _screen_text_is_allowed(text, allowed_text_keys)
+        )
+    ]
+    if unexpected_texts:
+        hard_unexpected_texts = [text for text in unexpected_texts if not _soft_unexpected_overlay_label(text)]
+        soft_unexpected_texts = [text for text in unexpected_texts if _soft_unexpected_overlay_label(text)]
+        if hard_unexpected_texts:
+            warnings.append("存在未直接来自 content slots 的屏幕文案：" + " / ".join(_short_text(text, 18) for text in hard_unexpected_texts[:3]))
+        if soft_unexpected_texts:
+            warnings.append("存在未直接来自 content slots 的短标签：" + " / ".join(_short_text(text, 18) for text in soft_unexpected_texts[:4]))
+
+    missing_selectors = _missing_edit_schema_selectors(edit_schema, custom_html, custom_css)
+    if missing_selectors:
+        warnings.append("edit_schema selector 未在 HTML/CSS 中命中：" + " / ".join(missing_selectors[:4]))
+    canvas_fit = _bespoke_html_canvas_fit_report(custom_html, custom_css, overlay_contract)
+    if not canvas_fit["ok"]:
+        warnings.extend("画布适配诊断：" + item for item in canvas_fit["errors"])
+    warnings.extend(canvas_fit["warnings"])
+    composition_execution = _composition_execution_report(custom_html, custom_css, overlay_contract)
+    if not composition_execution["ok"]:
+        warnings.extend("视觉构图诊断：" + item for item in composition_execution["errors"])
+    return {
+        "version": BESPOKE_HTML_VALIDATION_VERSION,
+        "ok": not errors,
+        "errors": errors,
+        "warnings": warnings[:8],
+        "metrics": {
+            "custom_html_chars": len(custom_html),
+            "custom_css_chars": len(custom_css),
+            "keyframes": keyframe_count,
+            "visible_text_blocks": len(visible_texts),
+        },
+        "canvas_fit_agent": canvas_fit,
+        "composition_execution": composition_execution,
+    }
+
+
+def _composition_execution_report(custom_html: str, custom_css: str, overlay_contract: Dict[str, Any]) -> Dict[str, Any]:
+    """Validate that model code executes the director's chosen visual mechanism."""
+    composition = overlay_contract.get("composition") if isinstance(overlay_contract.get("composition"), dict) else {}
+    if not composition:
+        return {"version": "mg_composition_execution_v1", "ok": True, "errors": [], "metrics": {}}
+    layout = str(composition.get("layout") or "")
+    primitives = {str(item).strip().lower() for item in composition.get("visual_primitives", []) if str(item).strip()}
+    html_css = f"{custom_html}\n{custom_css}".lower()
+    errors: List[str] = []
+    stroke_widths = [float(item) for item in re.findall(r"(?i)stroke-width\s*(?:=|:)\s*['\"]?(\d+(?:\.\d+)?)", html_css)]
+    max_stroke = max(stroke_widths) if stroke_widths else 0.0
+    visual_blocks = len(re.findall(r"data-ai-edit-kind\s*=\s*['\"]visual['\"]", custom_html, flags=re.I))
+    icon_blocks = len(re.findall(r"data-ai-edit-block\s*=\s*['\"][^'\"]*icon[^'\"]*['\"]", custom_html, flags=re.I))
+    line_count = len(re.findall(r"<(?:line|polyline)\b", custom_html, flags=re.I))
+    if "path" in primitives and max_stroke < 12:
+        errors.append(f"主路径最大 stroke-width 为 {max_stroke:g}px，未形成可读的大关系")
+    if "icon" in primitives and icon_blocks < 2:
+        errors.append("图标语义没有形成至少两个可编辑的大号图标对象")
+    if layout == "single_focus" and ("repeating-linear-gradient" in html_css or "mg-grid" in html_css) and line_count >= 6:
+        errors.append("single_focus 使用网格/细线替代了单一主视觉")
+    if visual_blocks < 2:
+        errors.append("缺少可编辑的主视觉对象，无法承载构图合同")
+    return {
+        "version": "mg_composition_execution_v1",
+        "ok": not errors,
+        "errors": errors,
+        "metrics": {"layout": layout, "max_stroke_width": max_stroke, "visual_blocks": visual_blocks, "icon_blocks": icon_blocks, "line_count": line_count},
+    }
+
+
+def _bespoke_css_quality_errors(custom_css: str) -> List[str]:
+    errors: List[str] = []
+    text = custom_css or ""
+    if re.search(r"(?i)\bcllamp\s*\(", text):
+        errors.append("custom_css 包含错误函数 cllamp")
+    if re.search(r"(?i)clamp\([^)]*\bpx\s*,", text) or re.search(r"(?i)clamp\(\s*px\b", text):
+        errors.append("custom_css 包含非法 clamp(px,...)")
+    if re.search(r"(?i)\b\d*\.?\d+\s*vwh\b", text):
+        errors.append("custom_css 包含非法单位 vwh")
+    if re.search(r"(?i)(?:^|[{};])\s*\.?keyframes\s+[a-zA-Z_-]", text) and "@keyframes" not in text:
+        errors.append("custom_css keyframes 语法错误")
+    if re.search(r"(?i)\bposition\s*:\s*abbsolute\b", text):
+        errors.append("custom_css 包含非法 position 值")
+    property_names = [
+        match.group(1).strip()
+        for match in re.finditer(r"(?i)(?:^|[{};])\s*([^:{};]+)\s*:", text)
+    ]
+    if any(name.startswith("-") and not name.startswith("--") for name in property_names):
+        errors.append("custom_css 包含疑似错误属性名")
+
+    oversized_fonts: List[str] = []
+    for value in re.findall(r"(?i)font-size\s*:\s*([^;{}]+)", text):
+        px_values = [float(item) for item in re.findall(r"(\d+(?:\.\d+)?)\s*px\b", value, flags=re.I)]
+        vw_values = [float(item) for item in re.findall(r"(\d+(?:\.\d+)?)\s*vw\b", value, flags=re.I)]
+        vmin_values = [float(item) for item in re.findall(r"(\d+(?:\.\d+)?)\s*vmin\b", value, flags=re.I)]
+        if (px_values and max(px_values) > 160) or (vw_values and max(vw_values) > 12) or (vmin_values and max(vmin_values) > 16):
+            oversized_fonts.append(value.strip())
+    if oversized_fonts:
+        errors.append("custom_css 字号超过安全上限：" + " / ".join(oversized_fonts[:2]))
+    return errors
+
+
+def _screen_text_is_allowed(text: str, allowed_text_keys: set[str]) -> bool:
+    key = _screen_text_key(text)
+    if not key:
+        return True
+    if key in allowed_text_keys:
+        return True
+    return any(key in allowed or allowed in key for allowed in allowed_text_keys if len(allowed) >= 4)
+
+
+def _soft_unexpected_overlay_label(text: str) -> bool:
+    raw = _prompt_text(text)
+    key = _screen_text_key(raw)
+    if not key:
+        return True
+    if re.fullmatch(r"[A-Z][A-Z0-9 _/-]{1,10}", raw):
+        return True
+    if re.fullmatch(r"\d{4}[./-]\d{1,2}[./-]\d{1,2}", raw):
+        return True
+    if len(key) <= 12 and not re.search(r"\d", raw):
+        return True
+    return False
+
+
+def _visible_texts_from_html(custom_html: str) -> List[str]:
+    text = re.sub(r"(?is)<svg\b.*?</svg>", "", custom_html)
+    text = re.sub(r"(?is)<[^>]+>", "\n", text)
+    texts: List[str] = []
+    for item in re.split(r"\n+", html.unescape(text)):
+        compact = re.sub(r"\s+", " ", item).strip()
+        if compact and not re.fullmatch(r"[\W_]+", compact):
+            texts.append(compact)
+    return texts[:20]
+
+
+def _missing_edit_schema_selectors(edit_schema: Dict[str, Any], custom_html: str, custom_css: str) -> List[str]:
+    selectors: List[str] = []
+    for key in ("editable_text_selectors", "editable_position_selectors", "editable_motion_selectors"):
+        value = edit_schema.get(key)
+        if isinstance(value, list):
+            selectors.extend(str(item).strip() for item in value if str(item).strip())
+    editable_blocks = edit_schema.get("editable_blocks")
+    if isinstance(editable_blocks, list):
+        for block in editable_blocks:
+            if isinstance(block, dict) and str(block.get("selector") or "").strip():
+                selectors.append(str(block.get("selector")).strip())
+    missing: List[str] = []
+    for selector in selectors[:24]:
+        if not _selector_likely_exists(selector, custom_html, custom_css):
+            missing.append(selector)
+    return missing
+
+
+def _selector_likely_exists(selector: str, custom_html: str, custom_css: str) -> bool:
+    if selector in custom_css:
+        return True
+    data_block_ids = re.findall(r"data-ai-edit-block\s*=\s*['\"]([^'\"]+)['\"]", selector)
+    for block_id in data_block_ids:
+        if re.search(rf'data-ai-edit-block=(["\']){re.escape(block_id)}\1', custom_html):
+            return True
+    class_names = re.findall(r"\.([a-zA-Z_][\w-]*)", selector)
+    for class_name in class_names:
+        if re.search(rf'class=(["\'])[^"\']*\b{re.escape(class_name)}\b[^"\']*\1', custom_html):
+            return True
+    ids = re.findall(r"#([a-zA-Z_][\w-]*)", selector)
+    for item_id in ids:
+        if re.search(rf'id=(["\']){re.escape(item_id)}\1', custom_html):
+            return True
+    tags = [part for part in re.split(r"[\s>+~.#:[\],]+", selector) if part and re.match(r"^[a-zA-Z][\w-]*$", part)]
+    return any(re.search(rf"<{re.escape(tag)}(?:\s|>|/)", custom_html, flags=re.I) for tag in tags)
+
+
+def _base_bespoke_html_css(visual_system: str) -> str:
+    accent = {
+        "metric": "#67E8F9",
+        "causal": "#A3E635",
+        "route": "#FBBF24",
+        "timeline": "#C084FC",
+        "comparison": "#38BDF8",
+    }.get(visual_system, "#67E8F9")
+    return f"""
+html, body {{ margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }}
+body {{ font-family: "Noto Sans CJK SC", Inter, sans-serif; color: #F8FAFC; }}
+.ai-mg-layer {{ position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; padding: 6.7% 5.4% 17% !important; overflow: hidden; background: transparent; --ai-accent: {accent}; --ai-ink: #F8FAFC; --ai-muted: rgba(226,232,240,.74); }}
+.ai-mg-layer * {{ box-sizing: border-box; }}
+.ai-mg-layer b, .ai-mg-layer strong {{ color: var(--ai-ink); }}
+@media (max-width: 760px) {{ .ai-mg-layer {{ padding: 28px 24px 116px; }} }}
+"""
+
+
+def _bespoke_html_canvas_guard_css() -> str:
+    """Non-negotiable outer geometry for all model-authored overlays."""
+    return """
+html,body{margin:0!important;width:100%!important;height:100%!important;overflow:hidden!important;background:transparent!important}
+.ai-mg-layer{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;box-sizing:border-box!important;padding:0!important;margin:0!important;overflow:hidden!important;transform:none!important}
+.ai-mg-layer> :first-child{max-width:100%!important;max-height:100%!important}
+"""
+
+
+def _bespoke_html_canvas_fit_report(
+    custom_html: str,
+    custom_css: str,
+    overlay_contract: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Deterministic canvas-fit agent before an asset becomes editor-ready.
+
+    It guards the common failure mode where a generated root uses 100vw plus
+    padding or a relative layout and therefore drifts outside a 16:9 iframe.
+    The appended guard normalizes the root; unsafe nested fixed canvases still
+    produce an explicit warning for traceability.
+    """
+    errors: List[str] = []
+    warnings: List[str] = []
+    canvas = overlay_contract.get("canvas") if isinstance(overlay_contract.get("canvas"), dict) else {}
+    width = int(canvas.get("width") or DEFAULT_RENDER_WIDTH)
+    height = int(canvas.get("height") or DEFAULT_RENDER_HEIGHT)
+    root_count = len(re.findall(r"\bai-mg-layer\b", custom_html))
+    if root_count != 1:
+        warnings.append(f"HTML 根容器 ai-mg-layer 出现 {root_count} 次，已由画布守卫固定外层")
+    if re.search(r"(?i)(?:^|[;}])\s*(?:html|body)\s*\{[^}]*\btransform\s*:", custom_css):
+        errors.append("HTML 根画布不能使用 transform，可能导致画面整体偏移")
+    oversized_fixed = [
+        int(value)
+        for value in re.findall(r"(?i)(?:width|height)\s*:\s*(\d{4,})px", custom_css)
+        if int(value) > max(width, height)
+    ]
+    if oversized_fixed:
+        warnings.append("存在大于画布的固定尺寸，画布质检会以 16:9 根容器裁切")
+    if re.search(r"(?i)\.ai-mg-layer\s*\{[^}]*\b(?:width|height)\s*:\s*100vw", custom_css):
+        warnings.append("模型尝试使用 100vw 根画布，已替换为 iframe 内 100% 尺寸")
+    svg_viewboxes = re.findall(r"(?is)<svg\b[^>]*\bviewBox\s*=\s*(['\"])(.*?)\1", custom_html)
+    if "<svg" in custom_html.lower() and not svg_viewboxes:
+        errors.append("SVG 缺少 1920x1080 viewBox，无法稳定适配画布")
+    for _, viewbox in svg_viewboxes:
+        values = [float(value) for value in re.findall(r"-?\d+(?:\.\d+)?", viewbox)]
+        if len(values) == 4 and (values[0] != 0 or values[1] != 0 or values[2] != width or values[3] != height):
+            errors.append(f"SVG viewBox 必须是 0 0 {width} {height}")
+            break
+    svg_bounds = {"x": width, "cx": width, "x1": width, "x2": width, "y": height, "cy": height, "y1": height, "y2": height}
+    for attribute, maximum in svg_bounds.items():
+        for raw_value in re.findall(rf"(?is)\b{attribute}\s*=\s*(['\"])(-?\d+(?:\.\d+)?)\1", custom_html):
+            value = float(raw_value[1])
+            if value < 0 or value > maximum:
+                errors.append(f"SVG {attribute} 坐标 {value:g} 超出 {width}x{height} 画布")
+                break
+        if errors:
+            break
+    unsafe_css_offsets = re.findall(r"(?is)\b(left|right|top|bottom)\s*:\s*(-?\d+(?:\.\d+)?)%", custom_css)
+    for property_name, raw_value in unsafe_css_offsets:
+        value = float(raw_value)
+        if value < -4 or value > 100:
+            errors.append(f"CSS {property_name}:{value:g}% 会把元素推出画布")
+            break
+    small_css_fonts = [
+        float(value)
+        for value in re.findall(r"(?is)font-size\s*:\s*(\d+(?:\.\d+)?)px", custom_css)
+        if float(value) < 18
+    ]
+    small_svg_fonts = [
+        float(value)
+        for _, value in re.findall(r"(?is)\bfont-size\s*=\s*(['\"])(\d+(?:\.\d+)?)\1", custom_html)
+        if float(value) < 18
+    ]
+    # The generation contract permits at most four 16px SVG coordinate ticks.
+    # They are decorative measurement marks, not text that carries the scene.
+    allowed_svg_coordinate_ticks = (
+        bool(small_svg_fonts)
+        and len(small_svg_fonts) <= 4
+        and all(value >= 16 for value in small_svg_fonts)
+    )
+    if small_css_fonts or (small_svg_fonts and not allowed_svg_coordinate_ticks):
+        errors.append("存在低于 18px 的可读文字，暂停帧可读性不合格")
+    return {
+        "agent": "html_canvas_fit_v1",
+        "canvas": f"{width}x{height}",
+        "ok": not errors,
+        "errors": errors,
+        "warnings": warnings[:4],
+        "root_guard": "applied",
+    }
+
+
+def _apply_bespoke_html_assets_to_scene_groups(
+    scene_groups: List[Dict[str, Any]],
+    html_assets_by_shot: Dict[str, Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    updated_groups: List[Dict[str, Any]] = []
+    for group in scene_groups:
+        if not isinstance(group, dict):
+            continue
+        updated_shots: List[Dict[str, Any]] = []
+        for shot in group.get("shots", []):
+            if not isinstance(shot, dict):
+                continue
+            shot_id = str(shot.get("id") or "")
+            asset = html_assets_by_shot.get(shot_id)
+            if not asset:
+                updated_shots.append(shot)
+                continue
+            html_design = deepcopy(shot.get("html_design") if isinstance(shot.get("html_design"), dict) else {})
+            html_design.update(
+                {
+                    "render_strategy": "llm_bespoke_html",
+                    "custom_html": asset["custom_html"],
+                    "custom_css": asset["custom_css"],
+                    "ai_html_generation": {
+                        "version": asset["version"],
+                        "source": asset["source"],
+                        "model": asset["model"],
+                        "clip_id": asset["clip_id"],
+                        "visual_system": asset["visual_system"],
+                        "layout_summary": asset["layout_summary"],
+                        "edit_schema": asset["edit_schema"],
+                        "overlay_contract": asset.get("overlay_contract") if isinstance(asset.get("overlay_contract"), dict) else {},
+                        "validation": asset.get("validation") if isinstance(asset.get("validation"), dict) else {},
+                    },
+                }
+            )
+            updated_shots.append({**shot, "html_design": html_design})
+        updated_groups.append({**group, "shots": updated_shots})
+    return updated_groups
 
 
 def _flatten_shots(scene_groups: List[Dict[str, Any]]) -> List[Dict[str, Any]]:

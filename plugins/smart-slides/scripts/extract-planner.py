@@ -20,6 +20,18 @@ ROOT_SYMBOLS = {
     "build_final_video_html",
     "is_current_bespoke_html_design",
     "is_current_bespoke_html_asset",
+    # Keep the source project's local bespoke-HTML contract intact. The
+    # standalone plugin supplies the HTML through Codex rather than making the
+    # source project's external LLM call, but validation and application stay
+    # source-derived.
+    "_html_overlay_contract_for_clip",
+    "_bespoke_html_asset_prompt",
+    "_minify_custom_html_fragment",
+    "_minify_custom_css",
+    "_normalize_bespoke_html_font_sizes",
+    "_validate_bespoke_html_asset",
+    "_bespoke_html_canvas_guard_css",
+    "_apply_bespoke_html_assets_to_scene_groups",
     "_sanitize_custom_html_fragment",
     "_sanitize_custom_css",
     "scale_scene_outline_durations",
@@ -38,6 +50,79 @@ def declared_names(node: ast.AST) -> list[str]:
         targets = node.targets if isinstance(node, ast.Assign) else [node.target]
         return [target.id for target in targets if isinstance(target, ast.Name)]
     return []
+
+
+def apply_local_preview_adapters(output: str) -> str:
+    """Reapply plugin-only preview behavior after source symbol extraction.
+
+    This is the committed Smart Slides narration-preview adapter from
+    47814a3. It is intentionally kept here rather than hand-editing the
+    generated planner so source synchronization remains deterministic.
+    """
+    replacements = [
+        (
+            '    scripts = editor_state.get("shot_scripts") if isinstance(editor_state.get("shot_scripts"), dict) else {}\n'
+            '    html_design_overrides = editor_state.get("html_design_overrides") if isinstance(editor_state.get("html_design_overrides"), dict) else {}\n',
+            '    scripts = editor_state.get("shot_scripts") if isinstance(editor_state.get("shot_scripts"), dict) else {}\n'
+            '    voice_assets = editor_state.get("voice_assets_by_shot") if isinstance(editor_state.get("voice_assets_by_shot"), dict) else {}\n'
+            '    html_design_overrides = editor_state.get("html_design_overrides") if isinstance(editor_state.get("html_design_overrides"), dict) else {}\n',
+        ),
+        (
+            '        media_markup = _player_media_markup(asset_url, str(option.get("title") or title))\n'
+            '        fallback_markup = ""\n',
+            '        media_markup = _player_media_markup(asset_url, str(option.get("title") or title))\n'
+            '        voice_asset = voice_assets.get(shot_id) if isinstance(voice_assets.get(shot_id), dict) else {}\n'
+            '        voice_url = str(voice_asset.get("asset_url") or voice_asset.get("url") or "")\n'
+            '        voice_markup = (\n'
+            '            f\'<audio class="voice-audio" data-shot-id="{html.escape(shot_id, quote=True)}" \'\n'
+            '            f\'src="{html.escape(voice_url, quote=True)}" preload="auto"></audio>\'\n'
+            '            if voice_url\n'
+            '            else ""\n'
+            '        )\n'
+            '        fallback_markup = ""\n',
+        ),
+        (
+            '              <div class="media">{media_markup}{fallback_markup}</div>\n'
+            '              <div class="grade"></div>\n',
+            '              <div class="media">{media_markup}{fallback_markup}</div>\n'
+            '              {voice_markup}\n'
+            '              <div class="grade"></div>\n',
+        ),
+        (
+            '    function activeVideo() {{ return scenes[current]?.querySelector(\'video\'); }}\n'
+            '    function syncVideos() {{\n'
+            '      scenes.forEach((scene, index) => {{\n'
+            '        const video = scene.querySelector(\'video\');\n'
+            '        if (!video) return;\n'
+            '        if (index !== current || !playing) video.pause();\n'
+            '      }});\n'
+            '      const video = activeVideo();\n'
+            '      if (video && playing) video.play().catch(() => {{}});\n'
+            '    }}\n',
+            '    function activeVideo() {{ return scenes[current]?.querySelector(\'video\'); }}\n'
+            '    function activeVoice() {{ return scenes[current]?.querySelector(\'audio.voice-audio\'); }}\n'
+            '    function syncVideos() {{\n'
+            '      scenes.forEach((scene, index) => {{\n'
+            '        const video = scene.querySelector(\'video\');\n'
+            '        const voice = scene.querySelector(\'audio.voice-audio\');\n'
+            '        if (video && (index !== current || !playing)) video.pause();\n'
+            '        if (voice && (index !== current || !playing)) {{\n'
+            '          voice.pause();\n'
+            '          voice.currentTime = 0;\n'
+            '        }}\n'
+            '      }});\n'
+            '      const video = activeVideo();\n'
+            '      if (video && playing) video.play().catch(() => {{}});\n'
+            '      const voice = activeVoice();\n'
+            '      if (voice && playing) voice.play().catch(() => {{}});\n'
+            '    }}\n',
+        ),
+    ]
+    for expected, replacement in replacements:
+        if expected not in output:
+            raise SystemExit("planner extraction no longer matches the local narration-preview adapter")
+        output = output.replace(expected, replacement, 1)
+    return output
 
 
 def main() -> int:
@@ -115,6 +200,7 @@ def main() -> int:
         .replace("hyperframes_template_fallback", "podcastor_editor_template_fallback")
         .replace("hyperframes_template_primary", "podcastor_editor_template_primary")
     )
+    output = apply_local_preview_adapters(output)
     forbidden = ("call_video_studio_llm", "api.siliconflow", "api.deepseek", "VIDEO_STUDIO_HTML_LLM")
     leaked = [token for token in forbidden if token in output]
     if leaked:

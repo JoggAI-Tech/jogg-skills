@@ -233,8 +233,13 @@ def _render_scene(visual_path: str, overlay_path: str, duration: float, output_p
     if _is_image(visual_path):
         command.extend(["-loop", "1", "-framerate", str(_FRAME_RATE), "-i", visual_path])
     else:
-        command.extend(["-stream_loop", "-1", "-i", visual_path])
-    base_filter = f"fps={_FRAME_RATE},scale={_WIDTH}:{_HEIGHT}:force_original_aspect_ratio=increase,crop={_WIDTH}:{_HEIGHT},setsar=1"
+        command.extend(["-i", visual_path])
+    # A short source may hold its final frame, but it must never restart and
+    # replay within the same shot. Candidate selection normally prevents this.
+    base_filter = (
+        f"fps={_FRAME_RATE},scale={_WIDTH}:{_HEIGHT}:force_original_aspect_ratio=increase,"
+        f"crop={_WIDTH}:{_HEIGHT},setsar=1,tpad=stop_mode=clone:stop_duration={duration:.3f}"
+    )
     if overlay_path:
         command.extend(["-loop", "1", "-framerate", str(_FRAME_RATE), "-i", overlay_path])
         fade_out = max(0.0, duration - 0.45)
@@ -309,6 +314,33 @@ def _caption_filter(path: Path) -> str:
     return f"subtitles='{escaped}'"
 
 
+def _media_duration_seconds(path: str) -> float:
+    result = subprocess.run(
+        [
+            "ffprobe", "-v", "error", "-show_entries", "format=duration",
+            "-of", "default=noprint_wrappers=1:nokey=1", path,
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+        env=_render_env(),
+    )
+    try:
+        return max(0.0, float(result.stdout.strip()))
+    except (TypeError, ValueError) as exc:
+        raise RuntimeError(f"could not read audio duration: {path}") from exc
+
+
+def _require_voice_coverage(audio_path: str, duration: float, shot_id: str) -> None:
+    minimum = max(0.5, min(1.0, float(os.getenv("SMART_SLIDES_MIN_VOICE_COVERAGE", "0.90"))))
+    actual = _media_duration_seconds(audio_path)
+    if actual + 0.05 < duration * minimum:
+        raise RuntimeError(
+            f"Jogg voice for {shot_id} covers {actual:.2f}s of a {duration:.2f}s shot; "
+            "regenerate the narration before local render instead of padding silence"
+        )
+
+
 def render_snapshot(snapshot: Dict[str, Any], work_dir: str, data_dir: str, output_path: str) -> Dict[str, Any]:
     shots = _shots(snapshot)
     if not shots:
@@ -337,6 +369,7 @@ def render_snapshot(snapshot: Dict[str, Any], work_dir: str, data_dir: str, outp
         audio_path = _local_path(voice_assets.get(shot_id), data_dir)
         if not audio_path:
             raise RuntimeError(f"missing Jogg voice audio for shot: {shot_id}")
+        _require_voice_coverage(audio_path, duration, shot_id)
         avatar_path = _local_path(avatar_assets.get(shot_id), data_dir)
         broll_path = _selected_broll(shot, selected_broll, data_dir)
         visual_path = avatar_path or broll_path

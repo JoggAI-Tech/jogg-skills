@@ -4,6 +4,7 @@ from __future__ import annotations
 import unittest
 
 from backend.services import video_studio_planner
+from backend.services import video_studio_bespoke_html
 from backend.services.video_studio_ppt_visual_assets import (
     PPT_VISUAL_LANGUAGE,
     ppt_visual_contract_art_direction,
@@ -148,6 +149,98 @@ class MgDirectorNormalizationTest(unittest.TestCase):
         self.assertEqual(director["composition"]["hero_frame"]["kind"], "资本流向图标路径")
         self.assertEqual(director["composition"]["typography"], self.composition["typography"])
         self.assertEqual(director["composition"]["icon_semantics"], ["云计算", "芯片", "资金"])
+
+
+class BespokeHtmlContractTest(unittest.TestCase):
+    def _director(self) -> dict:
+        return {
+            "version": "mg_director_v1",
+            "enabled": True,
+            "render_strategy": "llm_bespoke_html",
+            "visual_system": "causal",
+            "story_goal": "说明资本从应用层转向基础设施。",
+            "one_learning_point": "资本正在向算力基础设施集中。",
+            "main_visual_metaphor": "资本沿芯片和云计算路径向核心收紧。",
+            "visual_recipe": {
+                "composition_id": "causal_spine",
+                "hero_device_id": "semantic_icon_cluster",
+                "material_id": "luminous_data",
+                "motion_id": "directional_build_lock",
+                "originality_note": "把公司、芯片和资本原创为向核心收紧的折返路径。",
+            },
+            "composition": {
+                "animation_type": "self_contained_html",
+                "layout": "directional_path",
+                "hero_frame": {"kind": "资本路径", "x": 100, "y": 150, "w": 1320, "h": 620},
+                "typography": {"headline_scale": "display", "headline_min_px": 72, "supporting_min_px": 30},
+                "visual_primitives": ["path", "node", "icon"],
+                "icon_semantics": ["云计算", "芯片", "资金"],
+                "motion_choreography": "路径先出现，节点依次点亮，最后锁定基础设施。",
+            },
+            "screen_slots": [
+                {"role": "headline", "text": "资本流向"},
+                {"role": "takeaway", "text": "基础设施成为重心"},
+            ],
+        }
+
+    def _source_groups(self, custom_html: str) -> list[dict]:
+        return [{
+            "title": "资本流向",
+            "shots": [{
+                "id": "shot-bespoke",
+                "title": "基础设施重估",
+                "narration": "资本正在从应用层流向芯片和云计算基础设施。",
+                "duration_seconds": 8,
+                "broll_prompt": "AI data center infrastructure",
+                "scene_role": "broll_backdrop_overlay",
+                "mg_director": self._director(),
+                "html_design": {
+                    "custom_html": custom_html,
+                    "custom_css": ".ai-mg-layer{position:absolute;inset:0;color:#fff}.title{font-size:64px}",
+                    "edit_schema": {"editable_text_selectors": [".title"]},
+                },
+            }],
+            "html_layers": [{"title": "资本流向", "shot_indexes": [1]}],
+        }]
+
+    def _groups(self, custom_html: str) -> list[dict]:
+        source = self._source_groups(custom_html)
+        normalized = video_studio_planner.normalize_scene_groups(source, "broll_html")
+        return video_studio_bespoke_html.restore_bespoke_html_from_planning_input(source, normalized)
+
+    def test_codex_html_uses_the_extracted_source_contract_not_a_template(self) -> None:
+        html = (
+            '<main class="ai-mg-layer" data-ai-generated-html="true"><svg viewBox="0 0 1920 1080">'
+            '<path data-ai-edit-block="capital-path" data-ai-edit-kind="visual" d="M180 520 L880 280 L1440 620" stroke="#a3e635" stroke-width="28" fill="none"/>'
+            '<g data-ai-edit-block="icon-chip" data-ai-edit-kind="visual"><rect x="700" y="180" width="180" height="180" fill="#67e8f9"/></g>'
+            '<g data-ai-edit-block="icon-cloud" data-ai-edit-kind="visual"><circle cx="1360" cy="620" r="90" fill="#a3e635"/></g>'
+            '<text class="title" x="140" y="120" font-size="72">资本流向</text>'
+            '<text x="140" y="780" font-size="36">基础设施成为重心</text></svg></main>'
+        )
+        groups = video_studio_bespoke_html.prepare_bespoke_html_scene_groups("AI 科技热点", self._groups(html))
+        design = groups[0]["shots"][0]["html_design"]
+        self.assertEqual(design["render_strategy"], "llm_bespoke_html")
+        self.assertEqual(design["ai_html_generation"]["source"], "codex_local_bespoke_html")
+        self.assertEqual(design["ai_html_generation"]["validation"]["version"], "bespoke_html_validation_v2")
+        self.assertIn("position:absolute!important", design["custom_css"])
+        self.assertIn("data-ai-generated-html=\"true\"", design["custom_html"])
+        preview = video_studio_planner.build_composition_preview_html({"topic": "AI 科技热点", "scene_groups": groups, "editor_state": {}})
+        self.assertIn("custom-html-frame", preview)
+        self.assertNotIn("MG视觉系统", preview)
+
+    def test_missing_bespoke_html_is_a_blocking_contract_failure(self) -> None:
+        with self.assertRaises(video_studio_bespoke_html.BespokeHtmlContractError):
+            video_studio_bespoke_html.prepare_bespoke_html_scene_groups("AI 科技热点", self._groups(""))
+
+    def test_source_bespoke_prompt_is_extracted_for_codex_authoring(self) -> None:
+        groups = self._groups('<main class="ai-mg-layer" data-ai-generated-html="true"></main>')
+        shot = groups[0]["shots"][0]
+        prompt = video_studio_planner._bespoke_html_asset_prompt(
+            "AI 科技热点", video_studio_planner._mg_clip_for_shot(shot), [shot]
+        )
+        self.assertIn("MG 构图执行合同", prompt)
+        self.assertIn("AIGC 主路径", prompt)
+        self.assertIn("模板只允许作为失败兜底", prompt)
 
 
 if __name__ == "__main__":

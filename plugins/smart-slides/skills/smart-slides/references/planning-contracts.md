@@ -92,7 +92,7 @@ For each scene, provide:
 }
 ```
 
-Search queries are for Pexels/Pixabay: one visible scene, 3-8 words, no narration sentences, no causal explanation, and distinct shot semantics. `duration_seconds` equals the scene's voiceover duration.
+Search queries are for Pexels/Pixabay: one visible scene, 3-8 words, no narration sentences, no causal explanation, and distinct shot semantics. Adjacent shots must use different visible actions/subjects and cannot reuse a provider asset selected by another shot. Each candidate must cover the shot's `duration_seconds`; a short clip is not looped to fill narration time.
 
 Use one visual system from `metric`, `causal`, `route`, `timeline`, `comparison`, or `reveal`; one main visual metaphor; one learning point; and no more than three visible text blocks. Select the PPT-derived `visual_recipe` and full-frame `composition` here in the MG director layer, following [mg-director-visual-contract.md](mg-director-visual-contract.md). `visual_fx` adds texture only and never carries meaning.
 

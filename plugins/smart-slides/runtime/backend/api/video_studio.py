@@ -14,6 +14,7 @@ from pydantic import BaseModel, ConfigDict, Field
 from backend.services import storage
 from backend.services import video_studio_bgm
 from backend.services import video_studio_broll
+from backend.services import video_studio_bespoke_html
 from backend.services import video_studio_planner
 from backend.services.video_studio_mg_design import normalize_mg_design_doc
 from backend.services.video_studio_store import VideoStudioStore, ensure_project_governance
@@ -62,6 +63,10 @@ class BgmTrackPatch(BaseModel):
 class MgDesignDocPatch(BaseModel):
     mg_clip_id: str
     design_doc: Dict[str, Any]
+
+
+class MgHtmlPatch(BaseModel):
+    html_design_by_shot: Dict[str, Dict[str, Any]]
 
 
 class BrollCandidateDownloadRequest(BaseModel):
@@ -211,6 +216,28 @@ def _compact_query(value: str, limit: int = 72) -> str:
     return " ".join(str(value or "").split())[:limit].strip()
 
 
+def _project_broll_asset_keys(project: Dict[str, Any], *, exclude_shot_id: str = "") -> set[tuple[str, str]]:
+    state = project.get("editor_state") if isinstance(project.get("editor_state"), dict) else {}
+    selected = state.get("selected_broll_by_shot") if isinstance(state.get("selected_broll_by_shot"), dict) else {}
+    used: set[tuple[str, str]] = set()
+    for group in project.get("scene_groups") or []:
+        for shot in group.get("shots") or []:
+            if not isinstance(shot, dict):
+                continue
+            shot_id = str(shot.get("id") or "")
+            if not shot_id or shot_id == exclude_shot_id:
+                continue
+            options = [item for item in shot.get("broll_options") or [] if isinstance(item, dict)]
+            selected_id = str(selected.get(shot_id) or "")
+            option = next((item for item in options if str(item.get("id") or "") == selected_id), None)
+            option = option or next((item for item in options if item.get("asset_path") or item.get("asset_url")), None)
+            if option:
+                key = video_studio_broll.broll_asset_key(option)
+                if key[1]:
+                    used.add(key)
+    return used
+
+
 @router.post("/projects")
 def create_project(req: CreateProjectRequest) -> Dict[str, object]:
     return {"project": _store().create_project(req.topic.strip(), req.format, req.production_format, req.target_duration_seconds)}
@@ -355,9 +382,63 @@ def update_planning_state(project_id: str, req: FlexiblePatch) -> Dict[str, obje
     if isinstance(patch.get("scene_groups"), list):
         scaled_groups = _scale_scene_group_durations(patch["scene_groups"], target_duration)
         normalized = video_studio_planner.normalize_scene_groups(scaled_groups, str(patch.get("production_format") or project.get("production_format") or "broll_html"), patch.get("director_document") or project.get("director_document"))
+        try:
+            normalized = video_studio_bespoke_html.restore_bespoke_html_from_planning_input(
+                scaled_groups, normalized
+            )
+            normalized = video_studio_bespoke_html.prepare_bespoke_html_scene_groups(
+                str(patch.get("topic") or project.get("topic") or ""), normalized
+            )
+        except (video_studio_bespoke_html.BespokeHtmlContractError, video_studio_planner.VideoStudioGenerationError) as exc:
+            raise HTTPException(status_code=422, detail=str(exc)) from exc
         patch["scene_groups"] = normalized
         patch.update(_render_contract({**project, **patch}, normalized))
     return {"project": _store().update_project(project_id, patch)}
+
+
+@router.patch("/projects/{project_id}/mg-html")
+def update_mg_html(project_id: str, req: MgHtmlPatch) -> Dict[str, object]:
+    """Apply validated bespoke MG HTML without invalidating media assets."""
+    project = _project_or_404(project_id)
+    requested = {str(shot_id): design for shot_id, design in req.html_design_by_shot.items() if str(shot_id)}
+    if not requested:
+        raise HTTPException(status_code=400, detail="html_design_by_shot is required")
+
+    found: set[str] = set()
+    groups: list[dict[str, Any]] = []
+    for group in project.get("scene_groups") or []:
+        shots: list[dict[str, Any]] = []
+        for shot in group.get("shots") or []:
+            if not isinstance(shot, dict):
+                continue
+            shot_id = str(shot.get("id") or "")
+            design = requested.get(shot_id)
+            if design is None:
+                shots.append(shot)
+                continue
+            found.add(shot_id)
+            existing = shot.get("html_design") if isinstance(shot.get("html_design"), dict) else {}
+            shots.append({**shot, "html_design": {**existing, **design, "render_strategy": "llm_bespoke_html"}})
+        groups.append({**group, "shots": shots})
+
+    unknown = sorted(set(requested) - found)
+    if unknown:
+        raise HTTPException(status_code=404, detail="Shot not found: " + ", ".join(unknown[:5]))
+    try:
+        prepared = video_studio_bespoke_html.prepare_bespoke_html_scene_groups(str(project.get("topic") or ""), groups)
+    except (video_studio_bespoke_html.BespokeHtmlContractError, video_studio_planner.VideoStudioGenerationError) as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+
+    contract = _render_contract(project, prepared)
+    # The source render-contract builder may normalize back to its derived
+    # scene shape. Restore the already-sanitized authored layer afterwards so
+    # an editor-only MG update cannot discard it or touch media selections.
+    result_groups = video_studio_bespoke_html.restore_bespoke_html_from_planning_input(
+        prepared, contract.get("scene_groups", prepared)
+    )
+    updated = _store().update_project(project_id, {**contract, "scene_groups": result_groups, "stage": "editor"})
+    updated, preview_url = _create_preview(project_id, updated)
+    return {"project": updated, "updated_shot_ids": sorted(found), "preview_url": preview_url}
 
 
 @router.patch("/projects/{project_id}/editor-state")
@@ -481,7 +562,14 @@ def search_broll(project_id: str, shot_id: str, query: str = Query(""), per_page
     project = _project_or_404(project_id)
     shot = _find_shot(project, shot_id)
     try:
-        candidates = video_studio_broll.search_broll_candidates(shot, query=query.strip(), per_page=per_page, providers=[item.strip() for item in providers.split(",") if item.strip()])
+        candidates = video_studio_broll.search_broll_candidates(
+            shot,
+            query=query.strip(),
+            per_page=per_page,
+            providers=[item.strip() for item in providers.split(",") if item.strip()],
+            excluded_asset_keys=_project_broll_asset_keys(project, exclude_shot_id=shot_id),
+            minimum_duration_seconds=float(shot.get("duration_seconds") or 0),
+        )
     except video_studio_broll.BrollAssetError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     asset_plan = shot.get("asset_search_plan") if isinstance(shot.get("asset_search_plan"), dict) else {}
@@ -492,11 +580,16 @@ def search_broll(project_id: str, shot_id: str, query: str = Query(""), per_page
 @router.post("/projects/{project_id}/shots/{shot_id}/broll-assets/download")
 def download_broll(project_id: str, shot_id: str, req: BrollCandidateDownloadRequest) -> Dict[str, object]:
     project = _project_or_404(project_id)
+    shot = _find_shot(project, shot_id)
+    candidate_key = video_studio_broll.broll_asset_key(req.candidate)
+    if candidate_key[1] and candidate_key in _project_broll_asset_keys(project, exclude_shot_id=shot_id):
+        raise HTTPException(status_code=409, detail="该 B-roll 已被其他镜头选用；请选择不重复的素材")
+    if not video_studio_broll.candidate_covers_duration(req.candidate, float(shot.get("duration_seconds") or 0)):
+        raise HTTPException(status_code=409, detail="该 B-roll 时长不足以覆盖当前镜头；请选择更长素材")
     try:
         option = video_studio_broll.download_broll_candidate(req.candidate, project_id=project_id, shot_id=shot_id)
     except video_studio_broll.BrollAssetError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
-    shot = _find_shot(project, shot_id)
     options = [option, *[item for item in shot.get("broll_options") or [] if str(item.get("id") or "") != str(option.get("id") or "")]]
     groups = _replace_shot(project, shot_id, {**shot, "broll_options": options})
     contract = _render_contract(project, groups)
@@ -511,7 +604,12 @@ def search_and_download_broll(project_id: str, shot_id: str) -> Dict[str, object
     project = _project_or_404(project_id)
     shot = _find_shot(project, shot_id)
     try:
-        options = video_studio_broll.realize_broll_options(shot, project_id=project_id, per_page=8)
+        options = video_studio_broll.realize_broll_options(
+            shot,
+            project_id=project_id,
+            per_page=12,
+            excluded_asset_keys=_project_broll_asset_keys(project, exclude_shot_id=shot_id),
+        )
     except video_studio_broll.BrollAssetError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     groups = _replace_shot(project, shot_id, {**shot, "broll_options": options})
@@ -529,6 +627,8 @@ def prepare_editor_assets(project_id: str) -> Dict[str, object]:
     errors = []
     editor_state = project.get("editor_state") if isinstance(project.get("editor_state"), dict) else {}
     avatar_assets = editor_state.get("avatar_assets_by_shot") if isinstance(editor_state.get("avatar_assets_by_shot"), dict) else {}
+    selected_broll = deepcopy(editor_state.get("selected_broll_by_shot") if isinstance(editor_state.get("selected_broll_by_shot"), dict) else {})
+    used_asset_keys = _project_broll_asset_keys(project)
     for group in project.get("scene_groups") or []:
         shots = []
         for shot in group.get("shots") or []:
@@ -541,7 +641,19 @@ def prepare_editor_assets(project_id: str) -> Dict[str, object]:
                 shots.append(shot)
                 continue
             try:
-                shots.append({**shot, "broll_options": video_studio_broll.realize_broll_options(shot, project_id=project_id, per_page=8)})
+                realized = video_studio_broll.realize_broll_options(
+                    shot,
+                    project_id=project_id,
+                    per_page=12,
+                    excluded_asset_keys=used_asset_keys,
+                )
+                selected_option = next((item for item in realized if item.get("asset_path") or item.get("asset_url")), None)
+                if selected_option:
+                    selected_broll[shot_id] = str(selected_option.get("id") or "")
+                    key = video_studio_broll.broll_asset_key(selected_option)
+                    if key[1]:
+                        used_asset_keys.add(key)
+                shots.append({**shot, "broll_options": realized})
             except video_studio_broll.BrollAssetError as exc:
                 errors.append(f"{shot.get('id')}: {exc}")
                 shots.append(shot)
@@ -549,9 +661,71 @@ def prepare_editor_assets(project_id: str) -> Dict[str, object]:
     contract = _render_contract(project, groups)
     html_total = sum(1 for group in groups for shot in group.get("shots", []) if (shot.get("html_design") or {}).get("custom_html"))
     status = {"total_shots": sum(len(group.get("shots", [])) for group in groups), "mg_ready_count": html_total, "errors": errors, "html_generation": {"state": "ready" if html_total else "skipped", "message": "HTML/MG 由 Codex 本地生成"}}
-    updated = _store().update_project(project_id, {"scene_groups": contract.get("scene_groups", groups), **contract, "editor_asset_status": status, "stage": "editor"})
+    updated = _store().update_project(project_id, {"scene_groups": contract.get("scene_groups", groups), **contract, "editor_state": {**editor_state, "selected_broll_by_shot": selected_broll}, "editor_asset_status": status, "stage": "editor"})
     updated, preview_url = _create_preview(project_id, updated)
     return {"project": updated, "preview_url": preview_url, "asset_status": status}
+
+
+@router.post("/projects/{project_id}/refresh-broll")
+def refresh_broll(project_id: str) -> Dict[str, object]:
+    """Clear downloaded Pexels/Pixabay material for an explicit redo.
+
+    Jogg avatar/video assets and local uploads are deliberately preserved. The
+    caller must follow this with ``prepare-editor-assets`` before rendering.
+    """
+    project = _project_or_404(project_id)
+    state = project.get("editor_state") if isinstance(project.get("editor_state"), dict) else {}
+    avatar_assets = state.get("avatar_assets_by_shot") if isinstance(state.get("avatar_assets_by_shot"), dict) else {}
+    selected_broll = deepcopy(state.get("selected_broll_by_shot") if isinstance(state.get("selected_broll_by_shot"), dict) else {})
+    refreshed_shot_ids: list[str] = []
+    groups: list[dict[str, Any]] = []
+
+    for group in project.get("scene_groups") or []:
+        shots: list[dict[str, Any]] = []
+        for shot in group.get("shots") or []:
+            if not isinstance(shot, dict):
+                continue
+            shot_id = str(shot.get("id") or "")
+            if not shot_id or isinstance(avatar_assets.get(shot_id), dict):
+                shots.append(shot)
+                continue
+            options = [item for item in shot.get("broll_options") or [] if isinstance(item, dict)]
+            # Provider-backed entries are open-stock candidates or downloads.
+            # Do not remove a local asset the user uploaded in the editor.
+            retained = [item for item in options if not str(item.get("provider") or "").strip()]
+            if len(retained) != len(options):
+                refreshed_shot_ids.append(shot_id)
+                selected_broll.pop(shot_id, None)
+            shots.append({**shot, "broll_options": retained})
+        groups.append({**group, "shots": shots})
+
+    contract = _render_contract(project, groups)
+    status = {
+        "total_shots": sum(len(group.get("shots") or []) for group in groups),
+        "broll_ready_count": 0,
+        "mg_ready_count": sum(
+            1
+            for group in groups
+            for shot in group.get("shots") or []
+            if isinstance(shot, dict) and str((shot.get("html_design") or {}).get("custom_html") or "").strip()
+        ),
+        "errors": [],
+        "html_generation": {"state": "ready", "message": "HTML/MG 由 Codex 本地生成"},
+        "broll_refresh": {"state": "pending", "refreshed_shot_ids": refreshed_shot_ids},
+    }
+    updated = _store().update_project(
+        project_id,
+        {
+            "scene_groups": contract.get("scene_groups", groups),
+            **contract,
+            "editor_state": {**state, "selected_broll_by_shot": selected_broll},
+            "editor_asset_status": status,
+            "composition_preview_url": "",
+            "final_video_url": "",
+            "stage": "editor",
+        },
+    )
+    return {"project": updated, "refreshed_shot_ids": refreshed_shot_ids}
 
 
 @router.post("/projects/{project_id}/composition-preview")
