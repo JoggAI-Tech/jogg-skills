@@ -271,6 +271,57 @@ with socket.socket() as sock:
 PY
 }
 
+service_launchd_label() { printf 'com.codex.smart-slides.local'; }
+service_launchd_plist() { printf '%s/Library/LaunchAgents/%s.plist' "$HOME" "$(service_launchd_label)"; }
+
+start_local_service_launchd() {
+  [[ "$(uname -s)" == Darwin ]] || return 1
+  command -v launchctl >/dev/null 2>&1 || return 1
+
+  local label plist launch_agents uid python_bin log_path
+  label=$(service_launchd_label)
+  plist=$(service_launchd_plist)
+  launch_agents=${plist%/*}
+  uid=$(id -u)
+  python_bin=$(ensure_python_runtime)
+  log_path="$SMART_SLIDES_HOME/logs/service.log"
+  mkdir -p "$launch_agents" "$SMART_SLIDES_HOME/logs" "$SMART_SLIDES_DATA_DIR"
+
+  # launchd owns this process so the settings URL survives the shell that started it.
+  printf '%s\n' \
+    '<?xml version="1.0" encoding="UTF-8"?>' \
+    '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' \
+    '<plist version="1.0">' \
+    '<dict>' \
+    "<key>Label</key><string>$label</string>" \
+    '<key>ProgramArguments</key><array>' \
+    "<string>$python_bin</string>" \
+    '<string>-m</string><string>uvicorn</string><string>backend.main:app</string>' \
+    '<string>--host</string><string>127.0.0.1</string>' \
+    "<string>--port</string><string>${SMART_SLIDES_BASE_URL##*:}</string>" \
+    '</array>' \
+    "<key>WorkingDirectory</key><string>$RUNTIME_ROOT</string>" \
+    '<key>EnvironmentVariables</key><dict>' \
+    "<key>PYTHONPATH</key><string>$RUNTIME_ROOT</string>" \
+    "<key>SMART_SLIDES_HOME</key><string>$SMART_SLIDES_HOME</string>" \
+    "<key>SMART_SLIDES_DATA_DIR</key><string>$SMART_SLIDES_DATA_DIR</string>" \
+    '<key>PYTHONDONTWRITEBYTECODE</key><string>1</string>' \
+    '</dict>' \
+    '<key>RunAtLoad</key><true/>' \
+    '<key>KeepAlive</key><true/>' \
+    '<key>ThrottleInterval</key><integer>5</integer>' \
+    "<key>StandardOutPath</key><string>$log_path</string>" \
+    "<key>StandardErrorPath</key><string>$log_path</string>" \
+    '</dict>' \
+    '</plist>' > "$plist"
+  chmod 600 "$plist"
+
+  launchctl bootout "gui/$uid" "$plist" >/dev/null 2>&1 || true
+  launchctl bootstrap "gui/$uid" "$plist" >/dev/null 2>&1 || return 1
+  launchctl kickstart -k "gui/$uid/$label" >/dev/null 2>&1 || true
+  return 0
+}
+
 ensure_python_runtime() {
   if [[ -n "${SMART_SLIDES_PYTHON:-}" ]]; then printf '%s' "$SMART_SLIDES_PYTHON"; return; fi
   local venv="$SMART_SLIDES_HOME/venv"
@@ -300,15 +351,20 @@ start_local_service() {
   local port python_bin
   port=$(find_free_port)
   SMART_SLIDES_BASE_URL="http://127.0.0.1:$port"
-  python_bin=$(ensure_python_runtime)
-  mkdir -p "$SMART_SLIDES_HOME/logs" "$SMART_SLIDES_DATA_DIR"
   log "starting bundled Video Studio at $SMART_SLIDES_BASE_URL"
-  nohup env PYTHONPATH="$RUNTIME_ROOT" SMART_SLIDES_HOME="$SMART_SLIDES_HOME" SMART_SLIDES_DATA_DIR="$SMART_SLIDES_DATA_DIR" \
-    "$python_bin" -m uvicorn backend.main:app --host 127.0.0.1 --port "$port" \
-    > "$SMART_SLIDES_HOME/logs/service.log" 2>&1 < /dev/null &
-  local pid=$! attempt
+  local pid attempt
+  if ! start_local_service_launchd; then
+    python_bin=$(ensure_python_runtime)
+    mkdir -p "$SMART_SLIDES_HOME/logs" "$SMART_SLIDES_DATA_DIR"
+    nohup env PYTHONPATH="$RUNTIME_ROOT" SMART_SLIDES_HOME="$SMART_SLIDES_HOME" SMART_SLIDES_DATA_DIR="$SMART_SLIDES_DATA_DIR" \
+      "$python_bin" -m uvicorn backend.main:app --host 127.0.0.1 --port "$port" \
+      > "$SMART_SLIDES_HOME/logs/service.log" 2>&1 < /dev/null &
+    pid=$!
+  fi
   for attempt in $(seq 1 60); do local_service_ready && break; sleep 0.5; done
   local_service_ready || die "bundled Video Studio did not start; see $SMART_SLIDES_HOME/logs/service.log"
+  [[ -n "${pid:-}" ]] || pid=$(lsof -nP -iTCP:"$port" -sTCP:LISTEN -t 2>/dev/null | head -1 || true)
+  [[ "$pid" =~ ^[0-9]+$ ]] || pid=0
   jq -n --arg base_url "$SMART_SLIDES_BASE_URL" --argjson pid "$pid" '{base_url:$base_url,pid:$pid}' > "$SMART_SLIDES_SERVICE_FILE"
 }
 
