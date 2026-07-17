@@ -16,6 +16,7 @@ from html.parser import HTMLParser
 from typing import Any
 
 from backend.services import video_studio_planner as planner
+from backend.services import video_studio_visual_styles
 
 
 class BespokeHtmlContractError(ValueError):
@@ -312,6 +313,11 @@ def _css_number(value: float) -> str:
 
 def _safe_css_color(value: Any, *, block_id: str) -> str:
     color = str(value or "").strip()
+    semantic_color = re.fullmatch(
+        r"var\(\s*--mg-(?:ink|muted|surface|surface-recessed|primary|highlight|danger|outline)\s*\)",
+        color,
+        flags=re.IGNORECASE,
+    )
     hex_color = re.fullmatch(r"#[0-9a-fA-F]{3,8}", color)
     functional_color = re.fullmatch(
         r"(?:rgb|rgba|hsl|hsla)\(\s*[-+0-9.%]+(?:\s*[,/]\s*|\s+[-+0-9.%]+\s*){1,4}\)",
@@ -319,7 +325,7 @@ def _safe_css_color(value: Any, *, block_id: str) -> str:
         flags=re.IGNORECASE,
     )
     named_color = re.fullmatch(r"[A-Za-z]{3,24}", color)
-    if not (hex_color or functional_color or named_color):
+    if not (semantic_color or hex_color or functional_color or named_color):
         raise BespokeHtmlContractError(f"block {block_id} 的 color 无效")
     return color
 
@@ -419,31 +425,22 @@ def _source_template_surface_css(visual_system: str) -> str:
     hierarchy without changing the director-selected SVG composition into a
     template or a card grid.
     """
-    warm = {
-        "metric": "#FDE68A",
-        "causal": "#BEF264",
-        "route": "#FDE68A",
-        "timeline": "#DDD6FE",
-        "comparison": "#BAE6FD",
-    }.get(visual_system, "#FDE68A")
     return f"""
 .ai-mg-layer {{
-  --mg-accent: var(--ai-accent);
-  --mg-warm: {warm};
-  --mg-ink: #F8FAFC;
-  --mg-surface-soft: rgba(2,6,23,.24);
-  --mg-surface: rgba(2,6,23,.34);
-  --mg-outline: rgba(255,255,255,.14);
-  --mg-outline-subtle: rgba(255,255,255,.12);
+  --mg-accent: var(--mg-primary);
+  --mg-warm: var(--mg-highlight);
+  --mg-surface-soft: color-mix(in srgb,var(--mg-surface-recessed) 24%,transparent);
+  --mg-surface-local: color-mix(in srgb,var(--mg-surface) 34%,transparent);
+  --mg-outline-subtle: color-mix(in srgb,var(--mg-ink) 12%,transparent);
 }}
 .ai-mg-layer [data-mg-surface="source-translucent"],
 .ai-mg-layer .mg-source-surface {{
-  fill: rgba(2,6,23,.42) !important;
+  fill: color-mix(in srgb,var(--mg-surface) 42%,transparent) !important;
   stroke: var(--mg-outline);
   stroke-width: 1;
 }}
 .ai-mg-layer .mg-source-panel {{
-  background: var(--mg-surface);
+  background: var(--mg-surface-local);
   border: 1px solid var(--mg-outline);
   backdrop-filter: blur(10px);
 }}
@@ -565,7 +562,29 @@ def restore_bespoke_html_from_planning_input(
     return restored
 
 
-def prepare_bespoke_html_scene_groups(topic: str, scene_groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
+def _mark_style_profile(custom_html: str, profile_id: str) -> str:
+    if re.search(r"\bdata-mg-style-profile\s*=", custom_html, flags=re.IGNORECASE):
+        return re.sub(
+            r"\bdata-mg-style-profile\s*=\s*(['\"])[^'\"]*\1",
+            f'data-mg-style-profile="{html.escape(profile_id, quote=True)}"',
+            custom_html,
+            count=1,
+            flags=re.IGNORECASE,
+        )
+    return re.sub(
+        r"(<[a-z][^>]*\bclass\s*=\s*(['\"])[^'\"]*\bai-mg-layer\b[^'\"]*\2)([^>]*>)",
+        rf'\1 data-mg-style-profile="{html.escape(profile_id, quote=True)}"\3',
+        custom_html,
+        count=1,
+        flags=re.IGNORECASE,
+    )
+
+
+def prepare_bespoke_html_scene_groups(
+    topic: str,
+    scene_groups: list[dict[str, Any]],
+    visual_style_profile: dict[str, Any] | str | None = None,
+) -> list[dict[str, Any]]:
     """Validate and attach Codex-authored HTML using Podcastor source helpers."""
     assets_by_shot: dict[str, dict[str, Any]] = {}
     failures: list[str] = []
@@ -589,13 +608,20 @@ def prepare_bespoke_html_scene_groups(topic: str, scene_groups: list[dict[str, A
                 planner._sanitize_custom_html_fragment(str(html_design.get("custom_html") or ""))
             )
             custom_html = _soften_source_dark_backdrops(custom_html)
-            custom_css = planner._minify_custom_css(
+            authored_custom_css = planner._minify_custom_css(
                 planner._sanitize_custom_css(str(html_design.get("custom_css") or ""))
             )
             if not custom_html:
                 failures.append(f"{shot_id or shot.get('title')}: llm_bespoke_html requires html_design.custom_html")
                 continue
 
+            mg_director = shot.get("mg_director") if isinstance(shot.get("mg_director"), dict) else {}
+            resolved_style_profile = video_studio_visual_styles.resolve_visual_style_profile(
+                topic=topic,
+                requested=mg_director.get("visual_style_profile") or visual_style_profile,
+            )
+            mg_director = {**mg_director, "visual_style_profile": resolved_style_profile}
+            shot["mg_director"] = mg_director
             clip = planner._mg_clip_for_shot(shot)
             overlay_contract = planner._html_overlay_contract_for_clip(topic, clip, [shot])
             visual_system = str(overlay_contract.get("visual_system") or "comparison")
@@ -605,12 +631,29 @@ def prepare_bespoke_html_scene_groups(topic: str, scene_groups: list[dict[str, A
                     f'data-ai-generated-html="true" data-mg-clip-id="{html.escape(str(clip.get("id") or ""), quote=True)}">'
                     f"{custom_html}</main>"
                 )
+            custom_html = _mark_style_profile(custom_html, resolved_style_profile["id"])
+            visual_recipe = mg_director.get("visual_recipe") if isinstance(mg_director.get("visual_recipe"), dict) else {}
+            material_id = str(visual_recipe.get("material_id") or "editorial_color_field")
+            style_validation = video_studio_visual_styles.validate_authored_style(
+                custom_html,
+                authored_custom_css,
+                resolved_style_profile,
+                material_id=material_id,
+            )
+            if style_validation.get("errors"):
+                failures.append(
+                    f"{shot_id or shot.get('title')}: "
+                    + "；".join(str(item) for item in style_validation["errors"][:3])
+                )
+                continue
             custom_css = (
                 planner._base_bespoke_html_css(visual_system)
                 + "\n"
                 + _source_template_surface_css(visual_system)
                 + "\n"
-                + custom_css
+                + video_studio_visual_styles.profile_css(resolved_style_profile)
+                + "\n"
+                + authored_custom_css
                 + "\n"
                 + planner._bespoke_html_canvas_guard_css()
             )
@@ -628,20 +671,29 @@ def prepare_bespoke_html_scene_groups(topic: str, scene_groups: list[dict[str, A
                 edit_schema=edit_schema,
                 overlay_contract=overlay_contract,
             )
+            validation["style_profile"] = style_validation
+            validation["warnings"] = [
+                *style_validation.get("warnings", []),
+                *validation.get("warnings", []),
+            ][:8]
+            validation["metrics"] = {
+                **(validation.get("metrics") if isinstance(validation.get("metrics"), dict) else {}),
+                "style_profile": style_validation.get("metrics") if isinstance(style_validation.get("metrics"), dict) else {},
+            }
             if validation.get("errors"):
                 failures.append(
                     f"{shot_id or shot.get('title')}: " + "；".join(str(item) for item in validation["errors"][:3])
                 )
                 continue
 
-            mg_director = shot.get("mg_director") if isinstance(shot.get("mg_director"), dict) else {}
             assets_by_shot[shot_id] = {
                 "version": "bespoke_html_asset_v1",
                 "source": "codex_local_bespoke_html",
                 "model": "codex",
                 "clip_id": str(clip.get("id") or ""),
                 "visual_system": visual_system,
-                "style_baseline": "podcastor_mg_template_translucent_surfaces_v1",
+                "style_baseline": "smart_slides_visual_style_profile_v1",
+                "visual_style_profile": resolved_style_profile,
                 "overlay_contract": overlay_contract,
                 "custom_html": custom_html,
                 "custom_css": custom_css,

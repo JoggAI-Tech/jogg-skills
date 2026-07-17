@@ -12,7 +12,7 @@ from copy import deepcopy
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
-from backend.services import video_studio_planner
+from backend.services import video_studio_captions, video_studio_planner
 from render.animated_overlay import capture_html_keyframe as _capture_html_keyframe
 from render.animated_overlay import render_alpha_webm
 
@@ -404,11 +404,20 @@ def _timestamp(seconds: float) -> str:
 def _write_captions(shots: List[Dict[str, Any]], durations: List[float], scripts: Dict[str, Any], output: Path) -> None:
     entries: List[str] = []
     cursor = 0.0
-    for index, (shot, duration) in enumerate(zip(shots, durations), start=1):
+    cue_index = 1
+    for shot, duration in zip(shots, durations):
         shot_id = str(shot.get("id") or "")
         text = str(scripts.get(shot_id) or shot.get("narration") or shot.get("voiceover") or shot.get("title") or "").strip()
-        if text:
-            entries.extend([str(index), f"{_timestamp(cursor)} --> {_timestamp(cursor + duration)}", text, ""])
+        for cue in video_studio_captions.build_caption_cues(text, duration):
+            entries.extend(
+                [
+                    str(cue_index),
+                    f"{_timestamp(cursor + cue['start_seconds'])} --> {_timestamp(cursor + cue['end_seconds'])}",
+                    str(cue["text"]),
+                    "",
+                ]
+            )
+            cue_index += 1
         cursor += duration
     output.write_text("\n".join(entries), encoding="utf-8")
 
@@ -428,7 +437,15 @@ def _mix_bgm(narration: Path, bgm: str, volume: float, duration: float, output: 
 
 def _caption_filter(path: Path) -> str:
     escaped = str(path).replace("\\", "\\\\").replace(":", "\\:").replace("'", "\\'")
-    return f"subtitles='{escaped}'"
+    # libass interprets SRT styles on a 384x288 virtual canvas. These values
+    # resolve to roughly 68px type, 145px side margins, and a 71px bottom
+    # margin after original_size maps that canvas onto the 1920x1080 render.
+    style = (
+        "FontName=PingFang SC,FontSize=18,PrimaryColour=&H00FFFFFF,"
+        "OutlineColour=&H80000000,BorderStyle=1,Outline=1,Shadow=0,"
+        "Alignment=2,MarginL=29,MarginR=29,MarginV=19,WrapStyle=2"
+    )
+    return f"subtitles=filename='{escaped}':original_size=1920x1080:force_style='{style}'"
 
 
 def _media_duration_seconds(path: str) -> float:

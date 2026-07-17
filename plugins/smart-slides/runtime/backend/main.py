@@ -26,13 +26,15 @@ def _load_env_file(path: Path) -> None:
 
 _PLUGIN_ROOT = Path(__file__).resolve().parents[2]
 _load_env_file(_PLUGIN_ROOT / ".env")
-_load_env_file(Path.home() / ".codex" / "smart-slides" / ".env")
+_SMART_SLIDES_HOME = Path(os.path.expanduser(os.getenv("SMART_SLIDES_HOME", "~/.codex/smart-slides")))
+_load_env_file(_SMART_SLIDES_HOME / ".env")
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from backend.api.settings import router as settings_router
 from backend.api.video_studio import DATA_DIR, router
 
 
@@ -57,6 +59,7 @@ app.add_middleware(
 
 os.makedirs(DATA_DIR, exist_ok=True)
 app.mount("/data", StaticFiles(directory=DATA_DIR), name="data")
+app.include_router(settings_router)
 app.include_router(router)
 
 

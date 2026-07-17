@@ -26,11 +26,13 @@ load_env_file() {
   done < "$env_file"
 }
 
+: "${SMART_SLIDES_HOME:=$HOME/.codex/smart-slides}"
+# Explicit process environment always wins. The persisted setup-page values
+# belong to the selected runtime home, which also makes isolated runs work.
 load_env_file "$PLUGIN_ROOT/.env"
-load_env_file "$HOME/.codex/smart-slides/.env"
+load_env_file "$SMART_SLIDES_HOME/.env"
 
 : "${JOGG_BASE_URL:=https://api.jogg.ai}"
-: "${SMART_SLIDES_HOME:=$HOME/.codex/smart-slides}"
 : "${SMART_SLIDES_DATA_DIR:=$SMART_SLIDES_HOME/data}"
 : "${SMART_SLIDES_STATE_DIR:=$SMART_SLIDES_HOME/runs}"
 : "${SMART_SLIDES_SERVICE_FILE:=$SMART_SLIDES_HOME/service.json}"
@@ -40,6 +42,8 @@ load_env_file "$HOME/.codex/smart-slides/.env"
 : "${SMART_SLIDES_RENDER_POLL_INTERVAL_SECONDS:=5}"
 : "${SMART_SLIDES_MAX_JOGG_WAIT_SECONDS:=1800}"
 : "${SMART_SLIDES_MAX_RENDER_WAIT_SECONDS:=7200}"
+readonly SMART_SLIDES_JOGG_CONCURRENCY=5
+readonly SMART_SLIDES_JOGG_POST_LIMIT_PER_MINUTE=20
 
 ACTION=""
 RUN_ID=""
@@ -76,6 +80,7 @@ usage() {
   cat <<'EOF'
 usage:
   smart-slides.sh preflight
+  smart-slides.sh settings
   smart-slides.sh run --topic TEXT [--duration-seconds 600] [--avatar-mode MODE] [--planning-file PLAN.json]
   smart-slides.sh resume --run-id RUN_ID [--planning-file PLAN.json]
   smart-slides.sh status --run-id RUN_ID
@@ -247,13 +252,24 @@ start_local_service() {
   python_bin=$(ensure_python_runtime)
   mkdir -p "$SMART_SLIDES_HOME/logs" "$SMART_SLIDES_DATA_DIR"
   log "starting bundled Video Studio at $SMART_SLIDES_BASE_URL"
-  nohup env PYTHONPATH="$RUNTIME_ROOT" SMART_SLIDES_DATA_DIR="$SMART_SLIDES_DATA_DIR" \
+  nohup env PYTHONPATH="$RUNTIME_ROOT" SMART_SLIDES_HOME="$SMART_SLIDES_HOME" SMART_SLIDES_DATA_DIR="$SMART_SLIDES_DATA_DIR" \
     "$python_bin" -m uvicorn backend.main:app --host 127.0.0.1 --port "$port" \
     > "$SMART_SLIDES_HOME/logs/service.log" 2>&1 < /dev/null &
   local pid=$! attempt
   for attempt in $(seq 1 60); do local_service_ready && break; sleep 0.5; done
   local_service_ready || die "bundled Video Studio did not start; see $SMART_SLIDES_HOME/logs/service.log"
   jq -n --arg base_url "$SMART_SLIDES_BASE_URL" --argjson pid "$pid" '{base_url:$base_url,pid:$pid}' > "$SMART_SLIDES_SERVICE_FILE"
+}
+
+settings_url() { printf '%s/settings' "${SMART_SLIDES_BASE_URL%/}"; }
+
+open_settings_page() {
+  local url
+  url=$(settings_url)
+  if [[ "${SMART_SLIDES_NO_BROWSER:-}" != 1 ]] && command -v open >/dev/null 2>&1; then
+    open "$url" >/dev/null 2>&1 || true
+  fi
+  printf '%s' "$url"
 }
 
 openapi_response_ok() {
@@ -451,6 +467,7 @@ from copy import deepcopy
 from pathlib import Path
 
 from backend.services import video_studio_bespoke_html
+from backend.services import video_studio_visual_styles
 
 plan_path, clip_id, input_path, output_path, page_path, bound_json = sys.argv[1:]
 plan = json.loads(Path(plan_path).read_text(encoding="utf-8"))
@@ -489,8 +506,11 @@ for shot_id in bound_ids:
     candidate_shots.append(shot)
 
 try:
+    project_style_profile = video_studio_visual_styles.resolve_visual_style_profile_from_project(plan)
     prepared = video_studio_bespoke_html.prepare_bespoke_html_scene_groups(
-        str(plan.get("topic") or ""), [{"id": "html-checkpoint", "shots": candidate_shots}]
+        str(plan.get("topic") or ""),
+        [{"id": "html-checkpoint", "shots": candidate_shots}],
+        project_style_profile,
     )
 except Exception as exc:
     raise SystemExit(str(exc)) from exc
@@ -776,9 +796,9 @@ realize_jogg_asset() {
   if [[ "$target" == true ]]; then
     local avatar="$avatar_dir/$shot_id-avatar.mp4"
     ffmpeg -y -v error -i "$source" -map 0:v:0 -c:v copy -an "$avatar" || die "could not mute Jogg avatar for $shot_id"
-    state_mutate '.jogg_tasks[$shot]+={status:"ready",audio_path:$audio,avatar_path:$avatar}' --arg shot "$shot_id" --arg audio "$audio" --arg avatar "$avatar"
+    state_mutate '.jogg_tasks[$shot]+={status:"ready",last_status:"ready",audio_path:$audio,avatar_path:$avatar}' --arg shot "$shot_id" --arg audio "$audio" --arg avatar "$avatar"
   else
-    state_mutate '.jogg_tasks[$shot]+={status:"ready",audio_path:$audio,avatar_path:""}' --arg shot "$shot_id" --arg audio "$audio"
+    state_mutate '.jogg_tasks[$shot]+={status:"ready",last_status:"ready",audio_path:$audio,avatar_path:""}' --arg shot "$shot_id" --arg audio "$audio"
   fi
   rm -f "$source"
 }
@@ -799,7 +819,7 @@ sync_jogg_editor_state() {
   local_api_request PATCH "/projects/$project_id/editor-state" "$body"
 }
 
-ensure_jogg_assets() {
+ensure_jogg_assets_serial() {
   ensure_avatar_targets
   fetch_project
   local shots shot shot_id narration base_narration has_override duration script_hash saved_hash task_status task video_id body result submission_name old_audio old_avatar audio_path avatar_path target
@@ -868,6 +888,230 @@ ensure_jogg_assets() {
       result=$?; [[ $result == 124 ]] && return 10; die "Jogg generation failed for $shot_id"
     fi
   done < <(jq -c '.[]' <<< "$shots")
+  sync_jogg_editor_state
+  set_stage jogg_assets_ready
+}
+
+jogg_worker_dir() { printf '%s/jogg-workers' "$(html_checkpoint_dir)"; }
+
+jogg_submit_worker() {
+  local shot_id=$1 body_path=$2 result_path=$3 body_file headers_file status video_id code retry_after
+  body_file=$(mktemp)
+  headers_file=$(mktemp)
+  status=$(curl -sS -D "$headers_file" -o "$body_file" -w '%{http_code}' --connect-timeout 10 --max-time 180 \
+    -X POST "${JOGG_BASE_URL%/}/v2/create_video_from_avatar" \
+    -H "X-Api-Key: $JOGG_EFFECTIVE_API_KEY" -H 'Content-Type: application/json' --data @"$body_path" 2>/dev/null || printf '000')
+  if [[ "$status" =~ ^2[0-9][0-9]$ ]]; then
+    code=$(jq -r '.code // 0' "$body_file" 2>/dev/null || printf 1)
+    video_id=$(jq -r '.data.video_id // .video_id // empty' "$body_file" 2>/dev/null || true)
+    if [[ "$code" == 0 && -n "$video_id" ]]; then
+      jq -n --arg shot "$shot_id" --arg video "$video_id" '{outcome:"accepted",shot_id:$shot,video_id:$video}' > "$result_path"
+    else
+      jq -n --arg shot "$shot_id" '{outcome:"unknown",shot_id:$shot}' > "$result_path"
+    fi
+  elif [[ "$status" == 429 ]]; then
+    retry_after=$(awk 'BEGIN{IGNORECASE=1} /^retry-after:/ {gsub("\\r", ""); print $2; exit}' "$headers_file" 2>/dev/null || true)
+    [[ "$retry_after" =~ ^[0-9]+$ ]] || retry_after=$(jq -r '.retryAfter // .retry_after // .data.retryAfter // 60' "$body_file" 2>/dev/null || printf 60)
+    [[ "$retry_after" =~ ^[0-9]+$ ]] || retry_after=60
+    jq -n --arg shot "$shot_id" --argjson retry "$retry_after" '{outcome:"rate_limited",shot_id:$shot,retry_after_seconds:$retry}' > "$result_path"
+  else
+    jq -n --arg shot "$shot_id" --arg status "$status" '{outcome:"unknown",shot_id:$shot,http_status:$status}' > "$result_path"
+  fi
+  rm -f "$body_file" "$headers_file"
+}
+
+jogg_poll_worker() {
+  local shot_id=$1 video_id=$2 result_path=$3 started now body_file status url code
+  started=$(date +%s)
+  while :; do
+    body_file=$(mktemp)
+    if ! curl -sS -o "$body_file" --connect-timeout 10 --max-time 30 \
+      -H "X-Api-Key: $JOGG_EFFECTIVE_API_KEY" "${JOGG_BASE_URL%/}/v2/avatar_video/$video_id"; then
+      rm -f "$body_file"
+      jq -n --arg shot "$shot_id" --arg video "$video_id" '{outcome:"poll_error",shot_id:$shot,video_id:$video}' > "$result_path"
+      return
+    fi
+    code=$(jq -r '.code // 0' "$body_file" 2>/dev/null || printf 1)
+    status=$(jq -r '.data.status // .status // empty' "$body_file" 2>/dev/null | tr '[:upper:]' '[:lower:]')
+    url=$(jq -r '.data.video_url // .video_url // empty' "$body_file" 2>/dev/null || true)
+    rm -f "$body_file"
+    if [[ "$code" != 0 ]]; then
+      jq -n --arg shot "$shot_id" --arg video "$video_id" '{outcome:"poll_error",shot_id:$shot,video_id:$video}' > "$result_path"
+      return
+    fi
+    case "$status" in
+      completed|success|succeeded)
+        if [[ -n "$url" ]]; then jq -n --arg shot "$shot_id" --arg video "$video_id" --arg url "$url" '{outcome:"completed",shot_id:$shot,video_id:$video,video_url:$url}' > "$result_path"; else jq -n --arg shot "$shot_id" --arg video "$video_id" '{outcome:"failed",shot_id:$shot,video_id:$video,error:"Jogg completed without a video URL"}' > "$result_path"; fi
+        return ;;
+      failed|error|cancelled|canceled)
+        jq -n --arg shot "$shot_id" --arg video "$video_id" --arg status "$status" '{outcome:"failed",shot_id:$shot,video_id:$video,error:$status}' > "$result_path"
+        return ;;
+    esac
+    now=$(date +%s)
+    if (( now - started >= SMART_SLIDES_MAX_JOGG_WAIT_SECONDS )); then
+      jq -n --arg shot "$shot_id" --arg video "$video_id" --arg status "$status" '{outcome:"timeout",shot_id:$shot,video_id:$video,status:$status}' > "$result_path"
+      return
+    fi
+    sleep "$SMART_SLIDES_JOGG_POLL_INTERVAL_SECONDS"
+  done
+}
+
+jogg_submission_capacity() {
+  local now=$1 cutoff=$((now - 60)) recent
+  state_mutate '.jogg_submission_timestamps=((.jogg_submission_timestamps // []) | map(select(. >= $cutoff)))' --argjson cutoff "$cutoff"
+  recent=$(jq '.jogg_submission_timestamps | length' "$STATE_PATH")
+  printf '%s' "$((SMART_SLIDES_JOGG_POST_LIMIT_PER_MINUTE - recent))"
+}
+
+submit_jogg_batch() {
+  local worker_dir=$1; shift
+  local now capacity dispatched=0 shot_id task hash name result outcome video retry pid waiting=0 unknown=0
+  now=$(date +%s)
+  capacity=$(jogg_submission_capacity "$now")
+  if (( capacity <= 0 )); then
+    state_mutate '.stage="waiting_jogg" | .error="Jogg POST rate limit reached; resume after one minute"'
+    return 10
+  fi
+  local -a pids=() submitted=()
+  for shot_id in "$@"; do
+    (( dispatched < capacity )) || break
+    task=$(jq -c --arg id "$shot_id" '.jogg_tasks[$id] // {}' "$STATE_PATH")
+    hash=$(jq -r '.script_hash // empty' <<< "$task")
+    name="$RUN_ID-$shot_id"
+    state_mutate '.jogg_tasks[$id]+={video_id:"",status:"submitting",last_status:"submitting",submitted_at:$now,script_hash:$hash,submission_name:$name,audio_path:"",avatar_path:""} | .jogg_submission_timestamps=((.jogg_submission_timestamps // []) + [$now])' --arg id "$shot_id" --arg hash "$hash" --arg name "$name" --argjson now "$now"
+    rm -f "$worker_dir/$shot_id.submit.result.json"
+    jogg_submit_worker "$shot_id" "$worker_dir/$shot_id.submit.json" "$worker_dir/$shot_id.submit.result.json" &
+    pids+=("$!"); submitted+=("$shot_id"); ((dispatched+=1))
+  done
+  for pid in "${pids[@]}"; do wait "$pid" || true; done
+  for shot_id in "${submitted[@]}"; do
+    result="$worker_dir/$shot_id.submit.result.json"
+    outcome=$(jq -r '.outcome // "unknown"' "$result" 2>/dev/null || printf unknown)
+    case "$outcome" in
+      accepted)
+        video=$(jq -r '.video_id // empty' "$result")
+        state_mutate '.jogg_tasks[$id]+={video_id:$video,status:"pending",last_status:"pending",retry_after_seconds:0,retry_after_at:0}' --arg id "$shot_id" --arg video "$video" ;;
+      rate_limited)
+        retry=$(jq -r '.retry_after_seconds // 60' "$result")
+        state_mutate '.jogg_tasks[$id].status="planned" | .jogg_tasks[$id].last_status="rate_limited" | .jogg_tasks[$id].retry_after_seconds=$retry | .jogg_tasks[$id].retry_after_at=($now + $retry) | .stage="waiting_jogg" | .error="Jogg POST rate limited; resume after retry window"' --arg id "$shot_id" --argjson retry "$retry" --argjson now "$now"
+        waiting=1 ;;
+      *)
+        state_mutate '.jogg_tasks[$id].status="submission_unknown" | .jogg_tasks[$id].last_status="submission_unknown" | .stage="blocked_jogg_recovery" | .error=("Jogg submission outcome is unknown for " + $id + "; automatic resubmission is disabled")' --arg id "$shot_id"
+        unknown=1 ;;
+    esac
+  done
+  (( unknown == 0 )) || return 11
+  (( waiting == 0 )) || return 10
+  if (( dispatched < $# )); then
+    state_mutate '.stage="waiting_jogg" | .error="Jogg POST rate window is full; resume after one minute"'
+    return 10
+  fi
+}
+
+poll_jogg_batch() {
+  local worker_dir=$1 shots=$2; shift 2
+  local shot_id video_id result outcome url duration pid failed=0 timed_out=0
+  local -a pids=() ids=()
+  for shot_id in "$@"; do
+    video_id=$(state_get ".jogg_tasks[\"$shot_id\"].video_id")
+    jogg_poll_worker "$shot_id" "$video_id" "$worker_dir/$shot_id.poll.result.json" &
+    pids+=("$!"); ids+=("$shot_id")
+  done
+  for pid in "${pids[@]}"; do wait "$pid" || true; done
+  for shot_id in "${ids[@]}"; do
+    result="$worker_dir/$shot_id.poll.result.json"
+    outcome=$(jq -r '.outcome // "poll_error"' "$result" 2>/dev/null || printf poll_error)
+    case "$outcome" in
+      completed)
+        url=$(jq -r '.video_url // empty' "$result")
+        duration=$(jq -r --arg id "$shot_id" '.[] | select(.id==$id) | .duration_seconds' <<< "$shots")
+        state_mutate '.jogg_tasks[$id].status="completed" | .jogg_tasks[$id].last_status="completed"' --arg id "$shot_id"
+        realize_jogg_asset "$shot_id" "$duration" "$url" ;;
+      timeout)
+        state_mutate '.jogg_tasks[$id].status=$status | .jogg_tasks[$id].last_status=$status' --arg id "$shot_id" --arg status "$(jq -r '.status // "pending"' "$result")"
+        timed_out=1 ;;
+      *)
+        state_mutate '.jogg_tasks[$id].status="failed" | .jogg_tasks[$id].last_status="failed" | .jogg_tasks[$id].error=$error' --arg id "$shot_id" --arg error "$(jq -r '.error // .status // "Jogg status poll failed"' "$result" 2>/dev/null || printf 'Jogg status poll failed')"
+        failed=1 ;;
+    esac
+  done
+  if (( failed )); then
+    state_mutate '.stage="failed" | .error="One or more Jogg tasks failed; existing video checkpoints are preserved"'
+    return 1
+  fi
+  if (( timed_out )); then
+    set_stage waiting_jogg
+    return 10
+  fi
+}
+
+ensure_jogg_assets() {
+  ensure_avatar_targets
+  fetch_project
+  local shots shot shot_id narration base_narration has_override duration script_hash saved_hash task task_status video_id audio_path avatar_path target old_audio old_avatar body worker_dir now retry_after_at deferred_submission=0 submission_waiting=0 submit_result
+  shots=$(shots_json)
+  worker_dir=$(jogg_worker_dir); mkdir -p "$worker_dir"; : > "$worker_dir/submit.list"
+  while IFS= read -r shot; do
+    shot_id=$(jq -r '.id' <<< "$shot"); narration=$(jq -r '.narration' <<< "$shot"); base_narration=$(jq -r '.base_narration' <<< "$shot"); has_override=$(jq -r '.has_override' <<< "$shot"); duration=$(jq -r '.duration_seconds' <<< "$shot")
+    script_hash=$(sha256_text "$narration"); task=$(jq -c --arg id "$shot_id" '.jogg_tasks[$id] // {}' "$STATE_PATH"); saved_hash=$(jq -r '.script_hash // empty' <<< "$task")
+    if [[ -z "$saved_hash" && "$(jq -r '.video_id // empty' <<< "$task")$(jq -r '.audio_path // empty' <<< "$task")" != "" ]]; then
+      if [[ "$has_override" == true && "$narration" != "$base_narration" ]]; then saved_hash=legacy-unknown; else state_mutate '.jogg_tasks[$id].script_hash=$hash' --arg id "$shot_id" --arg hash "$script_hash"; saved_hash=$script_hash; task=$(jq -c --arg id "$shot_id" '.jogg_tasks[$id] // {}' "$STATE_PATH"); fi
+    fi
+    if [[ -n "$saved_hash" && "$saved_hash" != "$script_hash" ]]; then
+      task_status=$(jq -r '.status // empty' <<< "$task")
+      if [[ "$task_status" == submitting || "$task_status" == submission_unknown ]]; then state_mutate '.stage="blocked_jogg_recovery" | .error=("Jogg submission outcome is unknown for " + $id + "; refusing to submit edited narration")' --arg id "$shot_id"; return 11; fi
+      old_audio=$(jq -r '.audio_path // empty' <<< "$task"); old_avatar=$(jq -r '.avatar_path // empty' <<< "$task"); [[ -z "$old_audio" ]] || rm -f "$old_audio"; [[ -z "$old_avatar" ]] || rm -f "$old_avatar"
+      state_mutate '.jogg_tasks[$id]={video_id:"",status:"planned",script_hash:$hash,audio_path:"",avatar_path:""} | .composition_preview_url="" | .preview_project_fingerprint="" | .work_id="" | .render_project_fingerprint="" | .final_video_url=""' --arg id "$shot_id" --arg hash "$script_hash"
+      task=$(jq -c --arg id "$shot_id" '.jogg_tasks[$id]' "$STATE_PATH")
+    fi
+    video_id=$(jq -r '.video_id // empty' <<< "$task"); audio_path=$(jq -r '.audio_path // empty' <<< "$task"); avatar_path=$(jq -r '.avatar_path // empty' <<< "$task"); target=$(jq -r --arg id "$shot_id" '.avatar_shot_ids|index($id)!=null' "$STATE_PATH")
+    if [[ -n "$audio_path" && -f "$audio_path" && ( "$target" != true || ( -n "$avatar_path" && -f "$avatar_path" ) ) ]]; then continue; fi
+    if [[ -n "$video_id" && ( -n "$audio_path" || -n "$avatar_path" ) ]]; then
+      # Reuse the saved Jogg task to restore a missing local asset without resubmitting it.
+      state_mutate '.jogg_tasks[$id].status="pending" | .jogg_tasks[$id].last_status="pending"' --arg id "$shot_id"
+    fi
+    if [[ -n "$video_id" ]]; then
+      # The paid Jogg task already exists. Re-poll it to rebuild a missing
+      # local audio/avatar derivative without submitting another POST.
+      state_mutate '.jogg_tasks[$id].status="pending" | .jogg_tasks[$id].last_status="recovering_local_asset"' --arg id "$shot_id"
+    else
+      task_status=$(jq -r '.status // empty' <<< "$task")
+      if [[ "$task_status" == submitting || "$task_status" == submission_unknown ]]; then state_mutate '.stage="blocked_jogg_recovery" | .error=("Jogg submission outcome is unknown for " + $id + "; automatic resubmission is disabled")' --arg id "$shot_id"; return 11; fi
+      retry_after_at=$(jq -r '.retry_after_at // 0' <<< "$task")
+      now=$(date +%s)
+      if [[ "$retry_after_at" =~ ^[0-9]+$ ]] && (( retry_after_at > now )); then
+        deferred_submission=1
+        continue
+      fi
+      body=$(jq -cn --arg avatar "$AVATAR_ID" --arg voice "$VOICE_ID" --arg script "$narration" --arg name "$RUN_ID-$shot_id" '{avatar:{avatar_type:0,avatar_id:($avatar|tonumber? // $avatar)},voice:{type:"script",voice_id:$voice,script:$script},aspect_ratio:"landscape",screen_style:1,caption:false,video_name:$name}')
+      state_mutate '.jogg_tasks[$id]={video_id:"",status:"planned",script_hash:$hash,audio_path:"",avatar_path:""}' --arg id "$shot_id" --arg hash "$script_hash"
+      printf '%s' "$body" > "$worker_dir/$shot_id.submit.json"; printf '%s\n' "$shot_id" >> "$worker_dir/submit.list"
+    fi
+  done < <(jq -c '.[]' <<< "$shots")
+  local -a batch=(); local queued
+  while IFS= read -r queued; do
+    (( submission_waiting == 0 )) || break
+    batch+=("$queued")
+    if (( ${#batch[@]} == SMART_SLIDES_JOGG_CONCURRENCY )); then
+      submit_jogg_batch "$worker_dir" "${batch[@]}" || { submit_result=$?; [[ "$submit_result" == 10 ]] && submission_waiting=1 || return "$submit_result"; }
+      batch=()
+    fi
+  done < "$worker_dir/submit.list"
+  if (( ${#batch[@]} )); then
+    submit_jogg_batch "$worker_dir" "${batch[@]}" || { submit_result=$?; [[ "$submit_result" == 10 ]] && submission_waiting=1 || return "$submit_result"; }
+  fi
+  : > "$worker_dir/poll.list"
+  jq -r '.jogg_tasks | to_entries[] | select((.value.status // "") == "pending" and (.value.video_id // "") != "") | .key' "$STATE_PATH" > "$worker_dir/poll.list"
+  batch=()
+  while IFS= read -r queued; do
+    batch+=("$queued")
+    if (( ${#batch[@]} == SMART_SLIDES_JOGG_CONCURRENCY )); then poll_jogg_batch "$worker_dir" "$shots" "${batch[@]}" || return $?; batch=(); fi
+  done < "$worker_dir/poll.list"
+  (( ${#batch[@]} == 0 )) || poll_jogg_batch "$worker_dir" "$shots" "${batch[@]}" || return $?
+  if (( deferred_submission || submission_waiting )); then
+    set_stage waiting_jogg
+    return 10
+  fi
   sync_jogg_editor_state
   set_stage jogg_assets_ready
 }
@@ -1092,7 +1336,13 @@ parse_html_action_args() {
 
 handle_checkpoint() {
   local result=$1
-  case "$result" in 10|11) emit_state; return 0 ;; *) return "$result" ;; esac
+  case "$result" in
+    10|11) emit_state; return 0 ;;
+    *)
+      [[ -n "$STATE_PATH" && -f "$STATE_PATH" ]] && emit_state
+      return "$result"
+      ;;
+  esac
 }
 
 refresh_status() {
@@ -1119,8 +1369,16 @@ main() {
   mkdir -p "$SMART_SLIDES_HOME" "$SMART_SLIDES_DATA_DIR" "$SMART_SLIDES_STATE_DIR"
   case "$ACTION" in
     preflight)
-      ensure_local_renderer; start_local_service; resolve_jogg_api_key
-      jq -n --arg local "$SMART_SLIDES_BASE_URL" --arg jogg "$JOGG_BASE_URL" --arg data "$SMART_SLIDES_DATA_DIR" '{status:"ready",local_base_url:$local,jogg_base_url:$jogg,data_dir:$data,ffprobe_available:true}' ;;
+      start_local_service
+      if [[ -z "${JOGG_API_KEY:-}" ]]; then
+        jq -n --arg local "$SMART_SLIDES_BASE_URL" --arg settings "$(open_settings_page)" '{status:"configuration_required",local_base_url:$local,settings_url:$settings,jogg_api_key_configured:false}'
+        return 0
+      fi
+      ensure_local_renderer; resolve_jogg_api_key
+      jq -n --arg local "$SMART_SLIDES_BASE_URL" --arg jogg "$JOGG_BASE_URL" --arg data "$SMART_SLIDES_DATA_DIR" '{status:"ready",local_base_url:$local,jogg_base_url:$jogg,data_dir:$data,jogg_api_key_configured:true,ffprobe_available:true}' ;;
+    settings)
+      start_local_service
+      jq -n --arg local "$SMART_SLIDES_BASE_URL" --arg settings "$(open_settings_page)" '{status:"ready",local_base_url:$local,settings_url:$settings}' ;;
     run)
       parse_run_args "$@"; [[ -n "$TOPIC" ]] || die '--topic is required'; [[ "$DURATION_SECONDS" =~ ^[0-9]+$ ]] || die 'duration must be an integer'
       [[ "$AVATAR_MODE" =~ ^(none|opening|opening_closing|all)$ ]] || die 'invalid avatar mode'; init_run; acquire_run_lock

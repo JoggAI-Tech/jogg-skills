@@ -27,7 +27,9 @@ Each overlay has:
 
 Before authoring HTML, read [mg-director-visual-contract.md](mg-director-visual-contract.md). Implement its selected IDs and the normalized `composition.animation_type`, `layout`, `hero_frame`, `typography`, `visual_primitives`, `icon_semantics`, and `motion_choreography` literally. Do not reselect from the catalog at this stage.
 
-Read [podcastor-template-style.md](podcastor-template-style.md) for the extracted original surface and motion finish. It is a shared finish layer only: retain the director-selected bespoke composition and use localized 24-42% translucent backing surfaces so B-roll remains present behind the information layer.
+Read [visual-style-profiles.md](visual-style-profiles.md) before writing CSS, then read [podcastor-template-style.md](podcastor-template-style.md) for the extracted original surface and motion finish. The project profile is authoritative for palette, type, line, glow, and motion personality. The Podcastor reference supplies localized translucent-surface behavior only.
+
+Use semantic `var(--mg-*)` tokens for every color, font, line weight, and shared timing value. Do not write hex/RGB/HSL/named colors, redefine core tokens, or add a font stack. Use no more than five semantic color roles in one clip. The profile accent budget is 8%-12%; large surfaces use `surface` or `surface-recessed`, while `primary`, `highlight`, and `danger` identify only the focal relation or conclusion.
 
 ## Output Shape
 
@@ -78,7 +80,7 @@ Editor overrides use:
 - Keep the bottom caption zone clear.
 - Keep only the small configured avatar rectangle and 16-24px buffer clear; do not reserve the whole right side.
 - The overlay may use the full remaining frame and should not collapse into the upper-left corner.
-- Prefer transparent treatment or a localized 24%-42% source-template editorial surface. A 45%-70% solid field is reserved for an explicitly director-selected archival/document treatment; never use an 80% opaque full-frame backing rectangle merely to make arbitrary text readable. The complete composition must still read correctly without B-roll.
+- Prefer transparent treatment or a localized 24%-42% profile surface. A larger solid field requires an explicitly selected material and still uses `surface`/`surface-recessed`; accent colors never become the full-frame backing. Never use an 80% opaque full-frame rectangle merely to make arbitrary text readable.
 
 ## Content And Motion
 

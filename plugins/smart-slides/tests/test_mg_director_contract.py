@@ -196,7 +196,7 @@ class BespokeHtmlContractTest(unittest.TestCase):
                 "mg_director": self._director(),
                 "html_design": {
                     "custom_html": custom_html,
-                    "custom_css": ".ai-mg-layer{position:absolute;inset:0;color:#fff}.title{font-size:64px}",
+                    "custom_css": ".ai-mg-layer{position:absolute;inset:0;color:var(--mg-ink)}.title{font-size:64px;font-family:var(--mg-font-display)}",
                     "edit_schema": {"editable_text_selectors": [".title"]},
                 },
             }],
@@ -222,9 +222,9 @@ class BespokeHtmlContractTest(unittest.TestCase):
     def test_codex_html_uses_the_extracted_source_contract_not_a_template(self) -> None:
         html = (
             '<main class="ai-mg-layer" data-ai-generated-html="true"><svg viewBox="0 0 1920 1080">'
-            '<path data-ai-edit-block="capital-path" data-ai-edit-kind="visual" d="M180 520 L880 280 L1440 620" stroke="#a3e635" stroke-width="28" fill="none"/>'
-            '<g data-ai-edit-block="icon-chip" data-ai-edit-kind="visual"><rect x="700" y="180" width="180" height="180" fill="#67e8f9"/></g>'
-            '<g data-ai-edit-block="icon-cloud" data-ai-edit-kind="visual"><circle cx="1360" cy="620" r="90" fill="#a3e635"/></g>'
+            '<path data-ai-edit-block="capital-path" data-ai-edit-kind="visual" d="M180 520 L880 280 L1440 620" stroke="var(--mg-highlight)" stroke-width="28" fill="none"/>'
+            '<g data-ai-edit-block="icon-chip" data-ai-edit-kind="visual"><rect x="700" y="180" width="180" height="180" fill="var(--mg-primary)"/></g>'
+            '<g data-ai-edit-block="icon-cloud" data-ai-edit-kind="visual"><circle cx="1360" cy="620" r="90" fill="var(--mg-highlight)"/></g>'
             '<text class="title" x="140" y="120" font-size="72">资本流向</text>'
             '<text x="140" y="780" font-size="36">基础设施成为重心</text></svg></main>'
         )
@@ -239,14 +239,14 @@ class BespokeHtmlContractTest(unittest.TestCase):
         self.assertIn("custom-html-frame", preview)
         self.assertNotIn("MG视觉系统", preview)
 
-    def test_bespoke_html_inherits_source_template_transparent_surfaces(self) -> None:
+    def test_bespoke_html_inherits_project_profile_transparent_surfaces(self) -> None:
         html = (
             '<main class="ai-mg-layer" data-ai-generated-html="true"><svg viewBox="0 0 1920 1080">'
-            '<rect x="72" y="84" width="1776" height="820" rx="28" fill="#07111f" fill-opacity=".8"/>'
-            '<rect x="0" y="0" width="960" height="1080" fill="#0c2840" fill-opacity=".86"/>'
-            '<path data-ai-edit-block="capital-path" data-ai-edit-kind="visual" d="M180 520 L880 280 L1440 620" stroke="#a3e635" stroke-width="28" fill="none"/>'
-            '<g data-ai-edit-block="icon-chip" data-ai-edit-kind="visual"><rect x="700" y="180" width="180" height="180" fill="#67e8f9"/></g>'
-            '<g data-ai-edit-block="icon-cloud" data-ai-edit-kind="visual"><circle cx="1360" cy="620" r="90" fill="#a3e635"/></g>'
+            '<rect x="72" y="84" width="1776" height="820" rx="28" fill="var(--mg-surface)" fill-opacity=".42" data-mg-surface="source-translucent"/>'
+            '<rect x="0" y="0" width="960" height="1080" fill="var(--mg-surface-recessed)" fill-opacity=".38"/>'
+            '<path data-ai-edit-block="capital-path" data-ai-edit-kind="visual" d="M180 520 L880 280 L1440 620" stroke="var(--mg-highlight)" stroke-width="28" fill="none"/>'
+            '<g data-ai-edit-block="icon-chip" data-ai-edit-kind="visual"><rect x="700" y="180" width="180" height="180" fill="var(--mg-primary)"/></g>'
+            '<g data-ai-edit-block="icon-cloud" data-ai-edit-kind="visual"><circle cx="1360" cy="620" r="90" fill="var(--mg-highlight)"/></g>'
             '<text class="title" x="140" y="120" font-size="72">资本流向</text>'
             '<text x="140" y="780" font-size="36">基础设施成为重心</text></svg></main>'
         )
@@ -254,7 +254,12 @@ class BespokeHtmlContractTest(unittest.TestCase):
         self.assertIn('fill-opacity=".42"', design["custom_html"])
         self.assertIn('fill-opacity=".38"', design["custom_html"])
         self.assertIn('data-mg-surface="source-translucent"', design["custom_html"])
-        self.assertIn("--mg-surface: rgba(2,6,23,.34)", design["custom_css"])
+        self.assertIn('data-mg-style-profile="editorial_tech_news"', design["custom_html"])
+        self.assertIn("--mg-surface:#111315", design["custom_css"])
+        self.assertEqual(
+            design["ai_html_generation"]["validation"]["style_profile"]["profile_id"],
+            "editorial_tech_news",
+        )
 
     def test_missing_bespoke_html_is_a_blocking_contract_failure(self) -> None:
         with self.assertRaises(video_studio_bespoke_html.BespokeHtmlContractError):
@@ -269,6 +274,10 @@ class BespokeHtmlContractTest(unittest.TestCase):
         self.assertIn("MG 构图执行合同", prompt)
         self.assertIn("AIGC 主路径", prompt)
         self.assertIn("模板只允许作为失败兜底", prompt)
+        self.assertIn("项目视觉风格合同", prompt)
+        self.assertIn("--mg-primary", prompt)
+        self.assertIn("accent_budget_percent", prompt)
+        self.assertNotIn("color:white", prompt)
 
     def test_semantic_edit_schema_marks_only_declared_blocks(self) -> None:
         custom_html = (

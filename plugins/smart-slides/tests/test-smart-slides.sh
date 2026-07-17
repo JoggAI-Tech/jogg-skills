@@ -13,9 +13,9 @@ trap cleanup EXIT
 fail() { printf 'test failure: %s\n' "$*" >&2; exit 1; }
 
 start_mock() {
-  local avatar_status=$1 port_file="$TMP_DIR/port"
+  local avatar_status=$1 shot_count=${2:-3} submit_delay=${3:-0} submit_outcome=${4:-accepted} port_file="$TMP_DIR/port"
   rm -f "$port_file" "$TMP_DIR/requests.json"
-  python3 "$MOCK" --port 0 --port-file "$port_file" --request-log "$TMP_DIR/requests.json" --avatar-status "$avatar_status" &
+  python3 "$MOCK" --port 0 --port-file "$port_file" --request-log "$TMP_DIR/requests.json" --avatar-status "$avatar_status" --shot-count "$shot_count" --submit-delay-seconds "$submit_delay" --submit-outcome "$submit_outcome" &
   SERVER_PID=$!
   for _ in $(seq 1 50); do [[ -s "$port_file" ]] && break; sleep 0.1; done
   [[ -s "$port_file" ]] || fail 'mock server did not start'
@@ -88,6 +88,17 @@ planning_required_path() {
   stop_mock
 }
 
+configuration_required_path() {
+  start_mock completed; configure_paths configuration-required
+  unset JOGG_API_KEY
+  local result
+  result=$(SMART_SLIDES_NO_BROWSER=1 bash "$RUNNER" preflight)
+  [[ "$(jq -r '.status' <<< "$result")" == configuration_required ]] || fail 'preflight without Jogg key did not return configuration_required'
+  [[ "$(jq -r '.settings_url' <<< "$result")" == "$SMART_SLIDES_BASE_URL/settings" ]] || fail 'configuration result did not return the local settings URL'
+  jq -e '[.[]|select(.path=="/v2/create_video_from_avatar")]|length==0' "$TMP_DIR/requests.json" >/dev/null || fail 'configuration preflight submitted a paid Jogg task'
+  stop_mock
+}
+
 staged_html_path() {
   start_mock completed; configure_paths staged-html
   unset SMART_SLIDES_ALLOW_DETERMINISTIC_FALLBACK
@@ -143,11 +154,11 @@ staged_html_path() {
   valid_asset="$TMP_DIR/valid-html.json"
   jq -n '{
     custom_html:("<main class=\"ai-mg-layer\" data-ai-generated-html=\"true\"><svg viewBox=\"0 0 1920 1080\">"+
-      "<path data-ai-edit-block=\"flow\" data-ai-edit-kind=\"visual\" d=\"M180 520H1500\" stroke=\"#2dd4bf\" stroke-width=\"64\"/>"+
-      "<circle data-ai-edit-block=\"node-a\" data-ai-edit-kind=\"visual\" cx=\"480\" cy=\"520\" r=\"120\" fill=\"#f4c95d\"/>"+
-      "<circle data-ai-edit-block=\"node-b\" data-ai-edit-kind=\"visual\" cx=\"1320\" cy=\"520\" r=\"120\" fill=\"#e7f0f7\"/>"+
+      "<path data-ai-edit-block=\"flow\" data-ai-edit-kind=\"visual\" d=\"M180 520H1500\" stroke=\"var(--mg-primary)\" stroke-width=\"64\"/>"+
+      "<circle data-ai-edit-block=\"node-a\" data-ai-edit-kind=\"visual\" cx=\"480\" cy=\"520\" r=\"120\" fill=\"var(--mg-highlight)\"/>"+
+      "<circle data-ai-edit-block=\"node-b\" data-ai-edit-kind=\"visual\" cx=\"1320\" cy=\"520\" r=\"120\" fill=\"var(--mg-ink)\"/>"+
       "<text class=\"title\" x=\"160\" y=\"220\" font-size=\"72\">阶段验收</text></svg></main>"),
-    custom_css:".ai-mg-layer{position:absolute;inset:0}.title{fill:#fff;font-size:72px}",
+    custom_css:".ai-mg-layer{position:absolute;inset:0}.title{fill:var(--mg-ink);font-family:var(--mg-font-display);font-size:72px}",
     edit_schema:{editable_text_selectors:[".title"]}
   }' > "$valid_asset"
   result=$(bash "$RUNNER" apply-html --run-id "$run_id" --clip-id clip-alpha --html-file "$valid_asset")
@@ -311,11 +322,42 @@ no_avatar_visual_path() {
   stop_mock
 }
 
+parallel_jogg_path() {
+  start_mock completed 6 0.2; configure_paths parallel
+  local result run_id state first_poll first_create_last max_active
+  result=$(bash "$RUNNER" run --topic '并发数字人任务' --duration-seconds 60 --avatar-mode all)
+  run_id=$(jq -r '.run_id' <<< "$result"); state="$SMART_SLIDES_STATE_DIR/$run_id.json"
+  [[ "$(jq -r '.stage' <<< "$result")" == completed ]] || fail 'parallel Jogg run did not complete'
+  jq -e '.jogg_tasks|length==6' "$state" >/dev/null || fail 'parallel run did not persist every Jogg task'
+  jq -e '[.jogg_tasks[] | select((.submitted_at|type) == "number" and .last_status == "ready" and (.video_id|length)>0)] | length == 6' "$state" >/dev/null || fail 'parallel run did not preserve per-task Jogg checkpoints'
+  jq -e '[.[]|select(.path=="/v2/create_video_from_avatar")]|length==6' "$TMP_DIR/requests.json" >/dev/null || fail 'parallel run did not submit six tasks'
+  first_poll=$(jq '[to_entries[]|select(.value.path|test("^/v2/avatar_video/"))|.key][0]' "$TMP_DIR/requests.json")
+  first_create_last=$(jq '[to_entries[]|select(.value.path=="/v2/create_video_from_avatar")|.key]|max' "$TMP_DIR/requests.json")
+  (( first_create_last < first_poll )) || fail 'Jogg requests were polled before the submission batch completed'
+  max_active=$(curl -fsS "$JOGG_BASE_URL/__stats" | jq -r '.max_active_submissions')
+  [[ "$max_active" == 5 ]] || fail "expected five concurrent Jogg submissions, got $max_active"
+  stop_mock
+}
+
+rate_limited_jogg_path() {
+  start_mock completed 3 0 rate_limited; configure_paths rate-limited
+  local result run_id state
+  result=$(bash "$RUNNER" run --topic 'Jogg 限流检查' --duration-seconds 60 --avatar-mode opening)
+  run_id=$(jq -r '.run_id' <<< "$result"); state="$SMART_SLIDES_STATE_DIR/$run_id.json"
+  [[ "$(jq -r '.stage' <<< "$result")" == waiting_jogg ]] || fail 'Jogg 429 was not returned as waiting_jogg'
+  jq -e '[.jogg_tasks[] | select(.status == "planned" and .last_status == "rate_limited" and .retry_after_seconds == 17 and .retry_after_at > .submitted_at)] | length == 3' "$state" >/dev/null || fail 'Jogg 429 retry interval or checkpoints were not persisted'
+  jq -e '[.[] | select(.path=="/v2/create_video_from_avatar")] | length == 3' "$TMP_DIR/requests.json" >/dev/null || fail 'rate limit fixture did not receive every submitted task'
+  stop_mock
+}
+
 make_fake_ffmpeg
+configuration_required_path
 planning_required_path
 staged_html_path
 happy_path
 failure_path
 timeout_path
 no_avatar_visual_path
+parallel_jogg_path
+rate_limited_jogg_path
 printf 'smart-slides orchestration tests passed\n'

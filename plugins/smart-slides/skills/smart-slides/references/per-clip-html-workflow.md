@@ -49,7 +49,7 @@ For a multi-shot clip that needs different authored fragments, use `html_design_
 
 For each ID returned in `pending_clip_ids`:
 
-1. Read that clip's exact `mg_director`, `screen_slots`, shot durations, and [html-mg-contract.md](html-mg-contract.md). Do not select another visual grammar.
+1. Read that clip's exact `mg_director`, project `visual_style_profile`, `screen_slots`, shot durations, and [html-mg-contract.md](html-mg-contract.md). Do not select another visual grammar or palette.
 2. Author one asset JSON. Make `visual_fx` visibly present but subordinate in at least one sampled frame when its `fx_pack_id` is not `none`.
 3. Apply it:
 
@@ -59,7 +59,7 @@ bash "<plugin-root>/scripts/smart-slides.sh" apply-html \
   --html-file "/absolute/path/to/mg-capital-flow.json"
 ```
 
-4. Stop on `qa_failed`. Read the checkpoint error, repair only this asset, and apply it again. Do not approve an asset that failed sanitizer, contract, canvas-fit, semantic edit-schema, or composition checks.
+4. Stop on `qa_failed`. Read the checkpoint error, repair only this asset, and apply it again. Do not approve an asset that failed style-profile tokens, sanitizer, contract, canvas-fit, semantic edit-schema, or composition checks.
 5. Capture at least entry, build, and hold frames at content-relevant seconds:
 
 ```bash
@@ -100,6 +100,7 @@ Treat these as render-blocking:
 - missing or ambiguous semantic selectors;
 - missing primary visual or screen-slot text copied from outside the director contract;
 - unsafe HTML/CSS or remote assets;
+- hardcoded/undeclared colors, profile-token redefinition, unsupported fonts, excessive color roles, or glow outside the profile/material policy;
 - empty transparent output;
 - unchanged entry/build/hold frames when motion is required;
 - invisible requested `visual_fx`;

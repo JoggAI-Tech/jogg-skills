@@ -20,9 +20,11 @@ For an unspecified Chinese voice, choose the first available Chinese female voic
 
 ## Generate Planning
 
-Read [planning-contracts.md](references/planning-contracts.md), [MG-VISUAL-STANDARD-v1.md](references/MG-VISUAL-STANDARD-v1.md), [mg-director-visual-contract.md](references/mg-director-visual-contract.md), and [podcastor-template-style.md](references/podcastor-template-style.md) before authoring a plan. Then follow [per-clip-html-workflow.md](references/per-clip-html-workflow.md) and [html-mg-contract.md](references/html-mg-contract.md) to implement and inspect each director-selected HTML/MG clip. These are direct Podcastor source references at the commit recorded in `extraction-manifest.json`; do not replace them with a generic card or slide layout.
+Read [planning-contracts.md](references/planning-contracts.md), [MG-VISUAL-STANDARD-v1.md](references/MG-VISUAL-STANDARD-v1.md), [mg-director-visual-contract.md](references/mg-director-visual-contract.md), [visual-style-profiles.md](references/visual-style-profiles.md), and [podcastor-template-style.md](references/podcastor-template-style.md) before authoring a plan. Then follow [per-clip-html-workflow.md](references/per-clip-html-workflow.md) and [html-mg-contract.md](references/html-mg-contract.md) to implement and inspect each director-selected HTML/MG clip. These are direct Podcastor source references plus a local executable style-profile adaptation recorded in `extraction-manifest.json`; do not replace them with a generic card, website template, or copied slide layout.
 
 Before starting a new run, Codex must author a director-only planning JSON and pass it with `--planning-file`. Persist it under `~/.codex/smart-slides/plans/` so a blocked or interrupted run can reuse it. Include the existing project fields `producer_analysis`, `production_requirement_document`, `creative_plan`, `script`, `script_director`, `director_document`, and non-empty `scene_groups`. Every enabled `mg_director` must select `visual_recipe`, deliver a self-contained `composition`, and bind a stable clip ID to its shots; copy that same director contract into each generated shot. Do not put bulk `custom_html` or `custom_css` in this initial plan. Every shot needs topic-specific narration and render intent. Do not call an external LLM API.
+
+Select one project-level `visual_style_profile_id`: use `editorial_tech_news` for news/hotspots, `technical_blueprint` for mechanisms/engineering, or `archival_documentary` for history/evidence. An explicit user choice wins. Every MG clip inherits the same profile; `material_id` may change texture but must not invent another palette. If an explicit palette is necessary, provide exactly five colors ordered as surface, ink, primary, highlight, and danger.
 
 The first `run` returns `waiting_html` with `pending_clip_ids` before project creation or paid Jogg submission. For one pending clip at a time, author an asset JSON, call `apply-html`, capture entry/build/hold keyframes, inspect them, repair only that clip when needed, and call `approve-html`. Applying a revision clears that clip's earlier keyframes. The runtime passes each asset through Podcastor's original bespoke-HTML sanitizer, root guard, font normalization, canvas-fit report, and composition-execution report. `resume` starts Jogg only after every required clip is approved and never recreates approved clips.
 
@@ -31,6 +33,7 @@ Author the HTML as the original director pipeline requires:
 - Establish the one dominant visual structure in the selected `composition.hero_frame` first, then L1, L2, and L3 information in order from [MG-VISUAL-STANDARD-v1.md](references/MG-VISUAL-STANDARD-v1.md).
 - Use only `screen_slots` for visible copy. The composition must read as a complete 1920x1080 documentary frame without a B-roll aperture, media placeholder, or empty half-frame.
 - Include one `ai-mg-layer` root with `data-ai-generated-html="true"`, local HTML/CSS/SVG only, and a compact `edit_schema`. Use broad paths and large semantic SVG objects when the director requires them; do not use thin-line grids or card arrays as the main visual.
+- Use only the immutable semantic colors, font roles, line weights, and motion timings from [visual-style-profiles.md](references/visual-style-profiles.md). Never hardcode a color, redefine `--mg-*`, import a font, or apply generic glow.
 - Treat `template` as an explicit operator-selected recovery mode only. It is not a normal output strategy for Smart Slides runs.
 - Keep the B-roll visible through the information layer. Use the extracted Podcastor translucent surface tokens for localized text backing, evidence fields, and nodes; do not cover an entire 16:9 frame with an 80% opaque dark rectangle. A deliberate opaque documentary field requires an explicit `data-mg-opaque="true"` opt-out and must be justified by the selected `material_id`.
 
@@ -45,6 +48,8 @@ Preflight checks local tools, starts the bundled loopback-only API, and validate
 ```bash
 bash "<plugin-root>/scripts/smart-slides.sh" preflight
 ```
+
+When the Jogg key is not configured, `preflight` opens the local `/settings` page and returns `configuration_required`; it does not submit paid work. Reopen the page at any time with `smart-slides.sh settings`. The page persists only `JOGG_API_KEY` and optional `PEXELS_API_KEY` in `~/.codex/smart-slides/.env` (`0600`); explicit shell values take precedence. Do not ask for or show `PIXABAY_API_KEY`.
 
 Create a 10-minute project:
 
@@ -92,13 +97,14 @@ Read [jogg-endpoints.md](references/jogg-endpoints.md) for request shapes and [j
 - There is no standalone TTS request.
 - FFmpeg extracts audio from every completed Jogg video.
 - Immediately after extraction, the plugin probes each Jogg audio file and makes those measured durations the project timeline. B-roll search, scene cuts, subtitles, HTML/MG timing, and local render all follow that audio timeline; the requested duration remains a planning target. It never time-stretches narration or pads a silent tail.
+- Subtitles are split inside each measured shot at Chinese sentence and clause punctuation, timed by text weight, and wrapped to at most two lines of roughly 18 Chinese characters each. The browser preview and final FFmpeg render use the same cues and bottom safe area; never shrink a long paragraph to fit one cue.
 - Only `avatar_mode` target shots retain a muted avatar video. Non-target Jogg video images are deleted after audio extraction.
 - A saved `video_id` is a paid-task checkpoint. Always use `resume`; never resubmit it.
 - A `submission_unknown` task means Jogg may have accepted the paid POST but its response was lost. Stop and report `blocked_jogg_recovery`; never clear or resubmit that task automatically.
 
 ## Authentication
 
-Set `JOGG_API_KEY` from the Jogg OpenAPI dashboard. Smart Slides calls `https://api.jogg.ai/v2/...` with `X-Api-Key`; browser-session tokens are not accepted as a substitute. Credentials stay in process memory and never enter run state or stdout.
+Set `JOGG_API_KEY` from the Jogg OpenAPI dashboard, preferably through the local setup page. Smart Slides calls `https://api.jogg.ai/v2/...` with `X-Api-Key`; browser-session tokens are not accepted as a substitute. Credentials stay in process memory and the private local `.env`, never in run state or stdout. Jogg submissions and polls use a fixed five-worker pool and obey the 20 POST/minute/key rate limit; `429` returns a resumable `waiting_jogg` state.
 
 ## Boundaries
 

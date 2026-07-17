@@ -125,6 +125,79 @@ def apply_local_preview_adapters(output: str) -> str:
     return output
 
 
+def apply_local_caption_preview_adapters(output: str) -> str:
+    """Keep the browser preview on the same bounded cues as final FFmpeg."""
+    future_import = "from __future__ import annotations\n\n"
+    if future_import not in output:
+        raise SystemExit("planner extraction has no future import for caption adapter")
+    output = output.replace(
+        future_import,
+        future_import + "from backend.services import video_studio_captions\n",
+        1,
+    )
+    replacements = [
+        (
+            '        narration = str(scripts.get(shot_id) or shot.get("narration") or "")\n'
+            '        option = _selected_broll_option_for_preview(shot, selected_broll)\n',
+            '        narration = str(scripts.get(shot_id) or shot.get("narration") or "")\n'
+            '        caption_cues = video_studio_captions.build_caption_cues(narration, durations[index - 1])\n'
+            '        caption_data = html.escape(json.dumps(caption_cues, ensure_ascii=False, separators=(",", ":")), quote=True)\n'
+            '        caption_text = str(caption_cues[0].get("text") or "") if caption_cues else ""\n'
+            '        option = _selected_broll_option_for_preview(shot, selected_broll)\n',
+        ),
+        (
+            '              <div class="caption">{html.escape(narration)}</div>\n',
+            '              <div class="caption" data-caption-cues="{caption_data}">{html.escape(caption_text)}</div>\n',
+        ),
+        (
+            '    .caption {{ position: absolute; left: 30px; right: 132px; bottom: 28px; padding: 12px 16px; border-radius: 8px; background: rgba(0,0,0,.58); font-size: clamp(14px, 1.3vw, 20px); line-height: 1.45; font-weight: 900; backdrop-filter: blur(8px); }}\n',
+            '    .caption {{ position: absolute; left: 7.5%; right: 132px; bottom: 6.7%; max-height: 20%; overflow: hidden; padding: 12px 16px; border-radius: 8px; background: rgba(0,0,0,.58); font-size: clamp(14px, 1.3vw, 20px); line-height: 1.32; font-weight: 900; text-align: center; white-space: pre-line; overflow-wrap: normal; backdrop-filter: blur(8px); }}\n',
+        ),
+        (
+            '    function activeVideo() {{ return scenes[current]?.querySelector(\'video\'); }}\n'
+            '    function activeVoice() {{ return scenes[current]?.querySelector(\'audio.voice-audio\'); }}\n',
+            '    function activeVideo() {{ return scenes[current]?.querySelector(\'video\'); }}\n'
+            '    function activeVoice() {{ return scenes[current]?.querySelector(\'audio.voice-audio\'); }}\n'
+            '    function syncCaption(scene, localSeconds) {{\n'
+            '      const caption = scene?.querySelector(\'.caption\');\n'
+            '      if (!caption) return;\n'
+            '      let cues = [];\n'
+            '      try {{ cues = JSON.parse(caption.dataset.captionCues || \'[]\'); }} catch (_) {{}}\n'
+            '      const time = Math.max(0, Number(localSeconds) || 0);\n'
+            '      const cue = cues.find((item, index) => time >= Number(item.start_seconds || 0) && (time < Number(item.end_seconds || 0) || index === cues.length - 1));\n'
+            '      caption.textContent = cue?.text || \'\';\n'
+            '      caption.hidden = !cue;\n'
+            '    }}\n',
+        ),
+        (
+            '        scene.classList.toggle(\'active\', active);\n'
+            '        seekMgScene(scene, 0, active && playing);\n',
+            '        scene.classList.toggle(\'active\', active);\n'
+            '        seekMgScene(scene, 0, active && playing);\n'
+            '        syncCaption(scene, 0);\n',
+        ),
+        (
+            '      seekMgScene(scenes[current], progress, playing);\n'
+            '      if (playing) startBgm(); else stopBgm();\n',
+            '      seekMgScene(scenes[current], progress, playing);\n'
+            '      syncCaption(scenes[current], progress);\n'
+            '      if (playing) startBgm(); else stopBgm();\n',
+        ),
+        (
+            '      progress += 0.2;\n'
+            '      bar.style.width = Math.min(100, progress / duration * 100) + \'%\';\n',
+            '      progress += 0.2;\n'
+            '      syncCaption(scenes[current], progress);\n'
+            '      bar.style.width = Math.min(100, progress / duration * 100) + \'%\';\n',
+        ),
+    ]
+    for expected, replacement in replacements:
+        if expected not in output:
+            raise SystemExit("planner extraction no longer matches the local caption-preview adapter")
+        output = output.replace(expected, replacement, 1)
+    return output
+
+
 def apply_local_mg_adapters(output: str) -> str:
     """Reapply local continuous-MG preview and CSS safety adapters."""
     replacements = [
@@ -237,6 +310,306 @@ def apply_local_mg_adapters(output: str) -> str:
     return output
 
 
+def apply_local_visual_style_adapters(output: str) -> str:
+    """Add the plugin-only executable style layer without changing source files."""
+    future_import = "from __future__ import annotations\n\n"
+    if future_import not in output:
+        raise SystemExit("planner extraction has no future import for visual-style adapter")
+    output = output.replace(
+        future_import,
+        future_import + "from backend.services import video_studio_visual_styles\n",
+        1,
+    )
+    output += r'''
+
+# Smart Slides local visual-style profile adapter. Podcastor owns the semantic
+# scene and composition contracts; this layer supplies the missing project-wide
+# palette, type, line, glow, and motion tokens.
+def _smart_slides_visual_profile_from_director(
+    topic: str,
+    director_document: Dict[str, Any] | None,
+    fallback_requested: Any = None,
+) -> Dict[str, Any]:
+    style = (
+        director_document.get("html_mg_style")
+        if isinstance((director_document or {}).get("html_mg_style"), dict)
+        else {}
+    )
+    return video_studio_visual_styles.resolve_visual_style_profile(
+        topic=topic,
+        requested=style.get("visual_style_profile") or style.get("visual_style_profile_id") or fallback_requested,
+        legacy_palette=style.get("palette"),
+    )
+
+
+_podcastor_normalize_director_document = normalize_director_document
+def normalize_director_document(document: Dict[str, Any], topic: str, production_format: str) -> Dict[str, Any]:
+    normalized = _podcastor_normalize_director_document(document, topic, production_format)
+    if production_format != "broll_html":
+        return normalized
+    source_style = document.get("html_mg_style") if isinstance(document.get("html_mg_style"), dict) else {}
+    profile = video_studio_visual_styles.resolve_visual_style_profile(
+        topic=topic,
+        requested=source_style.get("visual_style_profile") or source_style.get("visual_style_profile_id"),
+        legacy_palette=source_style.get("palette"),
+    )
+    style = normalized.get("html_mg_style") if isinstance(normalized.get("html_mg_style"), dict) else {}
+    normalized["html_mg_style"] = {
+        **style,
+        "animation_style": str(source_style.get("animation_style") or "编辑化信息图、强层级、克制动效"),
+        "palette": video_studio_visual_styles.canonical_palette(profile),
+        "typography": str(source_style.get("typography") or profile["typography"]["personality"]),
+        "icon_style": str(source_style.get("icon_style") or "语义明确的大型图形，细线只作辅助"),
+        "visual_style_profile_id": profile["id"],
+        "visual_style_profile": profile,
+    }
+    return normalized
+
+
+_podcastor_normalize_requirement_document = normalize_requirement_document
+def normalize_requirement_document(document: Dict[str, Any], topic: str, production_format: str) -> Dict[str, Any]:
+    normalized = _podcastor_normalize_requirement_document(document, topic, production_format)
+    source_direction = document.get("html_mg_direction") if isinstance(document.get("html_mg_direction"), dict) else {}
+    profile = video_studio_visual_styles.resolve_visual_style_profile(
+        topic=topic,
+        requested=source_direction.get("visual_style_profile") or source_direction.get("visual_style_profile_id"),
+        legacy_palette=source_direction.get("palette"),
+    )
+    direction = normalized.get("html_mg_direction") if isinstance(normalized.get("html_mg_direction"), dict) else {}
+    normalized["html_mg_direction"] = {
+        **direction,
+        "style": str(source_direction.get("style") or profile["description"]),
+        "palette": video_studio_visual_styles.canonical_palette(profile),
+        "typography": str(source_direction.get("typography") or profile["typography"]["personality"]),
+        "icon_style": str(source_direction.get("icon_style") or "语义明确的大型图形，细线只作辅助"),
+        "visual_style_profile_id": profile["id"],
+        "visual_style_profile": profile,
+    }
+    return normalized
+
+
+_podcastor_normalize_creative_plan = normalize_creative_plan
+def normalize_creative_plan(
+    plan: Dict[str, Any],
+    topic: str,
+    requirement_document: Dict[str, Any] | None,
+    selected_option: Dict[str, Any] | None,
+) -> Dict[str, Any]:
+    normalized = _podcastor_normalize_creative_plan(plan, topic, requirement_document, selected_option)
+    direction = (
+        requirement_document.get("html_mg_direction")
+        if isinstance((requirement_document or {}).get("html_mg_direction"), dict)
+        else {}
+    )
+    profile = video_studio_visual_styles.resolve_visual_style_profile(
+        topic=topic,
+        requested=direction.get("visual_style_profile") or direction.get("visual_style_profile_id"),
+        legacy_palette=direction.get("palette"),
+    )
+    for scene in normalized.get("scenes") or []:
+        director = scene.get("mg_director") if isinstance(scene.get("mg_director"), dict) else {}
+        if director.get("enabled"):
+            director["visual_style_profile"] = deepcopy(profile)
+    return normalized
+
+
+def _smart_slides_requested_profile_from_groups(groups: List[Any]) -> Any:
+    for group in groups:
+        if not isinstance(group, dict):
+            continue
+        candidates = [
+            shot.get("mg_director")
+            for shot in group.get("shots") or []
+            if isinstance(shot, dict) and isinstance(shot.get("mg_director"), dict)
+        ]
+        candidates.extend(
+            layer.get("mg_director")
+            for layer in group.get("html_layers") or []
+            if isinstance(layer, dict) and isinstance(layer.get("mg_director"), dict)
+        )
+        for director in candidates:
+            if director.get("visual_style_profile") or director.get("visual_style_profile_id"):
+                return director.get("visual_style_profile") or director.get("visual_style_profile_id")
+    return None
+
+
+_podcastor_normalize_scene_groups = normalize_scene_groups
+def normalize_scene_groups(
+    groups: List[Any],
+    production_format: str,
+    director_document: Dict[str, Any] | None = None,
+) -> List[Dict[str, Any]]:
+    normalized = _podcastor_normalize_scene_groups(groups, production_format, director_document)
+    profile = _smart_slides_visual_profile_from_director(
+        str((director_document or {}).get("title") or (director_document or {}).get("reference_style") or ""),
+        director_document,
+        _smart_slides_requested_profile_from_groups(groups),
+    )
+    for group in normalized:
+        for shot in group.get("shots") or []:
+            director = shot.get("mg_director") if isinstance(shot.get("mg_director"), dict) else {}
+            if director.get("enabled"):
+                director["visual_style_profile"] = deepcopy(profile)
+        for layer in group.get("html_layers") or []:
+            director = layer.get("mg_director") if isinstance(layer.get("mg_director"), dict) else {}
+            if director.get("enabled"):
+                director["visual_style_profile"] = deepcopy(profile)
+    return normalized
+
+
+_podcastor_html_overlay_contract_for_clip = _html_overlay_contract_for_clip
+def _html_overlay_contract_for_clip(topic: str, clip: Dict[str, Any], bound_shots: List[Dict[str, Any]]) -> Dict[str, Any]:
+    contract = _podcastor_html_overlay_contract_for_clip(topic, clip, bound_shots)
+    director = clip.get("mg_director") if isinstance(clip.get("mg_director"), dict) else {}
+    profile = video_studio_visual_styles.resolve_visual_style_profile(
+        topic=topic,
+        requested=director.get("visual_style_profile"),
+    )
+    recipe = director.get("visual_recipe") if isinstance(director.get("visual_recipe"), dict) else {}
+    material_id = str(recipe.get("material_id") or "editorial_color_field")
+    contract["visual_style_profile"] = profile
+    contract["style_tokens"] = {
+        "css_variables": video_studio_visual_styles.profile_css_variables(profile),
+        "accent_budget_percent": profile["accent_budget_percent"],
+        "glow_policy": profile["glow_policy"],
+    }
+    contract["material_style_override"] = video_studio_visual_styles.material_style_override(profile, material_id)
+    contract["visual_quality_rules"] = [
+        *(contract.get("visual_quality_rules") or []),
+        "no_undeclared_color_literals",
+        "all_authored_colors_use_semantic_mg_css_variables",
+        "accent_area_respects_project_profile_budget",
+        "material_id_may_adjust_texture_but_never_replace_project_palette",
+    ]
+    contract["allowed_freedom"] = [
+        "主视觉隐喻、SVG/HTML 构图、扫描/测量/路径动效可以自由设计；颜色和字体只能使用项目 style tokens",
+        "工程边界、画布、安全区、文本来源、selector 和输出长度不能自由更改",
+    ]
+    return contract
+
+
+_podcastor_design_plan_for_shots = _design_plan_for_shots
+def _design_plan_for_shots(
+    shots: List[Dict[str, Any]],
+    *,
+    topic: str,
+    production_format: str,
+    director_document: Dict[str, Any] | None,
+    scene_groups: List[Dict[str, Any]] | None = None,
+) -> Dict[str, Any]:
+    plan = _podcastor_design_plan_for_shots(
+        shots,
+        topic=topic,
+        production_format=production_format,
+        director_document=director_document,
+        scene_groups=scene_groups,
+    )
+    first_profile = next(
+        (
+            shot.get("mg_director", {}).get("visual_style_profile")
+            for shot in shots
+            if isinstance(shot.get("mg_director"), dict)
+            and isinstance(shot.get("mg_director", {}).get("visual_style_profile"), dict)
+        ),
+        None,
+    )
+    plan["visual_style_profile"] = _smart_slides_visual_profile_from_director(topic, director_document, first_profile)
+    return plan
+
+
+_podcastor_build_render_contract_package = build_render_contract_package
+def build_render_contract_package(
+    *,
+    topic: str,
+    production_format: str,
+    script: str,
+    director_document: Dict[str, Any] | None,
+    scene_groups: List[Dict[str, Any]],
+    width: int = DEFAULT_RENDER_WIDTH,
+    height: int = DEFAULT_RENDER_HEIGHT,
+) -> Dict[str, Any]:
+    package = _podcastor_build_render_contract_package(
+        topic=topic,
+        production_format=production_format,
+        script=script,
+        director_document=director_document,
+        scene_groups=scene_groups,
+        width=width,
+        height=height,
+    )
+    design_plan = package.get("design_plan") if isinstance(package.get("design_plan"), dict) else {}
+    profile = design_plan.get("visual_style_profile") if isinstance(design_plan.get("visual_style_profile"), dict) else video_studio_visual_styles.resolve_visual_style_profile(topic=topic)
+    package["visual_style_profile"] = profile
+    render_manifest = package.get("render_manifest") if isinstance(package.get("render_manifest"), dict) else {}
+    render_manifest["visual_style_profile"] = profile
+    return package
+
+
+def _base_bespoke_html_css(visual_system: str) -> str:
+    return """
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; background: transparent; }
+body { font-family: var(--mg-font-body, Arial, sans-serif); color: var(--mg-ink, #F8FAFC); }
+.ai-mg-layer { position: absolute !important; inset: 0 !important; width: 100% !important; height: 100% !important; padding: 6.7% 5.4% 17% !important; overflow: hidden; background: transparent; --mg-primary:#E85D3F;--mg-ink:#F2EEE8;--mg-muted:#B6B4AE;--ai-accent:var(--mg-primary);--ai-ink:var(--mg-ink);--ai-muted:var(--mg-muted); }
+.ai-mg-layer * { box-sizing: border-box; }
+.ai-mg-layer b, .ai-mg-layer strong { color: var(--ai-ink); }
+@media (max-width: 760px) { .ai-mg-layer { padding: 28px 24px 116px; } }
+"""
+
+
+_podcastor_bespoke_html_asset_prompt = _bespoke_html_asset_prompt
+def _bespoke_html_asset_prompt(
+    topic: str,
+    clip: Dict[str, Any],
+    bound_shots: List[Dict[str, Any]],
+    *,
+    compact_retry: bool = False,
+    simple_retry: bool = False,
+    composition_retry: bool = False,
+    composition_feedback: str = "",
+) -> str:
+    prompt = _podcastor_bespoke_html_asset_prompt(
+        topic,
+        clip,
+        bound_shots,
+        compact_retry=compact_retry,
+        simple_retry=simple_retry,
+        composition_retry=composition_retry,
+        composition_feedback=composition_feedback,
+    )
+    contract = _html_overlay_contract_for_clip(topic, clip, bound_shots)
+    style_block = """
+项目视觉风格合同（所有 clip 继承同一 profile，material_id 只能做受控质感覆盖）：
+- visual_style_profile={profile}
+- CSS variables={tokens}
+- material override={material}
+- authored HTML/CSS 禁止 hex、RGB/HSL 和 named color；所有颜色使用合同中的 var(--mg-*)。
+- font-family 只能使用 var(--mg-font-display)、var(--mg-font-body) 或 var(--mg-font-mono)。
+- 强调色总面积不得超过 accent_budget_percent；大面积承载面使用 surface/surface-recessed。
+- glow 服从 material override；endpoint_only 只允许 .mg-endpoint 或 data-mg-emphasis=endpoint。
+""".format(
+        profile=json.dumps(contract.get("visual_style_profile") or {}, ensure_ascii=False),
+        tokens=json.dumps((contract.get("style_tokens") or {}).get("css_variables") or {}, ensure_ascii=False),
+        material=json.dumps(contract.get("material_style_override") or {}, ensure_ascii=False),
+    )
+    prompt = prompt.replace("\n工作方式：", "\n" + style_block + "\n工作方式：", 1)
+    prompt = prompt.replace("color:white", "color:var(--mg-ink);font-family:var(--mg-font-body)")
+    prompt = prompt.replace(
+        "可以用 45%-70% 画面的实体纯色色场、档案纸块、墨迹遮罩或大型几何主体承载主视觉",
+        "可以用 profile 的 surface/surface-recessed 构成大型承载面；primary/highlight/danger 只做少量焦点",
+    )
+    prompt = prompt.replace("资金流黄条", "资金流强调带").replace("主要主路径、黄条", "主要主路径、强调带")
+    prompt = prompt.replace(
+        "- custom_css 不得使用外链、@import、url()、JS。",
+        "- custom_css 不得使用外链、@import、url()、JS。\n"
+        "- custom_html/custom_css 不得写硬编码颜色；所有 fill/stroke/color/background/border/gradient stop 使用 style_tokens 的 var(--mg-*)。\n"
+        "- font-family 只能引用 var(--mg-font-display)、var(--mg-font-body) 或 var(--mg-font-mono)。",
+        1,
+    )
+    return prompt
+'''
+    return output
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("source", type=Path)
@@ -314,6 +687,8 @@ def main() -> int:
     )
     output = apply_local_preview_adapters(output)
     output = apply_local_mg_adapters(output)
+    output = apply_local_caption_preview_adapters(output)
+    output = apply_local_visual_style_adapters(output)
     forbidden = ("call_video_studio_llm", "api.siliconflow", "api.deepseek", "VIDEO_STUDIO_HTML_LLM")
     leaked = [token for token in forbidden if token in output]
     if leaked:

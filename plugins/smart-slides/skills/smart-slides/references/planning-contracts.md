@@ -21,12 +21,14 @@ This is not a script or storyboard. Its density must match the requested runtime
 `production_requirement_document` contains title, summary, background, production strategy, duration, reference style, and:
 
 - `material_requirements`: types, recommended sources, preferences, timeliness, regions, and named entities.
-- `html_mg_direction`: render strategy, template policy, palette, typography, icon style, and motion principles.
+- `html_mg_direction`: render strategy, template policy, `visual_style_profile_id`, palette, typography, icon style, and motion principles.
 - `audio_avatar`: BGM, avatar, and voice-tone guidance.
 - `ratio_plan`: B-roll, HTML/MG, and avatar proportions.
 - `risk_notes`.
 
 For `broll_html`, use `llm_bespoke_html` with `templates_as_fallback`, unless the user explicitly requests template-first output.
+
+Select one project profile from [visual-style-profiles.md](visual-style-profiles.md). Use `editorial_tech_news` for news/hotspots, `technical_blueprint` for engineering/mechanism explainers, or `archival_documentary` for history/evidence. The runtime persists the normalized `visual_style_profile` beside the ID. When the user explicitly supplies a palette, provide exactly five hex values ordered as `surface`, `ink`, `primary`, `highlight`, `danger`; otherwise omit the list and use the profile default.
 
 ## Script Director And Script
 

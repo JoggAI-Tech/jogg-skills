@@ -16,6 +16,7 @@ from backend.services import video_studio_bgm
 from backend.services import video_studio_broll
 from backend.services import video_studio_bespoke_html
 from backend.services import video_studio_planner
+from backend.services import video_studio_visual_styles
 from backend.services.video_studio_mg_design import normalize_mg_design_doc
 from backend.services.video_studio_store import VideoStudioStore, ensure_project_governance
 from backend.services.video_studio_works import VideoStudioWorksStore, apply_mg_assets_to_scene_groups, build_render_snapshot, work_matches_project_snapshot
@@ -730,7 +731,9 @@ def update_mg_clip_edit_schema(project_id: str, mg_clip_id: str, req: MgClipEdit
     if not block_by_id:
         raise HTTPException(status_code=409, detail="MG clip has no structured edit_schema; migrate the HTML asset before editing")
     normalized: Dict[str, Dict[str, Any]] = {}
+    visual_style_profile = video_studio_visual_styles.resolve_visual_style_profile_from_project(project)
     for block_id, patch in req.overrides.items():
+        patch = dict(patch)
         block = block_by_id.get(str(block_id))
         if not block:
             raise HTTPException(status_code=422, detail=f"Unknown editable block: {block_id}")
@@ -740,6 +743,11 @@ def update_mg_clip_edit_schema(project_id: str, mg_clip_id: str, req: MgClipEdit
             raise HTTPException(status_code=422, detail=f"Properties not editable for {block_id}: {', '.join(invalid)}")
         if "color" in patch and str(block.get("kind") or "") == "group" and str(block.get("colorMode") or block.get("color_mode") or "") != "descendants":
             raise HTTPException(status_code=422, detail=f"Group color requires colorMode=descendants: {block_id}")
+        if "color" in patch and patch.get("color") is not None:
+            color_token = video_studio_visual_styles.semantic_color_token(visual_style_profile, patch.get("color"))
+            if not color_token:
+                raise HTTPException(status_code=422, detail=f"Color must come from the project visual style profile: {block_id}")
+            patch["color"] = color_token
         for value in patch.values():
             if value is not None and not isinstance(value, (str, int, float, bool)):
                 raise HTTPException(status_code=422, detail=f"Editable values must be scalar: {block_id}")

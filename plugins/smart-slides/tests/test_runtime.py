@@ -14,9 +14,10 @@ from pathlib import Path
 import httpx
 from fastapi.testclient import TestClient
 
+from backend.api import settings as smart_slides_settings
 from backend.api import video_studio
 from backend.main import app
-from backend.services import video_studio_broll, video_studio_planner, video_studio_works
+from backend.services import video_studio_broll, video_studio_captions, video_studio_planner, video_studio_works
 from backend import main as smart_slides_main
 from render import animated_overlay, ffmpeg_adapter
 
@@ -62,6 +63,83 @@ class LocalApiTest(unittest.TestCase):
                 os.environ.pop("SMART_SLIDES_ALREADY_SET", None)
             else:
                 os.environ["SMART_SLIDES_ALREADY_SET"] = old_set
+
+    def test_settings_api_saves_private_env_without_returning_secret(self) -> None:
+        old_home = os.environ.get("SMART_SLIDES_HOME")
+        old_jogg = os.environ.pop("JOGG_API_KEY", None)
+        old_pexels = os.environ.pop("PEXELS_API_KEY", None)
+        os.environ["SMART_SLIDES_HOME"] = self.temp_dir
+        try:
+            with patch.object(smart_slides_settings, "_validate_jogg", return_value=(True, "Jogg API key 已验证。")), patch.object(
+                smart_slides_settings, "_validate_pexels", return_value=(True, "Pexels API key 已验证。")
+            ):
+                response = self.client.put(
+                    "/api/v1/settings",
+                    json={"jogg_api_key": "jogg-secret", "pexels_api_key": "pexels-secret"},
+                )
+            self.assertEqual(response.status_code, 200, response.text)
+            self.assertNotIn("jogg-secret", response.text)
+            self.assertNotIn("pexels-secret", response.text)
+            env_path = Path(self.temp_dir) / ".env"
+            self.assertEqual(env_path.stat().st_mode & 0o777, 0o600)
+            self.assertIn("JOGG_API_KEY=jogg-secret", env_path.read_text(encoding="utf-8"))
+            status = self.client.get("/api/v1/settings")
+            self.assertTrue(status.json()["jogg_api_key_configured"])
+            self.assertEqual(set(status.json()), {"jogg_api_key_configured", "pexels_api_key_configured"})
+            self.assertNotIn("jogg-secret", status.text)
+            with patch.object(smart_slides_settings, "_validate_jogg", return_value=(True, "ok")):
+                removed = self.client.put("/api/v1/settings", json={"clear_pexels_api_key": True})
+            self.assertEqual(removed.status_code, 200, removed.text)
+            self.assertNotIn("PEXELS_API_KEY", env_path.read_text(encoding="utf-8"))
+        finally:
+            if old_home is None:
+                os.environ.pop("SMART_SLIDES_HOME", None)
+            else:
+                os.environ["SMART_SLIDES_HOME"] = old_home
+            if old_jogg is not None:
+                os.environ["JOGG_API_KEY"] = old_jogg
+            if old_pexels is not None:
+                os.environ["PEXELS_API_KEY"] = old_pexels
+
+    def test_jogg_settings_validation_uses_whoami_with_api_key_header(self) -> None:
+        response = httpx.Response(200, json={"code": 0, "data": {"id": "local-user"}})
+        with patch.object(smart_slides_settings.httpx, "get", return_value=response) as request:
+            valid, _message = smart_slides_settings._validate_jogg("test-jogg-key")
+        self.assertTrue(valid)
+        self.assertEqual(request.call_args.args[0], "https://api.jogg.ai/v2/user/whoami")
+        self.assertEqual(request.call_args.kwargs["headers"], {"X-Api-Key": "test-jogg-key"})
+
+    def test_jogg_settings_does_not_accept_ambiguous_success_or_overwrite_a_key(self) -> None:
+        ambiguous = httpx.Response(200, json={"data": {"id": "missing-code"}})
+        with patch.object(smart_slides_settings.httpx, "get", return_value=ambiguous):
+            valid, _message = smart_slides_settings._validate_jogg("not-a-key")
+        self.assertFalse(valid)
+
+        old_home = os.environ.get("SMART_SLIDES_HOME")
+        old_jogg = os.environ.pop("JOGG_API_KEY", None)
+        os.environ["SMART_SLIDES_HOME"] = self.temp_dir
+        env_path = Path(self.temp_dir) / ".env"
+        env_path.write_text("JOGG_API_KEY=known-good-key\n", encoding="utf-8")
+        try:
+            with patch.object(smart_slides_settings, "_validate_jogg", return_value=(False, "Jogg 未接受此 API key。")):
+                response = self.client.put("/api/v1/settings", json={"jogg_api_key": "not-a-key"})
+            self.assertEqual(response.status_code, 422, response.text)
+            self.assertEqual(env_path.read_text(encoding="utf-8"), "JOGG_API_KEY=known-good-key\n")
+        finally:
+            if old_home is None:
+                os.environ.pop("SMART_SLIDES_HOME", None)
+            else:
+                os.environ["SMART_SLIDES_HOME"] = old_home
+            if old_jogg is not None:
+                os.environ["JOGG_API_KEY"] = old_jogg
+
+    def test_settings_page_only_exposes_managed_configuration_status(self) -> None:
+        source = (Path(__file__).resolve().parents[1] / "runtime" / "frontend" / "src" / "SettingsApp.tsx").read_text(encoding="utf-8")
+        self.assertIn("JOGG_API_KEY", source)
+        self.assertIn("PEXELS_API_KEY", source)
+        self.assertNotIn("PIXABAY_API_KEY", source)
+        self.assertIn("docs.jogg.ai/api-reference/v2/QuickStart/GettingStarted", source)
+        self.assertIn("www.pexels.com/api/", source)
 
     def test_render_env_finds_macos_local_binaries_with_launchd_path(self) -> None:
         old_path = os.environ.get("PATH")
@@ -264,13 +342,13 @@ class LocalApiTest(unittest.TestCase):
                     "html_design": {
                         "custom_html": (
                             '<main class="ai-mg-layer" data-ai-generated-html="true"><svg viewBox="0 0 1920 1080">'
-                            '<path data-ai-edit-block="capital-path" data-ai-edit-kind="visual" d="M180 520 L880 280 L1440 620" stroke="#a3e635" stroke-width="28" fill="none"/>'
-                            '<g data-ai-edit-block="icon-chip" data-ai-edit-kind="visual"><rect x="700" y="180" width="180" height="180" fill="#67e8f9"/></g>'
-                            '<g data-ai-edit-block="icon-cloud" data-ai-edit-kind="visual"><circle cx="1360" cy="620" r="90" fill="#a3e635"/></g>'
+                            '<path data-ai-edit-block="capital-path" data-ai-edit-kind="visual" d="M180 520 L880 280 L1440 620" stroke="var(--mg-highlight)" stroke-width="28" fill="none"/>'
+                            '<g data-ai-edit-block="icon-chip" data-ai-edit-kind="visual"><rect x="700" y="180" width="180" height="180" fill="var(--mg-primary)"/></g>'
+                            '<g data-ai-edit-block="icon-cloud" data-ai-edit-kind="visual"><circle cx="1360" cy="620" r="90" fill="var(--mg-highlight)"/></g>'
                             '<text class="title" x="140" y="120" font-size="72">资本流向</text>'
                             '<text x="140" y="780" font-size="36">基础设施成为重心</text></svg></main>'
                         ),
-                        "custom_css": ".ai-mg-layer{position:absolute;inset:0;color:#fff}.title{font-size:64px}",
+                        "custom_css": ".ai-mg-layer{position:absolute;inset:0;color:var(--mg-ink)}.title{font-family:var(--mg-font-display);font-size:64px}",
                         "edit_schema": {"editable_text_selectors": [".title"]},
                     },
                 }],
@@ -491,7 +569,7 @@ class LocalApiTest(unittest.TestCase):
             "mg_director": {"version": "mg_director_v1", "enabled": True, "render_strategy": "llm_bespoke_html", "visual_system": "reveal"},
             "html_design": {
                 "custom_html": "<div class='hero'>主体</div>", "custom_css": ".hero{color:#fff}",
-                "edit_schema": {"editable_blocks": [{"id": "hero", "name": "主体", "kind": "text", "selector": ".hero", "allowed": ["text", "x"]}]},
+                "edit_schema": {"editable_blocks": [{"id": "hero", "name": "主体", "kind": "text", "selector": ".hero", "allowed": ["text", "x", "color"]}]},
             },
         }
         clip = {"version": "mg_clip_v1", "id": "mg:edit", "scene_id": "shot-edit", "bound_shots": ["shot-edit"], "design_doc": {"version": "mg_design_doc_v1"}}
@@ -510,6 +588,17 @@ class LocalApiTest(unittest.TestCase):
         preview = self.client.get(f"/api/v1/video-studio/projects/{project['id']}/composition-preview.html")
         self.assertEqual(preview.status_code, 200, preview.text)
         self.assertIn("--smart-slides-edit-x:22px", preview.text)
+        color = self.client.patch(
+            f"/api/v1/video-studio/projects/{project['id']}/mg-clips/mg:edit/edit-schema",
+            json={"overrides": {"hero": {"color": "#E85D3F"}}},
+        )
+        self.assertEqual(color.status_code, 200, color.text)
+        self.assertEqual(color.json()["overrides"]["hero"]["color"], "var(--mg-primary)")
+        invalid_color = self.client.patch(
+            f"/api/v1/video-studio/projects/{project['id']}/mg-clips/mg:edit/edit-schema",
+            json={"overrides": {"hero": {"color": "#22D3EE"}}},
+        )
+        self.assertEqual(invalid_color.status_code, 422, invalid_color.text)
         invalid = self.client.patch(
             f"/api/v1/video-studio/projects/{project['id']}/mg-clips/mg:edit/edit-schema",
             json={"overrides": {"hero": {"opacity": 0.5}}},
@@ -559,6 +648,78 @@ class LocalFfmpegAdapterTest(unittest.TestCase):
 
     def tearDown(self) -> None:
         shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+    def test_long_chinese_captions_are_split_into_timed_two_line_cues(self) -> None:
+        text = (
+            "人工智能正在从单点工具升级为能够规划任务、调用软件并检查结果的智能体，"
+            "这会改变研发、客服和内容生产的工作方式。"
+            "但模型幻觉、数据权限和推理成本仍然决定它能否真正进入核心业务流程。"
+        )
+        cues = video_studio_captions.build_caption_cues(text, 12.0)
+
+        self.assertGreater(len(cues), 1)
+        self.assertEqual(cues[0]["start_seconds"], 0.0)
+        self.assertEqual(cues[-1]["end_seconds"], 12.0)
+        self.assertEqual(
+            video_studio_captions.normalize_caption_text("".join(cue["text"].replace("\n", "") for cue in cues)),
+            video_studio_captions.normalize_caption_text(text),
+        )
+        for previous, cue in zip(cues, cues[1:]):
+            self.assertEqual(previous["end_seconds"], cue["start_seconds"])
+        for cue in cues:
+            lines = cue["text"].splitlines()
+            self.assertLessEqual(len(lines), 2)
+            self.assertTrue(all(video_studio_captions.caption_display_width(line) <= 36 for line in lines))
+            self.assertFalse(any(line.startswith(tuple("，。！？；、：,.!?;:")) for line in lines))
+
+    def test_unpunctuated_caption_is_hard_split_without_overflow(self) -> None:
+        text = "超长无标点字幕内容" * 18
+        cues = video_studio_captions.build_caption_cues(text, 18.0)
+
+        self.assertGreater(len(cues), 2)
+        self.assertEqual("".join(cue["text"].replace("\n", "") for cue in cues), text)
+        self.assertTrue(
+            all(
+                video_studio_captions.caption_display_width(line) <= 36
+                for cue in cues
+                for line in cue["text"].splitlines()
+            )
+        )
+
+    def test_srt_writer_uses_multiple_cues_and_safe_1080p_style(self) -> None:
+        text = "第一句先说明今天的核心变化，第二句解释这项变化为什么重要，第三句给出普通人可以立刻采取的行动。"
+        output = self.work_dir / "captions.srt"
+        ffmpeg_adapter._write_captions(
+            [{"id": "shot-1", "narration": text}],
+            [9.0],
+            {},
+            output,
+        )
+
+        srt = output.read_text(encoding="utf-8")
+        self.assertGreater(srt.count(" --> "), 1)
+        self.assertIn("00:00:09,000", srt)
+        caption_filter = ffmpeg_adapter._caption_filter(output)
+        self.assertIn("original_size=1920x1080", caption_filter)
+        self.assertIn("FontSize=18", caption_filter)
+        self.assertIn("MarginL=29", caption_filter)
+        self.assertIn("MarginR=29", caption_filter)
+        self.assertIn("MarginV=19", caption_filter)
+
+    def test_composition_preview_uses_the_same_timed_caption_cues(self) -> None:
+        text = "第一段字幕介绍核心事实，第二段字幕解释原因，第三段字幕给出结论和行动建议。"
+        preview = video_studio_planner.build_composition_preview_html(
+            {
+                "topic": "字幕预览",
+                "scene_groups": [{"shots": [{"id": "shot-1", "title": "正文", "narration": text, "duration_seconds": 8}]}],
+                "editor_state": {"shot_scripts": {}, "voice_assets_by_shot": {}},
+            }
+        )
+
+        self.assertIn("data-caption-cues=", preview)
+        self.assertIn("function syncCaption(scene, localSeconds)", preview)
+        self.assertIn("syncCaption(scenes[current], progress)", preview)
+        self.assertIn("white-space: pre-line", preview)
 
     def test_renders_podcastor_snapshot_with_audio_for_all_and_avatar_for_one(self) -> None:
         snapshot = {

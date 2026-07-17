@@ -6,15 +6,17 @@ This reference supplies the finishing system for a director-selected bespoke HTM
 
 ## Surface Tokens
 
-Use the original template values as the baseline:
+The original template values below are a legacy fallback, not the current project palette. Current output takes colors, type, line weights, glow, and timing from [visual-style-profiles.md](visual-style-profiles.md). Map the original roles to `--mg-surface`, `--mg-surface-recessed`, `--mg-outline`, `--mg-ink`, `--mg-primary`, and `--mg-highlight`; do not copy the navy/cyan values into authored HTML.
+
+The extracted fallback values were:
 
 - Main localized surface: `rgba(2,6,23,.34)`.
 - Recessed or texture surface: `rgba(2,6,23,.24)`.
 - Fine outline: `rgba(255,255,255,.14)`; secondary outline: `rgba(255,255,255,.12)`.
-- Text ink: `#F8FAFC`; accent comes from the selected visual system; use one warm highlight only for L1 or a decisive endpoint.
+- Text ink: `#F8FAFC`; the historical accent came from the visual system. Current accents come only from the project profile and remain within its accent budget.
 - When a local text surface floats above B-roll, use `backdrop-filter: blur(10px)` plus the fine outline. Do not use it to build an unrelated card grid.
 
-The plugin automatically converts inherited `#07111f` / `#020617` / `#0f172a` SVG rectangles with `fill-opacity` of 60% or more to a 42% source-derived surface. A wide 800px-or-larger SVG color field at 60% or more is reduced to 38% while retaining its own color. Preserve a genuinely opaque field only with `data-mg-opaque="true"`.
+Legacy imports may convert inherited `#07111f` / `#020617` / `#0f172a` SVG rectangles to a translucent source-derived surface. Newly authored assets must use profile variables and cannot contain those literals. Preserve a genuinely opaque field only with `data-mg-opaque="true"` and an explicit compatible material.
 
 ## Original Patterns
 

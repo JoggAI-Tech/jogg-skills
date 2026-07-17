@@ -91,7 +91,7 @@ This is a grammar library, not a template library. Select exactly one ID from ea
 
 - Choose the recipe from the narration's meaning, not from decorative preference.
 - Let `composition_id` define the spatial skeleton and `hero_device_id` define the first-read subject. Do not substitute one for the other.
-- Let `material_id` control finish only and `motion_id` control timing only.
+- Let `material_id` control finish only and `motion_id` control timing only. The project `visual_style_profile_id` controls palette, typography, line weight, glow policy, and motion personality; a material may apply only the bounded override documented in [visual-style-profiles.md](visual-style-profiles.md).
 - Let `visual_fx` add only subordinate atmosphere. When it is not `none`, require the selected effect to be visibly executed in at least one entry/build/hold QA frame.
 - Explain the content-specific transformation in `originality_note`; do not restate the IDs.
 - Make the HTML frame self-contained. Do not reserve an aperture, black box, transparent evidence window, or half-frame blank for B-roll or another track.

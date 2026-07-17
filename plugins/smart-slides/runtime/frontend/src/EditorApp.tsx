@@ -65,6 +65,15 @@ type HtmlSource = {
   clip_id?: string;
   overrides?: HtmlBlockOverrides;
 };
+type StyleSwatch = { role: string; color: string; token: string };
+
+const defaultStyleSwatches: StyleSwatch[] = [
+  { role: 'ink', color: '#F2EEE8', token: 'var(--mg-ink)' },
+  { role: 'muted', color: '#B6B4AE', token: 'var(--mg-muted)' },
+  { role: 'primary', color: '#E85D3F', token: 'var(--mg-primary)' },
+  { role: 'highlight', color: '#F1C453', token: 'var(--mg-highlight)' },
+  { role: 'danger', color: '#D7435B', token: 'var(--mg-danger)' },
+];
 
 const formatTime = (seconds: number) => {
   const value = Math.max(0, Math.round(seconds));
@@ -100,6 +109,23 @@ function selectedBroll(project: VideoStudioProject, shot: VideoStudioShot) {
   return shot.broll_options.find((option) => option.id === selectedId) ?? shot.broll_options.find((option) => option.asset_url || option.asset_path) ?? shot.broll_options[0];
 }
 
+function styleSwatchesFor(project: VideoStudioProject): StyleSwatch[] {
+  const extended = project as VideoStudioProject & {
+    visual_style_profile?: { palette?: Record<string, string> };
+    render_manifest?: (VideoStudioProject['render_manifest'] & { visual_style_profile?: { palette?: Record<string, string> } }) | null;
+  };
+  const direction = project.production_requirement_document?.html_mg_direction as
+    | ({ visual_style_profile?: { palette?: Record<string, string> } })
+    | undefined;
+  const palette = direction?.visual_style_profile?.palette
+    ?? extended.render_manifest?.visual_style_profile?.palette
+    ?? extended.visual_style_profile?.palette;
+  if (!palette) return defaultStyleSwatches;
+  return ['ink', 'muted', 'primary', 'highlight', 'danger', 'outline']
+    .filter((role) => Boolean(palette[role]))
+    .map((role) => ({ role, color: palette[role], token: `var(--mg-${role})` }));
+}
+
 function previewDocument(source: HtmlSource) {
   const markup = source.custom_html || '<div class="empty">这个分镜没有 HTML/MG 信息层</div>';
   return `<!doctype html><html><head><style>*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:transparent;color:#fff;font-family:Arial,sans-serif}${source.custom_css ?? ''}.empty{position:absolute;inset:0;display:grid;place-items:center;color:#94a3b8;font-size:28px}</style></head><body>${markup}</body></html>`;
@@ -133,6 +159,22 @@ export function EditorApp() {
   const compositionPreviewUrl = project?.composition_preview_url
     ? `${project.composition_preview_url}${project.composition_preview_url.includes('?') ? '&' : '?'}v=${previewNonce}`
     : '';
+  const workStatus = work?.status ?? 'idle';
+  const renderPercent = typeof work?.progress?.percent === 'number'
+    ? Math.round(work.progress.percent)
+    : workStatus === 'success' ? 100 : 0;
+  const finalVideoUrl = project?.final_video_url
+    || (typeof work?.output?.url === 'string' ? work.output.url : '');
+  const isRendering = ['queued', 'rendering', 'running'].includes(workStatus);
+  const renderStatusLabel = busy
+    ? status
+    : workStatus === 'success'
+      ? 'MP4 已完成，可打开或下载'
+      : isRendering
+        ? `正在渲染${work?.progress?.phase ? ` · ${String(work.progress.phase)}` : ''}`
+        : workStatus === 'failed'
+          ? `渲染失败${work?.error ? ` · ${work.error}` : ''}`
+          : status;
 
   const loadProject = async () => {
     setBusy(true);
@@ -284,7 +326,8 @@ export function EditorApp() {
     setBusy(true); setStatus('正在创建本地渲染任务');
     try {
       const response = await videoStudioApi.createWork(project.id);
-      setWork(response.work); setStatus(`本地任务：${response.work.status}`);
+      setWork(response.work);
+      setStatus(response.work.status === 'success' ? '本地 MP4 已完成' : `本地任务：${response.work.status}`);
     } catch (error) { setStatus(error instanceof Error ? error.message : '渲染任务创建失败'); }
     finally { setBusy(false); }
   };
@@ -301,7 +344,13 @@ export function EditorApp() {
         <div className="commands">
           <button className="icon-command" title="刷新项目" onClick={() => void loadProject()} disabled={busy}><RefreshCw size={18} /></button>
           <button className="command secondary" onClick={() => void createPreview()} disabled={busy}><MonitorPlay size={17} />刷新预览</button>
-          <button className="command" onClick={() => void createRender()} disabled={busy}><Film size={17} />渲染 MP4</button>
+          <button className={`command render-command ${workStatus === 'success' ? 'is-complete' : ''}`} onClick={() => void createRender()} disabled={busy} aria-busy={busy}>
+            {busy ? <LoaderCircle className="spin" size={17} /> : workStatus === 'success' ? <Check size={17} /> : <Film size={17} />}
+            {busy ? '正在处理' : workStatus === 'success' ? '已完成' : isRendering ? '渲染中' : '渲染 MP4'}
+          </button>
+          {finalVideoUrl && <a className="command result-command" href={finalVideoUrl} target="_blank" rel="noreferrer" title="打开已生成的 MP4">
+            <Download size={17} />打开 MP4
+          </a>}
         </div>
       </header>
 
@@ -341,7 +390,7 @@ export function EditorApp() {
           </nav>
           <div className="inspector-body">
             {activeTool === 'broll' && selectedShot && <BrollPanel shot={selectedShot} selected={broll} query={brollQuery} setQuery={setBrollQuery} candidates={candidates} onSearch={searchBroll} onChoose={chooseBroll} onDownload={downloadCandidate} />}
-            {activeTool === 'html' && selectedShot && <HtmlPanel source={htmlSource} onSaveLegacy={saveHtml} onSaveOverrides={saveHtmlBlockOverrides} />}
+            {activeTool === 'html' && selectedShot && <HtmlPanel source={htmlSource} palette={styleSwatchesFor(project)} onSaveLegacy={saveHtml} onSaveOverrides={saveHtmlBlockOverrides} />}
             {activeTool === 'avatar' && <AvatarPanel editorState={editorState} shot={selectedShot} />}
             {activeTool === 'bgm' && <BgmPanel project={project} tracks={bgmTracks} onUpdate={updateEditor} onSelect={async (trackId) => { const response = await videoStudioApi.selectBgmTrack(project.id, trackId); setProject(response.project); setStatus(`BGM 已应用：${response.track.title}`); }} />}
           </div>
@@ -349,7 +398,14 @@ export function EditorApp() {
       </section>
 
       <section className="timeline-band">
-        <div className="timeline-heading"><strong>画面 / HTML / 声音</strong><span>{work ? `渲染 ${work.status} · ${work.progress?.percent ?? 0}%` : status}</span>{busy && <LoaderCircle className="spin" size={16} />}</div>
+        <div className="timeline-heading">
+          <div className="timeline-title"><strong>画面 / HTML / 声音</strong><small>{shots.length} 个分镜 · {formatTime(duration)}</small></div>
+          <div className={`render-status ${workStatus === 'success' ? 'is-success' : workStatus === 'failed' ? 'is-failed' : isRendering || busy ? 'is-running' : ''}`} aria-live="polite">
+            {busy || isRendering ? <LoaderCircle className="spin" size={15} /> : workStatus === 'success' ? <Check size={15} /> : <Film size={15} />}
+            <span>{renderStatusLabel}</span>
+            {(busy || isRendering) && <b>{renderPercent}%</b>}
+          </div>
+        </div>
         <div className="timeline-scroll">
           {shots.map((shot, index) => <button key={shot.id} className={`timeline-shot ${shot.id === selectedShot?.id ? 'active' : ''}`} style={{ flexGrow: Math.max(1, shot.duration_seconds) }} onClick={() => selectShot(shot.id)}>
             <span>{String(index + 1).padStart(2, '0')} {shot.title}</span><i className="track visual-track" /><i className="track html-track" /><i className="track voice-track" />
@@ -368,10 +424,12 @@ function BrollPanel({ shot, selected, query, setQuery, candidates, onSearch, onC
 
 function HtmlPanel({
   source,
+  palette,
   onSaveLegacy,
   onSaveOverrides,
 }: {
   source: HtmlSource;
+  palette: StyleSwatch[];
   onSaveLegacy: (html: string, css: string) => void;
   onSaveOverrides: (clipId: string, overrides: HtmlBlockOverrides) => Promise<void>;
 }) {
@@ -399,6 +457,7 @@ function HtmlPanel({
         block={block}
         customHtml={htmlValue}
         values={values[block.id] ?? {}}
+        palette={palette}
         onChange={(property, value) => updateBlock(block, property, value)}
       />)}
       <button
@@ -438,11 +497,13 @@ function SemanticBlockFields({
   block,
   customHtml,
   values,
+  palette,
   onChange,
 }: {
   block: EditableBlock;
   customHtml: string;
   values: Partial<Record<EditableBlockProperty, EditableBlockValue>>;
+  palette: StyleSwatch[];
   onChange: (property: EditableBlockProperty, value: EditableBlockValue) => void;
 }) {
   const valueFor = (property: EditableBlockProperty) => {
@@ -470,7 +531,8 @@ function SemanticBlockFields({
         return <label className="field" key={property}><span>{labelFor[property]}</span><select value={String(valueFor(property) || 'none')} onChange={(event) => onChange(property, event.target.value)}>{semanticMotionOptions.map((motion) => <option key={motion} value={motion}>{motion}</option>)}</select></label>;
       }
       if (property === 'color') {
-        return <label className="field" key={property}><span>{labelFor[property]}</span><input type="color" value={String(valueFor(property) || '#ffffff')} onChange={(event) => onChange(property, event.target.value)} /></label>;
+        const selected = String(valueFor(property) || '');
+        return <div className="field" key={property}><span>{labelFor[property]}</span><div className="color-swatches" role="group" aria-label={labelFor[property]}>{palette.map((swatch) => <button type="button" key={swatch.role} className={selected === swatch.token ? 'active' : ''} style={{ backgroundColor: swatch.color }} title={swatch.role} aria-label={swatch.role} onClick={() => onChange(property, swatch.token)} />)}</div></div>;
       }
       if (property === 'text') {
         return <label className="field" key={property}><span>{labelFor[property]}</span><input value={String(valueFor(property))} onChange={(event) => onChange(property, event.target.value)} /></label>;

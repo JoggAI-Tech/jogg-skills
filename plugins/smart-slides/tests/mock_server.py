@@ -6,6 +6,8 @@ from __future__ import annotations
 import argparse
 from copy import deepcopy
 import json
+import threading
+import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from typing import Any
@@ -13,12 +15,18 @@ from urllib.parse import urlparse
 
 
 class Fixture:
-    def __init__(self, avatar_status: str, request_log: Path):
+    def __init__(self, avatar_status: str, request_log: Path, shot_count: int = 3, submit_delay_seconds: float = 0.0, submit_outcome: str = "accepted"):
         self.avatar_status = avatar_status
         self.request_log = request_log
         self.requests: list[dict[str, Any]] = []
         self.project: dict[str, Any] = {}
         self.work_snapshot: dict[str, Any] | None = None
+        self.shot_count = shot_count
+        self.submit_delay_seconds = submit_delay_seconds
+        self.submit_outcome = submit_outcome
+        self.active_submissions = 0
+        self.max_active_submissions = 0
+        self.lock = threading.Lock()
 
     def record(self, method: str, path: str, headers: dict[str, str], body: str = "") -> None:
         self.requests.append(
@@ -68,11 +76,13 @@ class Handler(BaseHTTPRequestHandler):
         length = int(self.headers.get("Content-Length", "0"))
         return self.rfile.read(length).decode("utf-8", errors="replace") if length else ""
 
-    def send_json(self, payload: dict[str, Any], status: int = 200) -> None:
+    def send_json(self, payload: dict[str, Any], status: int = 200, headers: dict[str, str] | None = None) -> None:
         encoded = json.dumps(payload).encode("utf-8")
         self.send_response(status)
         self.send_header("Content-Type", "application/json")
         self.send_header("Content-Length", str(len(encoded)))
+        for key, value in (headers or {}).items():
+            self.send_header(key, value)
         self.end_headers()
         self.wfile.write(encoded)
 
@@ -89,6 +99,8 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({"code": 0, "data": {"access_key": "mock-openapi-key"}})
         elif path == "/v2/voices":
             self.send_json({"code": 0, "data": {"voices": [{"voice_id": "zh-female-1"}]}})
+        elif path == "/v2/user/whoami":
+            self.send_json({"code": 0, "data": {"id": "mock-user"}})
         elif path == "/v2/avatars/public":
             self.send_json({"code": 0, "data": {"avatars": [{"id": 7}]}})
         elif path.startswith("/v2/avatar_video/"):
@@ -113,6 +125,8 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({"work": work})
         elif path == "/__requests":
             self.send_json({"requests": self.fixture.requests})
+        elif path == "/__stats":
+            self.send_json({"max_active_submissions": self.fixture.max_active_submissions})
         else:
             self.send_json({"error": "not found"}, 404)
 
@@ -132,7 +146,21 @@ class Handler(BaseHTTPRequestHandler):
             if payload.get("voice", {}).get("type") != "script" or payload.get("caption") is not False:
                 self.send_json({"code": 1, "msg": "invalid avatar request"}, 400)
                 return
-            self.send_json({"code": 0, "data": {"video_id": f"avatar-{len(creates)}", "status": "pending"}})
+            with fixture.lock:
+                fixture.active_submissions += 1
+                fixture.max_active_submissions = max(fixture.max_active_submissions, fixture.active_submissions)
+            try:
+                if fixture.submit_delay_seconds:
+                    time.sleep(fixture.submit_delay_seconds)
+                if fixture.submit_outcome == "rate_limited":
+                    self.send_json({"code": 429, "retryAfter": 17}, 429, {"Retry-After": "17"})
+                elif fixture.submit_outcome == "unknown":
+                    self.send_json({"code": 1, "message": "response was malformed"})
+                else:
+                    self.send_json({"code": 0, "data": {"video_id": f"avatar-{len(creates)}", "status": "pending"}})
+            finally:
+                with fixture.lock:
+                    fixture.active_submissions -= 1
         elif path == "/api/v1/video-studio/projects":
             payload = json.loads(body)
             fixture.project = build_project()
@@ -154,9 +182,8 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json(fixture.response_project())
         elif path.endswith("/generate-storyboard"):
             fixture.project["scene_groups"] = [{"id": "group-1", "shots": [
-                {"id": "shot-01", "title": "Opening", "narration": "opening", "duration_seconds": 6, "broll_options": []},
-                {"id": "shot-02", "title": "Middle", "narration": "middle", "duration_seconds": 6, "broll_options": []},
-                {"id": "shot-03", "title": "Ending", "narration": "ending", "duration_seconds": 6, "broll_options": []},
+                {"id": f"shot-{index:02d}", "title": f"Shot {index}", "narration": f"narration {index}", "duration_seconds": 6, "broll_options": []}
+                for index in range(1, fixture.shot_count + 1)
             ]}]
             self.send_json(fixture.response_project())
         elif path.endswith("/sync-voice-timing"):
@@ -214,8 +241,11 @@ def main() -> None:
     parser.add_argument("--port-file", type=Path, required=True)
     parser.add_argument("--request-log", type=Path, required=True)
     parser.add_argument("--avatar-status", choices=["completed", "failed", "pending"], default="completed")
+    parser.add_argument("--shot-count", type=int, default=3)
+    parser.add_argument("--submit-delay-seconds", type=float, default=0.0)
+    parser.add_argument("--submit-outcome", choices=["accepted", "rate_limited", "unknown"], default="accepted")
     args = parser.parse_args()
-    fixture = Fixture(args.avatar_status, args.request_log)
+    fixture = Fixture(args.avatar_status, args.request_log, max(1, args.shot_count), max(0.0, args.submit_delay_seconds), args.submit_outcome)
     server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
     server.fixture = fixture  # type: ignore[attr-defined]
     args.port_file.write_text(str(server.server_port), encoding="utf-8")
