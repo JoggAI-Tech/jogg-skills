@@ -53,6 +53,9 @@ AVATAR_GENDER="female"
 AVATAR_AGE="adult"
 PLANNING_FILE=""
 RESUME_PLANNING_FILE=""
+HTML_CLIP_ID=""
+HTML_FILE=""
+HTML_AT_SECONDS=""
 VOICE_ID="${JOGG_DEFAULT_VOICE_ID:-}"
 AVATAR_ID="${JOGG_DEFAULT_AVATAR_ID:-}"
 JOGG_EFFECTIVE_API_KEY=""
@@ -61,7 +64,11 @@ PROJECT_JSON='{}'
 HTTP_STATUS=""
 HTTP_BODY=""
 
-[[ -x "$SMART_SLIDES_TOOL_DIR/ffprobe" ]] && export PATH="$SMART_SLIDES_TOOL_DIR:$PATH"
+# A plugin-managed tool directory may hold platform-matched FFmpeg binaries.
+# Never download or replace binaries implicitly during a render command.
+if [[ -x "$SMART_SLIDES_TOOL_DIR/ffmpeg" || -x "$SMART_SLIDES_TOOL_DIR/ffprobe" ]]; then
+  export PATH="$SMART_SLIDES_TOOL_DIR:$PATH"
+fi
 
 log() { printf '[smart-slides] %s\n' "$*" >&2; }
 
@@ -72,6 +79,10 @@ usage:
   smart-slides.sh run --topic TEXT [--duration-seconds 600] [--avatar-mode MODE] [--planning-file PLAN.json]
   smart-slides.sh resume --run-id RUN_ID [--planning-file PLAN.json]
   smart-slides.sh status --run-id RUN_ID
+  smart-slides.sh html-status --run-id RUN_ID
+  smart-slides.sh apply-html --run-id RUN_ID --clip-id CLIP_ID --html-file ASSET.json
+  smart-slides.sh capture-html --run-id RUN_ID --clip-id CLIP_ID --at-seconds SECONDS
+  smart-slides.sh approve-html --run-id RUN_ID --clip-id CLIP_ID
   smart-slides.sh preview --run-id RUN_ID
   smart-slides.sh refresh-broll --run-id RUN_ID
   smart-slides.sh render --run-id RUN_ID
@@ -86,8 +97,8 @@ require_bin() { command -v "$1" >/dev/null 2>&1 || die "missing required binary:
 ensure_local_renderer() {
   local python_bin
   python_bin=$(ensure_python_runtime)
-  PYTHONPATH="$RUNTIME_ROOT" "$python_bin" -c 'from render.ffmpeg_adapter import ensure_renderer_available; ensure_renderer_available()' \
-    || die "local FFmpeg renderer is not ready"
+  PYTHONPATH="$RUNTIME_ROOT" "$python_bin" -c 'from render.ffmpeg_adapter import ensure_renderer_available; ensure_renderer_available(require_browser=True)' \
+    || die "local FFmpeg/Chrome renderer is not ready"
 }
 
 set_stage() {
@@ -148,7 +159,7 @@ state_mutate() {
 state_get() { jq -r "$1 // empty" "$STATE_PATH"; }
 
 emit_state() {
-  jq '{run_id,stage,topic,target_duration_seconds,project_id,avatar_mode,avatar_shot_ids,jogg_tasks:(.jogg_tasks|with_entries(.value|={video_id,status,audio_path,avatar_path})),broll_shot_ids,composition_preview_url,editor_url,work_id,final_video_url,error,updated_at}' "$STATE_PATH"
+  jq '{run_id,stage,topic,target_duration_seconds,actual_duration_seconds,project_id,avatar_mode,avatar_shot_ids,html_clip_checkpoints,pending_clip_ids,jogg_tasks:(.jogg_tasks|with_entries(.value|={video_id,status,audio_path,avatar_path})),broll_shot_ids,composition_preview_url,editor_url,work_id,final_video_url,error,updated_at}' "$STATE_PATH"
 }
 
 request() {
@@ -306,7 +317,7 @@ init_run() {
   STATE_PATH="$SMART_SLIDES_STATE_DIR/$RUN_ID.json"
   jq -n --arg run_id "$RUN_ID" --arg topic "$TOPIC" --argjson duration "$DURATION_SECONDS" --arg mode "$AVATAR_MODE" --arg planning_file "$PLANNING_FILE" \
     --arg style "$AVATAR_STYLE" --arg gender "$AVATAR_GENDER" --arg age "$AVATAR_AGE" --arg now "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-    '{version:"smart_slides_run_v1",run_id:$run_id,topic:$topic,target_duration_seconds:$duration,avatar_mode:$mode,planning_file:$planning_file,planning_applied:false,avatar_profile:{style:$style,gender:$gender,age:$age,voice_id:"",avatar_id:""},stage:"initialized",project_id:"",avatar_shot_ids:[],jogg_tasks:{},broll_shot_ids:[],composition_preview_url:"",preview_project_fingerprint:"",editor_url:"",work_id:"",render_project_fingerprint:"",final_video_url:"",error:"",created_at:$now,updated_at:$now}' > "$STATE_PATH"
+    '{version:"smart_slides_run_v1",run_id:$run_id,topic:$topic,target_duration_seconds:$duration,actual_duration_seconds:0,avatar_mode:$mode,planning_file:$planning_file,planning_applied:false,html_planning_fingerprint:"",html_clip_checkpoints:{},pending_clip_ids:[],avatar_profile:{style:$style,gender:$gender,age:$age,voice_id:"",avatar_id:""},stage:"initialized",project_id:"",avatar_shot_ids:[],jogg_tasks:{},broll_shot_ids:[],composition_preview_url:"",preview_project_fingerprint:"",editor_url:"",work_id:"",render_project_fingerprint:"",final_video_url:"",error:"",created_at:$now,updated_at:$now}' > "$STATE_PATH"
 }
 
 load_run() {
@@ -325,6 +336,309 @@ planning_input_available() {
 set_blocked_planning() {
   state_mutate '.stage="blocked_planning" | .error="A Codex-authored planning JSON is required before project creation or paid Jogg requests. Resume with --planning-file PLAN.json." | .updated_at=$updated_at' \
     --arg updated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
+
+planning_html_clips() {
+  jq -c '
+    def top_level_clips:
+      [(.design_plan.mg_clips[]?, .mg_layer.mg_clips[]?, .render_manifest.mg_clips[]?)
+       | select(type == "object")
+       | . as $clip
+       | (($clip.id // "") | tostring) as $id
+       | ($clip.render_strategy // $clip.html_render_strategy // "llm_bespoke_html") as $strategy
+       | select($id != "" and ($clip.enabled // true) != false and $strategy == "llm_bespoke_html")
+       | {id:$id,bound_shot_ids:[$clip.bound_shots[]? | tostring]}];
+    def shot_clips:
+      [.scene_groups[]?.shots[]?
+       | select(type == "object")
+       | . as $shot
+       | (($shot.id // "") | tostring) as $shot_id
+       | ($shot.mg_director // {}) as $director
+       | ($shot.information_layer // {}) as $info
+       | ($shot.html_design // {}) as $html
+       | ($shot.html_render_strategy // $html.render_strategy // $director.render_strategy // "") as $strategy
+       | select($shot_id != "")
+       | select(($shot.scene_role // "") == "broll_backdrop_overlay")
+       | select(($info.enabled // false) == true and ($director.enabled // false) == true)
+       | select($strategy == "llm_bespoke_html")
+       | {id:(($html.clip_id // $shot.mg_clip_id // $director.clip_id // ("mg:" + $shot_id)) | tostring),bound_shot_ids:[$shot_id]}];
+    (top_level_clips + shot_clips)
+    | map(select(.bound_shot_ids | length > 0))
+    | sort_by(.id)
+    | group_by(.id)
+    | map({id:.[0].id,bound_shot_ids:([.[] | .bound_shot_ids[]] | unique)})
+  ' "$PLANNING_FILE"
+}
+
+refresh_pending_clip_ids() {
+  state_mutate '
+    .pending_clip_ids=([.html_clip_checkpoints | to_entries[]? | select(.value.status != "approved") | .key] | sort)
+    | .updated_at=$updated_at
+  ' --arg updated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
+
+initialize_html_checkpoints() {
+  [[ -n "$PLANNING_FILE" && -f "$PLANNING_FILE" ]] || return 0
+  local fingerprint current clips checkpoints
+  fingerprint=$(shasum -a 256 "$PLANNING_FILE" | awk '{print $1}')
+  current=$(state_get '.html_planning_fingerprint')
+  if [[ "$fingerprint" == "$current" && "$(jq -r 'has("html_clip_checkpoints")' "$STATE_PATH")" == true ]]; then
+    refresh_pending_clip_ids
+    return 0
+  fi
+  clips=$(planning_html_clips)
+  checkpoints=$(jq -cn --argjson clips "$clips" '
+    reduce $clips[] as $clip ({};
+      .[$clip.id]={status:"pending",asset_path:"",keyframes:[],attempt:0,error:"",bound_shot_ids:$clip.bound_shot_ids})
+  ')
+  state_mutate '
+    .html_planning_fingerprint=$fingerprint
+    | .html_clip_checkpoints=$checkpoints
+    | .pending_clip_ids=([$checkpoints | to_entries[]? | .key] | sort)
+    | .updated_at=$updated_at
+  ' --arg fingerprint "$fingerprint" --argjson checkpoints "$checkpoints" --arg updated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
+
+ensure_html_ready() {
+  initialize_html_checkpoints
+  refresh_pending_clip_ids
+  if [[ "$(jq '.pending_clip_ids | length' "$STATE_PATH")" != 0 ]]; then
+    state_mutate '.stage="waiting_html" | .error="" | .updated_at=$updated_at' \
+      --arg updated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    return 11
+  fi
+}
+
+html_checkpoint_exists() {
+  jq -e --arg id "$1" '.html_clip_checkpoints[$id] != null' "$STATE_PATH" >/dev/null
+}
+
+html_checkpoint_dir() {
+  printf '%s/html/%s' "$SMART_SLIDES_HOME" "$RUN_ID"
+}
+
+html_checkpoint_stem() {
+  sha256_text "$1"
+}
+
+set_html_checkpoint_error() {
+  local clip_id=$1 message=$2
+  state_mutate '
+    .html_clip_checkpoints[$id].status="qa_failed"
+    | .html_clip_checkpoints[$id].error=$error
+    | .stage="waiting_html"
+    | .error=""
+    | .updated_at=$updated_at
+  ' --arg id "$clip_id" --arg error "$message" --arg updated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  refresh_pending_clip_ids
+}
+
+apply_html_asset() {
+  local clip_id=$1 input_file=$2 checkpoint_dir stem asset_path page_path python_bin validation_error
+  initialize_html_checkpoints
+  html_checkpoint_exists "$clip_id" || die "unknown HTML clip id: $clip_id"
+  state_mutate '.html_clip_checkpoints[$id].attempt=((.html_clip_checkpoints[$id].attempt // 0) + 1)' --arg id "$clip_id"
+  [[ -f "$input_file" ]] || { set_html_checkpoint_error "$clip_id" "HTML asset file not found: $input_file"; emit_state; return 0; }
+  checkpoint_dir=$(html_checkpoint_dir); mkdir -p "$checkpoint_dir"
+  stem=$(html_checkpoint_stem "$clip_id")
+  asset_path="$checkpoint_dir/$stem.json"
+  page_path="$checkpoint_dir/$stem.html"
+  python_bin=$(ensure_python_runtime)
+  if ! validation_error=$(PYTHONPATH="$RUNTIME_ROOT" "$python_bin" - "$PLANNING_FILE" "$clip_id" "$input_file" "$asset_path" "$page_path" "$(jq -c --arg id "$clip_id" '.html_clip_checkpoints[$id].bound_shot_ids' "$STATE_PATH")" <<'PY' 2>&1
+import json
+import sys
+from copy import deepcopy
+from pathlib import Path
+
+from backend.services import video_studio_bespoke_html
+
+plan_path, clip_id, input_path, output_path, page_path, bound_json = sys.argv[1:]
+plan = json.loads(Path(plan_path).read_text(encoding="utf-8"))
+raw = Path(input_path).read_text(encoding="utf-8")
+bound_ids = [str(item) for item in json.loads(bound_json)]
+try:
+    parsed = json.loads(raw)
+except json.JSONDecodeError:
+    parsed = {"custom_html": raw, "custom_css": "", "edit_schema": {}}
+if not isinstance(parsed, dict):
+    raise SystemExit("HTML asset must be a JSON object or an HTML fragment")
+if isinstance(parsed.get("html_design_by_shot"), dict):
+    supplied_by_shot = parsed["html_design_by_shot"]
+else:
+    supplied = parsed.get("html_design") if isinstance(parsed.get("html_design"), dict) else parsed
+    supplied_by_shot = {shot_id: supplied for shot_id in bound_ids}
+
+shots_by_id = {
+    str(shot.get("id") or ""): shot
+    for group in plan.get("scene_groups") or [] if isinstance(group, dict)
+    for shot in group.get("shots") or [] if isinstance(shot, dict)
+}
+missing = [shot_id for shot_id in bound_ids if shot_id not in shots_by_id]
+if missing:
+    raise SystemExit("planned shot not found for clip: " + ", ".join(missing))
+
+candidate_shots = []
+for shot_id in bound_ids:
+    supplied = supplied_by_shot.get(shot_id)
+    if not isinstance(supplied, dict):
+        raise SystemExit(f"HTML asset is missing design for {shot_id}")
+    shot = deepcopy(shots_by_id[shot_id])
+    existing = shot.get("html_design") if isinstance(shot.get("html_design"), dict) else {}
+    shot["html_render_strategy"] = "llm_bespoke_html"
+    shot["html_design"] = {**existing, **supplied, "clip_id": clip_id, "render_strategy": "llm_bespoke_html"}
+    candidate_shots.append(shot)
+
+try:
+    prepared = video_studio_bespoke_html.prepare_bespoke_html_scene_groups(
+        str(plan.get("topic") or ""), [{"id": "html-checkpoint", "shots": candidate_shots}]
+    )
+except Exception as exc:
+    raise SystemExit(str(exc)) from exc
+
+designs = {str(shot["id"]): shot["html_design"] for shot in prepared[0]["shots"]}
+validations = {
+    shot_id: design.get("ai_html_generation", {}).get("validation", {})
+    for shot_id, design in designs.items()
+}
+first_design = designs[bound_ids[0]]
+document = """<!doctype html><html><head><meta charset=\"utf-8\"><style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:transparent}
+body{position:relative}
+%s
+</style></head><body>%s</body></html>""" % (
+    first_design.get("custom_css", ""), first_design.get("custom_html", "")
+)
+Path(page_path).write_text(document, encoding="utf-8")
+Path(output_path).write_text(json.dumps({
+    "version": "smart_slides_html_checkpoint_v1",
+    "clip_id": clip_id,
+    "bound_shot_ids": bound_ids,
+    "html_design_by_shot": designs,
+    "validation_by_shot": validations,
+    "preview_page_path": page_path,
+}, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+PY
+  ); then
+    rm -f "$asset_path" "$page_path"
+    validation_error=$(printf '%s' "$validation_error" | tail -n 1)
+    set_html_checkpoint_error "$clip_id" "${validation_error:-HTML contract validation failed}"
+    emit_state
+    return 0
+  fi
+  state_mutate '
+    .html_clip_checkpoints[$id].status="generated"
+    | .html_clip_checkpoints[$id].asset_path=$asset_path
+    | .html_clip_checkpoints[$id].keyframes=[]
+    | .html_clip_checkpoints[$id].error=""
+    | .stage="waiting_html"
+    | .error=""
+    | .updated_at=$updated_at
+  ' --arg id "$clip_id" --arg asset_path "$asset_path" --arg updated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  refresh_pending_clip_ids
+  emit_state
+}
+
+capture_html_asset() {
+  local clip_id=$1 at_seconds=$2 asset_path page_path output_path checkpoint_dir stem python_bin capture_error
+  initialize_html_checkpoints
+  html_checkpoint_exists "$clip_id" || die "unknown HTML clip id: $clip_id"
+  [[ "$at_seconds" =~ ^[0-9]+([.][0-9]+)?$ ]] || die '--at-seconds must be a non-negative number'
+  asset_path=$(state_get ".html_clip_checkpoints[\"$clip_id\"].asset_path")
+  [[ -n "$asset_path" && -f "$asset_path" ]] || { set_html_checkpoint_error "$clip_id" "Apply a valid HTML asset before capture"; emit_state; return 0; }
+  page_path=$(jq -r '.preview_page_path // empty' "$asset_path")
+  [[ -n "$page_path" && -f "$page_path" ]] || { set_html_checkpoint_error "$clip_id" "HTML preview page is missing; apply the asset again"; emit_state; return 0; }
+  checkpoint_dir=$(html_checkpoint_dir); stem=$(html_checkpoint_stem "$clip_id")
+  output_path="$checkpoint_dir/$stem-keyframe-$(printf '%.3f' "$at_seconds" | tr '.' '_').png"
+  python_bin=$(ensure_python_runtime)
+  if ! capture_error=$(PYTHONPATH="$RUNTIME_ROOT" "$python_bin" - "$page_path" "$at_seconds" "$output_path" <<'PY' 2>&1
+import sys
+from render import ffmpeg_adapter
+
+if not hasattr(ffmpeg_adapter, "capture_html_keyframe"):
+    raise SystemExit("local renderer does not expose capture_html_keyframe; update the bundled renderer")
+ffmpeg_adapter.capture_html_keyframe(sys.argv[1], float(sys.argv[2]), sys.argv[3])
+PY
+  ); then
+    rm -f "$output_path"
+    capture_error=$(printf '%s' "$capture_error" | tail -n 1)
+    set_html_checkpoint_error "$clip_id" "${capture_error:-HTML keyframe capture failed}"
+    emit_state
+    return 0
+  fi
+  [[ -s "$output_path" ]] || { set_html_checkpoint_error "$clip_id" "HTML keyframe capture produced an empty image"; emit_state; return 0; }
+  state_mutate '
+    .html_clip_checkpoints[$id].status="generated"
+    | .html_clip_checkpoints[$id].keyframes=(([
+        .html_clip_checkpoints[$id].keyframes[]? | select((.at_seconds | tonumber) != $at)
+      ] + [{at_seconds:$at,path:$path}]) | sort_by(.at_seconds))
+    | .html_clip_checkpoints[$id].error=""
+    | .stage="waiting_html"
+    | .updated_at=$updated_at
+  ' --arg id "$clip_id" --argjson at "$at_seconds" --arg path "$output_path" --arg updated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  refresh_pending_clip_ids
+  emit_state
+}
+
+approve_html_asset() {
+  local clip_id=$1 asset_path keyframe_path
+  initialize_html_checkpoints
+  html_checkpoint_exists "$clip_id" || die "unknown HTML clip id: $clip_id"
+  asset_path=$(state_get ".html_clip_checkpoints[\"$clip_id\"].asset_path")
+  if [[ -z "$asset_path" || ! -f "$asset_path" ]] || ! jq -e '
+    (.validation_by_shot | type == "object" and length > 0)
+    and all(.validation_by_shot[]; ((.errors // []) | length) == 0)
+  ' "$asset_path" >/dev/null; then
+    set_html_checkpoint_error "$clip_id" "HTML asset has not passed the extracted Podcastor validation contract"
+    emit_state
+    return 0
+  fi
+  if [[ "$(jq --arg id "$clip_id" '.html_clip_checkpoints[$id].keyframes | length' "$STATE_PATH")" == 0 ]]; then
+    set_html_checkpoint_error "$clip_id" "Capture and inspect at least one keyframe before approval"
+    emit_state
+    return 0
+  fi
+  while IFS= read -r keyframe_path; do
+    if [[ -z "$keyframe_path" || ! -s "$keyframe_path" ]]; then
+      set_html_checkpoint_error "$clip_id" "A captured HTML keyframe is missing or empty"
+      emit_state
+      return 0
+    fi
+  done < <(jq -r --arg id "$clip_id" '.html_clip_checkpoints[$id].keyframes[]?.path' "$STATE_PATH")
+  state_mutate '
+    .html_clip_checkpoints[$id].status="approved"
+    | .html_clip_checkpoints[$id].error=""
+    | .updated_at=$updated_at
+  ' --arg id "$clip_id" --arg updated_at "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  refresh_pending_clip_ids
+  if [[ "$(jq '.pending_clip_ids | length' "$STATE_PATH")" == 0 ]]; then
+    set_stage html_ready
+  else
+    set_stage waiting_html
+  fi
+  emit_state
+}
+
+build_effective_planning_file() {
+  local effective next asset_path
+  effective=$(mktemp "$SMART_SLIDES_STATE_DIR/.planning.XXXXXX")
+  cp "$PLANNING_FILE" "$effective"
+  while IFS= read -r asset_path; do
+    [[ -n "$asset_path" && -f "$asset_path" ]] || { rm -f "$effective"; die "approved HTML checkpoint asset is missing"; }
+    next=$(mktemp "$SMART_SLIDES_STATE_DIR/.planning.XXXXXX")
+    jq --slurpfile asset "$asset_path" '
+      ($asset[0].html_design_by_shot // {}) as $designs
+      | .scene_groups = [(.scene_groups // [])[]
+          | .shots = [(.shots // [])[]
+              | . as $shot
+              | (($shot.id // "") | tostring) as $shot_id
+              | if $designs[$shot_id] then
+                  .html_render_strategy="llm_bespoke_html"
+                  | .html_design=((.html_design // {}) + $designs[$shot_id])
+                else . end]]
+    ' "$effective" > "$next"
+    mv "$next" "$effective"
+  done < <(jq -r '.html_clip_checkpoints[]? | select(.status == "approved") | .asset_path' "$STATE_PATH")
+  printf '%s' "$effective"
 }
 
 fetch_project() {
@@ -357,7 +671,10 @@ ensure_planning() {
   fi
   ensure_project
   if [[ "$(state_get '.planning_applied')" != true && -n "$PLANNING_FILE" ]]; then
-    local_api_request PATCH "/projects/$(state_get '.project_id')/planning-state" "$(jq -c . "$PLANNING_FILE")"
+    local effective_planning_file
+    effective_planning_file=$(build_effective_planning_file)
+    local_api_request PATCH "/projects/$(state_get '.project_id')/planning-state" "$(jq -c . "$effective_planning_file")"
+    rm -f "$effective_planning_file"
     state_mutate '.planning_applied=true'
   fi
   fetch_project
@@ -555,14 +872,54 @@ ensure_jogg_assets() {
   set_stage jogg_assets_ready
 }
 
+audio_duration_seconds() {
+  local audio_path=$1 duration
+  duration=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$audio_path" 2>/dev/null | tr -d '[:space:]') || return 1
+  [[ "$duration" =~ ^[0-9]+([.][0-9]+)?$ ]] || return 1
+  awk -v value="$duration" 'BEGIN { if (value < 0.1 || value > 3600) exit 1; printf "%.3f", value }'
+}
+
+sync_jogg_voice_timing() {
+  local project_id audio_path shot_id measured durations body actual changed
+  project_id=$(state_get '.project_id')
+  [[ -n "$project_id" ]] || die "run state has no project_id"
+  durations='{}'
+  while IFS= read -r shot_id; do
+    audio_path=$(state_get ".jogg_tasks[\"$shot_id\"].audio_path")
+    if [[ -z "$audio_path" || ! -f "$audio_path" ]]; then
+      state_mutate '.stage="blocked_jogg_recovery" | .error=("Jogg audio is missing for " + $id + "; refusing to infer a timeline")' --arg id "$shot_id"
+      return 11
+    fi
+    if ! measured=$(audio_duration_seconds "$audio_path"); then
+      state_mutate '.stage="blocked_jogg_recovery" | .error=("Could not measure Jogg audio duration for " + $id + "; refusing to infer a timeline")' --arg id "$shot_id"
+      return 11
+    fi
+    durations=$(jq -c --arg id "$shot_id" --argjson duration "$measured" '.[$id]=$duration' <<< "$durations")
+  done < <(jq -r '.jogg_tasks|keys[]' "$STATE_PATH")
+  body=$(jq -cn --argjson durations "$durations" '{voice_durations_by_shot:$durations}')
+  log "synchronizing shot timing to measured Jogg narration"
+  local_api_request POST "/projects/$project_id/sync-voice-timing" "$body"
+  actual=$(jq -r '.actual_duration_seconds // 0' <<< "$HTTP_BODY")
+  changed=$(jq '(.updated_shot_ids // []) | length' <<< "$HTTP_BODY")
+  if [[ "$changed" =~ ^[1-9][0-9]*$ ]]; then
+    # Timing changes invalidate only previews/works. Jogg checkpoints remain
+    # intact and B-roll is re-evaluated against the new shot duration below.
+    state_mutate '.actual_duration_seconds=$actual | .composition_preview_url="" | .preview_project_fingerprint="" | .work_id="" | .render_project_fingerprint="" | .final_video_url="" | .error=""' --argjson actual "$actual"
+  else
+    state_mutate '.actual_duration_seconds=$actual | .error=""' --argjson actual "$actual"
+  fi
+}
+
 ensure_broll() {
   fetch_project
-  local targets shots shot_id has_asset project_id=''
+  local targets shots shot shot_id duration has_asset project_id=''
   targets=$(jq -c '.avatar_shot_ids' "$STATE_PATH"); shots=$(shots_json); project_id=$(state_get '.project_id')
-  while IFS= read -r shot_id; do
+  while IFS= read -r shot; do
+    shot_id=$(jq -r '.id' <<< "$shot")
+    duration=$(jq -r '.duration_seconds' <<< "$shot")
     jq -e --arg id "$shot_id" 'index($id)!=null' <<< "$targets" >/dev/null && continue
     fetch_project
-    has_asset=$(jq -r --arg id "$shot_id" '[.scene_groups[]?.shots[]?|select(.id==$id)|.broll_options[]?|select((.asset_path//"")!="" or (.asset_url//"")!="")]|length>0' <<< "$PROJECT_JSON")
+    has_asset=$(jq -r --arg id "$shot_id" --argjson duration "$duration" '[.scene_groups[]?.shots[]?|select(.id==$id)|.broll_options[]?|select(((.asset_path//"")!="" or (.asset_url//"")!="") and ((((.duration_seconds // 0)|tonumber? // 0) + 0.25) >= $duration))]|length>0' <<< "$PROJECT_JSON")
     if [[ "$has_asset" != true ]]; then
       log "downloading B-roll for $shot_id"
       request POST "${SMART_SLIDES_BASE_URL%/}/api/v1/video-studio/projects/$project_id/shots/$shot_id/broll-assets" ''
@@ -573,7 +930,7 @@ ensure_broll() {
         return 11
       fi
     fi
-  done < <(jq -r '.[].id' <<< "$shots")
+  done < <(jq -c '.[]' <<< "$shots")
   state_mutate '.broll_shot_ids=$ids' --argjson ids "$(jq -c --argjson targets "$targets" '[.[].id]-$targets' <<< "$shots")"
   set_stage broll_ready
 }
@@ -637,7 +994,7 @@ ensure_render() {
   fetch_project
   project_fingerprint=$(project_render_fingerprint)
   render_fingerprint=$(state_get '.render_project_fingerprint')
-  if [[ -n "$work_id" && -z "$render_fingerprint" ]]; then
+  if [[ -n "$work_id" ]]; then
     work_snapshot=''
     request GET "${SMART_SLIDES_BASE_URL%/}/api/v1/video-studio/works/$work_id" ''
     if [[ "$HTTP_STATUS" =~ ^2[0-9][0-9]$ ]]; then
@@ -652,6 +1009,7 @@ ensure_render() {
       render_fingerprint=$snapshot_fingerprint
       state_mutate '.render_project_fingerprint=$fingerprint' --arg fingerprint "$snapshot_fingerprint"
     else
+      log "saved work snapshot no longer matches current render inputs"
       work_id=''
       state_mutate '.work_id="" | .render_project_fingerprint="" | .final_video_url=""'
     fi
@@ -671,10 +1029,12 @@ ensure_render() {
 }
 
 run_until_preview() {
+  ensure_html_ready || return $?
   start_local_service
   ensure_planning || return $?
   resolve_jogg_api_key; resolve_profile
   ensure_jogg_assets || return $?
+  sync_jogg_voice_timing || return $?
   ensure_broll || return $?
   ensure_preview
 }
@@ -713,6 +1073,21 @@ parse_resume_args() {
     PLANNING_FILE=$supplied_planning_file
     RESUME_PLANNING_FILE=$supplied_planning_file
   fi
+}
+
+parse_html_action_args() {
+  local requested_run_id=''
+  while (($#)); do
+    case "$1" in
+      --run-id) requested_run_id=${2:-}; shift 2 ;;
+      --clip-id) HTML_CLIP_ID=${2:-}; shift 2 ;;
+      --html-file) HTML_FILE=${2:-}; shift 2 ;;
+      --at-seconds) HTML_AT_SECONDS=${2:-}; shift 2 ;;
+      *) die "unknown $ACTION option: $1" ;;
+    esac
+  done
+  [[ -n "$requested_run_id" ]] || die '--run-id is required'
+  load_run "$requested_run_id"
 }
 
 handle_checkpoint() {
@@ -754,9 +1129,25 @@ main() {
     resume)
       parse_resume_args "$@"; acquire_run_lock
       if [[ -n "$RESUME_PLANNING_FILE" ]]; then
-        state_mutate '.planning_file=$planning_file | .planning_applied=false | .avatar_shot_ids=[] | .error=""' --arg planning_file "$RESUME_PLANNING_FILE"
+        state_mutate '.planning_file=$planning_file | .planning_applied=false | .html_planning_fingerprint="" | .html_clip_checkpoints={} | .pending_clip_ids=[] | .avatar_shot_ids=[] | .error=""' --arg planning_file "$RESUME_PLANNING_FILE"
       fi
       if run_until_preview && ensure_render; then emit_state; else handle_checkpoint "$?"; fi ;;
+    html-status)
+      parse_html_action_args "$@"; acquire_run_lock; initialize_html_checkpoints; refresh_pending_clip_ids; emit_state ;;
+    apply-html)
+      parse_html_action_args "$@"; acquire_run_lock
+      [[ -n "$HTML_CLIP_ID" ]] || die '--clip-id is required'
+      [[ -n "$HTML_FILE" ]] || die '--html-file is required'
+      apply_html_asset "$HTML_CLIP_ID" "$HTML_FILE" ;;
+    capture-html)
+      parse_html_action_args "$@"; acquire_run_lock
+      [[ -n "$HTML_CLIP_ID" ]] || die '--clip-id is required'
+      [[ -n "$HTML_AT_SECONDS" ]] || die '--at-seconds is required'
+      capture_html_asset "$HTML_CLIP_ID" "$HTML_AT_SECONDS" ;;
+    approve-html)
+      parse_html_action_args "$@"; acquire_run_lock
+      [[ -n "$HTML_CLIP_ID" ]] || die '--clip-id is required'
+      approve_html_asset "$HTML_CLIP_ID" ;;
     preview)
       parse_run_id "$@"; acquire_run_lock
       if run_until_preview; then emit_state; else handle_checkpoint "$?"; fi ;;
@@ -764,7 +1155,9 @@ main() {
       parse_run_id "$@"; acquire_run_lock
       refresh_broll ;;
     render)
-      parse_run_id "$@"; acquire_run_lock; ensure_local_renderer; start_local_service
+      parse_run_id "$@"; acquire_run_lock
+      if ensure_html_ready; then :; else handle_checkpoint "$?"; return; fi
+      ensure_local_renderer; start_local_service
       if ensure_render; then emit_state; else handle_checkpoint "$?"; fi ;;
     status)
       parse_run_id "$@"; acquire_run_lock; refresh_status; emit_state ;;

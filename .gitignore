@@ -5,3 +5,6 @@
 **/.idea/
 **/.git/
 .firecrawl/
+**/node_modules/
+**/__pycache__/
+**/*.pyc

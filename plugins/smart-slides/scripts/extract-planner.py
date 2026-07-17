@@ -125,6 +125,118 @@ def apply_local_preview_adapters(output: str) -> str:
     return output
 
 
+def apply_local_mg_adapters(output: str) -> str:
+    """Reapply local continuous-MG preview and CSS safety adapters."""
+    replacements = [
+        (
+            'def _minify_custom_css(raw_css: str) -> str:\n'
+            '    text = re.sub(r"(?is)/\\*.*?\\*/", "", raw_css or "")\n'
+            '    text = re.sub(r"\\s+", " ", text)\n'
+            '    text = re.sub(r"\\s*([{}:;,>+~])\\s*", r"\\1", text)\n'
+            '    text = re.sub(r";}", "}", text)\n'
+            '    return text.strip()\n',
+            'def _minify_custom_css(raw_css: str) -> str:\n'
+            '    text = re.sub(r"(?is)/\\*.*?\\*/", "", raw_css or "")\n'
+            '    text = re.sub(r"\\s+", " ", text)\n'
+            '    # CSS calc() requires whitespace around binary + and - operators. Keeping\n'
+            '    # \'+\' out of the punctuation compactor also remains valid for sibling\n'
+            '    # selectors while preserving authored animation delays.\n'
+            '    text = re.sub(r"\\s*([{}:;,>~])\\s*", r"\\1", text)\n'
+            '    text = re.sub(r";}", "}", text)\n'
+            '    return text.strip()\n',
+        ),
+        (
+            '        html_enabled = _shot_uses_html(shot)\n'
+            '        html_overlay = ""\n'
+            '        if html_enabled:\n'
+            '            html_design = _html_design_for_preview(shot, html_design_overrides)\n'
+            '            mg_clip = mg_clip_by_shot.get(shot_id) or _mg_clip_for_preview(shot, html_design)\n'
+            '            html_layer_markup = _html_layer_markup_for_preview(shot, info, html_design, mg_clip)\n',
+            '        html_enabled = _shot_uses_html(shot)\n'
+            '        html_overlay = ""\n'
+            '        mg_clip_offset = 0.0\n'
+            '        if html_enabled:\n'
+            '            html_design = _html_design_for_preview(shot, html_design_overrides)\n'
+            '            mg_clip = mg_clip_by_shot.get(shot_id) or _mg_clip_for_preview(shot, html_design)\n'
+            '            clip_offsets = mg_clip.get("shot_offsets") if isinstance(mg_clip.get("shot_offsets"), dict) else {}\n'
+            '            mg_clip_offset = max(\n'
+            '                0.0,\n'
+            '                _positive_float(shot.get("mg_clip_offset_seconds"), _positive_float(clip_offsets.get(shot_id), 0.0)),\n'
+            '            )\n'
+            '            html_layer_markup = _html_layer_markup_for_preview(shot, info, html_design, mg_clip)\n',
+        ),
+        (
+            '            <section class="scene{\' scene--html\' if html_enabled else \'\'}" data-index="{index}">\n',
+            '            <section class="scene{\' scene--html\' if html_enabled else \'\'}" data-index="{index}" data-shot-id="{html.escape(shot_id, quote=True)}" data-mg-clip-offset="{mg_clip_offset:.3f}">\n',
+        ),
+        (
+            '    function activeVideo() {{ return scenes[current]?.querySelector(\'video\'); }}\n'
+            '    function activeVoice() {{ return scenes[current]?.querySelector(\'audio.voice-audio\'); }}\n'
+            '    function syncVideos() {{\n',
+            '    function activeVideo() {{ return scenes[current]?.querySelector(\'video\'); }}\n'
+            '    function activeVoice() {{ return scenes[current]?.querySelector(\'audio.voice-audio\'); }}\n'
+            '    function setMgAnimationTime(animation, timeMs, shouldPlay) {{\n'
+            '      try {{\n'
+            '        animation.pause();\n'
+            '        animation.currentTime = timeMs;\n'
+            '        const timing = animation.effect?.getComputedTiming?.();\n'
+            '        const endTime = Number(timing?.endTime);\n'
+            '        if (shouldPlay && (!Number.isFinite(endTime) || timeMs < endTime)) animation.play();\n'
+            '      }} catch (_) {{}}\n'
+            '    }}\n'
+            '    function seekMgScene(scene, localSeconds, shouldPlay) {{\n'
+            '      if (!scene) return;\n'
+            '      const offsetSeconds = Math.max(0, Number(scene.dataset.mgClipOffset) || 0);\n'
+            '      const timeMs = (offsetSeconds + Math.max(0, Number(localSeconds) || 0)) * 1000;\n'
+            '      const overlay = scene.querySelector(\'.info-layer\');\n'
+            '      for (const animation of overlay?.getAnimations({{subtree: true}}) || []) {{\n'
+            '        setMgAnimationTime(animation, timeMs, shouldPlay);\n'
+            '      }}\n'
+            '      const frame = scene.querySelector(\'iframe.custom-html-frame\');\n'
+            '      if (!frame) return;\n'
+            '      try {{\n'
+            '        const frameDocument = frame.contentDocument;\n'
+            '        if (!frameDocument || frameDocument.readyState === \'loading\') {{\n'
+            '          frame.addEventListener(\'load\', () => {{\n'
+            '            const active = scenes[current] === scene;\n'
+            '            seekMgScene(scene, active ? progress : 0, active && playing);\n'
+            '          }}, {{once: true}});\n'
+            '          return;\n'
+            '        }}\n'
+            '        for (const animation of frameDocument.getAnimations({{subtree: true}})) {{\n'
+            '          setMgAnimationTime(animation, timeMs, shouldPlay);\n'
+            '        }}\n'
+            '      }} catch (_) {{}}\n'
+            '    }}\n'
+            '    function syncVideos() {{\n',
+        ),
+        (
+            '      scenes.forEach((scene, i) => scene.classList.toggle(\'active\', i === current));\n',
+            '      scenes.forEach((scene, i) => {{\n'
+            '        const active = i === current;\n'
+            '        scene.classList.toggle(\'active\', active);\n'
+            '        seekMgScene(scene, 0, active && playing);\n'
+            '      }});\n',
+        ),
+        (
+            '      syncVideos();\n'
+            '      if (playing) startBgm(); else stopBgm();\n',
+            '      syncVideos();\n'
+            '      seekMgScene(scenes[current], progress, playing);\n'
+            '      if (playing) startBgm(); else stopBgm();\n',
+        ),
+        (
+            '        \'sandbox="" \'\n',
+            '        \'sandbox="allow-same-origin" \'\n',
+        ),
+    ]
+    for expected, replacement in replacements:
+        if expected not in output:
+            raise SystemExit("planner extraction no longer matches the local continuous-MG adapter")
+        output = output.replace(expected, replacement, 1)
+    return output
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("source", type=Path)
@@ -201,6 +313,7 @@ def main() -> int:
         .replace("hyperframes_template_primary", "podcastor_editor_template_primary")
     )
     output = apply_local_preview_adapters(output)
+    output = apply_local_mg_adapters(output)
     forbidden = ("call_video_studio_llm", "api.siliconflow", "api.deepseek", "VIDEO_STUDIO_HTML_LLM")
     leaked = [token for token in forbidden if token in output]
     if leaked:

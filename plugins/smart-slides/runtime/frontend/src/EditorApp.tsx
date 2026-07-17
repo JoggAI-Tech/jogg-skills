@@ -27,6 +27,19 @@ import {
   replaceHtmlEditableBlockText,
   upsertHtmlBlockAdjustCss,
 } from '@/features/video-studio/htmlEditor';
+import {
+  createSparseBlockOverride,
+  hasSparseBlockOverrides,
+  mergeSparseBlockOverrides,
+  normalizeEditSchema,
+  semanticBlockText,
+} from '@/features/video-studio/editSchema';
+import type {
+  EditableBlock,
+  EditableBlockProperty,
+  EditableBlockValue,
+  HtmlBlockOverrides,
+} from '@/features/video-studio/editSchema';
 import type {
   VideoStudioBgmTrack,
   VideoStudioBrollOption,
@@ -43,8 +56,15 @@ type LocalEditorState = VideoStudioProject['editor_state'] & {
   selected_voice_id?: string;
   voice_assets_by_shot?: Record<string, LocalAsset>;
   avatar_assets_by_shot?: Record<string, LocalAsset>;
+  html_block_overrides_by_clip?: Record<string, HtmlBlockOverrides>;
 };
-type HtmlSource = { custom_html?: string; custom_css?: string };
+type HtmlSource = {
+  custom_html?: string;
+  custom_css?: string;
+  edit_schema?: unknown;
+  clip_id?: string;
+  overrides?: HtmlBlockOverrides;
+};
 
 const formatTime = (seconds: number) => {
   const value = Math.max(0, Math.round(seconds));
@@ -59,8 +79,20 @@ function projectIdFromUrl() {
 
 function htmlSourceFor(project: VideoStudioProject, shot: VideoStudioShot): HtmlSource {
   const override = project.editor_state.html_design_overrides?.[shot.id]?.scene_design_spec as HtmlSource | undefined;
-  const source = shot.html_design as VideoStudioShot['html_design'] & HtmlSource;
-  return { custom_html: override?.custom_html ?? source.custom_html ?? '', custom_css: override?.custom_css ?? source.custom_css ?? '' };
+  const source = shot.html_design as VideoStudioShot['html_design'] & HtmlSource & {
+    ai_html_generation?: { clip_id?: string; edit_schema?: unknown };
+  };
+  const layerClip = project.mg_layer?.mg_clips.find((clip) => clip.bound_shots.includes(shot.id));
+  const designClip = project.design_plan?.mg_clips?.find((clip) => clip.bound_shots.includes(shot.id));
+  const clipId = source.ai_html_generation?.clip_id || shot.mg_clip?.id || layerClip?.id || designClip?.id || '';
+  const editorState = project.editor_state as LocalEditorState;
+  return {
+    custom_html: override?.custom_html ?? source.custom_html ?? '',
+    custom_css: override?.custom_css ?? source.custom_css ?? '',
+    edit_schema: override?.edit_schema ?? source.edit_schema ?? source.ai_html_generation?.edit_schema,
+    clip_id: clipId,
+    overrides: clipId ? editorState.html_block_overrides_by_clip?.[clipId] ?? {} : {},
+  };
 }
 
 function selectedBroll(project: VideoStudioProject, shot: VideoStudioShot) {
@@ -220,6 +252,23 @@ export function EditorApp() {
     void updateEditor({ html_design_overrides: { ...project.editor_state.html_design_overrides, [selectedShot.id]: next } }, 'HTML/MG 已保存');
   };
 
+  const saveHtmlBlockOverrides = async (clipId: string, overrides: HtmlBlockOverrides) => {
+    if (!project) return;
+    setBusy(true);
+    setStatus('正在保存语义化 HTML/MG 编辑');
+    try {
+      const response = await videoStudioApi.patchMgClipEditSchema(project.id, clipId, { overrides });
+      setProject(response.project);
+      setPreviewNonce((value) => value + 1);
+      setStatus('HTML/MG 语义编辑已保存');
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : 'HTML/MG 语义编辑保存失败');
+      throw error;
+    } finally {
+      setBusy(false);
+    }
+  };
+
   const createPreview = async () => {
     if (!project) return;
     setBusy(true); setStatus('正在生成本地合成预览');
@@ -250,9 +299,9 @@ export function EditorApp() {
         <div className="brand"><Clapperboard size={22} /><strong>Smart Slides</strong><span>LOCAL</span></div>
         <div className="project-title"><h1>{project.topic}</h1><p>{shots.length} 个分镜 · {formatTime(duration)} · {project.production_format}</p></div>
         <div className="commands">
-          <button className="icon-command" title="刷新项目" onClick={() => void loadProject()}><RefreshCw size={18} /></button>
-          <button className="command secondary" onClick={() => void createPreview()}><MonitorPlay size={17} />刷新预览</button>
-          <button className="command" onClick={() => void createRender()}><Film size={17} />渲染 MP4</button>
+          <button className="icon-command" title="刷新项目" onClick={() => void loadProject()} disabled={busy}><RefreshCw size={18} /></button>
+          <button className="command secondary" onClick={() => void createPreview()} disabled={busy}><MonitorPlay size={17} />刷新预览</button>
+          <button className="command" onClick={() => void createRender()} disabled={busy}><Film size={17} />渲染 MP4</button>
         </div>
       </header>
 
@@ -292,7 +341,7 @@ export function EditorApp() {
           </nav>
           <div className="inspector-body">
             {activeTool === 'broll' && selectedShot && <BrollPanel shot={selectedShot} selected={broll} query={brollQuery} setQuery={setBrollQuery} candidates={candidates} onSearch={searchBroll} onChoose={chooseBroll} onDownload={downloadCandidate} />}
-            {activeTool === 'html' && selectedShot && <HtmlPanel source={htmlSource} onSave={saveHtml} />}
+            {activeTool === 'html' && selectedShot && <HtmlPanel source={htmlSource} onSaveLegacy={saveHtml} onSaveOverrides={saveHtmlBlockOverrides} />}
             {activeTool === 'avatar' && <AvatarPanel editorState={editorState} shot={selectedShot} />}
             {activeTool === 'bgm' && <BgmPanel project={project} tracks={bgmTracks} onUpdate={updateEditor} onSelect={async (trackId) => { const response = await videoStudioApi.selectBgmTrack(project.id, trackId); setProject(response.project); setStatus(`BGM 已应用：${response.track.title}`); }} />}
           </div>
@@ -317,13 +366,128 @@ function BrollPanel({ shot, selected, query, setQuery, candidates, onSearch, onC
   </div>;
 }
 
-function HtmlPanel({ source, onSave }: { source: HtmlSource; onSave: (html: string, css: string) => void }) {
+function HtmlPanel({
+  source,
+  onSaveLegacy,
+  onSaveOverrides,
+}: {
+  source: HtmlSource;
+  onSaveLegacy: (html: string, css: string) => void;
+  onSaveOverrides: (clipId: string, overrides: HtmlBlockOverrides) => Promise<void>;
+}) {
   const [htmlValue, setHtmlValue] = useState(source.custom_html ?? '');
   const [cssValue, setCssValue] = useState(source.custom_css ?? '');
-  useEffect(() => { setHtmlValue(source.custom_html ?? ''); setCssValue(source.custom_css ?? ''); }, [source.custom_html, source.custom_css]);
-  const editable = useMemo(() => ensureHtmlEditableBlocks(htmlValue), [htmlValue]);
-  const blocks = useMemo(() => extractHtmlEditableBlocks(editable, cssValue), [editable, cssValue]);
-  return <div className="tool-panel"><div className="tool-title"><h2>HTML/MG</h2><span>{blocks.length} 个可编辑块</span></div>{blocks.slice(0, 6).map((block) => <label className="field" key={block.id}><span>{block.name}</span><input value={block.text} onChange={(event) => setHtmlValue(replaceHtmlEditableBlockText(editable, block.id, event.target.value))} /></label>)}<label className="field code"><span>HTML</span><textarea value={htmlValue} onChange={(event) => setHtmlValue(event.target.value)} /></label><label className="field code"><span>CSS</span><textarea value={cssValue} onChange={(event) => setCssValue(event.target.value)} /></label><button className="command wide" onClick={() => onSave(editable, upsertHtmlBlockAdjustCss(cssValue, blocks))}><Save size={17} />保存 HTML/MG</button></div>;
+  const [pendingOverrides, setPendingOverrides] = useState<HtmlBlockOverrides>({});
+  useEffect(() => {
+    setHtmlValue(source.custom_html ?? '');
+    setCssValue(source.custom_css ?? '');
+    setPendingOverrides({});
+  }, [source.clip_id, source.custom_html, source.custom_css]);
+  const schema = useMemo(() => normalizeEditSchema(source.edit_schema), [source.edit_schema]);
+
+  if (schema.isSemantic) {
+    const persisted = source.overrides ?? {};
+    const values = mergeSparseBlockOverrides(persisted, pendingOverrides);
+    const updateBlock = (block: EditableBlock, property: EditableBlockProperty, value: EditableBlockValue) => {
+      setPendingOverrides((current) => mergeSparseBlockOverrides(current, createSparseBlockOverride(block, property, value)));
+    };
+    return <div className="tool-panel">
+      <div className="tool-title"><h2>HTML/MG</h2><span>{schema.blocks.length} 个语义对象</span></div>
+      {!source.clip_id && <p className="note">当前分镜没有 clip_id，语义编辑暂时不能保存。</p>}
+      {schema.blocks.map((block) => <SemanticBlockFields
+        key={block.id}
+        block={block}
+        customHtml={htmlValue}
+        values={values[block.id] ?? {}}
+        onChange={(property, value) => updateBlock(block, property, value)}
+      />)}
+      <button
+        className="command wide"
+        disabled={!source.clip_id || !hasSparseBlockOverrides(pendingOverrides)}
+        onClick={async () => {
+          if (!source.clip_id) return;
+          await onSaveOverrides(source.clip_id, pendingOverrides);
+          setPendingOverrides({});
+        }}
+      ><Save size={17} />保存语义编辑</button>
+    </div>;
+  }
+
+  if (!schema.isLegacy) {
+    return <div className="tool-panel">
+      <div className="tool-title"><h2>HTML/MG</h2><span>schema 无效</span></div>
+      <p className="note">edit_schema 未通过校验：{schema.errors.join('；') || 'editable_blocks 为空'}。为避免破坏导演构图，已停止自动推断可编辑节点。</p>
+    </div>;
+  }
+
+  const editable = ensureHtmlEditableBlocks(htmlValue);
+  const blocks = extractHtmlEditableBlocks(editable, cssValue);
+  return <div className="tool-panel">
+    <div className="tool-title"><h2>HTML/MG</h2><span>{blocks.length} 个兼容块</span></div>
+    <p className="note">这是没有语义 edit_schema 的旧项目，当前使用兼容编辑。保存会写回整段 HTML/CSS；重新生成 MG 后可迁移到语义编辑。</p>
+    {blocks.slice(0, 6).map((block) => <label className="field" key={block.id}><span>{block.name}</span><input value={block.text} onChange={(event) => setHtmlValue(replaceHtmlEditableBlockText(editable, block.id, event.target.value))} /></label>)}
+    <label className="field code"><span>HTML</span><textarea value={htmlValue} onChange={(event) => setHtmlValue(event.target.value)} /></label>
+    <label className="field code"><span>CSS</span><textarea value={cssValue} onChange={(event) => setCssValue(event.target.value)} /></label>
+    <button className="command wide" onClick={() => onSaveLegacy(editable, upsertHtmlBlockAdjustCss(cssValue, blocks))}><Save size={17} />保存兼容 HTML/MG</button>
+  </div>;
+}
+
+const semanticMotionOptions = ['none', 'fade', 'slide', 'rise', 'wipe', 'pop', 'scan'];
+
+function SemanticBlockFields({
+  block,
+  customHtml,
+  values,
+  onChange,
+}: {
+  block: EditableBlock;
+  customHtml: string;
+  values: Partial<Record<EditableBlockProperty, EditableBlockValue>>;
+  onChange: (property: EditableBlockProperty, value: EditableBlockValue) => void;
+}) {
+  const valueFor = (property: EditableBlockProperty) => {
+    if (values[property] !== undefined) return values[property];
+    if (property === 'text') return semanticBlockText(customHtml, block.id);
+    if (property === 'opacity' || property === 'scale') return 1;
+    return '';
+  };
+  const labelFor: Record<EditableBlockProperty, string> = {
+    text: '文字',
+    x: 'X 坐标偏移',
+    y: 'Y 坐标偏移',
+    width: '宽度（元素实际宽）',
+    height: '高度（元素实际高）',
+    fontSize: '字号（CSS font-size）',
+    scale: block.kind === 'text' ? '缩放' : '视觉缩放（scale）',
+    color: block.colorMode === 'descendants' ? '颜色（传播到组内）' : '颜色',
+    opacity: '透明度',
+    motion: '动效',
+  };
+  return <div>
+    <div className="tool-title"><h2>{block.name}</h2><span>{block.kind}</span></div>
+    {block.allowed.map((property) => {
+      if (property === 'motion') {
+        return <label className="field" key={property}><span>{labelFor[property]}</span><select value={String(valueFor(property) || 'none')} onChange={(event) => onChange(property, event.target.value)}>{semanticMotionOptions.map((motion) => <option key={motion} value={motion}>{motion}</option>)}</select></label>;
+      }
+      if (property === 'color') {
+        return <label className="field" key={property}><span>{labelFor[property]}</span><input type="color" value={String(valueFor(property) || '#ffffff')} onChange={(event) => onChange(property, event.target.value)} /></label>;
+      }
+      if (property === 'text') {
+        return <label className="field" key={property}><span>{labelFor[property]}</span><input value={String(valueFor(property))} onChange={(event) => onChange(property, event.target.value)} /></label>;
+      }
+      const limits: Partial<Record<EditableBlockProperty, { min: number; max: number; step: number }>> = {
+        x: { min: -3840, max: 3840, step: 1 },
+        y: { min: -2160, max: 2160, step: 1 },
+        width: { min: 1, max: 3840, step: 1 },
+        height: { min: 1, max: 2160, step: 1 },
+        fontSize: { min: 1, max: 512, step: 1 },
+        scale: { min: 0.05, max: 10, step: 0.05 },
+        opacity: { min: 0, max: 1, step: 0.05 },
+      };
+      const limit = limits[property];
+      return <label className="field" key={property}><span>{labelFor[property]}</span><input type="number" value={String(valueFor(property))} min={limit?.min} max={limit?.max} step={limit?.step} onChange={(event) => { if (event.target.value !== '') onChange(property, Number(event.target.value)); }} /></label>;
+    })}
+  </div>;
 }
 
 function AvatarPanel({ editorState, shot }: { editorState?: LocalEditorState; shot?: VideoStudioShot }) {

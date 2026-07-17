@@ -260,6 +260,19 @@ export const videoStudioApi = {
     return normalizeProjectResponse(response.data);
   },
 
+  patchMgClipEditSchema: async (
+    projectId: string,
+    mgClipId: string,
+    payload: { overrides: Record<string, Record<string, string | number | boolean | null>> },
+  ): Promise<{ project: VideoStudioProject; clip_id: string; overrides: Record<string, Record<string, unknown>>; preview_url: string }> => {
+    const response = await axios.patch(
+      `${VIDEO_STUDIO_API_URL}/projects/${projectId}/mg-clips/${encodeURIComponent(mgClipId)}/edit-schema`,
+      payload,
+    );
+    const normalized = normalizeProjectResponse(response.data);
+    return { ...normalized, preview_url: absolutizeBackendUrl(response.data.preview_url) || '' };
+  },
+
   deleteMgClip: async (
     projectId: string,
     mgClipId: string,

@@ -35,7 +35,7 @@ For every enabled `mg_director`, provide:
 
 ## PPT-Derived Visual Grammar
 
-This is a grammar library, not a template library. Select exactly one ID from each dimension and recombine it around the shot's meaning.
+This is a grammar library, not a template library. Select exactly one ID from each dimension and recombine it around the shot's meaning. Any fixed ratios, coordinates, or example proportions in the source visual assets are examples, never mandates; the clip-specific `composition.hero_frame` and 1920x1080 safe area take precedence.
 
 ### Compositions
 
@@ -92,6 +92,7 @@ This is a grammar library, not a template library. Select exactly one ID from ea
 - Choose the recipe from the narration's meaning, not from decorative preference.
 - Let `composition_id` define the spatial skeleton and `hero_device_id` define the first-read subject. Do not substitute one for the other.
 - Let `material_id` control finish only and `motion_id` control timing only.
+- Let `visual_fx` add only subordinate atmosphere. When it is not `none`, require the selected effect to be visibly executed in at least one entry/build/hold QA frame.
 - Explain the content-specific transformation in `originality_note`; do not restate the IDs.
 - Make the HTML frame self-contained. Do not reserve an aperture, black box, transparent evidence window, or half-frame blank for B-roll or another track.
 - Use one main visual structure. Do not combine a second comparison, path, timeline, causal chain, map, or metric as a competing composition.

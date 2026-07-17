@@ -18,13 +18,14 @@ from backend.services import video_studio_bespoke_html
 from backend.services import video_studio_planner
 from backend.services.video_studio_mg_design import normalize_mg_design_doc
 from backend.services.video_studio_store import VideoStudioStore, ensure_project_governance
-from backend.services.video_studio_works import VideoStudioWorksStore, work_matches_project_snapshot
+from backend.services.video_studio_works import VideoStudioWorksStore, apply_mg_assets_to_scene_groups, build_render_snapshot, work_matches_project_snapshot
 from render import ffmpeg_adapter
 
 
 router = APIRouter(prefix="/api/v1/video-studio", tags=["video-studio"])
 DATA_DIR = os.path.expanduser(os.getenv("SMART_SLIDES_DATA_DIR", "~/.codex/smart-slides/data"))
 _IMPORT_LOCK = threading.RLock()
+_WORK_CREATE_LOCK = threading.RLock()
 
 
 class CreateProjectRequest(BaseModel):
@@ -67,6 +68,16 @@ class MgDesignDocPatch(BaseModel):
 
 class MgHtmlPatch(BaseModel):
     html_design_by_shot: Dict[str, Dict[str, Any]]
+
+
+class MgClipEditSchemaPatch(BaseModel):
+    overrides: Dict[str, Dict[str, Any]] = Field(min_length=1)
+
+
+class VoiceTimingSyncRequest(BaseModel):
+    """Measured Jogg narration duration for each completed shot."""
+
+    voice_durations_by_shot: Dict[str, float] = Field(min_length=1)
 
 
 class BrollCandidateDownloadRequest(BaseModel):
@@ -133,6 +144,105 @@ def _render_contract(project: Dict[str, Any], scene_groups: list[dict[str, Any]]
     return contract
 
 
+def _flatten_scene_groups(scene_groups: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    return [
+        shot
+        for group in scene_groups
+        if isinstance(group, dict)
+        for shot in group.get("shots") or []
+        if isinstance(shot, dict)
+    ]
+
+
+def _apply_voice_timing_to_contract(
+    project: Dict[str, Any],
+    contract: Dict[str, Any],
+    durations_by_shot: Dict[str, float],
+) -> Dict[str, Any]:
+    """Rehydrate source contracts after replacing planned durations with audio.
+
+    Podcastor's extracted storyboard normalizer intentionally rounds authored
+    planning durations to whole seconds. Jogg output is the source of truth at
+    this point, so the plugin corrects all time-bearing render fields locally
+    without re-normalizing narration, HTML, B-roll, or editor selections.
+    """
+    groups = contract.get("scene_groups") if isinstance(contract.get("scene_groups"), list) else []
+    cursor = 0.0
+    for group in groups:
+        if not isinstance(group, dict):
+            continue
+        shots = [shot for shot in group.get("shots") or [] if isinstance(shot, dict)]
+        for shot in shots:
+            shot_id = str(shot.get("id") or "")
+            duration = float(durations_by_shot.get(shot_id, shot.get("duration_seconds") or 0))
+            duration = max(0.1, round(duration, 3))
+            end = round(cursor + duration, 3)
+            scene_role = str(shot.get("scene_role") or "full_broll")
+            visual_role = str(shot.get("visual_role") or "broll_primary")
+            shot["duration_seconds"] = duration
+            shot["start_seconds"] = round(cursor, 3)
+            shot["end_seconds"] = end
+            shot["timing_source"] = "jogg_voice_audio"
+            shot["motion_timing"] = video_studio_planner._motion_timing(
+                duration,
+                int(shot.get("slot_count") or 0),
+                scene_role,
+            )
+            shot["timeline_elements"] = video_studio_planner._timeline_elements(
+                shot_id,
+                cursor,
+                end,
+                scene_role,
+                visual_role,
+            )
+            cursor = end
+        if str(group.get("id") or "") and isinstance(group.get("html_layers"), list):
+            group["html_layers"] = video_studio_planner._hydrate_html_layers_from_shots(group["html_layers"], shots)
+
+    shots = _flatten_scene_groups(groups)
+    information_layer = [
+        video_studio_planner._manifest_information_layer(shot)
+        for shot in shots
+        if video_studio_planner._shot_uses_html(shot)
+    ]
+    director_timeline = [video_studio_planner._director_timeline_item(shot) for shot in shots]
+    design_plan = video_studio_planner._design_plan_for_shots(
+        shots,
+        topic=str(project.get("topic") or ""),
+        production_format=str(project.get("production_format") or "broll_html"),
+        director_document=project.get("director_document") if isinstance(project.get("director_document"), dict) else None,
+        scene_groups=groups,
+    )
+    mg_clips = design_plan.get("mg_clips") if isinstance(design_plan.get("mg_clips"), list) else []
+    scene_plan_v2 = [
+        video_studio_planner._scene_plan_v2_for_shot(
+            shot,
+            width=video_studio_planner.DEFAULT_RENDER_WIDTH,
+            height=video_studio_planner.DEFAULT_RENDER_HEIGHT,
+        )
+        for shot in shots
+    ]
+    render_manifest = {
+        **(contract.get("render_manifest") if isinstance(contract.get("render_manifest"), dict) else {}),
+        "scenes": [video_studio_planner._render_scene_for_shot(shot) for shot in shots],
+        "information_layer": information_layer,
+        "mg_clips": mg_clips,
+        "director_timeline": director_timeline,
+        "design_plan": design_plan,
+        "scene_plan_v2": scene_plan_v2,
+    }
+    return {
+        **contract,
+        "scene_groups": groups,
+        "information_layer": information_layer,
+        "mg_clips": mg_clips,
+        "director_timeline": director_timeline,
+        "design_plan": design_plan,
+        "scene_plan_v2": scene_plan_v2,
+        "render_manifest": render_manifest,
+    }
+
+
 def _scale_scene_group_durations(scene_groups: list[dict[str, Any]], target_duration_seconds: int) -> list[dict[str, Any]]:
     groups = deepcopy(scene_groups)
     units: list[dict[str, Any]] = []
@@ -155,6 +265,11 @@ def _scale_scene_group_durations(scene_groups: list[dict[str, Any]], target_dura
 
 def _create_preview(project_id: str, project: Dict[str, Any]) -> tuple[Dict[str, Any], str]:
     preview_project = deepcopy(project)
+    preview_snapshot = build_render_snapshot(preview_project)
+    preview_project["scene_groups"] = apply_mg_assets_to_scene_groups(
+        preview_project.get("scene_groups") or [],
+        preview_snapshot.get("mg_layer") if isinstance(preview_snapshot.get("mg_layer"), dict) else {},
+    )
     editor_state = preview_project.get("editor_state") if isinstance(preview_project.get("editor_state"), dict) else {}
     avatar_assets = editor_state.get("avatar_assets_by_shot") if isinstance(editor_state.get("avatar_assets_by_shot"), dict) else {}
     selected_broll = deepcopy(editor_state.get("selected_broll_by_shot") if isinstance(editor_state.get("selected_broll_by_shot"), dict) else {})
@@ -396,6 +511,75 @@ def update_planning_state(project_id: str, req: FlexiblePatch) -> Dict[str, obje
     return {"project": _store().update_project(project_id, patch)}
 
 
+@router.post("/projects/{project_id}/sync-voice-timing")
+def sync_voice_timing(project_id: str, req: VoiceTimingSyncRequest) -> Dict[str, object]:
+    """Make measured Jogg narration the authoritative project timeline.
+
+    This endpoint is deliberately media-preserving. It only corrects shot and
+    derived contract timing; provider selections, local uploads, Jogg audio,
+    avatar video, bespoke HTML, and editor state remain attached to the same
+    shot IDs. The requested project duration remains an editorial target and
+    is reported alongside the actual narration duration.
+    """
+    project = _project_or_404(project_id)
+    supplied = {
+        str(shot_id): round(float(duration), 3)
+        for shot_id, duration in req.voice_durations_by_shot.items()
+        if str(shot_id).strip()
+    }
+    if not supplied or any(duration < 0.1 or duration > 3_600 for duration in supplied.values()):
+        raise HTTPException(status_code=422, detail="voice durations must be between 0.1 and 3600 seconds")
+
+    existing_groups = deepcopy(project.get("scene_groups") if isinstance(project.get("scene_groups"), list) else [])
+    shots = _flatten_scene_groups(existing_groups)
+    known_ids = {str(shot.get("id") or "") for shot in shots if str(shot.get("id") or "")}
+    unknown = sorted(set(supplied) - known_ids)
+    if unknown:
+        raise HTTPException(status_code=404, detail="Shot not found: " + ", ".join(unknown[:5]))
+    missing = sorted(known_ids - set(supplied))
+    if missing:
+        raise HTTPException(status_code=422, detail="missing Jogg voice duration: " + ", ".join(missing[:5]))
+
+    previous_total = round(sum(float(shot.get("duration_seconds") or 0) for shot in shots), 3)
+    changed_shot_ids: list[str] = []
+    for shot in shots:
+        shot_id = str(shot.get("id") or "")
+        measured = supplied[shot_id]
+        planned = float(shot.get("duration_seconds") or 0)
+        if abs(planned - measured) > 0.001:
+            changed_shot_ids.append(shot_id)
+        shot["planned_duration_seconds"] = round(planned, 3)
+        shot["duration_seconds"] = measured
+        shot["timing_source"] = "jogg_voice_audio"
+
+    contract = _render_contract(project, existing_groups)
+    restored_groups = video_studio_bespoke_html.restore_bespoke_html_from_planning_input(
+        existing_groups,
+        contract.get("scene_groups", existing_groups),
+    )
+    contract["scene_groups"] = restored_groups
+    contract = _apply_voice_timing_to_contract(project, contract, supplied)
+    actual_total = round(sum(supplied.values()), 3)
+    timing = {
+        "source": "jogg_voice_audio",
+        "requested_duration_seconds": int(project.get("target_duration_seconds") or 0),
+        "previous_timeline_duration_seconds": previous_total,
+        "actual_duration_seconds": actual_total,
+        "difference_from_requested_seconds": round(actual_total - float(project.get("target_duration_seconds") or 0), 3),
+        "updated_shot_ids": changed_shot_ids,
+    }
+    updated = _store().update_project(
+        project_id,
+        {**contract, "voice_timing": timing, "stage": "editor"},
+    )
+    return {
+        "project": updated,
+        "updated_shot_ids": changed_shot_ids,
+        "actual_duration_seconds": actual_total,
+        "difference_from_requested_seconds": timing["difference_from_requested_seconds"],
+    }
+
+
 @router.patch("/projects/{project_id}/mg-html")
 def update_mg_html(project_id: str, req: MgHtmlPatch) -> Dict[str, object]:
     """Apply validated bespoke MG HTML without invalidating media assets."""
@@ -436,6 +620,16 @@ def update_mg_html(project_id: str, req: MgHtmlPatch) -> Dict[str, object]:
     result_groups = video_studio_bespoke_html.restore_bespoke_html_from_planning_input(
         prepared, contract.get("scene_groups", prepared)
     )
+    voice_timing = project.get("voice_timing") if isinstance(project.get("voice_timing"), dict) else {}
+    if voice_timing.get("source") == "jogg_voice_audio":
+        durations_by_shot = {
+            str(shot.get("id") or ""): float(shot.get("duration_seconds") or 0)
+            for shot in _flatten_scene_groups(prepared)
+            if str(shot.get("id") or "")
+        }
+        contract["scene_groups"] = result_groups
+        contract = _apply_voice_timing_to_contract(project, contract, durations_by_shot)
+        result_groups = contract.get("scene_groups", result_groups)
     updated = _store().update_project(project_id, {**contract, "scene_groups": result_groups, "stage": "editor"})
     updated, preview_url = _create_preview(project_id, updated)
     return {"project": updated, "updated_shot_ids": sorted(found), "preview_url": preview_url}
@@ -504,6 +698,73 @@ def update_mg_design_doc(project_id: str, req: MgDesignDocPatch) -> Dict[str, ob
     document = normalize_mg_design_doc(req.design_doc)
     updated = _store().update_project(project_id, {"editor_state": {**state, "mg_design_doc_overrides": {**overrides, req.mg_clip_id: document}}, "stage": "editor"})
     return {"project": updated, "mg_clip_id": req.mg_clip_id, "design_doc": document}
+
+
+def _mg_clip_and_edit_schema(project: Dict[str, Any], mg_clip_id: str) -> tuple[Dict[str, Any], Dict[str, Any]]:
+    shots = _flatten_scene_groups(project.get("scene_groups") if isinstance(project.get("scene_groups"), list) else [])
+    clips = video_studio_planner._project_mg_clips(project, shots)
+    clip = next((item for item in clips if str(item.get("id") or "") == mg_clip_id), None)
+    if not clip:
+        raise HTTPException(status_code=404, detail="MG clip not found")
+    schema = clip.get("edit_schema") if isinstance(clip.get("edit_schema"), dict) else {}
+    asset_id = str(clip.get("html_asset_id") or "")
+    mg_layer = project.get("mg_layer") if isinstance(project.get("mg_layer"), dict) else {}
+    assets = mg_layer.get("html_assets") if isinstance(mg_layer.get("html_assets"), list) else []
+    asset = next((item for item in assets if isinstance(item, dict) and str(item.get("id") or "") == asset_id), None)
+    if not schema and isinstance(asset, dict) and isinstance(asset.get("edit_schema"), dict):
+        schema = asset.get("edit_schema") or {}
+    bound = [str(item) for item in clip.get("bound_shots") or [] if str(item)]
+    base_shot = next((shot for shot in shots if str(shot.get("id") or "") in bound), None)
+    html_design = base_shot.get("html_design") if isinstance(base_shot, dict) and isinstance(base_shot.get("html_design"), dict) else {}
+    if not schema and isinstance(html_design.get("edit_schema"), dict):
+        schema = html_design.get("edit_schema") or {}
+    return clip, schema
+
+
+@router.patch("/projects/{project_id}/mg-clips/{mg_clip_id}/edit-schema")
+def update_mg_clip_edit_schema(project_id: str, mg_clip_id: str, req: MgClipEditSchemaPatch) -> Dict[str, object]:
+    project = _project_or_404(project_id)
+    clip, schema = _mg_clip_and_edit_schema(project, mg_clip_id)
+    blocks = schema.get("editable_blocks") if isinstance(schema.get("editable_blocks"), list) else []
+    block_by_id = {str(item.get("id") or ""): item for item in blocks if isinstance(item, dict) and str(item.get("id") or "")}
+    if not block_by_id:
+        raise HTTPException(status_code=409, detail="MG clip has no structured edit_schema; migrate the HTML asset before editing")
+    normalized: Dict[str, Dict[str, Any]] = {}
+    for block_id, patch in req.overrides.items():
+        block = block_by_id.get(str(block_id))
+        if not block:
+            raise HTTPException(status_code=422, detail=f"Unknown editable block: {block_id}")
+        allowed = {str(item) for item in block.get("allowed") or [] if str(item)}
+        invalid = sorted(str(key) for key in patch if str(key) not in allowed)
+        if invalid:
+            raise HTTPException(status_code=422, detail=f"Properties not editable for {block_id}: {', '.join(invalid)}")
+        if "color" in patch and str(block.get("kind") or "") == "group" and str(block.get("colorMode") or block.get("color_mode") or "") != "descendants":
+            raise HTTPException(status_code=422, detail=f"Group color requires colorMode=descendants: {block_id}")
+        for value in patch.values():
+            if value is not None and not isinstance(value, (str, int, float, bool)):
+                raise HTTPException(status_code=422, detail=f"Editable values must be scalar: {block_id}")
+        normalized[str(block_id)] = {str(key): value for key, value in patch.items()}
+    state = project.get("editor_state") if isinstance(project.get("editor_state"), dict) else {}
+    all_overrides = deepcopy(state.get("html_block_overrides_by_clip") if isinstance(state.get("html_block_overrides_by_clip"), dict) else {})
+    current = deepcopy(all_overrides.get(mg_clip_id) if isinstance(all_overrides.get(mg_clip_id), dict) else {})
+    for block_id, patch in normalized.items():
+        block_patch = deepcopy(current.get(block_id) if isinstance(current.get(block_id), dict) else {})
+        for key, value in patch.items():
+            if value is None:
+                block_patch.pop(key, None)
+            else:
+                block_patch[key] = value
+        if block_patch:
+            current[block_id] = block_patch
+        else:
+            current.pop(block_id, None)
+    all_overrides[mg_clip_id] = current
+    updated = _store().update_project(
+        project_id,
+        {"editor_state": {**state, "html_block_overrides_by_clip": all_overrides}, "stage": "editor"},
+    )
+    updated, preview_url = _create_preview(project_id, updated)
+    return {"project": updated, "clip_id": str(clip.get("id") or mg_clip_id), "overrides": current, "preview_url": preview_url}
 
 
 @router.post("/projects/{project_id}/mg-clips/{mg_clip_id}/regenerate-html")
@@ -614,7 +875,18 @@ def search_and_download_broll(project_id: str, shot_id: str) -> Dict[str, object
         raise HTTPException(status_code=400, detail=str(exc)) from exc
     groups = _replace_shot(project, shot_id, {**shot, "broll_options": options})
     contract = _render_contract(project, groups)
-    updated = _store().update_project(project_id, {"scene_groups": contract.get("scene_groups", groups), **contract, "stage": "editor"})
+    state = project.get("editor_state") if isinstance(project.get("editor_state"), dict) else {}
+    selected = state.get("selected_broll_by_shot") if isinstance(state.get("selected_broll_by_shot"), dict) else {}
+    selected_option = next((item for item in options if item.get("asset_path") or item.get("asset_url")), {})
+    updated = _store().update_project(
+        project_id,
+        {
+            "scene_groups": contract.get("scene_groups", groups),
+            **contract,
+            "editor_state": {**state, "selected_broll_by_shot": {**selected, shot_id: str(selected_option.get("id") or "")}},
+            "stage": "editor",
+        },
+    )
     return {"project": updated}
 
 
@@ -766,22 +1038,26 @@ def get_final_video(project_id: str):
 
 @router.post("/projects/{project_id}/works")
 def create_work(project_id: str) -> Dict[str, object]:
-    project = _project_or_404(project_id)
-    if not project.get("composition_preview_url"):
-        project, _ = _create_preview(project_id, project)
-    store = _works_store()
-    works = store.list_works(project_id=project_id)
-    matching_works = [item for item in works if work_matches_project_snapshot(item, project)]
-    existing = next((item for item in matching_works if str(item.get("status") or "") in {"queued", "rendering"}), None)
-    if not existing:
-        existing = next(
-            (
-                item for item in matching_works
-                if str(item.get("status") or "") == "success"
-            ),
-            None,
-        )
-    work = existing or store.create_work(project, preview_artifact_url=str(project.get("composition_preview_url") or ""))
+    # A browser can submit this endpoint twice before its first response returns.
+    # Keep lookup and creation atomic so the same immutable project snapshot has
+    # one in-flight local render.
+    with _WORK_CREATE_LOCK:
+        project = _project_or_404(project_id)
+        if not project.get("composition_preview_url"):
+            project, _ = _create_preview(project_id, project)
+        store = _works_store()
+        works = store.list_works(project_id=project_id)
+        matching_works = [item for item in works if work_matches_project_snapshot(item, project)]
+        existing = next((item for item in matching_works if str(item.get("status") or "") in {"queued", "rendering"}), None)
+        if not existing:
+            existing = next(
+                (
+                    item for item in matching_works
+                    if str(item.get("status") or "") == "success"
+                ),
+                None,
+            )
+        work = existing or store.create_work(project, preview_artifact_url=str(project.get("composition_preview_url") or ""))
     if work.get("status") != "failed":
         ffmpeg_adapter.start_render_async(work, store, DATA_DIR)
         work = store.get_work(str(work["id"])) or work

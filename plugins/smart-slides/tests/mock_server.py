@@ -159,11 +159,24 @@ class Handler(BaseHTTPRequestHandler):
                 {"id": "shot-03", "title": "Ending", "narration": "ending", "duration_seconds": 6, "broll_options": []},
             ]}]
             self.send_json(fixture.response_project())
+        elif path.endswith("/sync-voice-timing"):
+            durations = json.loads(body).get("voice_durations_by_shot", {})
+            cursor = 0.0
+            changed: list[str] = []
+            for shot in fixture.shots():
+                shot_id = str(shot.get("id") or "")
+                measured = float(durations.get(shot_id, shot.get("duration_seconds") or 0))
+                if abs(float(shot.get("duration_seconds") or 0) - measured) > 0.001:
+                    changed.append(shot_id)
+                shot.update(duration_seconds=measured, start_seconds=round(cursor, 3), end_seconds=round(cursor + measured, 3))
+                cursor += measured
+            fixture.project["voice_timing"] = {"actual_duration_seconds": round(cursor, 3)}
+            self.send_json({**fixture.response_project(), "updated_shot_ids": changed, "actual_duration_seconds": round(cursor, 3)})
         elif path.endswith("/broll-assets"):
             shot_id = path.split("/shots/", 1)[1].split("/", 1)[0]
             for shot in fixture.shots():
                 if shot["id"] == shot_id:
-                    shot["broll_options"].append({"id": f"broll-{shot_id}", "asset_url": f"/data/assets/{shot_id}.mp4"})
+                    shot["broll_options"].append({"id": f"broll-{shot_id}", "asset_url": f"/data/assets/{shot_id}.mp4", "duration_seconds": shot["duration_seconds"]})
             self.send_json(fixture.response_project())
         elif path.endswith("/prepare-editor-assets"):
             fixture.project["editor_asset_status"]["html_generation"]["state"] = "ready"

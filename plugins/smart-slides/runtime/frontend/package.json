@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc --noEmit && vite build",
-    "test": "node --experimental-strip-types src/features/video-studio/model.test.ts && node --experimental-strip-types src/features/video-studio/htmlEditor.test.ts"
+    "test": "node --experimental-strip-types src/features/video-studio/model.test.ts && node --experimental-strip-types src/features/video-studio/htmlEditor.test.ts && node --experimental-strip-types src/features/video-studio/editSchema.test.ts"
   },
   "dependencies": {
     "axios": "^1.15.0",

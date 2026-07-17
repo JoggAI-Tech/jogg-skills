@@ -6,7 +6,7 @@ The only video business requests are Jogg plus optional Pexels/Pixabay material 
 
 ## Setup
 
-Required commands: `curl`, `jq`, `ffmpeg`, `ffprobe`, and local Google Chrome or Chromium. Set `SMART_SLIDES_CHROME_BIN` only when Chrome is not installed in its standard location. The renderer does not install packages or use a remote render service at runtime.
+Required commands: `curl`, `jq`, `ffmpeg`, `ffprobe`, Node.js 22 or newer, and local Google Chrome or Chromium. Set `SMART_SLIDES_NODE_BIN` or `SMART_SLIDES_CHROME_BIN` only when they are not available from the normal PATH or standard Chrome location. For a managed plugin dependency, place matching `ffmpeg` and `ffprobe` binaries in `SMART_SLIDES_TOOL_DIR` (default `~/.codex/smart-slides/bin`); preflight uses that private directory before the system PATH. The repository deliberately does not commit platform-specific FFmpeg binaries or install them silently, because they are architecture-specific and carry redistribution/license obligations. The renderer does not use a remote render service at runtime.
 
 Configure `JOGG_API_KEY` from the Jogg OpenAPI dashboard in the environment or `~/.codex/smart-slides/.env`. Smart Slides calls `https://api.jogg.ai/v2/...` directly; a browser-session token is not a public OpenAPI credential. The key is neither saved in run state nor printed.
 

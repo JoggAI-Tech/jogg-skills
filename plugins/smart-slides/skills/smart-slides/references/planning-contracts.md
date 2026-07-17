@@ -36,11 +36,13 @@ For `broll_html`, use `llm_bespoke_html` with `templates_as_fallback`, unless th
 
 ## Creative Plan
 
-Split the script into scenes. Podcastor's existing density guidance is:
+Split the script into scenes. The extracted Podcastor normalizer enforces `MAX_CREATIVE_PLAN_SCENES = 12`, so retain at most 12 top-level creative scenes:
 
 - 1-2 minutes: about 6-8 scenes.
-- 3-5 minutes: about 8-14 scenes.
-- more than 5 minutes: about 12-20 scenes.
+- 3-5 minutes: about 8-12 retained scenes.
+- more than 5 minutes: use 12 retained scenes and express additional beats as stable `voiceover_units` and storyboard shots within scene groups.
+
+Do not claim that 12-20 creative scenes survive normalization. Split dense material into multiple shot-level beats and scene groups while keeping the retained creative-scene list within the upstream cap.
 
 Each scene must have non-empty `voiceover_units[]` with stable IDs, text, and duration. Mark a scene as `视频素材 + HTML信息层` only when its data, cause, time, comparison, route, or reveal benefits from an information layer.
 
@@ -104,6 +106,6 @@ Use one visual system from `metric`, `causal`, `route`, `timeline`, `comparison`
 - `broll_prompt` and `asset_search_plan`.
 - `scene_role`: `broll_backdrop_overlay` or `full_broll`.
 - `visual_role`, `information_layer`, and the exact director-selected `mg_director.visual_recipe` and `mg_director.composition`.
-- `html_render_strategy` and `html_design` for information-layer shots.
+- `html_render_strategy` and a stable `html_design.clip_id` for information-layer shots. Omit `custom_html` and `custom_css` from the initial plan; produce them through [per-clip-html-workflow.md](per-clip-html-workflow.md).
 
 The local API runs the extracted `normalize_scene_groups()` and `build_render_contract_package()` when `scene_groups` is patched. Do not manually fabricate `render_manifest`, `director_timeline`, or derived layers when the normalizer can produce them.

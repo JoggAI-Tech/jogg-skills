@@ -1382,7 +1382,10 @@ def _sanitize_custom_css(raw_css: str) -> str:
 def _minify_custom_css(raw_css: str) -> str:
     text = re.sub(r"(?is)/\*.*?\*/", "", raw_css or "")
     text = re.sub(r"\s+", " ", text)
-    text = re.sub(r"\s*([{}:;,>+~])\s*", r"\1", text)
+    # CSS calc() requires whitespace around binary + and - operators. Keeping
+    # '+' out of the punctuation compactor also remains valid for sibling
+    # selectors while preserving authored animation delays.
+    text = re.sub(r"\s*([{}:;,>~])\s*", r"\1", text)
     text = re.sub(r";}", "}", text)
     return text.strip()
 
@@ -3664,9 +3667,15 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
 
         html_enabled = _shot_uses_html(shot)
         html_overlay = ""
+        mg_clip_offset = 0.0
         if html_enabled:
             html_design = _html_design_for_preview(shot, html_design_overrides)
             mg_clip = mg_clip_by_shot.get(shot_id) or _mg_clip_for_preview(shot, html_design)
+            clip_offsets = mg_clip.get("shot_offsets") if isinstance(mg_clip.get("shot_offsets"), dict) else {}
+            mg_clip_offset = max(
+                0.0,
+                _positive_float(shot.get("mg_clip_offset_seconds"), _positive_float(clip_offsets.get(shot_id), 0.0)),
+            )
             html_layer_markup = _html_layer_markup_for_preview(shot, info, html_design, mg_clip)
             contract_version = _html_layer_contract_version(mg_clip)
             html_overlay = f"""
@@ -3677,7 +3686,7 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
 
         scene_markup.append(
             f"""
-            <section class="scene{' scene--html' if html_enabled else ''}" data-index="{index}">
+            <section class="scene{' scene--html' if html_enabled else ''}" data-index="{index}" data-shot-id="{html.escape(shot_id, quote=True)}" data-mg-clip-offset="{mg_clip_offset:.3f}">
               <div class="media">{media_markup}{fallback_markup}</div>
               {voice_markup}
               <div class="grade"></div>
@@ -3777,6 +3786,39 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
     let bgmMonitorTimer = null;
     function activeVideo() {{ return scenes[current]?.querySelector('video'); }}
     function activeVoice() {{ return scenes[current]?.querySelector('audio.voice-audio'); }}
+    function setMgAnimationTime(animation, timeMs, shouldPlay) {{
+      try {{
+        animation.pause();
+        animation.currentTime = timeMs;
+        const timing = animation.effect?.getComputedTiming?.();
+        const endTime = Number(timing?.endTime);
+        if (shouldPlay && (!Number.isFinite(endTime) || timeMs < endTime)) animation.play();
+      }} catch (_) {{}}
+    }}
+    function seekMgScene(scene, localSeconds, shouldPlay) {{
+      if (!scene) return;
+      const offsetSeconds = Math.max(0, Number(scene.dataset.mgClipOffset) || 0);
+      const timeMs = (offsetSeconds + Math.max(0, Number(localSeconds) || 0)) * 1000;
+      const overlay = scene.querySelector('.info-layer');
+      for (const animation of overlay?.getAnimations({{subtree: true}}) || []) {{
+        setMgAnimationTime(animation, timeMs, shouldPlay);
+      }}
+      const frame = scene.querySelector('iframe.custom-html-frame');
+      if (!frame) return;
+      try {{
+        const frameDocument = frame.contentDocument;
+        if (!frameDocument || frameDocument.readyState === 'loading') {{
+          frame.addEventListener('load', () => {{
+            const active = scenes[current] === scene;
+            seekMgScene(scene, active ? progress : 0, active && playing);
+          }}, {{once: true}});
+          return;
+        }}
+        for (const animation of frameDocument.getAnimations({{subtree: true}})) {{
+          setMgAnimationTime(animation, timeMs, shouldPlay);
+        }}
+      }} catch (_) {{}}
+    }}
     function syncVideos() {{
       scenes.forEach((scene, index) => {{
         const video = scene.querySelector('video');
@@ -3859,7 +3901,11 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
     function show(index) {{
       current = Math.max(0, Math.min(index, scenes.length - 1));
       progress = 0;
-      scenes.forEach((scene, i) => scene.classList.toggle('active', i === current));
+      scenes.forEach((scene, i) => {{
+        const active = i === current;
+        scene.classList.toggle('active', active);
+        seekMgScene(scene, 0, active && playing);
+      }});
       thumbs.forEach((thumb, i) => thumb.classList.toggle('active', i === current));
       bar.style.width = '0%';
       const video = activeVideo();
@@ -3871,6 +3917,7 @@ def _build_video_studio_player_html(project: Dict[str, Any], *, page_label: str)
       play.textContent = playing ? 'Ⅱ' : '▶';
       player.classList.toggle('playing', playing);
       syncVideos();
+      seekMgScene(scenes[current], progress, playing);
       if (playing) startBgm(); else stopBgm();
     }}
     thumbs.forEach((thumb, i) => thumb.addEventListener('click', () => show(i)));
@@ -3972,7 +4019,7 @@ def _custom_html_iframe_markup(html_design: Dict[str, Any]) -> str:
 </html>"""
     return (
         '<iframe class="custom-html-frame" '
-        'sandbox="" '
+        'sandbox="allow-same-origin" '
         'title="用户微调 HTML 信息层" '
         f'srcdoc="{html.escape(srcdoc, quote=True)}"></iframe>'
     )

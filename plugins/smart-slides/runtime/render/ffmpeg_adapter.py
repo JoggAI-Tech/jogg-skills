@@ -13,6 +13,8 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
 from backend.services import video_studio_planner
+from render.animated_overlay import capture_html_keyframe as _capture_html_keyframe
+from render.animated_overlay import render_alpha_webm
 
 
 _ACTIVE_WORKS: set[str] = set()
@@ -23,10 +25,28 @@ _HEIGHT = 1080
 
 
 def _render_env() -> Dict[str, str]:
+    """Return the environment used by every local render subprocess.
+
+    launchd starts the preview service with a deliberately small PATH.  Homebrew
+    and manually-installed macOS binaries normally live outside that PATH, so
+    discover their standard locations here instead of relying on the shell that
+    originally started the service.
+    """
     env = dict(os.environ)
-    tool_dir = os.path.abspath(os.path.expanduser(env.get("SMART_SLIDES_TOOL_DIR", "~/.codex/smart-slides/bin")))
-    if os.path.isfile(os.path.join(tool_dir, "ffmpeg")) or os.path.isfile(os.path.join(tool_dir, "ffprobe")):
-        env["PATH"] = f"{tool_dir}{os.pathsep}{env.get('PATH', '')}"
+    candidates = [
+        os.path.abspath(os.path.expanduser(env.get("SMART_SLIDES_TOOL_DIR", "~/.codex/smart-slides/bin"))),
+        "/opt/homebrew/bin",
+        "/usr/local/bin",
+    ]
+    # Preserve an explicit tool directory as the highest-priority override,
+    # while only adding directories that actually exist.  This does not install
+    # or download a renderer.
+    prefix: List[str] = []
+    for candidate in candidates:
+        if os.path.isdir(candidate) and candidate not in prefix:
+            prefix.append(candidate)
+    existing_path = [entry for entry in env.get("PATH", "").split(os.pathsep) if entry]
+    env["PATH"] = os.pathsep.join([*prefix, *[entry for entry in existing_path if entry not in prefix]])
     return env
 
 
@@ -117,12 +137,29 @@ def _chrome_binary() -> str:
     raise RuntimeError("local Chrome is required to rasterize Podcastor HTML/MG overlays; set SMART_SLIDES_CHROME_BIN")
 
 
+def _node_binary() -> str:
+    configured = os.getenv("SMART_SLIDES_NODE_BIN", "").strip()
+    candidates = [configured, shutil.which("node", path=_render_env().get("PATH")) or ""]
+    for candidate in candidates:
+        if not candidate or not os.path.isfile(candidate) or not os.access(candidate, os.X_OK):
+            continue
+        version = subprocess.run([candidate, "--version"], capture_output=True, text=True, check=False, env=_render_env())
+        try:
+            major = int(version.stdout.strip().lstrip("v").split(".", 1)[0])
+        except (TypeError, ValueError):
+            major = 0
+        if version.returncode == 0 and major >= 22:
+            return candidate
+    raise RuntimeError("Node.js 22 or newer is required for local Chrome capture; set SMART_SLIDES_NODE_BIN")
+
+
 def ensure_renderer_available(*, require_browser: bool = False) -> None:
     for binary in ("ffmpeg", "ffprobe"):
         if not _binary(binary):
             raise RuntimeError(f"{binary} is required for local rendering")
     if require_browser:
         _chrome_binary()
+        _node_binary()
 
 
 def _shot_design(snapshot: Dict[str, Any], shot: Dict[str, Any]) -> Dict[str, Any]:
@@ -145,17 +182,24 @@ def _shot_uses_html(shot: Dict[str, Any]) -> bool:
     return bool(director.get("enabled")) or bool(layer.get("enabled")) or str(shot.get("scene_role") or "") == "broll_backdrop_overlay"
 
 
-def _render_overlay_png(snapshot: Dict[str, Any], shot: Dict[str, Any], work_dir: Path) -> str:
-    if not _shot_uses_html(shot):
-        return ""
-    if os.getenv("SMART_SLIDES_SKIP_BROWSER_RASTERIZER", "").lower() in {"1", "true", "yes"}:
-        return ""
+def _shot_mg_clip_offset_seconds(shot: Dict[str, Any]) -> float:
+    try:
+        return max(0.0, float(shot.get("mg_clip_offset_seconds") or 0.0))
+    except (TypeError, ValueError):
+        return 0.0
 
+
+def _write_overlay_page(
+    snapshot: Dict[str, Any],
+    shot: Dict[str, Any],
+    work_dir: Path,
+    *,
+    freeze_animations: bool,
+) -> Path:
     shot_id = str(shot.get("id") or "")
     overlays = work_dir / "overlays"
     overlays.mkdir(parents=True, exist_ok=True)
     page_path = overlays / f"{shot_id}.html"
-    output_path = overlays / f"{shot_id}.png"
     isolated = deepcopy(shot)
     isolated["html_design"] = _shot_design(snapshot, shot)
     editor = snapshot.get("editor_state") if isinstance(snapshot.get("editor_state"), dict) else {}
@@ -173,19 +217,74 @@ def _render_overlay_png(snapshot: Dict[str, Any], shot: Dict[str, Any], work_dir
         },
     }
     document = video_studio_planner.build_composition_preview_html(isolated_project)
-    overlay_css = """
+    freeze_css = "*,*::before,*::after{animation:none!important;transition:none!important}" if freeze_animations else ""
+    overlay_css = f"""
 <style>
-html,body{margin:0!important;width:1920px!important;height:1080px!important;overflow:hidden!important;background:transparent!important}
-.shell{display:block!important;width:1920px!important;height:1080px!important;background:transparent!important}
-.shell>header,.shell>footer,.controls,.media,.grade,.caption,.avatar{display:none!important}
-.stage{display:block!important;width:1920px!important;height:1080px!important;padding:0!important}
-.player{width:1920px!important;height:1080px!important;max-width:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;overflow:hidden!important}
-.scene{display:block!important;opacity:1!important;pointer-events:none!important;transition:none!important}
-.info-layer{opacity:1!important;animation:none!important}
+html,body{{margin:0!important;width:1920px!important;height:1080px!important;overflow:hidden!important;background:transparent!important}}
+.shell{{display:block!important;width:1920px!important;height:1080px!important;background:transparent!important}}
+.shell>header,.shell>footer,.controls,.media,.grade,.caption,.avatar{{display:none!important}}
+.stage{{display:block!important;width:1920px!important;height:1080px!important;padding:0!important}}
+.player{{width:1920px!important;height:1080px!important;max-width:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;overflow:hidden!important}}
+.scene{{display:block!important;opacity:1!important;pointer-events:none!important;transition:none!important}}
+.info-layer{{opacity:1!important}}
+{freeze_css}
 </style>
 """
     page_path.write_text(document.replace("</head>", f"{overlay_css}</head>"), encoding="utf-8")
-    profile_dir = overlays / f"chrome-{shot_id}"
+    return page_path
+
+
+def capture_html_keyframe(page_path: str | Path, at_seconds: float, output_path: str | Path) -> str:
+    """Capture a deterministic PNG from a local Podcastor HTML/MG page."""
+    ensure_renderer_available(require_browser=True)
+    return _capture_html_keyframe(
+        page_path,
+        at_seconds,
+        output_path,
+        chrome_binary=_chrome_binary(),
+        width=_WIDTH,
+        height=_HEIGHT,
+        env=_render_env(),
+    )
+
+
+def _render_overlay_webm(
+    snapshot: Dict[str, Any],
+    shot: Dict[str, Any],
+    work_dir: Path,
+    duration: float,
+) -> str:
+    if not _shot_uses_html(shot):
+        return ""
+    if os.getenv("SMART_SLIDES_SKIP_BROWSER_RASTERIZER", "").lower() in {"1", "true", "yes"}:
+        return ""
+    page_path = _write_overlay_page(snapshot, shot, work_dir, freeze_animations=False)
+    output_path = page_path.with_suffix(".webm")
+    return render_alpha_webm(
+        page_path,
+        duration,
+        output_path,
+        start_at_seconds=_shot_mg_clip_offset_seconds(shot),
+        frame_rate=_FRAME_RATE,
+        chrome_binary=_chrome_binary(),
+        ffmpeg_binary=_binary("ffmpeg") or "ffmpeg",
+        width=_WIDTH,
+        height=_HEIGHT,
+        env=_render_env(),
+    )
+
+
+def _render_overlay_png(snapshot: Dict[str, Any], shot: Dict[str, Any], work_dir: Path) -> str:
+    """Render the explicit diagnostic poster fallback."""
+    if not _shot_uses_html(shot):
+        return ""
+    if os.getenv("SMART_SLIDES_SKIP_BROWSER_RASTERIZER", "").lower() in {"1", "true", "yes"}:
+        return ""
+
+    shot_id = str(shot.get("id") or "")
+    page_path = _write_overlay_page(snapshot, shot, work_dir, freeze_animations=True)
+    output_path = page_path.with_suffix(".png")
+    profile_dir = page_path.parent / f"chrome-{shot_id}"
     command = [
         _chrome_binary(),
         "--headless=new",
@@ -223,6 +322,15 @@ html,body{margin:0!important;width:1920px!important;height:1080px!important;over
     return str(output_path)
 
 
+def _render_overlay(snapshot: Dict[str, Any], shot: Dict[str, Any], work_dir: Path, duration: float) -> str:
+    mode = os.getenv("SMART_SLIDES_HTML_RENDER_MODE", "animated").strip().lower() or "animated"
+    if mode == "poster":
+        return _render_overlay_png(snapshot, shot, work_dir)
+    if mode != "animated":
+        raise RuntimeError("SMART_SLIDES_HTML_RENDER_MODE must be 'animated' or 'poster'")
+    return _render_overlay_webm(snapshot, shot, work_dir, duration)
+
+
 def _is_image(path: str) -> bool:
     return Path(path).suffix.lower() in {".jpg", ".jpeg", ".png", ".webp", ".gif"}
 
@@ -241,11 +349,14 @@ def _render_scene(visual_path: str, overlay_path: str, duration: float, output_p
         f"crop={_WIDTH}:{_HEIGHT},setsar=1,tpad=stop_mode=clone:stop_duration={duration:.3f}"
     )
     if overlay_path:
-        command.extend(["-loop", "1", "-framerate", str(_FRAME_RATE), "-i", overlay_path])
+        if _is_image(overlay_path):
+            command.extend(["-loop", "1", "-framerate", str(_FRAME_RATE), "-i", overlay_path])
+        else:
+            command.extend(["-c:v", "libvpx-vp9", "-i", overlay_path])
         fade_out = max(0.0, duration - 0.45)
         filter_complex = (
             f"[0:v]{base_filter}[base];"
-            f"[1:v]format=rgba,fade=t=in:st=0:d=0.55:alpha=1,fade=t=out:st={fade_out:.3f}:d=0.45:alpha=1[mg];"
+            f"[1:v]format=rgba,setpts=PTS-STARTPTS,fade=t=in:st=0:d=0.55:alpha=1,fade=t=out:st={fade_out:.3f}:d=0.45:alpha=1[mg];"
             "[base][mg]overlay=0:0:format=auto,format=yuv420p[v]"
         )
         command.extend(["-filter_complex", filter_complex, "-map", "[v]"])
@@ -259,7 +370,7 @@ def _render_audio(source: str, duration: float, output_path: Path) -> None:
     safe_duration = max(0.1, float(duration))
     audio_filter = (
         "aformat=sample_rates=48000:channel_layouts=stereo,"
-        f"atrim=0:{safe_duration:.3f},apad=pad_dur={safe_duration:.3f},atrim=0:{safe_duration:.3f}"
+        f"atrim=0:{safe_duration:.3f}"
     )
     subprocess.run(
         ["ffmpeg", "-y", "-v", "error", "-i", source, "-af", audio_filter, "-c:a", "aac", "-b:a", "192k", str(output_path)],
@@ -268,10 +379,16 @@ def _render_audio(source: str, duration: float, output_path: Path) -> None:
     )
 
 
-def _concat_file(paths: Iterable[Path], destination: Path) -> Path:
+def _concat_input_file(paths: Iterable[Path], destination: Path) -> Path:
+    """Write an FFmpeg concat-demuxer input without copying its media."""
     list_path = destination.with_suffix(".txt")
     lines = ["file '" + str(path).replace("'", "'\\''") + "'" for path in paths]
     list_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return list_path
+
+
+def _concat_file(paths: Iterable[Path], destination: Path) -> Path:
+    list_path = _concat_input_file(paths, destination)
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(list_path), "-c", "copy", str(destination)], check=True, env=_render_env())
     return destination
 
@@ -332,12 +449,11 @@ def _media_duration_seconds(path: str) -> float:
 
 
 def _require_voice_coverage(audio_path: str, duration: float, shot_id: str) -> None:
-    minimum = max(0.5, min(1.0, float(os.getenv("SMART_SLIDES_MIN_VOICE_COVERAGE", "0.90"))))
     actual = _media_duration_seconds(audio_path)
-    if actual + 0.05 < duration * minimum:
+    if actual + 0.05 < duration:
         raise RuntimeError(
-            f"Jogg voice for {shot_id} covers {actual:.2f}s of a {duration:.2f}s shot; "
-            "regenerate the narration before local render instead of padding silence"
+            f"Jogg voice for {shot_id} is {actual:.2f}s but the timeline is {duration:.2f}s; "
+            "sync the project to measured Jogg voice timing before local render instead of padding silence"
         )
 
 
@@ -375,7 +491,7 @@ def render_snapshot(snapshot: Dict[str, Any], work_dir: str, data_dir: str, outp
         visual_path = avatar_path or broll_path
         if not visual_path:
             raise RuntimeError(f"missing local visual asset for shot: {shot_id}")
-        overlay_path = _render_overlay_png(snapshot, shot, directory)
+        overlay_path = _render_overlay(snapshot, shot, directory, duration)
         scene_video = scenes_dir / f"{index:03d}-{shot_id}.mp4"
         scene_audio = audio_dir / f"{index:03d}-{shot_id}.m4a"
         _render_scene(visual_path, overlay_path, duration, scene_video)
@@ -389,10 +505,13 @@ def render_snapshot(snapshot: Dict[str, Any], work_dir: str, data_dir: str, outp
                 "avatar_visual": bool(avatar_path),
                 "visual_path": visual_path,
                 "overlay_path": overlay_path,
+                "mg_clip_offset_seconds": _shot_mg_clip_offset_seconds(shot),
             }
         )
 
-    visual_track = _concat_file(scene_videos, directory / "visuals.mp4")
+    # Do not duplicate the full video timeline into a temporary visuals.mp4.
+    # The final composition can consume the scene list directly.
+    visual_list = _concat_input_file(scene_videos, directory / "visuals")
     narration = _concat_file(scene_audios, directory / "narration.m4a")
     captions = directory / "captions.srt"
     _write_captions(shots, durations, scripts, captions)
@@ -404,7 +523,7 @@ def render_snapshot(snapshot: Dict[str, Any], work_dir: str, data_dir: str, outp
     target.parent.mkdir(parents=True, exist_ok=True)
     subprocess.run(
         [
-            "ffmpeg", "-y", "-v", "error", "-i", str(visual_track), "-i", str(mixed_audio),
+            "ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(visual_list), "-i", str(mixed_audio),
             "-vf", _caption_filter(captions), "-map", "0:v:0", "-map", "1:a:0", "-c:v", "libx264", "-preset", "medium", "-crf", "20",
             "-c:a", "aac", "-b:a", "192k", "-shortest", "-movflags", "+faststart", str(target),
         ],

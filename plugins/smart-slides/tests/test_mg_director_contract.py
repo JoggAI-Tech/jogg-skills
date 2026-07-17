@@ -208,6 +208,17 @@ class BespokeHtmlContractTest(unittest.TestCase):
         normalized = video_studio_planner.normalize_scene_groups(source, "broll_html")
         return video_studio_bespoke_html.restore_bespoke_html_from_planning_input(source, normalized)
 
+    def test_css_minifier_preserves_calc_operator_whitespace(self) -> None:
+        css = (
+            ".scene + .scene { animation-delay: calc(19.54s + var(--shot-offset)); "
+            "width: calc(var(--frame-width) - 24px); }"
+        )
+        minified = video_studio_planner._minify_custom_css(css)
+
+        self.assertIn("calc(19.54s + var(--shot-offset))", minified)
+        self.assertIn("calc(var(--frame-width) - 24px)", minified)
+        self.assertIn(".scene + .scene", minified)
+
     def test_codex_html_uses_the_extracted_source_contract_not_a_template(self) -> None:
         html = (
             '<main class="ai-mg-layer" data-ai-generated-html="true"><svg viewBox="0 0 1920 1080">'
@@ -228,6 +239,23 @@ class BespokeHtmlContractTest(unittest.TestCase):
         self.assertIn("custom-html-frame", preview)
         self.assertNotIn("MG视觉系统", preview)
 
+    def test_bespoke_html_inherits_source_template_transparent_surfaces(self) -> None:
+        html = (
+            '<main class="ai-mg-layer" data-ai-generated-html="true"><svg viewBox="0 0 1920 1080">'
+            '<rect x="72" y="84" width="1776" height="820" rx="28" fill="#07111f" fill-opacity=".8"/>'
+            '<rect x="0" y="0" width="960" height="1080" fill="#0c2840" fill-opacity=".86"/>'
+            '<path data-ai-edit-block="capital-path" data-ai-edit-kind="visual" d="M180 520 L880 280 L1440 620" stroke="#a3e635" stroke-width="28" fill="none"/>'
+            '<g data-ai-edit-block="icon-chip" data-ai-edit-kind="visual"><rect x="700" y="180" width="180" height="180" fill="#67e8f9"/></g>'
+            '<g data-ai-edit-block="icon-cloud" data-ai-edit-kind="visual"><circle cx="1360" cy="620" r="90" fill="#a3e635"/></g>'
+            '<text class="title" x="140" y="120" font-size="72">资本流向</text>'
+            '<text x="140" y="780" font-size="36">基础设施成为重心</text></svg></main>'
+        )
+        design = video_studio_bespoke_html.prepare_bespoke_html_scene_groups("AI 科技热点", self._groups(html))[0]["shots"][0]["html_design"]
+        self.assertIn('fill-opacity=".42"', design["custom_html"])
+        self.assertIn('fill-opacity=".38"', design["custom_html"])
+        self.assertIn('data-mg-surface="source-translucent"', design["custom_html"])
+        self.assertIn("--mg-surface: rgba(2,6,23,.34)", design["custom_css"])
+
     def test_missing_bespoke_html_is_a_blocking_contract_failure(self) -> None:
         with self.assertRaises(video_studio_bespoke_html.BespokeHtmlContractError):
             video_studio_bespoke_html.prepare_bespoke_html_scene_groups("AI 科技热点", self._groups(""))
@@ -241,6 +269,121 @@ class BespokeHtmlContractTest(unittest.TestCase):
         self.assertIn("MG 构图执行合同", prompt)
         self.assertIn("AIGC 主路径", prompt)
         self.assertIn("模板只允许作为失败兜底", prompt)
+
+    def test_semantic_edit_schema_marks_only_declared_blocks(self) -> None:
+        custom_html = (
+            '<main class="ai-mg-layer" data-ai-generated-html="true">'
+            '<svg viewBox="0 0 1920 1080">'
+            '<g class="hero"><path data-ai-edit-block="legacy-path" d="M0 0L100 100"/></g>'
+            '<text class="headline">标题</text>'
+            '</svg></main>'
+        )
+        normalized_html, normalized_schema = video_studio_bespoke_html.normalize_edit_schema(
+            custom_html,
+            {
+                "editable_blocks": [
+                    {
+                        "id": "headline",
+                        "name": "主标题",
+                        "kind": "text",
+                        "selector": ".headline",
+                        "allowed": ["text", "x", "fontSize"],
+                    },
+                    {
+                        "id": "hero",
+                        "name": "主视觉",
+                        "kind": "group",
+                        "selector": ".hero",
+                        "allowed": ["x", "scale", "color"],
+                        "colorMode": "descendants",
+                    },
+                ]
+            },
+        )
+
+        self.assertIn('data-ai-edit-block="headline"', normalized_html)
+        self.assertIn('data-ai-edit-block="hero"', normalized_html)
+        self.assertNotIn('data-ai-edit-block="legacy-path"', normalized_html)
+        self.assertEqual(normalized_schema["version"], "edit_schema_v2")
+        self.assertEqual(normalized_schema["editable_blocks"][1]["colorMode"], "descendants")
+        edited_html = video_studio_bespoke_html.apply_edit_text_overrides(
+            normalized_html,
+            normalized_schema,
+            {"headline": {"text": "芯片 < 算力"}},
+        )
+        self.assertIn("芯片 &lt; 算力", edited_html)
+        self.assertIn('<path d="M0 0L100 100"/>', edited_html)
+        group_css = video_studio_bespoke_html.build_edit_override_css(
+            normalized_schema,
+            {"hero": {"color": "#22d3ee"}},
+        )
+        self.assertIn(".hero,.hero *", group_css)
+        self.assertIn("fill:#22d3ee", group_css)
+
+    def test_semantic_edit_schema_rejects_ambiguous_or_nested_blocks(self) -> None:
+        duplicate_id = {
+            "editable_blocks": [
+                {"id": "same", "name": "一", "kind": "text", "selector": ".one", "allowed": ["text"]},
+                {"id": "same", "name": "二", "kind": "text", "selector": ".two", "allowed": ["text"]},
+            ]
+        }
+        with self.assertRaisesRegex(video_studio_bespoke_html.BespokeHtmlContractError, "重复"):
+            video_studio_bespoke_html.normalize_edit_schema(
+                '<main><span class="one">一</span><span class="two">二</span></main>',
+                duplicate_id,
+            )
+
+        with self.assertRaisesRegex(video_studio_bespoke_html.BespokeHtmlContractError, "简单 selector"):
+            video_studio_bespoke_html.normalize_edit_schema(
+                '<main><g class="hero"><path class="line"/></g></main>',
+                {"editable_blocks": [{"id": "line", "name": "线", "kind": "visual", "selector": ".hero .line", "allowed": ["color"]}]},
+            )
+
+        for custom_html in (
+            '<main><span>没有标题</span></main>',
+            '<main><span class="headline">一</span><span class="headline">二</span></main>',
+        ):
+            with self.assertRaisesRegex(video_studio_bespoke_html.BespokeHtmlContractError, "必须唯一命中"):
+                video_studio_bespoke_html.normalize_edit_schema(
+                    custom_html,
+                    {"editable_blocks": [{"id": "headline", "name": "标题", "kind": "text", "selector": ".headline", "allowed": ["text"]}]},
+                )
+
+        with self.assertRaisesRegex(video_studio_bespoke_html.BespokeHtmlContractError, "子块"):
+            video_studio_bespoke_html.normalize_edit_schema(
+                '<main><g class="hero"><path class="line"/></g></main>',
+                {
+                    "editable_blocks": [
+                        {"id": "hero", "name": "视觉组", "kind": "group", "selector": ".hero", "allowed": ["scale"]},
+                        {"id": "line", "name": "子路径", "kind": "visual", "selector": ".line", "allowed": ["color"]},
+                    ]
+                },
+            )
+
+    def test_edit_override_css_is_sparse_and_scoped(self) -> None:
+        schema = {
+            "version": "edit_schema_v2",
+            "editable_blocks": [
+                {
+                    "id": "headline",
+                    "name": "主标题",
+                    "kind": "text",
+                    "selector": "[data-ai-edit-block='headline']",
+                    "allowed": ["text", "x", "fontSize", "color"],
+                }
+            ],
+        }
+        css = video_studio_bespoke_html.build_edit_override_css(schema, {"headline": {"x": 120}})
+        self.assertIn("[data-ai-edit-block='headline']", css)
+        self.assertIn("--smart-slides-edit-x:120px", css)
+        self.assertNotIn("color", css)
+        self.assertNotIn("opacity", css)
+        self.assertNotIn("animation", css)
+        self.assertNotIn("width", css)
+        self.assertNotIn("height", css)
+
+        with self.assertRaisesRegex(video_studio_bespoke_html.BespokeHtmlContractError, "不允许编辑 opacity"):
+            video_studio_bespoke_html.build_edit_override_css(schema, {"headline": {"opacity": 0.5}})
 
 
 if __name__ == "__main__":

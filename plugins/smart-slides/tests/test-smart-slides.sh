@@ -37,7 +37,7 @@ EOF
   chmod +x "$TMP_DIR/bin/ffmpeg"
   cat > "$TMP_DIR/bin/ffprobe" <<'EOF'
 #!/usr/bin/env sh
-exit 0
+printf '%s\n' '8.554'
 EOF
   chmod +x "$TMP_DIR/bin/ffprobe"
   export PATH="$TMP_DIR/bin:$PATH"
@@ -88,6 +88,96 @@ planning_required_path() {
   stop_mock
 }
 
+staged_html_path() {
+  start_mock completed; configure_paths staged-html
+  unset SMART_SLIDES_ALLOW_DETERMINISTIC_FALLBACK
+  local result run_id state plan creates works invalid_asset valid_asset keyframe alpha_attempt
+  plan="$TMP_DIR/director-only-planning.json"
+  jq -n '{
+    producer_analysis:{summary:"Codex-authored fixture"},
+    production_requirement_document:{target_audience:"test"},
+    creative_plan:{script:"alpha beta"},
+    script:"alpha beta",
+    director_document:{visual_strategy:"fixture"},
+    scene_groups:[{id:"group-1",shots:[
+      {
+        id:"shot-01",title:"Alpha",narration:"planned alpha",duration_seconds:8,
+        scene_role:"broll_backdrop_overlay",broll_options:[],
+        information_layer:{enabled:true,keyword:"Alpha"},
+        html_render_strategy:"llm_bespoke_html",
+        html_design:{clip_id:"clip-alpha"},
+        mg_director:{version:"mg_director_v1",enabled:true,render_strategy:"llm_bespoke_html",visual_system:"causal",screen_slots:[{role:"headline",text:"阶段验收"}]}
+      },
+      {
+        id:"shot-02",title:"Beta",narration:"planned beta",duration_seconds:8,
+        scene_role:"broll_backdrop_overlay",broll_options:[],
+        information_layer:{enabled:true,keyword:"Beta"},
+        html_render_strategy:"llm_bespoke_html",
+        html_design:{clip_id:"clip-beta"},
+        mg_director:{version:"mg_director_v1",enabled:true,render_strategy:"llm_bespoke_html",visual_system:"comparison",screen_slots:[{role:"headline",text:"阶段验收"}]}
+      }
+    ]}]
+  }' > "$plan"
+
+  result=$(bash "$RUNNER" run --topic '分阶段 HTML' --duration-seconds 60 --avatar-mode none --planning-file "$plan")
+  run_id=$(jq -r '.run_id' <<< "$result"); state="$SMART_SLIDES_STATE_DIR/$run_id.json"
+  [[ "$(jq -r '.stage' <<< "$result")" == waiting_html ]] || fail 'director-only planning did not wait for per-clip HTML'
+  jq -e '.pending_clip_ids == ["clip-alpha","clip-beta"]' "$state" >/dev/null || fail 'pending HTML clip IDs were not persisted'
+  jq -e '.html_clip_checkpoints["clip-alpha"].status == "pending" and .html_clip_checkpoints["clip-beta"].status == "pending"' "$state" >/dev/null || fail 'pending HTML checkpoints were not initialized'
+  creates=$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json" 2>/dev/null || printf '0')
+  works=$(jq '[.[]|select(.path|endswith("/works"))]|length' "$TMP_DIR/requests.json" 2>/dev/null || printf '0')
+  [[ "$creates" == 0 ]] || fail 'waiting HTML submitted a paid Jogg task'
+  [[ "$works" == 0 ]] || fail 'waiting HTML created a render work'
+
+  result=$(bash "$RUNNER" html-status --run-id "$run_id")
+  jq -e '.pending_clip_ids == ["clip-alpha","clip-beta"]' <<< "$result" >/dev/null || fail 'html-status did not report pending clips'
+
+  invalid_asset="$TMP_DIR/invalid-html.json"
+  jq -n '{custom_html:"",custom_css:""}' > "$invalid_asset"
+  result=$(bash "$RUNNER" apply-html --run-id "$run_id" --clip-id clip-alpha --html-file "$invalid_asset")
+  [[ "$(jq -r '.html_clip_checkpoints["clip-alpha"].status' <<< "$result")" == qa_failed ]] || fail "invalid HTML did not enter qa_failed: $result"
+  result=$(bash "$RUNNER" resume --run-id "$run_id")
+  [[ "$(jq -r '.stage' <<< "$result")" == waiting_html ]] || fail 'failed HTML QA did not block resume'
+  [[ ! -f "$TMP_DIR/requests.json" ]] || jq -e '[.[]|select(.path=="/v2/create_video_from_avatar" or (.path|endswith("/works")))]|length==0' "$TMP_DIR/requests.json" >/dev/null || fail 'failed HTML QA allowed paid generation or render'
+
+  valid_asset="$TMP_DIR/valid-html.json"
+  jq -n '{
+    custom_html:("<main class=\"ai-mg-layer\" data-ai-generated-html=\"true\"><svg viewBox=\"0 0 1920 1080\">"+
+      "<path data-ai-edit-block=\"flow\" data-ai-edit-kind=\"visual\" d=\"M180 520H1500\" stroke=\"#2dd4bf\" stroke-width=\"64\"/>"+
+      "<circle data-ai-edit-block=\"node-a\" data-ai-edit-kind=\"visual\" cx=\"480\" cy=\"520\" r=\"120\" fill=\"#f4c95d\"/>"+
+      "<circle data-ai-edit-block=\"node-b\" data-ai-edit-kind=\"visual\" cx=\"1320\" cy=\"520\" r=\"120\" fill=\"#e7f0f7\"/>"+
+      "<text class=\"title\" x=\"160\" y=\"220\" font-size=\"72\">阶段验收</text></svg></main>"),
+    custom_css:".ai-mg-layer{position:absolute;inset:0}.title{fill:#fff;font-size:72px}",
+    edit_schema:{editable_text_selectors:[".title"]}
+  }' > "$valid_asset"
+  result=$(bash "$RUNNER" apply-html --run-id "$run_id" --clip-id clip-alpha --html-file "$valid_asset")
+  [[ "$(jq -r '.html_clip_checkpoints["clip-alpha"].status' <<< "$result")" == generated ]] || fail "valid first HTML clip was not generated: $result"
+  alpha_attempt=$(jq -r '.html_clip_checkpoints["clip-alpha"].attempt' "$state")
+  [[ "$alpha_attempt" == 2 ]] || fail 'HTML apply attempt count was not preserved across QA failure'
+  keyframe="$TMP_DIR/clip-alpha.png"; printf 'png-alpha' > "$keyframe"
+  jq --arg path "$keyframe" '.html_clip_checkpoints["clip-alpha"].keyframes=[{at_seconds:1,path:$path}]' "$state" > "$state.tmp"; mv "$state.tmp" "$state"
+  result=$(bash "$RUNNER" approve-html --run-id "$run_id" --clip-id clip-alpha)
+  [[ "$(jq -r '.html_clip_checkpoints["clip-alpha"].status' <<< "$result")" == approved ]] || fail 'first HTML clip was not approved'
+  result=$(bash "$RUNNER" resume --run-id "$run_id")
+  [[ "$(jq -r '.stage' <<< "$result")" == waiting_html ]] || fail 'resume did not remain at the unapproved clip'
+  [[ "$(jq -r '.html_clip_checkpoints["clip-alpha"].attempt' "$state")" == "$alpha_attempt" ]] || fail 'resume recreated an approved HTML clip'
+  jq -e '.pending_clip_ids == ["clip-beta"]' "$state" >/dev/null || fail 'resume did not isolate the remaining HTML clip'
+
+  result=$(bash "$RUNNER" apply-html --run-id "$run_id" --clip-id clip-beta --html-file "$valid_asset")
+  [[ "$(jq -r '.html_clip_checkpoints["clip-beta"].status' <<< "$result")" == generated ]] || fail 'valid second HTML clip was not generated'
+  keyframe="$TMP_DIR/clip-beta.png"; printf 'png-beta' > "$keyframe"
+  jq --arg path "$keyframe" '.html_clip_checkpoints["clip-beta"].keyframes=[{at_seconds:2,path:$path}]' "$state" > "$state.tmp"; mv "$state.tmp" "$state"
+  result=$(bash "$RUNNER" approve-html --run-id "$run_id" --clip-id clip-beta)
+  [[ "$(jq -r '.stage' <<< "$result")" == html_ready ]] || fail 'all approved HTML clips did not reach html_ready'
+
+  result=$(bash "$RUNNER" resume --run-id "$run_id")
+  [[ "$(jq -r '.stage' <<< "$result")" == completed ]] || fail 'approved staged HTML run did not complete'
+  jq -e '[.[]|select(.path|endswith("/planning-state"))|.body|fromjson|.scene_groups[].shots[].html_design.custom_html|select(contains("data-ai-generated-html"))]|length==2' "$TMP_DIR/requests.json" >/dev/null || fail 'approved per-clip HTML was not injected into planning'
+  jq -e '[.[]|select(.path=="/v2/create_video_from_avatar")]|length==2' "$TMP_DIR/requests.json" >/dev/null || fail 'approved staged run did not create exactly one Jogg task per shot'
+  jq -e '[.[]|select(.path|test("tts|hermes|cos|deepseek|siliconflow";"i"))]|length==0' "$TMP_DIR/requests.json" >/dev/null || fail 'staged workflow crossed a forbidden request boundary'
+  stop_mock
+}
+
 happy_path() {
   start_mock completed; configure_paths happy
   local preflight result run_id creates_before creates_after works_before works_after state busy_result busy_status edited_result lock_plan
@@ -98,6 +188,7 @@ happy_path() {
   run_id=$(jq -r '.run_id' <<< "$result"); state="$SMART_SLIDES_STATE_DIR/$run_id.json"
   [[ "$(jq -r '.stage' <<< "$result")" == completed ]] || fail 'happy path did not complete'
   [[ "$(jq -r '.target_duration_seconds' "$state")" == 600 ]] || fail 'duration was not preserved'
+  [[ "$(jq -r '.actual_duration_seconds' "$state")" == 25.662 ]] || fail 'measured Jogg duration was not persisted'
   jq -e '.jogg_tasks|length==3' "$state" >/dev/null || fail 'every shot must have a Jogg task'
   jq -e '[.jogg_tasks[].audio_path|select(length>0)]|length==3' "$state" >/dev/null || fail 'every shot must have extracted audio'
   jq -e '[.jogg_tasks[].avatar_path|select(length>0)]|length==2' "$state" >/dev/null || fail 'only opening and closing should retain avatar video'
@@ -106,6 +197,7 @@ happy_path() {
   jq -e '[.[]|select(.path=="/v2/create_video_from_avatar")|.body|fromjson|select(.voice.type=="script")]|length==3' "$TMP_DIR/requests.json" >/dev/null || fail 'Jogg did not use script voice'
   jq -e '[.[]|select(.path|test("tts";"i"))]|length==0' "$TMP_DIR/requests.json" >/dev/null || fail 'standalone TTS was requested'
   jq -e '[.[]|select(.path=="/api/v1/video-studio/projects/project-1/editor-state")|.body|fromjson|select((.voice_assets_by_shot|length)==3 and (.avatar_assets_by_shot|length)==2 and .avatar_enabled==false)]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'editor state asset maps are wrong'
+  jq -e '[.[]|select(.path=="/api/v1/video-studio/projects/project-1/sync-voice-timing")|.body|fromjson|select((.voice_durations_by_shot["shot-01"] == 8.554) and (.voice_durations_by_shot["shot-02"] == 8.554))]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'Jogg audio durations were not synchronized before B-roll'
   jq -e '[.[]|select(.path=="/api/v1/video-studio/projects/project-1/shots/shot-02/broll-assets")]|length==1' "$TMP_DIR/requests.json" >/dev/null || fail 'middle B-roll was not downloaded'
   jq -e '[.[]|select(.path|test("shots/(shot-01|shot-03)/broll-assets"))]|length==0' "$TMP_DIR/requests.json" >/dev/null || fail 'avatar shots downloaded B-roll'
   creates_before=$(jq '[.[]|select(.path=="/v2/create_video_from_avatar")]|length' "$TMP_DIR/requests.json")
@@ -221,6 +313,7 @@ no_avatar_visual_path() {
 
 make_fake_ffmpeg
 planning_required_path
+staged_html_path
 happy_path
 failure_path
 timeout_path

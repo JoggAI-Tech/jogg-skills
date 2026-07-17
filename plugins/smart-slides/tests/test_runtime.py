@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import io
 import os
 import shutil
 import subprocess
@@ -15,9 +16,9 @@ from fastapi.testclient import TestClient
 
 from backend.api import video_studio
 from backend.main import app
-from backend.services import video_studio_broll, video_studio_works
+from backend.services import video_studio_broll, video_studio_planner, video_studio_works
 from backend import main as smart_slides_main
-from render import ffmpeg_adapter
+from render import animated_overlay, ffmpeg_adapter
 
 
 class LocalApiTest(unittest.TestCase):
@@ -61,6 +62,28 @@ class LocalApiTest(unittest.TestCase):
                 os.environ.pop("SMART_SLIDES_ALREADY_SET", None)
             else:
                 os.environ["SMART_SLIDES_ALREADY_SET"] = old_set
+
+    def test_render_env_finds_macos_local_binaries_with_launchd_path(self) -> None:
+        old_path = os.environ.get("PATH")
+        old_tool_dir = os.environ.get("SMART_SLIDES_TOOL_DIR")
+        tool_dir = Path(self.temp_dir) / "managed-tools"
+        tool_dir.mkdir()
+        try:
+            os.environ["PATH"] = "/usr/bin:/bin"
+            os.environ["SMART_SLIDES_TOOL_DIR"] = str(tool_dir)
+            render_path = ffmpeg_adapter._render_env()["PATH"].split(os.pathsep)
+            self.assertEqual(render_path[0], str(tool_dir))
+            self.assertIn("/usr/local/bin", render_path)
+            self.assertLess(render_path.index("/usr/local/bin"), render_path.index("/usr/bin"))
+        finally:
+            if old_path is None:
+                os.environ.pop("PATH", None)
+            else:
+                os.environ["PATH"] = old_path
+            if old_tool_dir is None:
+                os.environ.pop("SMART_SLIDES_TOOL_DIR", None)
+            else:
+                os.environ["SMART_SLIDES_TOOL_DIR"] = old_tool_dir
 
     def test_project_contract_and_planning_fallbacks(self) -> None:
         response = self.client.post(
@@ -138,6 +161,63 @@ class LocalApiTest(unittest.TestCase):
         self.assertEqual(sum(unit["duration_seconds"] for unit in creative_units), 600)
         self.assertEqual(sum(shot["duration_seconds"] for shot in shots), 600)
 
+    def test_sync_voice_timing_makes_jogg_audio_the_timeline_authority(self) -> None:
+        project = self.client.post(
+            "/api/v1/video-studio/projects",
+            json={"topic": "语音对齐", "format": "long", "production_format": "broll", "target_duration_seconds": 60},
+        ).json()["project"]
+        groups = [{
+            "id": "voice-group",
+            "title": "语音镜头",
+            "shots": [
+                {
+                    "id": "shot-voice-01", "title": "第一段", "narration": "第一段。", "duration_seconds": 15,
+                    "broll_prompt": "factory automation", "scene_role": "full_broll", "visual_role": "broll_primary",
+                    "broll_options": [{"id": "broll-01", "provider": "pexels", "provider_id": "one", "duration_seconds": 15, "asset_path": "/tmp/one.mp4"}],
+                },
+                {
+                    "id": "shot-voice-02", "title": "第二段", "narration": "第二段。", "duration_seconds": 15,
+                    "broll_prompt": "robot arm closeup", "scene_role": "full_broll", "visual_role": "broll_primary",
+                    "broll_options": [{"id": "broll-02", "provider": "pixabay", "provider_id": "two", "duration_seconds": 15, "asset_path": "/tmp/two.mp4"}],
+                },
+            ],
+        }]
+        video_studio._store().update_project(
+            project["id"],
+            {
+                "scene_groups": groups,
+                "editor_state": {
+                    "voice_assets_by_shot": {"shot-voice-01": {"path": "/tmp/one.m4a"}, "shot-voice-02": {"path": "/tmp/two.m4a"}},
+                    "avatar_assets_by_shot": {"shot-voice-01": {"path": "/tmp/one-avatar.mp4", "muted": True}},
+                    "selected_broll_by_shot": {"shot-voice-01": "broll-01", "shot-voice-02": "broll-02"},
+                },
+            },
+        )
+
+        response = self.client.post(
+            f"/api/v1/video-studio/projects/{project['id']}/sync-voice-timing",
+            json={"voice_durations_by_shot": {"shot-voice-01": 8.554, "shot-voice-02": 4.25}},
+        )
+        self.assertEqual(response.status_code, 200, response.text)
+        updated = response.json()["project"]
+        shots = {shot["id"]: shot for group in updated["scene_groups"] for shot in group["shots"]}
+        self.assertAlmostEqual(shots["shot-voice-01"]["duration_seconds"], 8.554, places=3)
+        self.assertAlmostEqual(shots["shot-voice-02"]["start_seconds"], 8.554, places=3)
+        self.assertAlmostEqual(shots["shot-voice-02"]["end_seconds"], 12.804, places=3)
+        self.assertEqual(shots["shot-voice-01"]["timing_source"], "jogg_voice_audio")
+        self.assertEqual(shots["shot-voice-01"]["broll_options"][0]["id"], "broll-01")
+        self.assertEqual(updated["editor_state"]["selected_broll_by_shot"]["shot-voice-02"], "broll-02")
+        self.assertIn("shot-voice-01", updated["editor_state"]["voice_assets_by_shot"])
+        self.assertIn("shot-voice-01", updated["editor_state"]["avatar_assets_by_shot"])
+        self.assertAlmostEqual(updated["voice_timing"]["actual_duration_seconds"], 12.804, places=3)
+        self.assertAlmostEqual(updated["render_manifest"]["scenes"][1]["start"], 8.554, places=3)
+        self.assertAlmostEqual(updated["scene_plan_v2"][1]["timing"]["end_s"], 12.804, places=3)
+
+        with patch.object(video_studio_broll, "search_broll_candidates", return_value=[]) as search:
+            searched = self.client.get(f"/api/v1/video-studio/projects/{project['id']}/shots/shot-voice-01/broll-search")
+        self.assertEqual(searched.status_code, 200, searched.text)
+        self.assertAlmostEqual(search.call_args.kwargs["minimum_duration_seconds"], 8.554, places=3)
+
     def test_planning_state_preserves_and_validates_codex_bespoke_html(self) -> None:
         project = self.client.post(
             "/api/v1/video-studio/projects",
@@ -214,13 +294,16 @@ class LocalApiTest(unittest.TestCase):
             json={"topic": "MG 局部刷新", "format": "long", "production_format": "broll_html", "target_duration_seconds": 60},
         ).json()["project"]
         shot = {
-            "id": "shot-mg", "title": "局部刷新", "narration": "展示局部刷新。", "duration_seconds": 8,
+            "id": "shot-mg", "title": "局部刷新", "narration": "展示局部刷新。", "duration_seconds": 8.554,
             "scene_role": "broll_backdrop_overlay",
             "information_layer": {"enabled": True, "type": "metric", "keyword": "局部刷新"},
             "html_render_strategy": "llm_bespoke_html",
             "broll_options": [{"id": "stock", "provider": "pexels", "provider_id": "stock-1", "asset_path": "/tmp/stock.mp4"}],
         }
-        video_studio._store().update_project(project["id"], {"scene_groups": [{"title": "MG", "shots": [shot]}]})
+        video_studio._store().update_project(
+            project["id"],
+            {"scene_groups": [{"title": "MG", "shots": [shot]}], "voice_timing": {"source": "jogg_voice_audio"}},
+        )
         response = self.client.patch(
             f"/api/v1/video-studio/projects/{project['id']}/mg-html",
             json={"html_design_by_shot": {"shot-mg": {
@@ -239,6 +322,7 @@ class LocalApiTest(unittest.TestCase):
         updated = response.json()["project"]["scene_groups"][0]["shots"][0]
         self.assertEqual(updated["broll_options"][0]["id"], "stock")
         self.assertIn("data-ai-generated-html", updated["html_design"]["custom_html"])
+        self.assertAlmostEqual(updated["end_seconds"], 8.554, places=3)
         self.assertEqual(response.json()["updated_shot_ids"], ["shot-mg"])
 
     def test_prepare_editor_assets_excludes_already_selected_broll(self) -> None:
@@ -350,6 +434,88 @@ class LocalApiTest(unittest.TestCase):
         self.assertNotEqual(current["id"], stale["id"])
         self.assertTrue(current["render_snapshot"]["editor_state"]["bgm_enabled"])
 
+    def test_work_snapshot_preserves_multi_shot_mg_clip(self) -> None:
+        project = self.client.post(
+            "/api/v1/video-studio/projects",
+            json={"topic": "连续 MG", "format": "long", "production_format": "broll_html", "target_duration_seconds": 60},
+        ).json()["project"]
+        shots = [
+            {
+                "id": "shot-1", "title": "前半", "duration_seconds": 4.25, "start_seconds": 0.0, "end_seconds": 4.25,
+                "scene_role": "broll_backdrop_overlay", "information_layer": {"enabled": True},
+                "mg_director": {"version": "mg_director_v1", "enabled": True, "visual_system": "reveal"},
+                "html_design": {"asset_id": "html:continuous", "custom_html": "<div class='ai-mg-layer'>连续动画</div>", "custom_css": ".ai-mg-layer{animation:move 10s linear}"},
+            },
+            {
+                "id": "shot-2", "title": "后半", "duration_seconds": 5.75, "start_seconds": 4.25, "end_seconds": 10.0,
+                "scene_role": "broll_backdrop_overlay", "information_layer": {"enabled": True}, "html_design": {},
+                "mg_director": {"version": "mg_director_v1", "enabled": True, "visual_system": "reveal"},
+            },
+        ]
+        clip = {
+            "version": "mg_clip_v1", "id": "mg:continuous", "scene_id": "shot-1",
+            "bound_shots": ["shot-1", "shot-2"], "html_asset_id": "html:continuous",
+            "design_doc": {"version": "mg_design_doc_v1"},
+        }
+        updated = video_studio._store().update_project(
+            project["id"],
+            {
+                "scene_groups": [{"id": "group-1", "shots": shots}],
+                "design_plan": {"version": "video_studio_design_plan_v1", "mg_clips": [clip], "scenes": []},
+                "render_manifest": {"version": "video_studio_render_manifest_v1", "mg_clips": [clip], "scenes": []},
+            },
+        )
+        snapshot = video_studio_works.build_render_snapshot(updated)
+        self.assertEqual(len(snapshot["mg_layer"]["mg_clips"]), 1)
+        current = snapshot["mg_layer"]["mg_clips"][0]
+        self.assertEqual(current["bound_shots"], ["shot-1", "shot-2"])
+        self.assertEqual(current["shot_offsets"], {"shot-1": 0.0, "shot-2": 4.25})
+        self.assertEqual(current["duration"], 10.0)
+        self.assertEqual(snapshot["mg_layer"]["html_assets"][0]["bound_shots"], ["shot-1", "shot-2"])
+        snapshot_shots = snapshot["scene_groups"][0]["shots"]
+        self.assertEqual([shot["mg_clip_id"] for shot in snapshot_shots], ["mg:continuous", "mg:continuous"])
+        self.assertEqual([shot["mg_clip_offset_seconds"] for shot in snapshot_shots], [0.0, 4.25])
+        preview = video_studio_planner.build_composition_preview_html(snapshot)
+        self.assertIn('data-shot-id="shot-2" data-mg-clip-offset="4.250"', preview)
+        self.assertIn('sandbox="allow-same-origin"', preview)
+        self.assertIn("seekMgScene(scene, 0, active && playing)", preview)
+
+    def test_mg_clip_edit_schema_stores_only_allowed_sparse_overrides(self) -> None:
+        project = self.client.post(
+            "/api/v1/video-studio/projects",
+            json={"topic": "语义编辑", "format": "long", "production_format": "broll_html", "target_duration_seconds": 60},
+        ).json()["project"]
+        shot = {
+            "id": "shot-edit", "title": "语义层", "duration_seconds": 6,
+            "scene_role": "broll_backdrop_overlay", "information_layer": {"enabled": True},
+            "mg_director": {"version": "mg_director_v1", "enabled": True, "render_strategy": "llm_bespoke_html", "visual_system": "reveal"},
+            "html_design": {
+                "custom_html": "<div class='hero'>主体</div>", "custom_css": ".hero{color:#fff}",
+                "edit_schema": {"editable_blocks": [{"id": "hero", "name": "主体", "kind": "text", "selector": ".hero", "allowed": ["text", "x"]}]},
+            },
+        }
+        clip = {"version": "mg_clip_v1", "id": "mg:edit", "scene_id": "shot-edit", "bound_shots": ["shot-edit"], "design_doc": {"version": "mg_design_doc_v1"}}
+        video_studio._store().update_project(
+            project["id"],
+            {"scene_groups": [{"id": "group-edit", "shots": [shot]}], "design_plan": {"mg_clips": [clip], "scenes": []}, "render_manifest": {"mg_clips": [clip], "scenes": []}},
+        )
+        response = self.client.patch(
+            f"/api/v1/video-studio/projects/{project['id']}/mg-clips/mg:edit/edit-schema",
+            json={"overrides": {"hero": {"x": 22}}},
+        )
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertEqual(response.json()["overrides"], {"hero": {"x": 22}})
+        state = response.json()["project"]["editor_state"]
+        self.assertEqual(state["html_block_overrides_by_clip"]["mg:edit"], {"hero": {"x": 22}})
+        preview = self.client.get(f"/api/v1/video-studio/projects/{project['id']}/composition-preview.html")
+        self.assertEqual(preview.status_code, 200, preview.text)
+        self.assertIn("--smart-slides-edit-x:22px", preview.text)
+        invalid = self.client.patch(
+            f"/api/v1/video-studio/projects/{project['id']}/mg-clips/mg:edit/edit-schema",
+            json={"overrides": {"hero": {"opacity": 0.5}}},
+        )
+        self.assertEqual(invalid.status_code, 422, invalid.text)
+
     def test_existing_project_json_imports_without_id_or_schema_migration(self) -> None:
         fixture = {
             "id": "existing-project-id",
@@ -426,6 +592,8 @@ class LocalFfmpegAdapterTest(unittest.TestCase):
         self.assertNotIn("正文信息", captions)
         self.assertEqual(manifest["backend"], "local_ffmpeg")
         self.assertTrue(output.is_file())
+        self.assertTrue((self.work_dir / "visuals.txt").is_file())
+        self.assertFalse((self.work_dir / "visuals.mp4").exists())
         subprocess.run(["ffmpeg", "-v", "error", "-i", str(self.work_dir / "narration.m4a"), "-f", "null", "-"], check=True)
 
     def test_local_ffmpeg_render_has_video_and_audio_without_external_composer(self) -> None:
@@ -470,22 +638,197 @@ class LocalFfmpegAdapterTest(unittest.TestCase):
                 "bgm_enabled": False,
             },
         }
-        with self.assertRaisesRegex(RuntimeError, "padding silence"):
+        with self.assertRaisesRegex(RuntimeError, "sync the project to measured Jogg voice timing"):
             ffmpeg_adapter.render_snapshot(snapshot, str(self.work_dir), str(self.data_dir), str(self.temp_dir / "blocked.mp4"))
 
-    def test_rasterizes_original_podcastor_mg_preview_in_local_chrome(self) -> None:
+    def test_audio_renderer_never_pads_a_voice_track(self) -> None:
+        with patch.object(ffmpeg_adapter.subprocess, "run") as run:
+            ffmpeg_adapter._render_audio("/tmp/voice.m4a", 8.554, self.work_dir / "voice.m4a")
+        command = run.call_args.args[0]
+        self.assertNotIn("apad", command[command.index("-af") + 1])
+
+    def test_alpha_renderer_freezes_animation_time(self) -> None:
+        page = self.work_dir / "animated.html"
+        page.write_text("<main style='animation:fade 1s linear'>MG</main>", encoding="utf-8")
+        output = self.work_dir / "animated.webm"
+        frame_times: list[float] = []
+        sessions: list[object] = []
+        commands: list[list[str]] = []
+
+        class FakeSession:
+            def __init__(self, **_: object) -> None:
+                self.closed = False
+                self.page_uri = ""
+                sessions.append(self)
+
+            def navigate(self, page_uri: str) -> None:
+                self.page_uri = page_uri
+
+            def evaluate(self, expression: str) -> object:
+                marker = "const __SMART_SLIDES_FRAME_TIME_MS__ = "
+                if marker in expression:
+                    value = expression.split(marker, 1)[1].split(";", 1)[0]
+                    frame_times.append(float(value))
+                return None
+
+            def screenshot_png(self) -> bytes:
+                return b"fake-png-frame"
+
+            def close(self) -> None:
+                self.closed = True
+
+        class FakeProcess:
+            def __init__(self, command: list[str], **_: object) -> None:
+                commands.append(command)
+                self.stdin = io.BytesIO()
+                self.stderr = io.BytesIO()
+                self.returncode: int | None = None
+
+            def wait(self, timeout: float | None = None) -> int:
+                del timeout
+                output.write_bytes(b"fake-alpha-webm")
+                self.returncode = 0
+                return 0
+
+            def kill(self) -> None:
+                self.returncode = -9
+
+        animated_overlay.render_alpha_webm(
+            page,
+            duration=1,
+            output_path=output,
+            start_at_seconds=4.25,
+            frame_rate=2,
+            chrome_binary="/tmp/fake-chrome",
+            session_factory=FakeSession,
+            process_factory=FakeProcess,
+        )
+
+        self.assertEqual(animated_overlay._frame_times_ms(1, 2), [0.0, 500.0, 1000.0])
+        self.assertEqual(frame_times, [4250.0, 4750.0, 5250.0])
+        self.assertEqual(len(commands), 1)
+        self.assertIn("libvpx-vp9", commands[0])
+        self.assertIn("yuva420p", commands[0])
+        self.assertIn("alpha_mode=1", commands[0])
+        self.assertTrue(sessions[0].page_uri.startswith("file:"))
+        self.assertTrue(sessions[0].closed)
+
+    def test_chrome_capture_frame_times_include_cross_shot_offset(self) -> None:
+        try:
+            node = animated_overlay._node_binary(ffmpeg_adapter._render_env())
+        except RuntimeError as exc:
+            self.skipTest(str(exc))
+        helper_uri = animated_overlay._CAPTURE_HELPER.resolve().as_uri()
+        script = (
+            f'import {{ frameTimes }} from {json.dumps(helper_uri)}; '
+            'process.stdout.write(JSON.stringify(frameTimes(1, 2, 4250)));'
+        )
+        result = subprocess.run(
+            [node, "--input-type=module", "-e", script],
+            check=True,
+            capture_output=True,
+            text=True,
+            env=ffmpeg_adapter._render_env(),
+        )
+        self.assertEqual(json.loads(result.stdout), [4250, 4750, 5250])
+
+    def test_alpha_renderer_passes_start_offset_to_node_capture(self) -> None:
+        page = self.work_dir / "node-offset.html"
+        page.write_text("<main>MG</main>", encoding="utf-8")
+        output = self.work_dir / "node-offset.webm"
+        capture_commands: list[list[str]] = []
+
+        class FakeEncoder:
+            def __init__(self, _command: list[str], **_: object) -> None:
+                self.stdin = io.BytesIO()
+                self.stderr = io.BytesIO()
+                self.returncode: int | None = None
+
+            def wait(self, timeout: float | None = None) -> int:
+                del timeout
+                output.write_bytes(b"fake-alpha-webm")
+                self.returncode = 0
+                return 0
+
+            def kill(self) -> None:
+                self.returncode = -9
+
+        class FakeCapture:
+            def __init__(self, command: list[str], **_: object) -> None:
+                capture_commands.append(command)
+                self.stderr = io.BytesIO()
+                self.returncode = 0
+
+            def communicate(self, timeout: float | None = None) -> tuple[bytes, bytes]:
+                del timeout
+                return b"", b""
+
+            def poll(self) -> int:
+                return self.returncode
+
+        with patch.object(animated_overlay, "_node_binary", return_value="/tmp/node"):
+            with patch.object(animated_overlay.subprocess, "Popen", side_effect=FakeCapture):
+                animated_overlay.render_alpha_webm(
+                    page,
+                    duration=1,
+                    output_path=output,
+                    start_at_seconds=4.25,
+                    frame_rate=2,
+                    chrome_binary="/tmp/chrome",
+                    process_factory=FakeEncoder,
+                )
+        self.assertEqual(len(capture_commands), 1)
+        command = capture_commands[0]
+        self.assertEqual(command[command.index("--start-ms") + 1], "4250.000000")
+
+    def test_ffmpeg_overlay_passes_cross_shot_offset_to_alpha_renderer(self) -> None:
+        shot = {
+            "id": "shot-offset",
+            "duration_seconds": 1,
+            "scene_role": "broll_backdrop_overlay",
+            "mg_clip_offset_seconds": 4.25,
+            "html_design": {"custom_html": "<main>MG</main>", "custom_css": ""},
+        }
+        page = self.work_dir / "offset.html"
+        page.write_text("<main>MG</main>", encoding="utf-8")
+        output = self.work_dir / "offset.webm"
+        with patch.object(ffmpeg_adapter, "_write_overlay_page", return_value=page):
+            with patch.object(ffmpeg_adapter, "_chrome_binary", return_value="/tmp/chrome"):
+                with patch.object(ffmpeg_adapter, "_binary", return_value="/tmp/ffmpeg"):
+                    with patch.object(ffmpeg_adapter, "render_alpha_webm", return_value=str(output)) as render:
+                        result = ffmpeg_adapter._render_overlay_webm({}, shot, self.work_dir, 1)
+        self.assertEqual(result, str(output))
+        self.assertEqual(render.call_args.kwargs["start_at_seconds"], 4.25)
+
+    def test_rasterizes_animated_podcastor_mg_preview_in_local_chrome(self) -> None:
         shot = {
             "id": "shot-mg", "title": "核心指标", "narration": "核心指标正在上升。", "duration_seconds": 1,
             "scene_role": "broll_backdrop_overlay",
+            "mg_clip_offset_seconds": 0.25,
             "information_layer": {"enabled": True, "overlay_type": "metric_callout", "keyword": "核心指标", "primary_fact": "增长 42%", "takeaway": "基础设施成为重心"},
-            "mg_director": {"enabled": True, "visual_system": "metric", "main_visual_metaphor": "核心数字放大"},
-            "html_design": {"custom_html": "<main class=\"ai-mg-layer\"><strong>42%</strong></main>", "custom_css": ".ai-mg-layer{position:absolute;inset:0;display:grid;place-items:center;background:rgba(4,18,38,.75);font-size:180px;color:#fff}"},
+            "mg_director": {"version": "mg_director_v1", "enabled": True, "visual_system": "metric", "main_visual_metaphor": "核心数字放大"},
+            "html_design": {
+                "custom_html": "<main class=\"ai-mg-layer\"><strong>42%</strong></main>",
+                "custom_css": (
+                    ".ai-mg-layer{position:absolute;inset:0;display:grid;place-items:center;background:transparent;"
+                    "font-size:180px;color:#fff;animation:slide-in 1s linear both}"
+                    "@keyframes slide-in{from{transform:translateX(-320px);opacity:0}to{transform:translateX(0);opacity:1}}"
+                ),
+            },
         }
         snapshot = {"topic": "编辑器叠层", "scene_groups": [{"shots": [shot]}], "editor_state": {"html_design_overrides": {}}}
-        overlay = ffmpeg_adapter._render_overlay_png(snapshot, shot, self.work_dir)
+        overlay = ffmpeg_adapter._render_overlay(snapshot, shot, self.work_dir, 1)
         self.assertTrue(overlay)
+        self.assertEqual(Path(overlay).suffix, ".webm")
         self.assertGreater(Path(overlay).stat().st_size, 1000)
-        subprocess.run(["ffmpeg", "-v", "error", "-i", overlay, "-f", "null", "-"], check=True, env=ffmpeg_adapter._render_env())
+        page = (self.work_dir / "overlays" / "shot-mg.html").read_text(encoding="utf-8")
+        self.assertNotIn("animation:none!important", page)
+        self.assertIn('data-shot-id="shot-mg" data-mg-clip-offset="0.250"', page)
+        subprocess.run(
+            ["ffmpeg", "-v", "error", "-c:v", "libvpx-vp9", "-i", overlay, "-f", "null", "-"],
+            check=True,
+            env=ffmpeg_adapter._render_env(),
+        )
 
     def test_broll_video_is_not_looped_to_fill_a_scene(self) -> None:
         output = self.work_dir / "scene.mp4"
