@@ -72,7 +72,7 @@ class LocalApiTest(unittest.TestCase):
         try:
             with patch.object(smart_slides_settings, "_validate_jogg", return_value=(True, "Jogg API key 已验证。")), patch.object(
                 smart_slides_settings, "_validate_pexels", return_value=(True, "Pexels API key 已验证。")
-            ):
+            ), patch.object(smart_slides_settings, "_jogg_remaining_quota", return_value=321.0):
                 response = self.client.put(
                     "/api/v1/settings",
                     json={"jogg_api_key": "jogg-secret", "pexels_api_key": "pexels-secret"},
@@ -80,6 +80,7 @@ class LocalApiTest(unittest.TestCase):
             self.assertEqual(response.status_code, 200, response.text)
             self.assertNotIn("jogg-secret", response.text)
             self.assertNotIn("pexels-secret", response.text)
+            self.assertEqual(response.json()["jogg_remaining_quota"], 321.0)
             env_path = Path(self.temp_dir) / ".env"
             self.assertEqual(env_path.stat().st_mode & 0o777, 0o600)
             self.assertIn("JOGG_API_KEY=jogg-secret", env_path.read_text(encoding="utf-8"))
@@ -108,6 +109,13 @@ class LocalApiTest(unittest.TestCase):
         self.assertTrue(valid)
         self.assertEqual(request.call_args.args[0], "https://api.jogg.ai/v2/user/whoami")
         self.assertEqual(request.call_args.kwargs["headers"], {"X-Api-Key": "test-jogg-key"})
+
+    def test_jogg_settings_reads_remaining_quota_after_validation(self) -> None:
+        response = httpx.Response(200, json={"code": 0, "data": {"remaining_quota": 42.5}})
+        with patch.object(smart_slides_settings.httpx, "get", return_value=response) as request:
+            quota = smart_slides_settings._jogg_remaining_quota("test-jogg-key")
+        self.assertEqual(quota, 42.5)
+        self.assertEqual(request.call_args.args[0], "https://api.jogg.ai/v2/user/remaining_quota")
 
     def test_jogg_settings_does_not_accept_ambiguous_success_or_overwrite_a_key(self) -> None:
         ambiguous = httpx.Response(200, json={"data": {"id": "missing-code"}})

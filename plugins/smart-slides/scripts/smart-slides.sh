@@ -50,7 +50,7 @@ RUN_ID=""
 STATE_PATH=""
 LOCK_DIR=""
 TOPIC=""
-DURATION_SECONDS=600
+DURATION_SECONDS=180
 AVATAR_MODE="opening_closing"
 AVATAR_STYLE="professional"
 AVATAR_GENDER="female"
@@ -80,8 +80,10 @@ usage() {
   cat <<'EOF'
 usage:
   smart-slides.sh preflight
+  smart-slides.sh doctor
+  smart-slides.sh install-deps
   smart-slides.sh settings
-  smart-slides.sh run --topic TEXT [--duration-seconds 600] [--avatar-mode MODE] [--planning-file PLAN.json]
+  smart-slides.sh run --topic TEXT [--duration-seconds 180] [--avatar-mode MODE] [--planning-file PLAN.json]
   smart-slides.sh resume --run-id RUN_ID [--planning-file PLAN.json]
   smart-slides.sh status --run-id RUN_ID
   smart-slides.sh html-status --run-id RUN_ID
@@ -98,6 +100,55 @@ EOF
 }
 
 require_bin() { command -v "$1" >/dev/null 2>&1 || die "missing required binary: $1"; }
+
+dependency_report() {
+  local name path chrome_path dependencies='[]' missing='[]'
+  for name in curl jq ffmpeg ffprobe shasum node; do
+    path=$(command -v "$name" 2>/dev/null || true)
+    dependencies=$(jq -c --arg name "$name" --arg path "$path" '. + [{name:$name,installed:($path != ""),path:$path}]' <<< "$dependencies")
+    [[ -n "$path" ]] || missing=$(jq -c --arg name "$name" '. + [$name]' <<< "$missing")
+  done
+  chrome_path="${SMART_SLIDES_CHROME_BIN:-}"
+  [[ -n "$chrome_path" && -x "$chrome_path" ]] || chrome_path=$(command -v google-chrome 2>/dev/null || command -v chromium 2>/dev/null || true)
+  [[ -n "$chrome_path" ]] || [[ ! -x "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" ]] || chrome_path="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+  dependencies=$(jq -c --arg path "$chrome_path" '. + [{name:"chrome",installed:($path != ""),path:$path}]' <<< "$dependencies")
+  [[ -n "$chrome_path" ]] || missing=$(jq -c '. + ["chrome"]' <<< "$missing")
+  jq -n --argjson dependencies "$dependencies" --argjson missing "$missing" '{status:(if ($missing|length)==0 then "ready" else "dependencies_missing" end),dependencies:$dependencies,missing:$missing}'
+}
+
+install_official_ffmpeg() {
+  local version=8.1.2 archive build_root source_dir prefix jobs
+  require_bin curl; require_bin tar; require_bin make; require_bin cc
+  version="${SMART_SLIDES_FFMPEG_VERSION:-8.1.2}"
+  build_root=$(mktemp -d "$SMART_SLIDES_HOME/ffmpeg-build.XXXXXX")
+  archive="$build_root/ffmpeg-$version.tar.xz"
+  prefix="$SMART_SLIDES_HOME/toolchain/ffmpeg-$version"
+  log "building FFmpeg $version from official ffmpeg.org source"
+  curl -fsSL "https://ffmpeg.org/releases/ffmpeg-$version.tar.xz" -o "$archive"
+  tar -xf "$archive" -C "$build_root"
+  source_dir="$build_root/ffmpeg-$version"
+  [[ -d "$source_dir" ]] || die "official FFmpeg archive did not contain its source directory"
+  jobs=$(sysctl -n hw.ncpu 2>/dev/null || printf 2)
+  (
+    cd "$source_dir"
+    ./configure --prefix="$prefix" --disable-debug --disable-doc
+    make -j "$jobs"
+    make install
+  )
+  mkdir -p "$SMART_SLIDES_TOOL_DIR"
+  ln -sf "$prefix/bin/ffmpeg" "$SMART_SLIDES_TOOL_DIR/ffmpeg"
+  ln -sf "$prefix/bin/ffprobe" "$SMART_SLIDES_TOOL_DIR/ffprobe"
+  rm -rf "$build_root"
+  export PATH="$SMART_SLIDES_TOOL_DIR:$PATH"
+}
+
+install_dependencies() {
+  [[ "$(uname -s)" == Darwin ]] || die "automatic FFmpeg installation is currently supported on macOS only"
+  if ! command -v ffmpeg >/dev/null 2>&1 || ! command -v ffprobe >/dev/null 2>&1; then
+    install_official_ffmpeg
+  fi
+  require_bin curl; require_bin jq; require_bin ffmpeg; require_bin ffprobe; require_bin shasum; require_bin node
+}
 
 ensure_local_renderer() {
   local python_bin
@@ -895,14 +946,17 @@ ensure_jogg_assets_serial() {
 jogg_worker_dir() { printf '%s/jogg-workers' "$(html_checkpoint_dir)"; }
 
 jogg_submit_worker() {
-  local shot_id=$1 body_path=$2 result_path=$3 body_file headers_file status video_id code retry_after
+  local shot_id=$1 body_path=$2 result_path=$3 body_file headers_file status video_id code retry_after message
   body_file=$(mktemp)
   headers_file=$(mktemp)
   status=$(curl -sS -D "$headers_file" -o "$body_file" -w '%{http_code}' --connect-timeout 10 --max-time 180 \
     -X POST "${JOGG_BASE_URL%/}/v2/create_video_from_avatar" \
     -H "X-Api-Key: $JOGG_EFFECTIVE_API_KEY" -H 'Content-Type: application/json' --data @"$body_path" 2>/dev/null || printf '000')
-  if [[ "$status" =~ ^2[0-9][0-9]$ ]]; then
-    code=$(jq -r '.code // 0' "$body_file" 2>/dev/null || printf 1)
+  code=$(jq -r '.code // 0' "$body_file" 2>/dev/null || printf 1)
+  message=$(jq -r '.msg // .message // ""' "$body_file" 2>/dev/null || true)
+  if [[ "$code" == 18020 ]]; then
+    jq -n --arg shot "$shot_id" --arg message "${message:-Insufficient credit}" '{outcome:"insufficient_credits",shot_id:$shot,error:$message}' > "$result_path"
+  elif [[ "$status" =~ ^2[0-9][0-9]$ ]]; then
     video_id=$(jq -r '.data.video_id // .video_id // empty' "$body_file" 2>/dev/null || true)
     if [[ "$code" == 0 && -n "$video_id" ]]; then
       jq -n --arg shot "$shot_id" --arg video "$video_id" '{outcome:"accepted",shot_id:$shot,video_id:$video}' > "$result_path"
@@ -995,6 +1049,9 @@ submit_jogg_batch() {
         retry=$(jq -r '.retry_after_seconds // 60' "$result")
         state_mutate '.jogg_tasks[$id].status="planned" | .jogg_tasks[$id].last_status="rate_limited" | .jogg_tasks[$id].retry_after_seconds=$retry | .jogg_tasks[$id].retry_after_at=($now + $retry) | .stage="waiting_jogg" | .error="Jogg POST rate limited; resume after retry window"' --arg id "$shot_id" --argjson retry "$retry" --argjson now "$now"
         waiting=1 ;;
+      insufficient_credits)
+        state_mutate '.jogg_tasks[$id].status="insufficient_credits" | .jogg_tasks[$id].last_status="insufficient_credits" | .jogg_tasks[$id].error=$error | .stage="insufficient_credits" | .error=("Jogg credits are insufficient for " + $id + ": " + $error)' --arg id "$shot_id" --arg error "$(jq -r '.error // "Insufficient credit"' "$result")"
+        return 10 ;;
       *)
         state_mutate '.jogg_tasks[$id].status="submission_unknown" | .jogg_tasks[$id].last_status="submission_unknown" | .stage="blocked_jogg_recovery" | .error=("Jogg submission outcome is unknown for " + $id + "; automatic resubmission is disabled")' --arg id "$shot_id"
         unknown=1 ;;
@@ -1365,7 +1422,19 @@ refresh_status() {
 
 main() {
   ACTION=${1:-}; shift || true
-  require_bin curl; require_bin jq; require_bin ffmpeg; require_bin ffprobe; require_bin shasum
+  if [[ "$ACTION" == install-deps ]]; then
+    install_dependencies
+    dependency_report
+    return 0
+  fi
+  require_bin curl; require_bin jq
+  if [[ "$ACTION" == doctor ]]; then
+    dependency_report
+    return 0
+  fi
+  if [[ "$ACTION" != preflight && "$ACTION" != settings ]]; then
+    require_bin ffmpeg; require_bin ffprobe; require_bin shasum
+  fi
   mkdir -p "$SMART_SLIDES_HOME" "$SMART_SLIDES_DATA_DIR" "$SMART_SLIDES_STATE_DIR"
   case "$ACTION" in
     preflight)
@@ -1374,6 +1443,11 @@ main() {
         jq -n --arg local "$SMART_SLIDES_BASE_URL" --arg settings "$(open_settings_page)" '{status:"configuration_required",local_base_url:$local,settings_url:$settings,jogg_api_key_configured:false}'
         return 0
       fi
+      if [[ "$(dependency_report | jq -r '.status')" != ready ]]; then
+        log "installing missing local render dependencies"
+        install_dependencies
+      fi
+      require_bin ffmpeg; require_bin ffprobe; require_bin shasum
       ensure_local_renderer; resolve_jogg_api_key
       jq -n --arg local "$SMART_SLIDES_BASE_URL" --arg jogg "$JOGG_BASE_URL" --arg data "$SMART_SLIDES_DATA_DIR" '{status:"ready",local_base_url:$local,jogg_base_url:$jogg,data_dir:$data,jogg_api_key_configured:true,ffprobe_available:true}' ;;
     settings)
@@ -1423,7 +1497,7 @@ main() {
       local file=''
       while (($#)); do case "$1" in --file) file=${2:-}; shift 2 ;; --avatar-mode) AVATAR_MODE=${2:-}; shift 2 ;; *) die "unknown import option: $1" ;; esac; done
       [[ -f "$file" ]] || die 'import --file must point to a project JSON'; jq -e 'type=="object" and (.id|type=="string")' "$file" >/dev/null || die 'invalid Video Studio project JSON'
-      start_local_service; TOPIC=$(jq -r '.topic // "Imported Video Studio project"' "$file"); DURATION_SECONDS=$(jq -r '.target_duration_seconds // 600' "$file"); init_run; acquire_run_lock
+      start_local_service; TOPIC=$(jq -r '.topic // "Imported Video Studio project"' "$file"); DURATION_SECONDS=$(jq -r '.target_duration_seconds // 180' "$file"); init_run; acquire_run_lock
       local_api_request POST '/projects/import' "$(jq -c '{project:.}' "$file")"
       state_mutate '.project_id=$id | .planning_applied=true | .stage="project_imported" | .editor_url=($base+"/?project_id="+$id)' --arg id "$(jq -r '.project.id' <<< "$HTTP_BODY")" --arg base "$SMART_SLIDES_BASE_URL"
       emit_state ;;

@@ -105,6 +105,20 @@ def _validate_jogg(key: str) -> tuple[bool, str]:
     return False, "Jogg 未接受此 API key。"
 
 
+def _jogg_remaining_quota(key: str) -> float | None:
+    try:
+        response = httpx.get(
+            f"{_jogg_base_url()}/v2/user/remaining_quota",
+            headers={"X-Api-Key": key},
+            timeout=10.0,
+        )
+        payload: Any = response.json() if response.is_success else None
+    except (httpx.HTTPError, ValueError):
+        return None
+    quota = payload.get("data", {}).get("remaining_quota") if isinstance(payload, dict) and payload.get("code") == 0 else None
+    return float(quota) if isinstance(quota, (int, float)) else None
+
+
 def _validate_pexels(key: str) -> tuple[bool, str]:
     try:
         response = httpx.get(
@@ -171,5 +185,6 @@ def update_settings(patch: SettingsPatch) -> dict[str, object]:
         "jogg_message": jogg_message,
         "pexels_valid": pexels_valid,
         "pexels_message": pexels_message,
+        "jogg_remaining_quota": _jogg_remaining_quota(jogg_key),
         "restart_required": True,
     }

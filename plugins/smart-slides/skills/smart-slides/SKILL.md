@@ -12,7 +12,7 @@ Create and edit the existing Video Studio project format without a Podcastor sou
 Extract:
 
 - `topic`: required subject or source brief.
-- `duration_seconds`: convert minutes to seconds; default long-form requests to `600`.
+- `duration_seconds`: convert minutes to seconds; default requests to `180`.
 - `avatar_mode`: map user wording to `none`, `opening`, `opening_closing`, or `all`.
 - avatar persona: explicit avatar/voice IDs win. Otherwise infer professional/social, gender, and age from the subject.
 
@@ -49,14 +49,16 @@ Preflight checks local tools, starts the bundled loopback-only API, and validate
 bash "<plugin-root>/scripts/smart-slides.sh" preflight
 ```
 
+Before a run, use `smart-slides.sh doctor` to return the installed/missing local runtime dependencies. On macOS, `smart-slides.sh install-deps` builds a missing FFmpeg from the official `ffmpeg.org` source release in the plugin's private tool directory, without Homebrew or `sudo`; other missing runtime tools are reported explicitly.
+
 When the Jogg key is not configured, `preflight` opens the local `/settings` page and returns `configuration_required`; it does not submit paid work. Reopen the page at any time with `smart-slides.sh settings`. The page persists only `JOGG_API_KEY` and optional `PEXELS_API_KEY` in `~/.codex/smart-slides/.env` (`0600`); explicit shell values take precedence. Do not ask for or show `PIXABAY_API_KEY`.
 
-Create a 10-minute project:
+Create a 3-minute project:
 
 ```bash
 bash "<plugin-root>/scripts/smart-slides.sh" run \
   --topic "人工智能如何改变制造业" \
-  --duration-seconds 600 \
+  --duration-seconds 180 \
   --avatar-mode opening_closing \
   --avatar-style professional \
   --avatar-gender female \

@@ -8,6 +8,8 @@ The only video business requests are Jogg plus optional Pexels/Pixabay material 
 
 Required commands: `curl`, `jq`, `ffmpeg`, `ffprobe`, Node.js 22 or newer, and local Google Chrome or Chromium. Set `SMART_SLIDES_NODE_BIN` or `SMART_SLIDES_CHROME_BIN` only when they are not available from the normal PATH or standard Chrome location. For a managed plugin dependency, place matching `ffmpeg` and `ffprobe` binaries in `SMART_SLIDES_TOOL_DIR` (default `~/.codex/smart-slides/bin`); preflight uses that private directory before the system PATH. The repository deliberately does not commit platform-specific FFmpeg binaries or install them silently, because they are architecture-specific and carry redistribution/license obligations. The renderer does not use a remote render service at runtime.
 
+Check all local runtime dependencies with `bash scripts/smart-slides.sh doctor`. On macOS, `bash scripts/smart-slides.sh install-deps` installs a missing FFmpeg from the official `ffmpeg.org` source release into the plugin's private tool directory, without Homebrew or `sudo`. Other missing runtime tools are reported explicitly.
+
 Run `smart-slides.sh settings` to open the loopback-only setup page. It stores only `JOGG_API_KEY` (required) and `PEXELS_API_KEY` (optional B-roll search) in `~/.codex/smart-slides/.env` with `0600` permissions. A process environment variable takes precedence. The page verifies Jogg through `GET /v2/user/whoami`; it never creates a video. Smart Slides calls `https://api.jogg.ai/v2/...` directly; a browser-session token is not a public OpenAPI credential. The key is neither saved in run state nor printed. `PIXABAY_API_KEY` remains supported when already present but is intentionally absent from setup.
 
 ```bash
@@ -23,7 +25,7 @@ Jogg result downloads are retried locally when the CDN is briefly unavailable. S
 ```bash
 bash scripts/smart-slides.sh run \
   --topic "人工智能如何改变制造业" \
-  --duration-seconds 600 \
+  --duration-seconds 180 \
   --avatar-mode opening_closing \
   --planning-file "/absolute/path/to/codex-plan.json"
 ```

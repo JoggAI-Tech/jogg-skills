@@ -74,8 +74,9 @@ export function SettingsApp() {
         pexels_api_key: pexelsKey || undefined,
         clear_pexels_api_key: clearPexels,
       });
-      const result = response.data as { jogg_valid: boolean; pexels_valid: boolean | null };
-      setNotice(result.jogg_valid ? (result.pexels_valid === false ? '已保存。Pexels 未验证。' : '已保存并验证。') : '已保存，但 Jogg key 未验证。');
+      const result = response.data as { jogg_valid: boolean; pexels_valid: boolean | null; jogg_remaining_quota: number | null };
+      const quota = result.jogg_remaining_quota === null ? '' : ` 余额：${result.jogg_remaining_quota}`;
+      setNotice(result.jogg_valid ? (result.pexels_valid === false ? `已保存。Pexels 未验证。${quota}` : `已保存并验证。${quota}`) : '已保存，但 Jogg key 未验证。');
       setJoggKey(''); setPexelsKey(''); setClearPexels(false);
       await load();
     } catch (requestError) {
