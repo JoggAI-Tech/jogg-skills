@@ -27,6 +27,11 @@ Install this skills repository with:
 npx skills add JoggAI-Tech/jogg-skills
 ```
 
+## Product site
+
+Open [`site/index.html`](site/index.html) for the JoggAI product introduction,
+official feature examples, and the Jogg Skills installation entry point.
+
 ## Current scaffold
 
 - `jogg-api` is the main JoggAI v2 skill for endpoint execution and workflow routing.

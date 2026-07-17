@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Meet JoggAI, an AI video creation platform for turning scripts, links, images, audio, and ideas into avatar videos, video podcasts, ads, and reusable content."
+    />
+    <meta name="theme-color" content="#0e0f12" />
+    <title>JoggAI - AI video creation from source to screen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css?v=3" />
+    <script src="./app.js?v=3" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header" data-header>
+      <a class="wordmark" href="#top" aria-label="JoggAI home">
+        <img src="./assets/jogg-logo.webp" alt="" width="42" height="28" />
+        <span>JOGG</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="site-nav">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Primary navigation">
+        <a href="#workflow">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#use-cases">Use cases</a>
+        <a href="#about">About</a>
+        <a href="#install">Install Skills</a>
+        <a class="nav-cta" href="https://app.jogg.ai/" target="_blank" rel="noreferrer">Start creating <span aria-hidden="true">↗</span></a>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section id="top" class="hero" aria-labelledby="hero-title">
+        <video
+          class="hero-media"
+          data-auto-video
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          poster="./assets/jogg-avatar-example-poster.jpg"
+          aria-hidden="true"
+        >
+          <source src="https://res.jogg.ai/upload/www/AI_Avatar_Video_Example_1_98f85fdaf2.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-shade" aria-hidden="true"></div>
+        <div class="hero-inner page-shell">
+          <p class="hero-kicker">AI video creation platform</p>
+          <h1 id="hero-title">JoggAI makes video production repeatable.</h1>
+          <p class="hero-copy">
+            Turn scripts, links, images, audio, and rough ideas into polished avatar videos, video podcasts,
+            product content, and global-ready campaigns.
+          </p>
+          <div class="hero-actions">
+            <a class="button button--primary" href="https://app.jogg.ai/" target="_blank" rel="noreferrer">Create a video <span aria-hidden="true">↗</span></a>
+            <a class="button button--ghost" href="#workflow">See how it works <span aria-hidden="true">↓</span></a>
+          </div>
+          <div class="hero-foot">
+            <div class="hero-route" aria-label="JoggAI production flow">
+              <span>Source</span><i aria-hidden="true"></i><span>Script</span><i aria-hidden="true"></i><span>Voice</span><i aria-hidden="true"></i><span>Video</span>
+            </div>
+            <button class="video-toggle" type="button" data-video-toggle aria-label="Pause background video">
+              <span class="video-toggle-icon" aria-hidden="true"></span>
+              <span data-video-toggle-label>Pause reel</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section id="workflow" class="workflow-section" aria-labelledby="workflow-title">
+        <div class="content-shell">
+          <div class="section-intro reveal">
+            <p class="eyebrow">One workspace. One continuous flow.</p>
+            <div>
+              <h2 id="workflow-title">From the material you have<br />to the video you need.</h2>
+              <p>
+                JoggAI reduces the repeated production work between an idea and a usable video, while keeping
+                the creative choices visible and editable.
+              </p>
+            </div>
+          </div>
+
+          <ol class="workflow-line reveal" aria-label="JoggAI production workflow">
+            <li>
+              <span>01</span>
+              <div>
+                <h3>Bring a source</h3>
+                <p>Start with a script, topic, product URL, image, PDF, audio file, or existing content.</p>
+              </div>
+            </li>
+            <li>
+              <span>02</span>
+              <div>
+                <h3>Shape the message</h3>
+                <p>Generate or refine the script, structure the story, and adapt it for the intended audience.</p>
+              </div>
+            </li>
+            <li>
+              <span>03</span>
+              <div>
+                <h3>Choose the presence</h3>
+                <p>Select an avatar, voice, language, format, subtitles, visuals, and brand presentation.</p>
+              </div>
+            </li>
+            <li>
+              <span>04</span>
+              <div>
+                <h3>Finish the video</h3>
+                <p>Review, edit, translate, render, and reuse the result across channels and audiences.</p>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="features" class="features-section" aria-labelledby="features-title">
+        <div class="content-shell">
+          <div class="feature-heading reveal">
+            <p class="eyebrow">Core creation modes</p>
+            <h2 id="features-title">A production system for<br />more than one kind of video.</h2>
+          </div>
+
+          <article class="feature-band reveal">
+            <div class="feature-media">
+              <video
+                controls
+                playsinline
+                preload="none"
+                poster="./assets/jogg-avatar-example-poster.jpg"
+                aria-label="Official JoggAI avatar video example"
+              >
+                <source src="https://res.jogg.ai/upload/www/AI_Avatar_Video_Example_1_98f85fdaf2.mp4" type="video/mp4" />
+                Your browser does not support HTML video.
+              </video>
+            </div>
+            <div class="feature-content">
+              <p class="feature-index">01 / Avatar Video</p>
+              <h3>Put a presenter behind any approved script.</h3>
+              <p>
+                Choose from stock avatars or create your own, pair the presenter with a compatible voice, and
+                produce consistent videos without cameras, actors, or repeated studio setup.
+              </p>
+              <ul class="feature-points">
+                <li>Script or uploaded audio</li>
+                <li>Stock, photo, and custom avatars</li>
+                <li>Voices, captions, ratios, and languages</li>
+              </ul>
+              <a class="text-link" href="https://www.jogg.ai/features/talking-avatar/" target="_blank" rel="noreferrer">Explore Avatar Video <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+
+          <article class="feature-band feature-band--reverse reveal">
+            <div class="feature-media feature-media--contain">
+              <video
+                controls
+                playsinline
+                preload="none"
+                poster="./assets/jogg-podcast-example-poster.webp"
+                aria-label="Official JoggAI video podcast example"
+              >
+                <source src="https://res-intl.jogg.ai/upload/www/AI_as_the_New_Creative_Partner_1_feef7bd862_fa2b4adf06.webm" type="video/webm" />
+                Your browser does not support HTML video.
+              </video>
+            </div>
+            <div class="feature-content">
+              <p class="feature-index">02 / Video Podcast</p>
+              <h3>Turn source material into a two-host conversation.</h3>
+              <p>
+                Work from text, URLs, PDFs, YouTube videos, DOCX, MP3, or WAV files. JoggAI can structure a
+                natural dialogue and present it with two distinct avatars and voices.
+              </p>
+              <ul class="feature-points">
+                <li>Two-host conversational format</li>
+                <li>Talk show, two-shot, and split-screen layouts</li>
+                <li>Landscape and vertical delivery</li>
+              </ul>
+              <a class="text-link" href="https://www.jogg.ai/features/ai-podcast-generator/" target="_blank" rel="noreferrer">Explore Video Podcast <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+
+          <article class="feature-band reveal">
+            <div class="feature-media feature-media--interface">
+              <img
+                src="./assets/jogg-avatar-editor.png"
+                alt="Official JoggAI Avatar Video editor with presenter preview, script, voice, and subtitle controls"
+                width="1280"
+                height="638"
+                loading="lazy"
+              />
+            </div>
+            <div class="feature-content">
+              <p class="feature-index">03 / URL & product video</p>
+              <h3>Move from a product page to campaign-ready video.</h3>
+              <p>
+                Use a product URL or existing assets to accelerate scripts, presenter-led product stories, ad
+                variations, and social content without rebuilding the production process for every version.
+              </p>
+              <ul class="feature-points">
+                <li>URL-to-video and product avatar workflows</li>
+                <li>Reusable brand assets and visual styles</li>
+                <li>Fast variants for audiences and channels</li>
+              </ul>
+              <a class="text-link" href="https://www.jogg.ai/features/url-to-video/" target="_blank" rel="noreferrer">Explore URL to Video <span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="capability-section" aria-labelledby="capability-title">
+        <div class="content-shell">
+          <div class="capability-heading reveal">
+            <p class="eyebrow eyebrow--light">The supporting system</p>
+            <h2 id="capability-title">Everyday production tools,<br />connected around the video.</h2>
+          </div>
+          <div class="capability-grid">
+            <article class="reveal">
+              <span>01</span>
+              <h3>AI avatars</h3>
+              <p>Use public presenters, generate from text or photos, or build a custom on-brand avatar.</p>
+            </article>
+            <article class="reveal">
+              <span>02</span>
+              <h3>Voices & cloning</h3>
+              <p>Match language, tone, and persona with public voices or approved custom voice assets.</p>
+            </article>
+            <article class="reveal">
+              <span>03</span>
+              <h3>Script generation</h3>
+              <p>Turn topics and existing material into structured scripts, dialogue, and reusable variants.</p>
+            </article>
+            <article class="reveal">
+              <span>04</span>
+              <h3>Translation</h3>
+              <p>Adapt video, speech, captions, and presenter delivery for audiences across languages.</p>
+            </article>
+            <article class="reveal">
+              <span>05</span>
+              <h3>Captions & editing</h3>
+              <p>Review the script, subtitles, music, visuals, effects, timing, and format before export.</p>
+            </article>
+            <article class="reveal">
+              <span>06</span>
+              <h3>API workflows</h3>
+              <p>Integrate avatar video, templates, lip sync, translation, and result delivery into products.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="use-cases" class="use-cases-section" aria-labelledby="use-cases-title">
+        <div class="content-shell">
+          <div class="use-cases-heading reveal">
+            <p class="eyebrow">Built for real video work</p>
+            <div>
+              <h2 id="use-cases-title">One platform.<br />Different reasons to press render.</h2>
+              <p>JoggAI is designed around the materials teams already have and the outputs they need repeatedly.</p>
+            </div>
+          </div>
+          <div class="use-case-list">
+            <article class="reveal"><span>Marketing & ads</span><p>Product launches, campaign tests, personalized outreach, and ad variants.</p><b>01</b></article>
+            <article class="reveal"><span>Social content</span><p>Fast explainers, creator formats, news-style updates, and content repurposing.</p><b>02</b></article>
+            <article class="reveal"><span>Training & education</span><p>Consistent presenters, multilingual lessons, onboarding, and internal communication.</p><b>03</b></article>
+            <article class="reveal"><span>Podcasts & interviews</span><p>Two-host discussions, visual podcasts, source breakdowns, and commentary.</p><b>04</b></article>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="about-section" aria-labelledby="about-title">
+        <div class="content-shell about-grid reveal">
+          <div>
+            <p class="eyebrow eyebrow--light">About JoggAI</p>
+            <h2 id="about-title">Built for the messy middle between an idea and a finished video.</h2>
+          </div>
+          <div class="about-copy">
+            <p>
+              Based in Singapore, JoggAI focuses on making video creation simpler, faster, and easier to
+              repeat. The platform removes repeated production steps so marketers, creators, startups,
+              agencies, and teams can spend more time on the story, audience, and message.
+            </p>
+            <p>
+              Its practical premise is straightforward: start from the product link, campaign idea, images,
+              podcast clip, or rough script already available, then make the path to a usable video shorter.
+            </p>
+            <a class="text-link text-link--light" href="https://www.jogg.ai/about/" target="_blank" rel="noreferrer">Read the official JoggAI story <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section id="install" class="install-section" aria-labelledby="install-title">
+        <div class="content-shell install-grid reveal">
+          <div>
+            <p class="eyebrow">Jogg Skills for Codex</p>
+            <h2 id="install-title">Install the workflow bundle.</h2>
+          </div>
+          <div class="install-action">
+            <p>Add the Jogg Skills repository to Codex from a single command.</p>
+            <div class="command-box">
+              <code id="install-command">npx skills add JoggAI-Tech/jogg-skills</code>
+              <button type="button" data-copy-command aria-describedby="copy-status">Copy</button>
+            </div>
+            <p id="copy-status" class="copy-status" aria-live="polite"></p>
+            <a class="text-link" href="https://github.com/JoggAI-Tech/jogg-skills" target="_blank" rel="noreferrer">View repository <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </section>
+
+      <section class="closing-cta" aria-labelledby="closing-title">
+        <div class="content-shell closing-inner reveal">
+          <p class="eyebrow eyebrow--light">From source to screen</p>
+          <h2 id="closing-title">Bring the material.<br />Leave with the video.</h2>
+          <a class="button button--white" href="https://app.jogg.ai/" target="_blank" rel="noreferrer">Start creating with JoggAI <span aria-hidden="true">↗</span></a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="content-shell footer-inner">
+        <a class="wordmark" href="#top" aria-label="JoggAI home">
+          <img src="./assets/jogg-logo.webp" alt="" width="42" height="28" />
+          <span>JOGG</span>
+        </a>
+        <p>AI video creation platform</p>
+        <p>Official product links · <span data-year></span></p>
+      </div>
+    </footer>
+  </body>
+</html>
