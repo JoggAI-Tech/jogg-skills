@@ -315,8 +315,13 @@ start_local_service() {
 settings_url() { printf '%s/settings' "${SMART_SLIDES_BASE_URL%/}"; }
 
 open_settings_page() {
-  local url
+  local url attempt
   url=$(settings_url)
+  for attempt in $(seq 1 20); do
+    local_service_ready && break
+    sleep 0.25
+  done
+  local_service_ready || die "bundled Video Studio is not ready; refusing to open settings"
   if [[ "${SMART_SLIDES_NO_BROWSER:-}" != 1 ]] && command -v open >/dev/null 2>&1; then
     open "$url" >/dev/null 2>&1 || true
   fi
