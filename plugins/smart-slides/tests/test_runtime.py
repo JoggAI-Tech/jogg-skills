@@ -133,6 +133,41 @@ class LocalApiTest(unittest.TestCase):
             if old_jogg is not None:
                 os.environ["JOGG_API_KEY"] = old_jogg
 
+    def test_pexels_settings_validation_bypasses_auth_insensitive_cache(self) -> None:
+        valid_response = httpx.Response(200, json={"photos": []})
+        with patch.object(smart_slides_settings.httpx, "get", return_value=valid_response) as request:
+            valid, _message = smart_slides_settings._validate_pexels("test-pexels-key")
+        self.assertTrue(valid)
+        self.assertIn("validation_nonce=", request.call_args.args[0])
+        self.assertEqual(request.call_args.kwargs["headers"], {"Authorization": "test-pexels-key", "Cache-Control": "no-store"})
+
+        ambiguous = httpx.Response(200, json={"status": 200})
+        with patch.object(smart_slides_settings.httpx, "get", return_value=ambiguous):
+            valid, _message = smart_slides_settings._validate_pexels("not-a-key")
+        self.assertFalse(valid)
+
+    def test_invalid_pexels_submission_is_not_saved(self) -> None:
+        old_home = os.environ.get("SMART_SLIDES_HOME")
+        old_jogg = os.environ.pop("JOGG_API_KEY", None)
+        os.environ["SMART_SLIDES_HOME"] = self.temp_dir
+        env_path = Path(self.temp_dir) / ".env"
+        env_path.write_text("JOGG_API_KEY=known-good-key\nPEXELS_API_KEY=known-good-pexels-key\n", encoding="utf-8")
+        try:
+            with patch.object(smart_slides_settings, "_validate_pexels", return_value=(False, "Pexels 未接受此 key。")):
+                response = self.client.put("/api/v1/settings", json={"pexels_api_key": "not-a-key"})
+            self.assertEqual(response.status_code, 422, response.text)
+            self.assertEqual(
+                env_path.read_text(encoding="utf-8"),
+                "JOGG_API_KEY=known-good-key\nPEXELS_API_KEY=known-good-pexels-key\n",
+            )
+        finally:
+            if old_home is None:
+                os.environ.pop("SMART_SLIDES_HOME", None)
+            else:
+                os.environ["SMART_SLIDES_HOME"] = old_home
+            if old_jogg is not None:
+                os.environ["JOGG_API_KEY"] = old_jogg
+
     def test_settings_page_only_exposes_managed_configuration_status(self) -> None:
         source = (Path(__file__).resolve().parents[1] / "runtime" / "frontend" / "src" / "SettingsApp.tsx").read_text(encoding="utf-8")
         self.assertIn("JOGG_API_KEY", source)

@@ -37,7 +37,7 @@ function SecretInput({ label, value, onChange, configured, required, hint }: {
           {visible ? <EyeOff size={18} /> : <Eye size={18} />}
         </button>
       </span>
-      <span className={configured ? 'setup-config-status ok' : 'setup-config-status'}>{configured ? '已配置' : '未配置'}</span>
+      <span className={configured ? 'setup-config-status ok' : 'setup-config-status'}>{configured ? '已保存' : '未配置'}</span>
     </span>
     <small>{hint}</small>
   </label>;

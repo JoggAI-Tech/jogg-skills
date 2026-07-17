@@ -1488,6 +1488,53 @@ button {
 .setup-config-status.ok {
   color: var(--settings-cyan);
 }
+
+/* Make the timeline tracks self-explanatory without changing its layout. */
+.editor-shell .timeline-heading {
+  gap: 16px;
+}
+.editor-shell .timeline-legend {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-left: auto;
+  color: #9da9b7;
+  font-size: 10px;
+  font-weight: 650;
+  white-space: nowrap;
+}
+.editor-shell .timeline-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 0;
+  color: inherit;
+}
+.editor-shell .legend-swatch {
+  display: inline-block;
+  width: 20px;
+  height: 6px;
+  border-radius: 999px;
+}
+.editor-shell .timeline-legend .visual-track {
+  background: #3d9bb2;
+}
+.editor-shell .timeline-legend .html-track {
+  background: #b6a15b;
+}
+.editor-shell .timeline-legend .voice-track {
+  background: #6fa178;
+}
+@media (max-width: 720px) {
+  .editor-shell .timeline-legend {
+    order: 3;
+    width: 100%;
+    margin-left: 0;
+  }
+  .editor-shell .timeline-heading {
+    gap: 6px 12px;
+  }
+}
 @media (max-width: 620px) {
   .setup-shell {
     grid-template-rows: 58px minmax(0, 1fr);

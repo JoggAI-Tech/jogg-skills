@@ -399,7 +399,12 @@ export function EditorApp() {
 
       <section className="timeline-band">
         <div className="timeline-heading">
-          <div className="timeline-title"><strong>画面 / HTML / 声音</strong><small>{shots.length} 个分镜 · {formatTime(duration)}</small></div>
+          <div className="timeline-title"><strong>时间线</strong><small>{shots.length} 个分镜 · {formatTime(duration)}</small></div>
+          <div className="timeline-legend" aria-label="时间线图例">
+            <span><i className="legend-swatch visual-track" />画面</span>
+            <span><i className="legend-swatch html-track" />信息层</span>
+            <span><i className="legend-swatch voice-track" />声音</span>
+          </div>
           <div className={`render-status ${workStatus === 'success' ? 'is-success' : workStatus === 'failed' ? 'is-failed' : isRendering || busy ? 'is-running' : ''}`} aria-live="polite">
             {busy || isRendering ? <LoaderCircle className="spin" size={15} /> : workStatus === 'success' ? <Check size={15} /> : <Film size={15} />}
             <span>{renderStatusLabel}</span>
@@ -407,8 +412,8 @@ export function EditorApp() {
           </div>
         </div>
         <div className="timeline-scroll">
-          {shots.map((shot, index) => <button key={shot.id} className={`timeline-shot ${shot.id === selectedShot?.id ? 'active' : ''}`} style={{ flexGrow: Math.max(1, shot.duration_seconds) }} onClick={() => selectShot(shot.id)}>
-            <span>{String(index + 1).padStart(2, '0')} {shot.title}</span><i className="track visual-track" /><i className="track html-track" /><i className="track voice-track" />
+          {shots.map((shot, index) => <button key={shot.id} className={`timeline-shot ${shot.id === selectedShot?.id ? 'active' : ''}`} style={{ flexGrow: Math.max(1, shot.duration_seconds) }} aria-label={`第 ${index + 1} 个分镜：${shot.title}，包含画面、信息层和声音轨道`} onClick={() => selectShot(shot.id)}>
+            <span>{String(index + 1).padStart(2, '0')} {shot.title}</span><i className="track visual-track" title="画面" aria-hidden="true" /><i className="track html-track" title="信息层" aria-hidden="true" /><i className="track voice-track" title="声音" aria-hidden="true" />
           </button>)}
         </div>
       </section>

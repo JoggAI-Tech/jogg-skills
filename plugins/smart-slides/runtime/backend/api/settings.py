@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import secrets
 import tempfile
 from pathlib import Path
 from typing import Any, Optional
@@ -107,14 +108,19 @@ def _validate_jogg(key: str) -> tuple[bool, str]:
 def _validate_pexels(key: str) -> tuple[bool, str]:
     try:
         response = httpx.get(
-            "https://api.pexels.com/v1/search?query=technology&per_page=1",
-            headers={"Authorization": key},
+            f"https://api.pexels.com/v1/search?query=technology&per_page=1&validation_nonce={secrets.token_urlsafe(16)}",
+            headers={"Authorization": key, "Cache-Control": "no-store"},
             timeout=10.0,
         )
     except httpx.HTTPError:
         return False, "Pexels 无法连接，已保存该 key。"
-    if response.is_success:
-        return True, "Pexels API key 已验证。"
+    if response.is_success and response.headers.get("content-type", "").startswith("application/json"):
+        try:
+            payload: Any = response.json()
+        except ValueError:
+            payload = None
+        if isinstance(payload, dict) and isinstance(payload.get("photos"), list):
+            return True, "Pexels API key 已验证。"
     return False, "Pexels 未接受此 key，已保存以便稍后修正。"
 
 
@@ -131,13 +137,17 @@ def get_settings() -> dict[str, object]:
 def update_settings(patch: SettingsPatch) -> dict[str, object]:
     values = _read_env_file(_env_path())
     submitted_jogg_key = patch.jogg_api_key.strip() if patch.jogg_api_key is not None else ""
+    submitted_pexels_key = patch.pexels_api_key.strip() if patch.pexels_api_key is not None else ""
     if submitted_jogg_key:
         jogg_valid, jogg_message = _validate_jogg(submitted_jogg_key)
         if not jogg_valid:
             raise HTTPException(status_code=422, detail=jogg_message)
         values["JOGG_API_KEY"] = submitted_jogg_key
-    if patch.pexels_api_key is not None and patch.pexels_api_key.strip():
-        values["PEXELS_API_KEY"] = patch.pexels_api_key.strip()
+    if submitted_pexels_key:
+        pexels_valid, pexels_message = _validate_pexels(submitted_pexels_key)
+        if not pexels_valid:
+            raise HTTPException(status_code=422, detail=pexels_message)
+        values["PEXELS_API_KEY"] = submitted_pexels_key
     if patch.clear_pexels_api_key:
         values.pop("PEXELS_API_KEY", None)
     if not values.get("JOGG_API_KEY") and not os.getenv("JOGG_API_KEY"):
@@ -151,7 +161,10 @@ def update_settings(patch: SettingsPatch) -> dict[str, object]:
     pexels_valid: bool | None = None
     pexels_message = "Pexels 未配置；自动 B-roll 下载将在缺少素材时暂停。"
     if values.get("PEXELS_API_KEY"):
-        pexels_valid, pexels_message = _validate_pexels(values["PEXELS_API_KEY"])
+        if submitted_pexels_key:
+            pexels_valid, pexels_message = True, "Pexels API key 已验证。"
+        else:
+            pexels_valid, pexels_message = _validate_pexels(values["PEXELS_API_KEY"])
     return {
         "saved": True,
         "jogg_valid": jogg_valid,
