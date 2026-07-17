@@ -744,7 +744,7 @@ video {
 .install-grid {
   display: grid;
   grid-template-columns: minmax(0, 0.9fr) minmax(420px, 1.1fr);
-  align-items: end;
+  align-items: start;
   gap: 96px;
 }
 
@@ -753,10 +753,74 @@ video {
   font-size: 54px;
 }
 
-.install-action > p:first-child {
-  margin: 0 0 24px;
+.install-heading > p:last-child {
+  max-width: 520px;
+  margin: 26px 0 0;
   color: var(--muted);
   font-size: 17px;
+}
+
+.install-options {
+  border-top: 1px solid #c8ced8;
+}
+
+.install-option {
+  padding: 30px 0 34px;
+  border-bottom: 1px solid #c8ced8;
+}
+
+.install-option-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.install-option-title > span {
+  padding-top: 5px;
+  color: var(--brand);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.install-option-title p {
+  margin: 0 0 3px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.install-option h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 28px;
+}
+
+.install-option > p {
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.plugin-install-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.plugin-install-steps li + li {
+  margin-top: 18px;
+}
+
+.plugin-install-steps li > span {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--body);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .command-box {
@@ -803,8 +867,22 @@ video {
   font-size: 13px;
 }
 
-.install-action .text-link {
+.install-option .text-link {
   margin-top: 4px;
+}
+
+.install-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 22px;
+}
+
+.install-links .button {
+  min-height: 46px;
+  padding: 0 18px;
+  font-size: 13px;
 }
 
 .closing-cta {
@@ -1069,6 +1147,15 @@ video {
   .install-section h2,
   .closing-cta h2 {
     font-size: 43px;
+  }
+
+  .command-box {
+    align-items: stretch;
+  }
+
+  .command-box code {
+    overflow-wrap: anywhere;
+    white-space: normal;
   }
 
   .workflow-line {

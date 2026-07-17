@@ -15,8 +15,8 @@
       href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=3" />
-    <script src="./app.js?v=3" defer></script>
+    <link rel="stylesheet" href="./styles.css?v=4" />
+    <script src="./app.js?v=4" defer></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
@@ -35,7 +35,7 @@
         <a href="#features">Features</a>
         <a href="#use-cases">Use cases</a>
         <a href="#about">About</a>
-        <a href="#install">Install Skills</a>
+        <a href="#install">Install</a>
         <a class="nav-cta" href="https://app.jogg.ai/" target="_blank" rel="noreferrer">Start creating <span aria-hidden="true">↗</span></a>
       </nav>
     </header>
@@ -300,18 +300,82 @@
 
       <section id="install" class="install-section" aria-labelledby="install-title">
         <div class="content-shell install-grid reveal">
-          <div>
+          <div class="install-heading">
             <p class="eyebrow">Jogg Skills for Codex</p>
-            <h2 id="install-title">Install the workflow bundle.</h2>
+            <h2 id="install-title">Install once.<br />Add what you need.</h2>
+            <p>
+              The core Skills and Smart Slides live in the same JoggAI repository. Start with the workflow
+              bundle, then add the Smart Slides plugin when you need the full local studio runtime.
+            </p>
           </div>
-          <div class="install-action">
-            <p>Add the Jogg Skills repository to Codex from a single command.</p>
-            <div class="command-box">
-              <code id="install-command">npx skills add JoggAI-Tech/jogg-skills</code>
-              <button type="button" data-copy-command aria-describedby="copy-status">Copy</button>
-            </div>
-            <p id="copy-status" class="copy-status" aria-live="polite"></p>
-            <a class="text-link" href="https://github.com/JoggAI-Tech/jogg-skills" target="_blank" rel="noreferrer">View repository <span aria-hidden="true">↗</span></a>
+          <div class="install-options">
+            <article class="install-option">
+              <div class="install-option-title">
+                <span>01</span>
+                <div>
+                  <p>Core workflow bundle</p>
+                  <h3>Jogg Skills</h3>
+                </div>
+              </div>
+              <p>Install the repository Skills for Jogg API, lip sync, and trend-to-video workflows.</p>
+              <div class="command-box">
+                <code id="skills-install-command">npx skills add JoggAI-Tech/jogg-skills</code>
+                <button
+                  type="button"
+                  data-copy-command
+                  data-copy-target="skills-install-command"
+                  aria-describedby="skills-copy-status"
+                >Copy</button>
+              </div>
+              <p id="skills-copy-status" class="copy-status" aria-live="polite"></p>
+              <a class="text-link" href="https://github.com/JoggAI-Tech/jogg-skills" target="_blank" rel="noreferrer">View repository <span aria-hidden="true">↗</span></a>
+            </article>
+
+            <article class="install-option">
+              <div class="install-option-title">
+                <span>02</span>
+                <div>
+                  <p>Optional plugin · same repository</p>
+                  <h3>Smart Slides</h3>
+                </div>
+              </div>
+              <p>
+                Add the bundled Smart Slides plugin when you want local planning, editing, preview, and
+                rendering with Jogg assets.
+              </p>
+              <ol class="plugin-install-steps">
+                <li>
+                  <span>Register the JoggAI marketplace</span>
+                  <div class="command-box">
+                    <code id="marketplace-install-command">codex plugin marketplace add JoggAI-Tech/jogg-skills --ref main</code>
+                    <button
+                      type="button"
+                      data-copy-command
+                      data-copy-target="marketplace-install-command"
+                      aria-describedby="marketplace-copy-status"
+                    >Copy</button>
+                  </div>
+                  <p id="marketplace-copy-status" class="copy-status" aria-live="polite"></p>
+                </li>
+                <li>
+                  <span>Install Smart Slides from that marketplace</span>
+                  <div class="command-box">
+                    <code id="plugin-install-command">codex plugin add smart-slides@jogg-skills</code>
+                    <button
+                      type="button"
+                      data-copy-command
+                      data-copy-target="plugin-install-command"
+                      aria-describedby="plugin-copy-status"
+                    >Copy</button>
+                  </div>
+                  <p id="plugin-copy-status" class="copy-status" aria-live="polite"></p>
+                </li>
+              </ol>
+              <div class="install-links">
+                <a class="button button--primary" href="codex://plugins/install/smart-slides?marketplace=jogg-skills">Install in Codex</a>
+                <a class="text-link" href="https://github.com/JoggAI-Tech/jogg-skills/tree/main/plugins/smart-slides" target="_blank" rel="noreferrer">View plugin source <span aria-hidden="true">↗</span></a>
+              </div>
+            </article>
           </div>
         </div>
       </section>

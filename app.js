@@ -4,9 +4,7 @@ const nav = document.querySelector("#site-nav");
 const heroVideo = document.querySelector("[data-auto-video]");
 const videoToggle = document.querySelector("[data-video-toggle]");
 const videoToggleLabel = document.querySelector("[data-video-toggle-label]");
-const copyButton = document.querySelector("[data-copy-command]");
-const copyStatus = document.querySelector("#copy-status");
-const installCommand = document.querySelector("#install-command");
+const copyButtons = document.querySelectorAll("[data-copy-command]");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 function setHeaderState() {
@@ -57,30 +55,37 @@ videoToggle?.addEventListener("click", async () => {
   }
 });
 
-copyButton?.addEventListener("click", async () => {
-  const command = installCommand.textContent.trim();
+copyButtons.forEach((copyButton) => {
+  copyButton.addEventListener("click", async () => {
+    const commandNode = document.querySelector(`#${copyButton.dataset.copyTarget}`);
+    const statusId = copyButton.getAttribute("aria-describedby");
+    const copyStatus = statusId ? document.querySelector(`#${statusId}`) : null;
+    if (!commandNode) return;
 
-  try {
-    await Promise.race([
-      navigator.clipboard.writeText(command),
-      new Promise((_, reject) => window.setTimeout(() => reject(new Error("Clipboard timeout")), 800)),
-    ]);
-    copyButton.textContent = "Copied";
-    copyStatus.textContent = "Install command copied to clipboard.";
-  } catch {
-    const selection = window.getSelection();
-    const range = document.createRange();
-    range.selectNodeContents(installCommand);
-    selection.removeAllRanges();
-    selection.addRange(range);
-    copyButton.textContent = "Selected";
-    copyStatus.textContent = "The install command is selected and ready to copy.";
-  }
+    const command = commandNode.textContent.trim();
 
-  window.setTimeout(() => {
-    copyButton.textContent = "Copy";
-    copyStatus.textContent = "";
-  }, 2600);
+    try {
+      await Promise.race([
+        navigator.clipboard.writeText(command),
+        new Promise((_, reject) => window.setTimeout(() => reject(new Error("Clipboard timeout")), 800)),
+      ]);
+      copyButton.textContent = "Copied";
+      if (copyStatus) copyStatus.textContent = "Install command copied to clipboard.";
+    } catch {
+      const selection = window.getSelection();
+      const range = document.createRange();
+      range.selectNodeContents(commandNode);
+      selection.removeAllRanges();
+      selection.addRange(range);
+      copyButton.textContent = "Selected";
+      if (copyStatus) copyStatus.textContent = "The install command is selected and ready to copy.";
+    }
+
+    window.setTimeout(() => {
+      copyButton.textContent = "Copy";
+      if (copyStatus) copyStatus.textContent = "";
+    }, 2600);
+  });
 });
 
 document.querySelectorAll("[data-year]").forEach((node) => {

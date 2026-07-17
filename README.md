@@ -21,15 +21,23 @@ skills/
 
 ## Install
 
-Install this skills repository with:
+Install the repository Skills with:
 
 ```bash
 npx skills add JoggAI-Tech/jogg-skills
 ```
 
+Smart Slides is an optional Codex plugin in the same repository at
+[`plugins/smart-slides`](plugins/smart-slides). Register the repository marketplace and install it with:
+
+```bash
+codex plugin marketplace add JoggAI-Tech/jogg-skills --ref main
+codex plugin add smart-slides@jogg-skills
+```
+
 ## Product site
 
-Open [`site/index.html`](site/index.html) for the JoggAI product introduction,
+Open [`index.html`](index.html) for the JoggAI product introduction,
 official feature examples, and the Jogg Skills installation entry point.
 
 ## Current scaffold
