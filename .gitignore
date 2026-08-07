@@ -1,0 +1,10 @@
+.DS_Store
+.env
+.idea/
+**/.env
+**/.idea/
+**/.git/
+.firecrawl/
+**/node_modules/
+**/__pycache__/
+**/*.pyc

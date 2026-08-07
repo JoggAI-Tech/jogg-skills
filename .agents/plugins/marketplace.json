@@ -1,0 +1,20 @@
+{
+  "name": "jogg-skills",
+  "interface": {
+    "displayName": "Jogg Skills"
+  },
+  "plugins": [
+    {
+      "name": "smart-video",
+      "source": {
+        "source": "local",
+        "path": "./plugins/smart-video"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Creativity"
+    }
+  ]
+}

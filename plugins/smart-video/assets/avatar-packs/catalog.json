@@ -1,0 +1,17 @@
+{
+  "schema": "smartvideo_avatar_catalog_v1",
+  "default_avatar_id": "2ca35484ebb0d907a8b08c80cc963531",
+  "model_id": "avatar-0603",
+  "items": [
+    {
+      "avatar_id": "2ca35484ebb0d907a8b08c80cc963531",
+      "name": "Classroom Presenter",
+      "aspect_ratio": "landscape",
+      "template_id": "0603",
+      "model_id": "avatar-0603",
+      "payload_root": "2ca35484ebb0d907a8b08c80cc963531",
+      "bundle_id": "avatar-2ca35484ebb0d907a8b08c80cc963531-templates",
+      "file_count": 253
+    }
+  ]
+}
