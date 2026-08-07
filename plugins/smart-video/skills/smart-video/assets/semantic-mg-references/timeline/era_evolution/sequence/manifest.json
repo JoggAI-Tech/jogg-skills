@@ -1,0 +1,31 @@
+{
+  "id": "era_evolution--sequence",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "era_evolution",
+  "name": "Three Eras of AI Products",
+  "presentation_form_id": "sequence",
+  "presentation_form_name": "Sequence",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "vertical-index",
+  "motion_profile": "rail-travel",
+  "layout": "headline-top",
+  "layout_instance_id": "era_evolution--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "era-panels",
+  "art_direction": "triptych era_evolution with directional time object",
+  "composition_signature": "era_evolution:sequence:era-panels:headline-top:era_evolution:kinetic-ivory:vertical-index:rail-travel:triptych:caption:triptych:headline:era_evolution--1--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

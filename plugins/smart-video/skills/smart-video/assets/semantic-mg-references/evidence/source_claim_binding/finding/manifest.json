@@ -1,0 +1,31 @@
+{
+  "id": "source_claim_binding--finding",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "scene_id": "source_claim_binding",
+  "name": "Every Claim Has a Source",
+  "presentation_form_id": "finding",
+  "presentation_form_name": "Finding",
+  "visual_id": "atlas-blue",
+  "proof_mode": "stamp",
+  "motion_profile": "finding-stamp",
+  "layout": "headline-bottom",
+  "layout_instance_id": "source_claim_binding--3--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_name": "source-verdict",
+  "art_direction": "redaction source_claim_binding with finding lockup",
+  "composition_signature": "source_claim_binding:finding:source-verdict:headline-bottom:source_claim_binding:atlas-blue:stamp:finding-stamp:redaction-sheet:caption:redaction:headline:source_claim_binding--3--layout:cinema-caption-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

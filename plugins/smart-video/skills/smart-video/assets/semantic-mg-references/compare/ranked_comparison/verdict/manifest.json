@@ -1,0 +1,31 @@
+{
+  "id": "ranked_comparison--verdict",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "scene_id": "ranked_comparison",
+  "name": "Where Teams Save Time",
+  "presentation_form_id": "verdict",
+  "presentation_form_name": "Verdict",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "caption-line",
+  "motion_profile": "verdict-lock",
+  "layout": "headline-bottom",
+  "layout_instance_id": "ranked_comparison--3--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "rank-podium",
+  "art_direction": "monument ranked_list with decisive verdict object",
+  "composition_signature": "ranked_comparison:verdict:rank-podium:headline-bottom:ranked_list:cobalt-coral:caption-line:verdict-lock:number-monument:caption:monument:headline:ranked_comparison--3--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

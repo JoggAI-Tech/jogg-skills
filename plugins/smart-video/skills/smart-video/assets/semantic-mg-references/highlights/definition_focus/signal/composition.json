@@ -1,0 +1,114 @@
+{
+  "id": "definition_focus--signal",
+  "scene_id": "definition_focus",
+  "scene_title": "Inference Economy",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "signal",
+  "lens_name": "Signal",
+  "intent": "Lead with the one idea the audience must remember",
+  "composition_name": "term-orbit",
+  "layout_grammar": "diagram-right-rail",
+  "layout_contract_id": "definition_focus--expression-1",
+  "layout_instance_id": "definition_focus--1--layout",
+  "portrait_silhouette_id": "offset-upper-left",
+  "composition_family": "sticker-mascot",
+  "design_contract_id": "definition_focus--sticker-mascot--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "term_definition",
+  "support_components": [
+    "word_anatomy",
+    "example_chip"
+  ],
+  "semantic_slots": [
+    "term",
+    "definition",
+    "example"
+  ],
+  "data_shape": "definition_example",
+  "motion": "term_assemble",
+  "motion_profile": "impact-lock",
+  "visual_id": "sticker-classroom",
+  "proof_mode": "floating-chips",
+  "copy_surface": "technical",
+  "art_surface": "mascot",
+  "copy_mode": "editorial",
+  "art_direction": "mascot term_definition with single dominant symbol",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.476,
+        "y": 7.64,
+        "w": 55.44,
+        "h": 41.802
+      },
+      "art": {
+        "x": 63.802,
+        "y": 5.126,
+        "w": 30.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 5.286,
+        "y": 78.162,
+        "w": 54.846,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 5.476,
+          "y": 7.64,
+          "w": 55.44,
+          "h": 41.802
+        },
+        {
+          "x": 5.286,
+          "y": 78.162,
+          "w": 54.846,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.356,
+        "y": 4.72,
+        "w": 42.44,
+        "h": 79.802
+      },
+      "art": {
+        "x": 50.856,
+        "y": 5.098,
+        "w": 42.692,
+        "h": 80.11
+      },
+      "proof": {
+        "x": 6.208,
+        "y": 88.126,
+        "w": 87.846,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 6.356,
+          "y": 4.72,
+          "w": 42.44,
+          "h": 79.802
+        },
+        {
+          "x": 6.208,
+          "y": 88.126,
+          "w": 87.846,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "definition_focus:signal:term-orbit:diagram-right-rail:term_definition:sticker-classroom:floating-chips:impact-lock:sticker-mascot:technical:mascot:editorial:definition_focus--1--layout:offset-upper-left",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "capital_flow_network",
+  "composition_id": "capital_flow_network--architecture",
+  "lens_id": "architecture",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "capital_flow_network--1--layout",
+  "portrait_silhouette_id": "offset-upper-left",
+  "structural_fingerprint": "capital_flow_network:architecture:capital-river:diagram-center:capital_flow_network:electric-cyan:caption-line:structure-assemble:river-flow:floating:flow-river:editorial:capital_flow_network--1--layout:offset-upper-left",
+  "art_direction": "flow-river capital_flow_network with structural blueprint",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "26effe7168d46eb374924adb56869ef323b47ceece204944faf7acaaa9bf814e",
+    "9:16": "68e3784cf45093cd2f76a59f2b388ea5e7da3a5bb727b4dcf571626190415c2f"
+  }
+}

@@ -1,0 +1,114 @@
+{
+  "id": "statement_monument--thesis",
+  "scene_id": "statement_monument",
+  "scene_title": "Intelligence Becomes Infrastructure",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "thesis",
+  "lens_name": "Thesis",
+  "intent": "Turn the implication into a decisive editorial statement",
+  "composition_name": "edge-crop-thesis",
+  "layout_grammar": "diagonal-right",
+  "layout_contract_id": "statement_monument--expression-3",
+  "layout_instance_id": "statement_monument--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "diagonal-lock",
+  "design_contract_id": "statement_monument--diagonal-lock--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "claim_monument",
+  "support_components": [
+    "proof_strip",
+    "context_caption"
+  ],
+  "semantic_slots": [
+    "claim",
+    "proof",
+    "implication"
+  ],
+  "data_shape": "claim_evidence",
+  "motion": "monument_reveal",
+  "motion_profile": "poster-slam",
+  "visual_id": "material-editorial",
+  "proof_mode": "caption-line",
+  "copy_surface": "poster",
+  "art_surface": "diagonal",
+  "copy_mode": "statement",
+  "art_direction": "diagonal claim_monument with poster conclusion",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 58.786,
+        "y": 7.46,
+        "w": 36.44,
+        "h": 57.802
+      },
+      "art": {
+        "x": 5.099,
+        "y": 6.189,
+        "w": 55.692,
+        "h": 87.11
+      },
+      "proof": {
+        "x": 59.857,
+        "y": 76.243,
+        "w": 34.846,
+        "h": 17
+      },
+      "avoid_zones": [
+        {
+          "x": 58.786,
+          "y": 7.46,
+          "w": 36.44,
+          "h": 57.802
+        },
+        {
+          "x": 59.857,
+          "y": 76.243,
+          "w": 34.846,
+          "h": 17
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.846,
+        "y": 4.58,
+        "w": 86.44,
+        "h": 31.802
+      },
+      "art": {
+        "x": 6.072,
+        "y": 40.147,
+        "w": 87.692,
+        "h": 49.11
+      },
+      "proof": {
+        "x": 6.896,
+        "y": 92.189,
+        "w": 85.846,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.846,
+          "y": 4.58,
+          "w": 86.44,
+          "h": 31.802
+        },
+        {
+          "x": 6.896,
+          "y": 92.189,
+          "w": 85.846,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "statement_monument:thesis:edge-crop-thesis:diagonal-right:claim_monument:material-editorial:caption-line:poster-slam:diagonal-lock:poster:diagonal:statement:statement_monument--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "maps",
+  "scene_id": "geo_bubble",
+  "composition_id": "geo_bubble--pattern",
+  "lens_id": "pattern",
+  "visual_id": "material-editorial",
+  "layout_instance_id": "geo_bubble--2--layout",
+  "portrait_silhouette_id": "poster-inset-bottom",
+  "structural_fingerprint": "geo_bubble:pattern:hotspot-lens:poster-offset-right:geo_bubble:material-editorial:metric-cards:region-emerge:full-bleed-chart:floating:chart-field:statement:geo_bubble--2--layout:poster-inset-bottom",
+  "art_direction": "chart-field geo_bubble with spatial concentration",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "97f6e41d15b36bc2896ef33e58ba78b2c4ee1cefea08dd196028bdd42e0831a7",
+    "9:16": "b51b34638260568585de1e8e1a0ea213274f1d5a33d329951305fadc6962bdcf"
+  }
+}

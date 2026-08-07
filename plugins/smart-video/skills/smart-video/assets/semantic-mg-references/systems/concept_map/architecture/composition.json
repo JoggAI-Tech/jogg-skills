@@ -1,0 +1,115 @@
+{
+  "id": "concept_map--architecture",
+  "scene_id": "concept_map",
+  "scene_title": "What Makes a Model Useful",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "architecture",
+  "lens_name": "Architecture",
+  "intent": "Make structure and dependency visible",
+  "composition_name": "concept-network",
+  "layout_grammar": "diagram-center",
+  "layout_contract_id": "concept_map--expression-1",
+  "layout_instance_id": "concept_map--1--layout",
+  "portrait_silhouette_id": "left-caption-stage",
+  "composition_family": "network-radial",
+  "design_contract_id": "concept_map--network-radial--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "concept_map",
+  "support_components": [
+    "concept_nodes",
+    "relation_labels",
+    "focus_cluster"
+  ],
+  "semantic_slots": [
+    "core_concept",
+    "relationships",
+    "meaning"
+  ],
+  "data_shape": "semantic_graph",
+  "motion": "concept_connect",
+  "motion_profile": "structure-assemble",
+  "visual_id": "sticker-classroom",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "floating",
+  "art_surface": "network",
+  "copy_mode": "editorial",
+  "art_direction": "network concept_map with structural blueprint",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.844,
+        "y": 6.0,
+        "w": 37.78,
+        "h": 40.099
+      },
+      "art": {
+        "x": 26.297,
+        "y": 16.0,
+        "w": 69.154,
+        "h": 69.945
+      },
+      "proof": {
+        "x": 4.571,
+        "y": 78.0,
+        "w": 34.077,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 4.844,
+          "y": 6.0,
+          "w": 37.78,
+          "h": 40.099
+        },
+        {
+          "x": 4.571,
+          "y": 78.0,
+          "w": 34.077,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.024,
+        "y": 5.0,
+        "w": 32.78,
+        "h": 67.099
+      },
+      "art": {
+        "x": 43.216,
+        "y": 5.0,
+        "w": 51.154,
+        "h": 79.945
+      },
+      "proof": {
+        "x": 5.688,
+        "y": 75.0,
+        "w": 33.077,
+        "h": 12
+      },
+      "avoid_zones": [
+        {
+          "x": 6.024,
+          "y": 5.0,
+          "w": 32.78,
+          "h": 67.099
+        },
+        {
+          "x": 5.688,
+          "y": 75.0,
+          "w": 33.077,
+          "h": 12
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "concept_map:architecture:concept-network:diagram-center:concept_map:sticker-classroom:edge-tabs:structure-assemble:network-radial:floating:network:editorial:concept_map--1--layout:left-caption-stage",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

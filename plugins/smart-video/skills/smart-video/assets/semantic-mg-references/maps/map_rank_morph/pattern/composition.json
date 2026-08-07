@@ -1,0 +1,115 @@
+{
+  "id": "map_rank_morph--pattern",
+  "scene_id": "map_rank_morph",
+  "scene_title": "The Geography of AI Investment",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "lens_id": "pattern",
+  "lens_name": "Pattern",
+  "intent": "Show spatial concentration and regional contrast",
+  "composition_name": "region-rank-focus",
+  "layout_grammar": "diagram-right-rail",
+  "layout_contract_id": "map_rank_morph--expression-2",
+  "layout_instance_id": "map_rank_morph--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_family": "bars-surge",
+  "design_contract_id": "map_rank_morph--bars-surge--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "map_rank_morph",
+  "support_components": [
+    "map_positions",
+    "rank_bars",
+    "morph_links"
+  ],
+  "semantic_slots": [
+    "geography",
+    "ranking",
+    "shift"
+  ],
+  "data_shape": "geo_rank",
+  "motion": "map_to_rank",
+  "motion_profile": "region-emerge",
+  "visual_id": "luminous-grid",
+  "proof_mode": "metric-cards",
+  "copy_surface": "technical",
+  "art_surface": "bars",
+  "copy_mode": "editorial",
+  "art_direction": "bars map_rank_morph with spatial concentration",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.13,
+        "y": 8.54,
+        "w": 54.78,
+        "h": 42.099
+      },
+      "art": {
+        "x": 64.198,
+        "y": 4.811,
+        "w": 31.154,
+        "h": 87.945
+      },
+      "proof": {
+        "x": 4.714,
+        "y": 77.757,
+        "w": 55.077,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 5.13,
+          "y": 8.54,
+          "w": 54.78,
+          "h": 42.099
+        },
+        {
+          "x": 4.714,
+          "y": 77.757,
+          "w": 55.077,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 52.25,
+        "y": 5.42,
+        "w": 41.78,
+        "h": 80.099
+      },
+      "art": {
+        "x": 6.144,
+        "y": 4.853,
+        "w": 43.154,
+        "h": 79.945
+      },
+      "proof": {
+        "x": 5.792,
+        "y": 87.811,
+        "w": 88.077,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 52.25,
+          "y": 5.42,
+          "w": 41.78,
+          "h": 80.099
+        },
+        {
+          "x": 5.792,
+          "y": 87.811,
+          "w": 88.077,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "map_rank_morph:pattern:region-rank-focus:diagram-right-rail:map_rank_morph:luminous-grid:metric-cards:region-emerge:bars-surge:technical:bars:editorial:map_rank_morph--2--layout:offset-lower-right",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

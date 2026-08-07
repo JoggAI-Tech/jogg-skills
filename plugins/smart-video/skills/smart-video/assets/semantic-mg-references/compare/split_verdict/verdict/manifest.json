@@ -1,0 +1,31 @@
+{
+  "id": "split_verdict--verdict",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "scene_id": "split_verdict",
+  "name": "Open or Controlled?",
+  "presentation_form_id": "verdict",
+  "presentation_form_name": "Verdict",
+  "visual_id": "luminous-grid",
+  "proof_mode": "center-badge",
+  "motion_profile": "verdict-lock",
+  "layout": "poster-offset-right",
+  "layout_instance_id": "split_verdict--3--layout",
+  "portrait_silhouette_id": "middle-story-band",
+  "composition_name": "verdict-gate",
+  "art_direction": "symbol split_verdict with decisive verdict object",
+  "composition_signature": "split_verdict:verdict:verdict-gate:poster-offset-right:split_verdict:luminous-grid:center-badge:verdict-lock:center-symbol:floating:symbol:statement:split_verdict--3--layout:middle-story-band",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

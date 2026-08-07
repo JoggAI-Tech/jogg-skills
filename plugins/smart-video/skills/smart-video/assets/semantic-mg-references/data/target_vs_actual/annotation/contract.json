@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "data",
+  "scene_id": "target_vs_actual",
+  "composition_id": "target_vs_actual--annotation",
+  "lens_id": "annotation",
+  "visual_id": "signal-noir",
+  "layout_instance_id": "target_vs_actual--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "target_vs_actual:annotation:gap-annotation:data-left:target_actual:signal-noir:edge-tabs:annotation-focus:force-quadrant:technical:quadrant:metric:target_vs_actual--2--layout:art-monument-top",
+  "art_direction": "quadrant target_actual with annotated decisive mark",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "84a6f0e5b3f448fbb51c5702a345ce59f864987f8bb79cfa90ad09cfb92f4f38",
+    "9:16": "eed22208294eee36a8fe60a58b2d8f5004aeec81029a6cd98e6feb3c3b233d95"
+  }
+}

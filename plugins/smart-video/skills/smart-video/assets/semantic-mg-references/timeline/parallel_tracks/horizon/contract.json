@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "parallel_tracks",
+  "composition_id": "parallel_tracks--horizon",
+  "lens_id": "horizon",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "parallel_tracks--3--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "structural_fingerprint": "parallel_tracks:horizon:convergence-lock:timeline-caption:parallel_tracks:luminous-grid:floating-chips:horizon-settle:route-bridge:editorial:route:headline:parallel_tracks--3--layout:bottom-compact",
+  "art_direction": "route parallel_tracks with compressed time horizon",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "d969deb242519afeabbad81e62d851dbb91beeea6ba74a0ee56a47838ad31196",
+    "9:16": "be9d70ee43532b23d37d7ed850a02d05d7f2aa2dbcad631f6442bb0c6ec2d64d"
+  }
+}

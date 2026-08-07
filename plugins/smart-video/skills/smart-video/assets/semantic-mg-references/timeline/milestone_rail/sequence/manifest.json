@@ -1,0 +1,31 @@
+{
+  "id": "milestone_rail--sequence",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "milestone_rail",
+  "name": "The Five-Year Agent Shift",
+  "presentation_form_id": "sequence",
+  "presentation_form_name": "Sequence",
+  "visual_id": "archive-dossier",
+  "proof_mode": "vertical-index",
+  "motion_profile": "rail-travel",
+  "layout": "timeline-band",
+  "layout_instance_id": "milestone_rail--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_name": "milestone-rail",
+  "art_direction": "rail milestone_rail with directional time object",
+  "composition_signature": "milestone_rail:sequence:milestone-rail:timeline-band:milestone_rail:archive-dossier:vertical-index:rail-travel:step-rail:caption:rail:headline:milestone_rail--1--layout:top-compact",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

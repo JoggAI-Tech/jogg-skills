@@ -1,0 +1,31 @@
+{
+  "id": "forecast_band--chart",
+  "category_id": "data",
+  "category_name": "Data",
+  "scene_id": "forecast_band",
+  "name": "Three Paths to Scale",
+  "presentation_form_id": "chart",
+  "presentation_form_name": "Chart",
+  "visual_id": "luminous-grid",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "chart-build",
+  "layout": "full-width-stage",
+  "layout_instance_id": "forecast_band--1--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_name": "forecast-field",
+  "art_direction": "wave-field forecast_band with chart-dominant field",
+  "composition_signature": "forecast_band:chart:forecast-field:full-width-stage:forecast_band:luminous-grid:edge-tabs:chart-build:wave-horizon:floating:wave-field:headline:forecast_band--1--layout:cinema-caption-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "maturity_ladder--mechanism",
+  "category_id": "process",
+  "category_name": "Process",
+  "scene_id": "maturity_ladder",
+  "name": "Five Levels of AI Operations",
+  "presentation_form_id": "mechanism",
+  "presentation_form_name": "Mechanism",
+  "visual_id": "atlas-blue",
+  "proof_mode": "vertical-index",
+  "motion_profile": "mechanism-run",
+  "layout": "diagram-center",
+  "layout_instance_id": "maturity_ladder--1--layout",
+  "portrait_silhouette_id": "left-caption-stage",
+  "composition_name": "maturity-steps",
+  "art_direction": "rail maturity_ladder with visible causal mechanism",
+  "composition_signature": "maturity_ladder:mechanism:maturity-steps:diagram-center:maturity_ladder:atlas-blue:vertical-index:mechanism-run:step-rail:floating:rail:editorial:maturity_ladder--1--layout:left-caption-stage",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

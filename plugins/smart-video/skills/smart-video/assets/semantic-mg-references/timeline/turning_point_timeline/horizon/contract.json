@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "turning_point_timeline",
+  "composition_id": "turning_point_timeline--horizon",
+  "lens_id": "horizon",
+  "visual_id": "chalkboard-lab",
+  "layout_instance_id": "turning_point_timeline--3--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "structural_fingerprint": "turning_point_timeline:horizon:after-horizon:full-width-stage:timeline_inflection:chalkboard-lab:edge-tabs:horizon-settle:wave-horizon:floating:wave-field:headline:turning_point_timeline--3--layout:cinema-caption-top",
+  "art_direction": "wave-field timeline_inflection with compressed time horizon",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "879cfe23513f9aa6f5a115394d92172dcad4749fe6b4b3520dc1caf69624769e",
+    "9:16": "d0894b2e92c8f32cbedf398abc628d0e33c653386e2dd04a1f2066f0a46a0bcc"
+  }
+}

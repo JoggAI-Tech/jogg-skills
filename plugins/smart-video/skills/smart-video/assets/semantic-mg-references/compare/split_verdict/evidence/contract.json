@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "split_verdict",
+  "composition_id": "split_verdict--evidence",
+  "lens_id": "evidence",
+  "visual_id": "material-editorial",
+  "layout_instance_id": "split_verdict--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "structural_fingerprint": "split_verdict:evidence:balanced-proof:editorial-left:split_verdict:material-editorial:center-badge:evidence-build:opposed-cards:editorial:opposed:editorial:split_verdict--2--layout:bottom-editorial",
+  "art_direction": "opposed split_verdict with measured proof field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "c3c198889e870b95686d8ac5b37a2a51d1d569b488811c958c0a7f1bb43e4ad9",
+    "9:16": "ffe11362f30a5afd985e6012bddd8ce5d7a0493fe519dc14869a4e1b812b346a"
+  }
+}

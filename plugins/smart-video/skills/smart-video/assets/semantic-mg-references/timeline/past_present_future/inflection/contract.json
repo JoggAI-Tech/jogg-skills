@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "past_present_future",
+  "composition_id": "past_present_future--inflection",
+  "lens_id": "inflection",
+  "visual_id": "sticker-classroom",
+  "layout_instance_id": "past_present_future--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "structural_fingerprint": "past_present_future:inflection:present-focus:editorial-left:past_present_future:sticker-classroom:caption-line:pivot-magnify:editorial-margin:editorial:framed-object:editorial:past_present_future--2--layout:right-caption-stage",
+  "art_direction": "framed-object past_present_future with magnified inflection",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "e13e859fddb0ee53bf8eef58710e406714b53f7759928c9e166f729b29dc882d",
+    "9:16": "6a06ad081ae9ee7740445138f718da16bc3d3db0dae9f87b5dfbf4ae6668a63b"
+  }
+}

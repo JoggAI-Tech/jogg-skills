@@ -1,0 +1,115 @@
+{
+  "id": "regional_choropleth--implication",
+  "scene_id": "regional_choropleth",
+  "scene_title": "AI Adoption by Region",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "lens_id": "implication",
+  "lens_name": "Implication",
+  "intent": "Connect geography to the consequence",
+  "composition_name": "regional-finding",
+  "layout_grammar": "metric-monument",
+  "layout_contract_id": "regional_choropleth--expression-3",
+  "layout_instance_id": "regional_choropleth--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "number-monument",
+  "design_contract_id": "regional_choropleth--number-monument--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "regional_choropleth",
+  "support_components": [
+    "region_shapes",
+    "value_scale",
+    "focus_region"
+  ],
+  "semantic_slots": [
+    "regions",
+    "intensity",
+    "explanation"
+  ],
+  "data_shape": "regional_values",
+  "motion": "regions_fill",
+  "motion_profile": "impact-arrive",
+  "visual_id": "luminous-grid",
+  "proof_mode": "caption-line",
+  "copy_surface": "poster",
+  "art_surface": "monument",
+  "copy_mode": "metric",
+  "art_direction": "monument regional_choropleth with geographic consequence",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.555,
+        "y": 9.36,
+        "w": 37.78,
+        "h": 61.099
+      },
+      "art": {
+        "x": 46.0,
+        "y": 3.874,
+        "w": 49.154,
+        "h": 89.945
+      },
+      "proof": {
+        "x": 5.0,
+        "y": 78.838,
+        "w": 38.077,
+        "h": 14
+      },
+      "avoid_zones": [
+        {
+          "x": 5.555,
+          "y": 9.36,
+          "w": 37.78,
+          "h": 61.099
+        },
+        {
+          "x": 5.0,
+          "y": 78.838,
+          "w": 38.077,
+          "h": 14
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.555,
+        "y": 5.28,
+        "w": 85.78,
+        "h": 32.099
+      },
+      "art": {
+        "x": 6.0,
+        "y": 39.902,
+        "w": 88.154,
+        "h": 48.945
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 91.874,
+        "w": 86.077,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.555,
+          "y": 5.28,
+          "w": 85.78,
+          "h": 32.099
+        },
+        {
+          "x": 7.0,
+          "y": 91.874,
+          "w": 86.077,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "regional_choropleth:implication:regional-finding:metric-monument:regional_choropleth:luminous-grid:caption-line:impact-arrive:number-monument:poster:monument:metric:regional_choropleth--3--layout:poster-inset-top",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

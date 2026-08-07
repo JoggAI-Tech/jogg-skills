@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "module_dependency",
+  "composition_id": "module_dependency--principle",
+  "lens_id": "principle",
+  "visual_id": "redaction-paper",
+  "layout_instance_id": "module_dependency--3--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "structural_fingerprint": "module_dependency:principle:dependency-rule:evidence-left:module_dependency:redaction-paper:stamp:principle-lock:redaction-sheet:paper:redaction:editorial:module_dependency--3--layout:right-caption-stage",
+  "art_direction": "redaction module_dependency with governing system rule",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "c5dd1fd6813379762f4f3ff34e8daf7112363fc121c810d9d296f4a8caed2a61",
+    "9:16": "ea0ef0594c82c9d41312341c0dc47192202f98be4b6e188fbeaf7cd73272699b"
+  }
+}

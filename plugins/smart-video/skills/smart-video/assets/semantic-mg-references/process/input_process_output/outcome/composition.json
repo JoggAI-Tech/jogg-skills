@@ -1,0 +1,115 @@
+{
+  "id": "input_process_output--outcome",
+  "scene_id": "input_process_output",
+  "scene_title": "From Lecture to Mastery",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "outcome",
+  "lens_name": "Outcome",
+  "intent": "Connect the process to its measurable result",
+  "composition_name": "output-lock",
+  "layout_grammar": "statement-right",
+  "layout_contract_id": "input_process_output--expression-3",
+  "layout_instance_id": "input_process_output--3--layout",
+  "portrait_silhouette_id": "upper-lockup",
+  "composition_family": "before-after-slab",
+  "design_contract_id": "input_process_output--before-after-slab--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "input_process_output",
+  "support_components": [
+    "input_bin",
+    "process_engine",
+    "output_bin"
+  ],
+  "semantic_slots": [
+    "input",
+    "process",
+    "output"
+  ],
+  "data_shape": "input_output",
+  "motion": "process_transform",
+  "motion_profile": "outcome-resolve",
+  "visual_id": "sticker-classroom",
+  "proof_mode": "center-badge",
+  "copy_surface": "poster",
+  "art_surface": "before-after",
+  "copy_mode": "statement",
+  "art_direction": "before-after input_process_output with result-bearing machine",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 56.038,
+        "y": 10.36,
+        "w": 39.22,
+        "h": 61.901
+      },
+      "art": {
+        "x": 5.099,
+        "y": 4.874,
+        "w": 48.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 55.857,
+        "y": 78.838,
+        "w": 38.923,
+        "h": 14
+      },
+      "avoid_zones": [
+        {
+          "x": 56.038,
+          "y": 10.36,
+          "w": 39.22,
+          "h": 61.901
+        },
+        {
+          "x": 55.857,
+          "y": 78.838,
+          "w": 38.923,
+          "h": 14
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.098,
+        "y": 5.28,
+        "w": 86.22,
+        "h": 24.901
+      },
+      "art": {
+        "x": 6.072,
+        "y": 41.902,
+        "w": 87.846,
+        "h": 53.055
+      },
+      "proof": {
+        "x": 6.896,
+        "y": 31.874,
+        "w": 85.923,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 7.098,
+          "y": 5.28,
+          "w": 86.22,
+          "h": 24.901
+        },
+        {
+          "x": 6.896,
+          "y": 31.874,
+          "w": 85.923,
+          "h": 7
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "input_process_output:outcome:output-lock:statement-right:input_process_output:sticker-classroom:center-badge:outcome-resolve:before-after-slab:poster:before-after:statement:input_process_output--3--layout:upper-lockup",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

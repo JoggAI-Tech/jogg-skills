@@ -1,0 +1,115 @@
+{
+  "id": "feature_matrix--evidence",
+  "scene_id": "feature_matrix",
+  "scene_title": "Choosing an AI Workspace",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "evidence",
+  "lens_name": "Evidence",
+  "intent": "Explain the difference through concrete proof",
+  "composition_name": "selected-cell",
+  "layout_grammar": "editorial-right",
+  "layout_contract_id": "feature_matrix--expression-2",
+  "layout_instance_id": "feature_matrix--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_family": "evidence-board",
+  "design_contract_id": "feature_matrix--evidence-board--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "feature_matrix",
+  "support_components": [
+    "product_headers",
+    "capability_rows",
+    "winner_marks"
+  ],
+  "semantic_slots": [
+    "options",
+    "criteria",
+    "decision"
+  ],
+  "data_shape": "matrix_boolean",
+  "motion": "matrix_scan",
+  "motion_profile": "evidence-build",
+  "visual_id": "material-editorial",
+  "proof_mode": "stamp",
+  "copy_surface": "editorial",
+  "art_surface": "evidence",
+  "copy_mode": "editorial",
+  "art_direction": "evidence feature_matrix with measured proof field",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 59.891,
+        "y": 8.36,
+        "w": 35.44,
+        "h": 65.802
+      },
+      "art": {
+        "x": 5.099,
+        "y": 4.874,
+        "w": 51.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 59.857,
+        "y": 79.838,
+        "w": 34.846,
+        "h": 13
+      },
+      "avoid_zones": [
+        {
+          "x": 59.891,
+          "y": 8.36,
+          "w": 35.44,
+          "h": 65.802
+        },
+        {
+          "x": 59.857,
+          "y": 79.838,
+          "w": 34.846,
+          "h": 13
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 51.951,
+        "y": 5.28,
+        "w": 42.44,
+        "h": 79.802
+      },
+      "art": {
+        "x": 6.072,
+        "y": 4.902,
+        "w": 42.692,
+        "h": 80.11
+      },
+      "proof": {
+        "x": 5.896,
+        "y": 87.874,
+        "w": 87.846,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 51.951,
+          "y": 5.28,
+          "w": 42.44,
+          "h": 79.802
+        },
+        {
+          "x": 5.896,
+          "y": 87.874,
+          "w": 87.846,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "feature_matrix:evidence:selected-cell:editorial-right:feature_matrix:material-editorial:stamp:evidence-build:evidence-board:editorial:evidence:editorial:feature_matrix--2--layout:offset-lower-right",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

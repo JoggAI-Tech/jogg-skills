@@ -1,0 +1,115 @@
+{
+  "id": "benchmark_gap--evidence",
+  "scene_id": "benchmark_gap",
+  "scene_title": "The Reliability Gap",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "evidence",
+  "lens_name": "Evidence",
+  "intent": "Explain the difference through concrete proof",
+  "composition_name": "benchmark-callout",
+  "layout_grammar": "data-topline",
+  "layout_contract_id": "benchmark_gap--expression-2",
+  "layout_instance_id": "benchmark_gap--2--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "composition_family": "full-bleed-chart",
+  "design_contract_id": "benchmark_gap--full-bleed-chart--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "benchmark_gap",
+  "support_components": [
+    "benchmark_bar",
+    "actual_bar",
+    "gap_annotation"
+  ],
+  "semantic_slots": [
+    "benchmark",
+    "actual",
+    "gap"
+  ],
+  "data_shape": "paired_metric",
+  "motion": "gap_expand",
+  "motion_profile": "evidence-build",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "metric-cards",
+  "copy_surface": "caption",
+  "art_surface": "chart-field",
+  "copy_mode": "metric",
+  "art_direction": "chart-field benchmark_gap with measured proof field",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.56,
+        "y": 5.36,
+        "w": 48.44,
+        "h": 23.802
+      },
+      "art": {
+        "x": 4.802,
+        "y": 31.874,
+        "w": 89.692,
+        "h": 61.11
+      },
+      "proof": {
+        "x": 57.286,
+        "y": 6.838,
+        "w": 37.846,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 5.56,
+          "y": 5.36,
+          "w": 48.44,
+          "h": 23.802
+        },
+        {
+          "x": 57.286,
+          "y": 6.838,
+          "w": 37.846,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 12.44,
+        "y": 5.28,
+        "w": 76.44,
+        "h": 22.802
+      },
+      "art": {
+        "x": 7.856,
+        "y": 30.902,
+        "w": 83.692,
+        "h": 44.11
+      },
+      "proof": {
+        "x": 12.208,
+        "y": 77.874,
+        "w": 75.846,
+        "h": 17
+      },
+      "avoid_zones": [
+        {
+          "x": 12.44,
+          "y": 5.28,
+          "w": 76.44,
+          "h": 22.802
+        },
+        {
+          "x": 12.208,
+          "y": 77.874,
+          "w": 75.846,
+          "h": 17
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "benchmark_gap:evidence:benchmark-callout:data-topline:benchmark_gap:kinetic-ivory:metric-cards:evidence-build:full-bleed-chart:caption:chart-field:metric:benchmark_gap--2--layout:center-lockup",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

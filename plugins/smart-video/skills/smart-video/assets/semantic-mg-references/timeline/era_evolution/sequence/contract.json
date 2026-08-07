@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "era_evolution",
+  "composition_id": "era_evolution--sequence",
+  "lens_id": "sequence",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "era_evolution--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "era_evolution:sequence:era-panels:headline-top:era_evolution:kinetic-ivory:vertical-index:rail-travel:triptych:caption:triptych:headline:era_evolution--1--layout:art-monument-top",
+  "art_direction": "triptych era_evolution with directional time object",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "b73f1b971133c5912c48c75d0ca991f9f02a105068e879929051abf7eb9a764a",
+    "9:16": "6f8f092f8fdbacf110ab6851efc1e2b323e2066a1257c175eb521dd2f998abba"
+  }
+}

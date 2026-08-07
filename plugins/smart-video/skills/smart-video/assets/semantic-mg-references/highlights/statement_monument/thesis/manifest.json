@@ -1,0 +1,31 @@
+{
+  "id": "statement_monument--thesis",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "scene_id": "statement_monument",
+  "name": "Intelligence Becomes Infrastructure",
+  "presentation_form_id": "thesis",
+  "presentation_form_name": "Thesis",
+  "visual_id": "material-editorial",
+  "proof_mode": "caption-line",
+  "motion_profile": "poster-slam",
+  "layout": "diagonal-right",
+  "layout_instance_id": "statement_monument--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_name": "edge-crop-thesis",
+  "art_direction": "diagonal claim_monument with poster conclusion",
+  "composition_signature": "statement_monument:thesis:edge-crop-thesis:diagonal-right:claim_monument:material-editorial:caption-line:poster-slam:diagonal-lock:poster:diagonal:statement:statement_monument--3--layout:poster-inset-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

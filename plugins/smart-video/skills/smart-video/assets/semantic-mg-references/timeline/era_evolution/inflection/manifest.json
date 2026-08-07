@@ -1,0 +1,31 @@
+{
+  "id": "era_evolution--inflection",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "era_evolution",
+  "name": "Three Eras of AI Products",
+  "presentation_form_id": "inflection",
+  "presentation_form_name": "Inflection",
+  "visual_id": "material-editorial",
+  "proof_mode": "stamp",
+  "motion_profile": "pivot-magnify",
+  "layout": "evidence-left",
+  "layout_instance_id": "era_evolution--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "composition_name": "era-transition",
+  "art_direction": "paper-stack era_evolution with magnified inflection",
+  "composition_signature": "era_evolution:inflection:era-transition:evidence-left:era_evolution:material-editorial:stamp:pivot-magnify:archive-stack:paper:paper-stack:editorial:era_evolution--2--layout:bottom-editorial",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

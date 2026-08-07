@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "myth_vs_fact",
+  "composition_id": "myth_vs_fact--duel",
+  "lens_id": "duel",
+  "visual_id": "sticker-classroom",
+  "layout_instance_id": "myth_vs_fact--1--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "structural_fingerprint": "myth_vs_fact:duel:myth-fact-symbol:statement-left:myth_fact:sticker-classroom:center-badge:opposed-wipe:myth-wheel:poster:myth-wheel:statement:myth_vs_fact--1--layout:center-lockup",
+  "art_direction": "myth-wheel myth_fact with opposed visual masses",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "2978f2cadd022e4f6f58faaab0aca17ac900508ff0bfb2e6c59253c269f479fd",
+    "9:16": "953dc8ed3489a996ce9b39d6996b1123486be690071ef107c1c87a6dbb2a50cf"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "multi_case_synthesis--finding",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "scene_id": "multi_case_synthesis",
+  "name": "Patterns Across Four AI Teams",
+  "presentation_form_id": "finding",
+  "presentation_form_name": "Finding",
+  "visual_id": "archive-dossier",
+  "proof_mode": "caption-line",
+  "motion_profile": "finding-stamp",
+  "layout": "diagonal-right",
+  "layout_instance_id": "multi_case_synthesis--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "composition_name": "synthesis-finding",
+  "art_direction": "wide-stage multi_case_synthesis with finding lockup",
+  "composition_signature": "multi_case_synthesis:finding:synthesis-finding:diagonal-right:multi_case_synthesis:archive-dossier:caption-line:finding-stamp:bottom-statement-stage:poster:wide-stage:statement:multi_case_synthesis--3--layout:lower-lockup",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

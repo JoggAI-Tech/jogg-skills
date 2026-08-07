@@ -1,0 +1,115 @@
+{
+  "id": "tradeoff_balance--evidence",
+  "scene_id": "tradeoff_balance",
+  "scene_title": "Accuracy or Latency?",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "evidence",
+  "lens_name": "Evidence",
+  "intent": "Explain the difference through concrete proof",
+  "composition_name": "cost-benefit-proof",
+  "layout_grammar": "data-right",
+  "layout_contract_id": "tradeoff_balance--expression-2",
+  "layout_instance_id": "tradeoff_balance--2--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_family": "gate-split",
+  "design_contract_id": "tradeoff_balance--gate-split--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "tradeoff_scale",
+  "support_components": [
+    "left_weight",
+    "right_weight",
+    "decision_marker"
+  ],
+  "semantic_slots": [
+    "priority_a",
+    "priority_b",
+    "rule"
+  ],
+  "data_shape": "weighted_tradeoff",
+  "motion": "balance_settle",
+  "motion_profile": "evidence-build",
+  "visual_id": "electric-cyan",
+  "proof_mode": "center-badge",
+  "copy_surface": "technical",
+  "art_surface": "hard-split",
+  "copy_mode": "metric",
+  "art_direction": "hard-split tradeoff_scale with measured proof field",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 63.487,
+        "y": 7.46,
+        "w": 31.22,
+        "h": 67.901
+      },
+      "art": {
+        "x": 5.297,
+        "y": 5.189,
+        "w": 55.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 63.571,
+        "y": 82.243,
+        "w": 30.923,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 63.487,
+          "y": 7.46,
+          "w": 31.22,
+          "h": 67.901
+        },
+        {
+          "x": 63.571,
+          "y": 82.243,
+          "w": 30.923,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.667,
+        "y": 4.58,
+        "w": 86.22,
+        "h": 20.901
+      },
+      "art": {
+        "x": 5.216,
+        "y": 29.147,
+        "w": 89.846,
+        "h": 62.055
+      },
+      "proof": {
+        "x": 6.688,
+        "y": 93,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.667,
+          "y": 4.58,
+          "w": 86.22,
+          "h": 20.901
+        },
+        {
+          "x": 6.688,
+          "y": 93,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "tradeoff_balance:evidence:cost-benefit-proof:data-right:tradeoff_scale:electric-cyan:center-badge:evidence-build:gate-split:technical:hard-split:metric:tradeoff_balance--2--layout:top-compact",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

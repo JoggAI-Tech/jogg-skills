@@ -1,0 +1,115 @@
+{
+  "id": "correlation_bubble--headline",
+  "scene_id": "correlation_bubble",
+  "scene_title": "Context Drives Completion",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "headline",
+  "lens_name": "Headline",
+  "intent": "Turn the result into an editorial data statement",
+  "composition_name": "correlation-thesis",
+  "layout_grammar": "poster-center",
+  "layout_contract_id": "correlation_bubble--expression-3",
+  "layout_instance_id": "correlation_bubble--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "center-symbol",
+  "design_contract_id": "correlation_bubble--center-symbol--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "correlation_bubble",
+  "support_components": [
+    "bubble_plot",
+    "trend_line",
+    "focus_bubble"
+  ],
+  "semantic_slots": [
+    "x_measure",
+    "y_measure",
+    "relationship"
+  ],
+  "data_shape": "xy_bubbles",
+  "motion": "bubbles_plot",
+  "motion_profile": "number-resolve",
+  "visual_id": "paper-collage",
+  "proof_mode": "center-badge",
+  "copy_surface": "poster",
+  "art_surface": "symbol",
+  "copy_mode": "statement",
+  "art_direction": "symbol correlation_bubble with oversized numeric conclusion",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 18.631,
+        "y": 5.36,
+        "w": 64.0,
+        "h": 24.0
+      },
+      "art": {
+        "x": 13.901,
+        "y": 30.874,
+        "w": 72.0,
+        "h": 55.0
+      },
+      "proof": {
+        "x": 28.143,
+        "y": 88.838,
+        "w": 44.0,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 18.631,
+          "y": 5.36,
+          "w": 64.0,
+          "h": 24.0
+        },
+        {
+          "x": 28.143,
+          "y": 88.838,
+          "w": 44.0,
+          "h": 7
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.571,
+        "y": 5.28,
+        "w": 86.0,
+        "h": 32.0
+      },
+      "art": {
+        "x": 5.928,
+        "y": 39.902,
+        "w": 88.0,
+        "h": 49.0
+      },
+      "proof": {
+        "x": 7.104,
+        "y": 91.874,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.571,
+          "y": 5.28,
+          "w": 86.0,
+          "h": 32.0
+        },
+        {
+          "x": 7.104,
+          "y": 91.874,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "correlation_bubble:headline:correlation-thesis:poster-center:correlation_bubble:paper-collage:center-badge:number-resolve:center-symbol:poster:symbol:statement:correlation_bubble--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

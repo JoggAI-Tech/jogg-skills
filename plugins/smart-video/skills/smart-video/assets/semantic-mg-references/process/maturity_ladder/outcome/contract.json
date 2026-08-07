@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "process",
+  "scene_id": "maturity_ladder",
+  "composition_id": "maturity_ladder--outcome",
+  "lens_id": "outcome",
+  "visual_id": "cobalt-coral",
+  "layout_instance_id": "maturity_ladder--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "structural_fingerprint": "maturity_ladder:outcome:maturity-target:diagonal-left:maturity_ladder:cobalt-coral:caption-line:outcome-resolve:number-monument:poster:monument:statement:maturity_ladder--3--layout:lower-lockup",
+  "art_direction": "monument maturity_ladder with result-bearing machine",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "57792074c9f05adc62624535035b0e7b65859f71995218a8965b5593f2a0a874",
+    "9:16": "b77acca74b872a80e67dc7080023ea2839de3e1bcaf9ef528b443cf5fa63fdf7"
+  }
+}

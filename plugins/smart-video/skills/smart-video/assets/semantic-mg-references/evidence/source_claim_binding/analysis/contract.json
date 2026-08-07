@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "evidence",
+  "scene_id": "source_claim_binding",
+  "composition_id": "source_claim_binding--analysis",
+  "lens_id": "analysis",
+  "visual_id": "redaction-paper",
+  "layout_instance_id": "source_claim_binding--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "structural_fingerprint": "source_claim_binding:analysis:claim-analysis:evidence-right:source_claim_binding:redaction-paper:vertical-index:analysis-connect:pipeline-spine:paper:pipeline:editorial:source_claim_binding--2--layout:right-caption-stage",
+  "art_direction": "pipeline source_claim_binding with connected evidence fragments",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "a4ed18fa5c2b29f450485c76f1959f47d3a2bb0be0d7900f25761e0d4c90ce4f",
+    "9:16": "7c266bda5b0b6d9cc99a80e24bd6690c2fef47f365153c9b086323e042fc3a9f"
+  }
+}

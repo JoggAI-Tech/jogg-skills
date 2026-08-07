@@ -1,0 +1,115 @@
+{
+  "id": "feedback_loop--walkthrough",
+  "scene_id": "feedback_loop",
+  "scene_title": "The Evaluation Loop",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "walkthrough",
+  "lens_name": "Walkthrough",
+  "intent": "Guide the viewer through the operating sequence",
+  "composition_name": "loop-intervention",
+  "layout_grammar": "editorial-right",
+  "layout_contract_id": "feedback_loop--expression-2",
+  "layout_instance_id": "feedback_loop--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_family": "network-radial",
+  "design_contract_id": "feedback_loop--network-radial--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "feedback_loop",
+  "support_components": [
+    "loop_nodes",
+    "feedback_return",
+    "quality_gain"
+  ],
+  "semantic_slots": [
+    "observe",
+    "evaluate",
+    "improve"
+  ],
+  "data_shape": "feedback_cycle",
+  "motion": "loop_trace",
+  "motion_profile": "guided-sequence",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "editorial",
+  "art_surface": "network",
+  "copy_mode": "editorial",
+  "art_direction": "network feedback_loop with guided operating path",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 59.613,
+        "y": 8.54,
+        "w": 35.22,
+        "h": 65.901
+      },
+      "art": {
+        "x": 5.297,
+        "y": 4.811,
+        "w": 51.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 59.571,
+        "y": 79.757,
+        "w": 34.923,
+        "h": 13
+      },
+      "avoid_zones": [
+        {
+          "x": 59.613,
+          "y": 8.54,
+          "w": 35.22,
+          "h": 65.901
+        },
+        {
+          "x": 59.571,
+          "y": 79.757,
+          "w": 34.923,
+          "h": 13
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 51.793,
+        "y": 5.42,
+        "w": 42.22,
+        "h": 79.901
+      },
+      "art": {
+        "x": 6.216,
+        "y": 4.853,
+        "w": 42.846,
+        "h": 80.055
+      },
+      "proof": {
+        "x": 5.688,
+        "y": 87.811,
+        "w": 87.923,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 51.793,
+          "y": 5.42,
+          "w": 42.22,
+          "h": 79.901
+        },
+        {
+          "x": 5.688,
+          "y": 87.811,
+          "w": 87.923,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "feedback_loop:walkthrough:loop-intervention:editorial-right:feedback_loop:kinetic-ivory:edge-tabs:guided-sequence:network-radial:editorial:network:editorial:feedback_loop--2--layout:offset-lower-right",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

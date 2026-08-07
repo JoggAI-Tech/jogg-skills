@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "nested_taxonomy",
+  "composition_id": "nested_taxonomy--architecture",
+  "lens_id": "architecture",
+  "visual_id": "chalkboard-lab",
+  "layout_instance_id": "nested_taxonomy--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "structural_fingerprint": "nested_taxonomy:architecture:nested-taxonomy:diagram-left-rail:nested_taxonomy:chalkboard-lab:edge-tabs:structure-assemble:taxonomy-grid:technical:taxonomy:editorial:nested_taxonomy--1--layout:top-editorial",
+  "art_direction": "taxonomy nested_taxonomy with structural blueprint",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "7a86637dfcedb815b081ca47b188923dd46d170ffe167bb14af8512b43f41cda",
+    "9:16": "30799e195dda707996e54c6d92529415478e9304956a5e5803e053f629275c63"
+  }
+}

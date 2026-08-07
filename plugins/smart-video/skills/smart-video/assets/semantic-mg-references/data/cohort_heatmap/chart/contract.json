@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "data",
+  "scene_id": "cohort_heatmap",
+  "composition_id": "cohort_heatmap--chart",
+  "lens_id": "chart",
+  "visual_id": "atlas-blue",
+  "layout_instance_id": "cohort_heatmap--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "cohort_heatmap:chart:cohort-grid:full-width-stage:cohort_heatmap:atlas-blue:edge-tabs:chart-build:taxonomy-grid:floating:taxonomy:headline:cohort_heatmap--1--layout:art-monument-top",
+  "art_direction": "taxonomy cohort_heatmap with chart-dominant field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "c635bbe9c8fe8b8d5f953d0e2484eb4d2ac507c365c67b39d7e247030f512f61",
+    "9:16": "eb8b266a828723aa9392d5fd604352a42866059a63197b7c5adcc5fce4a61e49"
+  }
+}

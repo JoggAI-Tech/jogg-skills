@@ -1,0 +1,115 @@
+{
+  "id": "parallel_tracks--horizon",
+  "scene_id": "parallel_tracks",
+  "scene_title": "Models and Chips Co-Evolve",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "horizon",
+  "lens_name": "Horizon",
+  "intent": "Compress time into a before-now-next argument",
+  "composition_name": "convergence-lock",
+  "layout_grammar": "timeline-caption",
+  "layout_contract_id": "parallel_tracks--expression-3",
+  "layout_instance_id": "parallel_tracks--3--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "composition_family": "route-bridge",
+  "design_contract_id": "parallel_tracks--route-bridge--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "parallel_tracks",
+  "support_components": [
+    "track_a",
+    "track_b",
+    "sync_bridges"
+  ],
+  "semantic_slots": [
+    "track_a",
+    "track_b",
+    "convergence"
+  ],
+  "data_shape": "parallel_events",
+  "motion": "dual_track_draw",
+  "motion_profile": "horizon-settle",
+  "visual_id": "luminous-grid",
+  "proof_mode": "floating-chips",
+  "copy_surface": "editorial",
+  "art_surface": "route",
+  "copy_mode": "headline",
+  "art_direction": "route parallel_tracks with compressed time horizon",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.975,
+        "y": 69.82,
+        "w": 48.22,
+        "h": 23.901
+      },
+      "art": {
+        "x": 5.099,
+        "y": 5.063,
+        "w": 89.846,
+        "h": 60.055
+      },
+      "proof": {
+        "x": 57.857,
+        "y": 73.081,
+        "w": 36.923,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 4.975,
+          "y": 69.82,
+          "w": 48.22,
+          "h": 23.901
+        },
+        {
+          "x": 57.857,
+          "y": 73.081,
+          "w": 36.923,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.035,
+        "y": 71.86,
+        "w": 86.22,
+        "h": 20.901
+      },
+      "art": {
+        "x": 5.072,
+        "y": 5.049,
+        "w": 89.846,
+        "h": 61.055
+      },
+      "proof": {
+        "x": 6.896,
+        "y": 67.063,
+        "w": 85.923,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 7.035,
+          "y": 71.86,
+          "w": 86.22,
+          "h": 20.901
+        },
+        {
+          "x": 6.896,
+          "y": 67.063,
+          "w": 85.923,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "parallel_tracks:horizon:convergence-lock:timeline-caption:parallel_tracks:luminous-grid:floating-chips:horizon-settle:route-bridge:editorial:route:headline:parallel_tracks--3--layout:bottom-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

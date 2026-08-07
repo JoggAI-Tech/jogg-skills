@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "concept_map",
+  "composition_id": "concept_map--principle",
+  "lens_id": "principle",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "concept_map--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "structural_fingerprint": "concept_map:principle:concept-thesis:diagonal-right:concept_map:kinetic-ivory:center-badge:principle-lock:center-symbol:poster:symbol:statement:concept_map--3--layout:lower-lockup",
+  "art_direction": "symbol concept_map with governing system rule",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "41ae6112c621c6dd95c08581399385cb14e0485fe0492a8c427d68ea84b22046",
+    "9:16": "ac0ddcea49622694910ec98a46cd81e85583ed19ec4da253b60fbd202b42649d"
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "id": "hub_and_spoke--architecture",
+  "scene_id": "hub_and_spoke",
+  "scene_title": "The AI Workspace Hub",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "architecture",
+  "lens_name": "Architecture",
+  "intent": "Make structure and dependency visible",
+  "composition_name": "hub-network",
+  "layout_grammar": "diagram-center",
+  "layout_contract_id": "hub_and_spoke--expression-1",
+  "layout_instance_id": "hub_and_spoke--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "composition_family": "network-radial",
+  "design_contract_id": "hub_and_spoke--network-radial--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "hub_spoke",
+  "support_components": [
+    "central_hub",
+    "spoke_nodes",
+    "connection_lines"
+  ],
+  "semantic_slots": [
+    "hub",
+    "services",
+    "coordination"
+  ],
+  "data_shape": "network_star",
+  "motion": "spokes_connect",
+  "motion_profile": "structure-assemble",
+  "visual_id": "electric-cyan",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "floating",
+  "art_surface": "network",
+  "copy_mode": "editorial",
+  "art_direction": "network hub_spoke with structural blueprint",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.652,
+        "y": 6.54,
+        "w": 38.0,
+        "h": 40.0
+      },
+      "art": {
+        "x": 25.901,
+        "y": 15.811,
+        "w": 69.0,
+        "h": 70.0
+      },
+      "proof": {
+        "x": 5.143,
+        "y": 77.757,
+        "w": 34.0,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 5.652,
+          "y": 6.54,
+          "w": 38.0,
+          "h": 40.0
+        },
+        {
+          "x": 5.143,
+          "y": 77.757,
+          "w": 34.0,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.592,
+        "y": 5.42,
+        "w": 86.0,
+        "h": 25.0
+      },
+      "art": {
+        "x": 5.928,
+        "y": 32.853,
+        "w": 88.0,
+        "h": 56.0
+      },
+      "proof": {
+        "x": 7.104,
+        "y": 91.811,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.592,
+          "y": 5.42,
+          "w": 86.0,
+          "h": 25.0
+        },
+        {
+          "x": 7.104,
+          "y": 91.811,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "hub_and_spoke:architecture:hub-network:diagram-center:hub_spoke:electric-cyan:edge-tabs:structure-assemble:network-radial:floating:network:editorial:hub_and_spoke--1--layout:top-editorial",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

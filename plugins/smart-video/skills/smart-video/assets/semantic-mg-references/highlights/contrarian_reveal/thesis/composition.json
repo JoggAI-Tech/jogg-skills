@@ -1,0 +1,114 @@
+{
+  "id": "contrarian_reveal--thesis",
+  "scene_id": "contrarian_reveal",
+  "scene_title": "Bigger Models Are Not the Moat",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "thesis",
+  "lens_name": "Thesis",
+  "intent": "Turn the implication into a decisive editorial statement",
+  "composition_name": "contrarian-poster",
+  "layout_grammar": "diagonal-left",
+  "layout_contract_id": "contrarian_reveal--expression-3",
+  "layout_instance_id": "contrarian_reveal--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "opposed-cards",
+  "design_contract_id": "contrarian_reveal--opposed-cards--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "contrarian_switch",
+  "support_components": [
+    "crossed_assumption",
+    "replacement_claim"
+  ],
+  "semantic_slots": [
+    "assumption",
+    "reversal",
+    "reason"
+  ],
+  "data_shape": "claim_reversal",
+  "motion": "strike_and_replace",
+  "motion_profile": "poster-slam",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "center-badge",
+  "copy_surface": "poster",
+  "art_surface": "opposed",
+  "copy_mode": "statement",
+  "art_direction": "opposed contrarian_switch with poster conclusion",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.72,
+        "y": 7.82,
+        "w": 36.44,
+        "h": 57.802
+      },
+      "art": {
+        "x": 38.703,
+        "y": 6.063,
+        "w": 55.692,
+        "h": 87.11
+      },
+      "proof": {
+        "x": 5.429,
+        "y": 76.081,
+        "w": 34.846,
+        "h": 17
+      },
+      "avoid_zones": [
+        {
+          "x": 5.72,
+          "y": 7.82,
+          "w": 36.44,
+          "h": 57.802
+        },
+        {
+          "x": 5.429,
+          "y": 76.081,
+          "w": 34.846,
+          "h": 17
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.54,
+        "y": 4.86,
+        "w": 86.44,
+        "h": 31.802
+      },
+      "art": {
+        "x": 5.784,
+        "y": 40.049,
+        "w": 87.692,
+        "h": 49.11
+      },
+      "proof": {
+        "x": 7.312,
+        "y": 92.063,
+        "w": 85.846,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.54,
+          "y": 4.86,
+          "w": 86.44,
+          "h": 31.802
+        },
+        {
+          "x": 7.312,
+          "y": 92.063,
+          "w": 85.846,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "contrarian_reveal:thesis:contrarian-poster:diagonal-left:contrarian_switch:cobalt-coral:center-badge:poster-slam:opposed-cards:poster:opposed:statement:contrarian_reveal--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

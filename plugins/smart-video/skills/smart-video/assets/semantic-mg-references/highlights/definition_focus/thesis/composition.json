@@ -1,0 +1,114 @@
+{
+  "id": "definition_focus--thesis",
+  "scene_id": "definition_focus",
+  "scene_title": "Inference Economy",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "thesis",
+  "lens_name": "Thesis",
+  "intent": "Turn the implication into a decisive editorial statement",
+  "composition_name": "definition-poster",
+  "layout_grammar": "poster-center",
+  "layout_contract_id": "definition_focus--expression-3",
+  "layout_instance_id": "definition_focus--3--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "composition_family": "editorial-margin",
+  "design_contract_id": "definition_focus--editorial-margin--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "term_definition",
+  "support_components": [
+    "word_anatomy",
+    "example_chip"
+  ],
+  "semantic_slots": [
+    "term",
+    "definition",
+    "example"
+  ],
+  "data_shape": "definition_example",
+  "motion": "term_assemble",
+  "motion_profile": "poster-slam",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "caption-line",
+  "copy_surface": "poster",
+  "art_surface": "framed-object",
+  "copy_mode": "statement",
+  "art_direction": "framed-object term_definition with poster conclusion",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 17.382,
+        "y": 4.82,
+        "w": 64.44,
+        "h": 23.802
+      },
+      "art": {
+        "x": 14.297,
+        "y": 31.063,
+        "w": 71.692,
+        "h": 55.11
+      },
+      "proof": {
+        "x": 27.571,
+        "y": 89.081,
+        "w": 43.846,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 17.382,
+          "y": 4.82,
+          "w": 64.44,
+          "h": 23.802
+        },
+        {
+          "x": 27.571,
+          "y": 89.081,
+          "w": 43.846,
+          "h": 7
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 11.562,
+        "y": 4.86,
+        "w": 76.44,
+        "h": 22.802
+      },
+      "art": {
+        "x": 8.216,
+        "y": 31.049,
+        "w": 83.692,
+        "h": 44.11
+      },
+      "proof": {
+        "x": 11.688,
+        "y": 78.063,
+        "w": 75.846,
+        "h": 17
+      },
+      "avoid_zones": [
+        {
+          "x": 11.562,
+          "y": 4.86,
+          "w": 76.44,
+          "h": 22.802
+        },
+        {
+          "x": 11.688,
+          "y": 78.063,
+          "w": 75.846,
+          "h": 17
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "definition_focus:thesis:definition-poster:poster-center:term_definition:kinetic-ivory:caption-line:poster-slam:editorial-margin:poster:framed-object:statement:definition_focus--3--layout:center-lockup",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

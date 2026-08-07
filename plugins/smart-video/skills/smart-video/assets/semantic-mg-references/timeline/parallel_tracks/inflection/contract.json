@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "parallel_tracks",
+  "composition_id": "parallel_tracks--inflection",
+  "lens_id": "inflection",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "parallel_tracks--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "structural_fingerprint": "parallel_tracks:inflection:track-crossover:diagram-right-rail:parallel_tracks:electric-cyan:edge-tabs:pivot-magnify:wave-horizon:technical:wave-field:editorial:parallel_tracks--2--layout:offset-lower-right",
+  "art_direction": "wave-field parallel_tracks with magnified inflection",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "5e476f6b9297ee4c99c2d480a75bff4f4eb6e3381259db0dfe0b3e9af79de45c",
+    "9:16": "37b2ead3be657c96afe3a50fc0b32d630c1e070b170e21d70bb24bfbef83d4a7"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "conversion_funnel--outcome",
+  "category_id": "process",
+  "category_name": "Process",
+  "scene_id": "conversion_funnel",
+  "name": "The AI Activation Funnel",
+  "presentation_form_id": "outcome",
+  "presentation_form_name": "Outcome",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "caption-line",
+  "motion_profile": "outcome-resolve",
+  "layout": "metric-monument",
+  "layout_instance_id": "conversion_funnel--3--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "composition_name": "conversion-headline",
+  "art_direction": "monument conversion_funnel with result-bearing machine",
+  "composition_signature": "conversion_funnel:outcome:conversion-headline:metric-monument:conversion_funnel:cobalt-coral:caption-line:outcome-resolve:number-monument:poster:monument:metric:conversion_funnel--3--layout:center-lockup",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

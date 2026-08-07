@@ -1,0 +1,115 @@
+{
+  "id": "turning_point_timeline--sequence",
+  "scene_id": "turning_point_timeline",
+  "scene_title": "The Cost Curve Breaks",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "sequence",
+  "lens_name": "Sequence",
+  "intent": "Make chronology the primary visual object",
+  "composition_name": "inflection-curve",
+  "layout_grammar": "data-left",
+  "layout_contract_id": "turning_point_timeline--expression-1",
+  "layout_instance_id": "turning_point_timeline--1--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "technical-curve",
+  "design_contract_id": "turning_point_timeline--technical-curve--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "timeline_inflection",
+  "support_components": [
+    "before_slope",
+    "pivot_marker",
+    "after_slope"
+  ],
+  "semantic_slots": [
+    "before",
+    "turning_point",
+    "after"
+  ],
+  "data_shape": "time_series_event",
+  "motion": "curve_break",
+  "motion_profile": "rail-travel",
+  "visual_id": "electric-cyan",
+  "proof_mode": "floating-chips",
+  "copy_surface": "technical",
+  "art_surface": "curve",
+  "copy_mode": "metric",
+  "art_direction": "curve timeline_inflection with directional time object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.731,
+        "y": 7.64,
+        "w": 31.22,
+        "h": 67.901
+      },
+      "art": {
+        "x": 39.198,
+        "y": 5.126,
+        "w": 55.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 4.714,
+        "y": 82.162,
+        "w": 30.923,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 4.731,
+          "y": 7.64,
+          "w": 31.22,
+          "h": 67.901
+        },
+        {
+          "x": 4.714,
+          "y": 82.162,
+          "w": 30.923,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.851,
+        "y": 4.72,
+        "w": 86.22,
+        "h": 31.901
+      },
+      "art": {
+        "x": 6.144,
+        "y": 40.098,
+        "w": 87.846,
+        "h": 49.055
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 92.126,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.851,
+          "y": 4.72,
+          "w": 86.22,
+          "h": 31.901
+        },
+        {
+          "x": 6.792,
+          "y": 92.126,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "turning_point_timeline:sequence:inflection-curve:data-left:timeline_inflection:electric-cyan:floating-chips:rail-travel:technical-curve:technical:curve:metric:turning_point_timeline--1--layout:poster-inset-top",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

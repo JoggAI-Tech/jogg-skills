@@ -1,0 +1,115 @@
+{
+  "id": "quadrant_positioning--duel",
+  "scene_id": "quadrant_positioning",
+  "scene_title": "The Agent Market Map",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "duel",
+  "lens_name": "Duel",
+  "intent": "Make the alternatives directly and fairly comparable",
+  "composition_name": "quadrant-map",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "quadrant_positioning--expression-1",
+  "layout_instance_id": "quadrant_positioning--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_family": "force-quadrant",
+  "design_contract_id": "quadrant_positioning--force-quadrant--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "positioning_quadrant",
+  "support_components": [
+    "axis_labels",
+    "market_dots",
+    "focus_zone"
+  ],
+  "semantic_slots": [
+    "x_axis",
+    "y_axis",
+    "position"
+  ],
+  "data_shape": "xy_positions",
+  "motion": "plot_and_focus",
+  "motion_profile": "opposed-wipe",
+  "visual_id": "chalkboard-lab",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "floating",
+  "art_surface": "quadrant",
+  "copy_mode": "headline",
+  "art_direction": "quadrant positioning_quadrant with opposed visual masses",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.135,
+        "y": 5.54,
+        "w": 46.44,
+        "h": 27.802
+      },
+      "art": {
+        "x": 5.0,
+        "y": 35.811,
+        "w": 89.692,
+        "h": 57.11
+      },
+      "proof": {
+        "x": 56.0,
+        "y": 6.757,
+        "w": 38.846,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 5.135,
+          "y": 5.54,
+          "w": 46.44,
+          "h": 27.802
+        },
+        {
+          "x": 56.0,
+          "y": 6.757,
+          "w": 38.846,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.135,
+        "y": 5.42,
+        "w": 86.44,
+        "h": 20.802
+      },
+      "art": {
+        "x": 5.0,
+        "y": 28.853,
+        "w": 89.692,
+        "h": 62.11
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 92.811,
+        "w": 85.846,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.135,
+          "y": 5.42,
+          "w": 86.44,
+          "h": 20.802
+        },
+        {
+          "x": 7.0,
+          "y": 92.811,
+          "w": 85.846,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "quadrant_positioning:duel:quadrant-map:full-width-stage:positioning_quadrant:chalkboard-lab:edge-tabs:opposed-wipe:force-quadrant:floating:quadrant:headline:quadrant_positioning--1--layout:top-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

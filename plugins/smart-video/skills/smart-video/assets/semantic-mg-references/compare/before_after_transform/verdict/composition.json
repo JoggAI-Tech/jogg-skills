@@ -1,0 +1,115 @@
+{
+  "id": "before_after_transform--verdict",
+  "scene_id": "before_after_transform",
+  "scene_title": "From Manual Queue to Agent Loop",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "verdict",
+  "lens_name": "Verdict",
+  "intent": "Resolve the trade-off with a usable decision rule",
+  "composition_name": "result-slab",
+  "layout_grammar": "headline-bottom",
+  "layout_contract_id": "before_after_transform--expression-3",
+  "layout_instance_id": "before_after_transform--3--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_family": "diagonal-lock",
+  "design_contract_id": "before_after_transform--diagonal-lock--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "before_after",
+  "support_components": [
+    "before_panel",
+    "after_panel",
+    "delta_badge"
+  ],
+  "semantic_slots": [
+    "before",
+    "change",
+    "after"
+  ],
+  "data_shape": "state_change",
+  "motion": "wipe_transform",
+  "motion_profile": "verdict-lock",
+  "visual_id": "paper-collage",
+  "proof_mode": "caption-line",
+  "copy_surface": "caption",
+  "art_surface": "diagonal",
+  "copy_mode": "headline",
+  "art_direction": "diagonal before_after with decisive verdict object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.647,
+        "y": 70.18,
+        "w": 62.44,
+        "h": 23.802
+      },
+      "art": {
+        "x": 5.198,
+        "y": 4.937,
+        "w": 89.692,
+        "h": 61.11
+      },
+      "proof": {
+        "x": 69.714,
+        "y": 72.919,
+        "w": 24.846,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 4.647,
+          "y": 70.18,
+          "w": 62.44,
+          "h": 23.802
+        },
+        {
+          "x": 69.714,
+          "y": 72.919,
+          "w": 24.846,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.767,
+        "y": 5.14,
+        "w": 86.44,
+        "h": 20.802
+      },
+      "art": {
+        "x": 5.144,
+        "y": 28.951,
+        "w": 89.692,
+        "h": 62.11
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 92.937,
+        "w": 85.846,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.767,
+          "y": 5.14,
+          "w": 86.44,
+          "h": 20.802
+        },
+        {
+          "x": 6.792,
+          "y": 92.937,
+          "w": 85.846,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "before_after_transform:verdict:result-slab:headline-bottom:before_after:paper-collage:caption-line:verdict-lock:diagonal-lock:caption:diagonal:headline:before_after_transform--3--layout:top-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

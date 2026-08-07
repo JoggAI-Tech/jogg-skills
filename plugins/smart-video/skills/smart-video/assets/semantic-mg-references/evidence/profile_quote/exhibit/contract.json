@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "evidence",
+  "scene_id": "profile_quote",
+  "composition_id": "profile_quote--exhibit",
+  "lens_id": "exhibit",
+  "visual_id": "material-editorial",
+  "layout_instance_id": "profile_quote--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "structural_fingerprint": "profile_quote:exhibit:profile-exhibit:evidence-right:profile_quote:material-editorial:vertical-index:exhibit-uncover:case-window:paper:case-window:editorial:profile_quote--1--layout:top-editorial",
+  "art_direction": "case-window profile_quote with material source object",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "68775bc525a9a44eaae57bc6e0b106c43cae6823de3fc11f88821eb30f95876b",
+    "9:16": "21ae2248a50da967f17462efdea5b963c9c52afec6f0c59b4082596708864444"
+  }
+}

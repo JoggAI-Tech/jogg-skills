@@ -1,0 +1,31 @@
+{
+  "id": "target_vs_actual--chart",
+  "category_id": "data",
+  "category_name": "Data",
+  "scene_id": "target_vs_actual",
+  "name": "Usage Outruns the Plan",
+  "presentation_form_id": "chart",
+  "presentation_form_name": "Chart",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "metric-cards",
+  "motion_profile": "chart-build",
+  "layout": "split-decision",
+  "layout_instance_id": "target_vs_actual--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "composition_name": "target-gauge",
+  "art_direction": "bars target_actual with chart-dominant field",
+  "composition_signature": "target_vs_actual:chart:target-gauge:split-decision:target_actual:cobalt-coral:metric-cards:chart-build:bars-surge:caption:bars:duel:target_vs_actual--1--layout:top-editorial",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

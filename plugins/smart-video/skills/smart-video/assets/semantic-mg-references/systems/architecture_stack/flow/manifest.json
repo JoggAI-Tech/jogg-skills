@@ -1,0 +1,31 @@
+{
+  "id": "architecture_stack--flow",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "architecture_stack",
+  "name": "An Enterprise Agent Stack",
+  "presentation_form_id": "flow",
+  "presentation_form_name": "Flow",
+  "visual_id": "atlas-blue",
+  "proof_mode": "floating-chips",
+  "motion_profile": "flow-trace",
+  "layout": "full-width-stage",
+  "layout_instance_id": "architecture_stack--2--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_name": "layer-cutaway",
+  "art_direction": "curve architecture_stack with directional exchange",
+  "composition_signature": "architecture_stack:flow:layer-cutaway:full-width-stage:architecture_stack:atlas-blue:floating-chips:flow-trace:technical-curve:floating:curve:headline:architecture_stack--2--layout:art-monument-bottom",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

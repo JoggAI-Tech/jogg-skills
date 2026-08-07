@@ -1,0 +1,31 @@
+{
+  "id": "evidence_board--finding",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "scene_id": "evidence_board",
+  "name": "Tracing the Compute Shortage",
+  "presentation_form_id": "finding",
+  "presentation_form_name": "Finding",
+  "visual_id": "paper-collage",
+  "proof_mode": "stamp",
+  "motion_profile": "finding-stamp",
+  "layout": "poster-center",
+  "layout_instance_id": "evidence_board--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "composition_name": "evidence-verdict",
+  "art_direction": "redaction evidence_board with finding lockup",
+  "composition_signature": "evidence_board:finding:evidence-verdict:poster-center:evidence_board:paper-collage:stamp:finding-stamp:redaction-sheet:poster:redaction:statement:evidence_board--3--layout:lower-lockup",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

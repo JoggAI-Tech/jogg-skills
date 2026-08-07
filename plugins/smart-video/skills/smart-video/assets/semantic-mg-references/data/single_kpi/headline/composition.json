@@ -1,0 +1,115 @@
+{
+  "id": "single_kpi--headline",
+  "scene_id": "single_kpi",
+  "scene_title": "42 Hours Returned",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "headline",
+  "lens_name": "Headline",
+  "intent": "Turn the result into an editorial data statement",
+  "composition_name": "kpi-headline",
+  "layout_grammar": "poster-center",
+  "layout_contract_id": "single_kpi--expression-3",
+  "layout_instance_id": "single_kpi--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "full-bleed-chart",
+  "design_contract_id": "single_kpi--full-bleed-chart--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "single_kpi",
+  "support_components": [
+    "unit_label",
+    "benchmark_line",
+    "context_note"
+  ],
+  "semantic_slots": [
+    "value",
+    "benchmark",
+    "meaning"
+  ],
+  "data_shape": "single_value",
+  "motion": "number_count",
+  "motion_profile": "number-resolve",
+  "visual_id": "luminous-grid",
+  "proof_mode": "metric-cards",
+  "copy_surface": "poster",
+  "art_surface": "chart-field",
+  "copy_mode": "statement",
+  "art_direction": "chart-field single_kpi with oversized numeric conclusion",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 18.77,
+        "y": 4.64,
+        "w": 64.0,
+        "h": 24.0
+      },
+      "art": {
+        "x": 13.802,
+        "y": 31.126,
+        "w": 72.0,
+        "h": 55.0
+      },
+      "proof": {
+        "x": 28.286,
+        "y": 89.162,
+        "w": 44.0,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 18.77,
+          "y": 4.64,
+          "w": 64.0,
+          "h": 24.0
+        },
+        {
+          "x": 28.286,
+          "y": 89.162,
+          "w": 44.0,
+          "h": 7
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.65,
+        "y": 4.72,
+        "w": 86.0,
+        "h": 32.0
+      },
+      "art": {
+        "x": 5.856,
+        "y": 40.098,
+        "w": 88.0,
+        "h": 49.0
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 92.126,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.65,
+          "y": 4.72,
+          "w": 86.0,
+          "h": 32.0
+        },
+        {
+          "x": 7.208,
+          "y": 92.126,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "single_kpi:headline:kpi-headline:poster-center:single_kpi:luminous-grid:metric-cards:number-resolve:full-bleed-chart:poster:chart-field:statement:single_kpi--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

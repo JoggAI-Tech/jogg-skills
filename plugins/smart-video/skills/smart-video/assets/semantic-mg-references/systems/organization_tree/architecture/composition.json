@@ -1,0 +1,115 @@
+{
+  "id": "organization_tree--architecture",
+  "scene_id": "organization_tree",
+  "scene_title": "The AI-Native Team",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "architecture",
+  "lens_name": "Architecture",
+  "intent": "Make structure and dependency visible",
+  "composition_name": "organization-tree",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "organization_tree--expression-1",
+  "layout_instance_id": "organization_tree--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "network-radial",
+  "design_contract_id": "organization_tree--network-radial--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "organization_tree",
+  "support_components": [
+    "team_nodes",
+    "reporting_lines",
+    "platform_core"
+  ],
+  "semantic_slots": [
+    "leadership",
+    "pods",
+    "platform"
+  ],
+  "data_shape": "tree",
+  "motion": "tree_expand",
+  "motion_profile": "structure-assemble",
+  "visual_id": "atlas-blue",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "floating",
+  "art_surface": "network",
+  "copy_mode": "headline",
+  "art_direction": "network organization_tree with structural blueprint",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.917,
+        "y": 4.64,
+        "w": 45.78,
+        "h": 28.099
+      },
+      "art": {
+        "x": 4.802,
+        "y": 36.126,
+        "w": 90.154,
+        "h": 56.945
+      },
+      "proof": {
+        "x": 56.286,
+        "y": 7.162,
+        "w": 39.077,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 5.917,
+          "y": 4.64,
+          "w": 45.78,
+          "h": 28.099
+        },
+        {
+          "x": 56.286,
+          "y": 7.162,
+          "w": 39.077,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.797,
+        "y": 68.72,
+        "w": 85.78,
+        "h": 23.099
+      },
+      "art": {
+        "x": 4.856,
+        "y": 5.098,
+        "w": 90.154,
+        "h": 53.945
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 62.126,
+        "w": 86.077,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.797,
+          "y": 68.72,
+          "w": 85.78,
+          "h": 23.099
+        },
+        {
+          "x": 7.208,
+          "y": 62.126,
+          "w": 86.077,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "organization_tree:architecture:organization-tree:full-width-stage:organization_tree:atlas-blue:edge-tabs:structure-assemble:network-radial:floating:network:headline:organization_tree--1--layout:art-monument-top",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

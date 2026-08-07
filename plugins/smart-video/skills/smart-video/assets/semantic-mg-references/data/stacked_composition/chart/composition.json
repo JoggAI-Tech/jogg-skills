@@ -1,0 +1,115 @@
+{
+  "id": "stacked_composition--chart",
+  "scene_id": "stacked_composition",
+  "scene_title": "Revenue Mix Is Changing",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "chart",
+  "lens_name": "Chart",
+  "intent": "Let the quantitative relationship carry the slide",
+  "composition_name": "stacked-stage",
+  "layout_grammar": "data-right",
+  "layout_contract_id": "stacked_composition--expression-1",
+  "layout_instance_id": "stacked_composition--1--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "layered-stack",
+  "design_contract_id": "stacked_composition--layered-stack--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "stacked_composition",
+  "support_components": [
+    "stacked_bars",
+    "category_legend",
+    "change_arrow"
+  ],
+  "semantic_slots": [
+    "starting_mix",
+    "change",
+    "ending_mix"
+  ],
+  "data_shape": "stacked_series",
+  "motion": "stack_shift",
+  "motion_profile": "chart-build",
+  "visual_id": "chalkboard-lab",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "technical",
+  "art_surface": "layers",
+  "copy_mode": "metric",
+  "art_direction": "layers stacked_composition with chart-dominant field",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 64.387,
+        "y": 8.18,
+        "w": 31.0,
+        "h": 68.0
+      },
+      "art": {
+        "x": 5.0,
+        "y": 4.937,
+        "w": 56.0,
+        "h": 88.0
+      },
+      "proof": {
+        "x": 64.0,
+        "y": 81.919,
+        "w": 31.0,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 64.387,
+          "y": 8.18,
+          "w": 31.0,
+          "h": 68.0
+        },
+        {
+          "x": 64.0,
+          "y": 81.919,
+          "w": 31.0,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.387,
+        "y": 5.14,
+        "w": 86.0,
+        "h": 32.0
+      },
+      "art": {
+        "x": 6.0,
+        "y": 39.951,
+        "w": 88.0,
+        "h": 49.0
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 91.937,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.387,
+          "y": 5.14,
+          "w": 86.0,
+          "h": 32.0
+        },
+        {
+          "x": 7.0,
+          "y": 91.937,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "stacked_composition:chart:stacked-stage:data-right:stacked_composition:chalkboard-lab:edge-tabs:chart-build:layered-stack:technical:layers:metric:stacked_composition--1--layout:poster-inset-top",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

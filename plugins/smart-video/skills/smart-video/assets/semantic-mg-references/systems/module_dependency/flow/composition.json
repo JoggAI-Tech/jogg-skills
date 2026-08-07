@@ -1,0 +1,115 @@
+{
+  "id": "module_dependency--flow",
+  "scene_id": "module_dependency",
+  "scene_title": "What the Answer Depends On",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "flow",
+  "lens_name": "Flow",
+  "intent": "Show movement between actors, layers, or resources",
+  "composition_name": "dependency-path",
+  "layout_grammar": "timeline-band",
+  "layout_contract_id": "module_dependency--expression-2",
+  "layout_instance_id": "module_dependency--2--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "composition_family": "pipeline-spine",
+  "design_contract_id": "module_dependency--pipeline-spine--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "module_dependency",
+  "support_components": [
+    "dependency_nodes",
+    "required_links",
+    "failure_marker"
+  ],
+  "semantic_slots": [
+    "module",
+    "dependencies",
+    "result"
+  ],
+  "data_shape": "directed_graph",
+  "motion": "dependency_trace",
+  "motion_profile": "flow-trace",
+  "visual_id": "electric-cyan",
+  "proof_mode": "vertical-index",
+  "copy_surface": "caption",
+  "art_surface": "pipeline",
+  "copy_mode": "headline",
+  "art_direction": "pipeline module_dependency with directional exchange",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.673,
+        "y": 4.46,
+        "w": 57.78,
+        "h": 32.099
+      },
+      "art": {
+        "x": 4.901,
+        "y": 41.189,
+        "w": 90.154,
+        "h": 51.945
+      },
+      "proof": {
+        "x": 66.143,
+        "y": 7.243,
+        "w": 29.077,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 5.673,
+          "y": 4.46,
+          "w": 57.78,
+          "h": 32.099
+        },
+        {
+          "x": 66.143,
+          "y": 7.243,
+          "w": 29.077,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.613,
+        "y": 71.58,
+        "w": 85.78,
+        "h": 21.099
+      },
+      "art": {
+        "x": 4.928,
+        "y": 5.147,
+        "w": 90.154,
+        "h": 60.945
+      },
+      "proof": {
+        "x": 7.104,
+        "y": 67.189,
+        "w": 86.077,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 7.613,
+          "y": 71.58,
+          "w": 85.78,
+          "h": 21.099
+        },
+        {
+          "x": 7.104,
+          "y": 67.189,
+          "w": 86.077,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "module_dependency:flow:dependency-path:timeline-band:module_dependency:electric-cyan:vertical-index:flow-trace:pipeline-spine:caption:pipeline:headline:module_dependency--2--layout:bottom-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,115 @@
+{
+  "id": "part_to_whole--annotation",
+  "scene_id": "part_to_whole",
+  "scene_title": "Where the AI Budget Goes",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "annotation",
+  "lens_name": "Annotation",
+  "intent": "Explain the decisive data point in context",
+  "composition_name": "segment-detail",
+  "layout_grammar": "data-left",
+  "layout_contract_id": "part_to_whole--expression-2",
+  "layout_instance_id": "part_to_whole--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "full-bleed-chart",
+  "design_contract_id": "part_to_whole--full-bleed-chart--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "part_to_whole",
+  "support_components": [
+    "donut_segments",
+    "legend",
+    "dominant_share"
+  ],
+  "semantic_slots": [
+    "largest",
+    "remainder",
+    "whole"
+  ],
+  "data_shape": "parts",
+  "motion": "segments_fill",
+  "motion_profile": "annotation-focus",
+  "visual_id": "sticker-classroom",
+  "proof_mode": "metric-cards",
+  "copy_surface": "technical",
+  "art_surface": "chart-field",
+  "copy_mode": "metric",
+  "art_direction": "chart-field part_to_whole with annotated decisive mark",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.941,
+        "y": 8.18,
+        "w": 31.0,
+        "h": 68.0
+      },
+      "art": {
+        "x": 39.198,
+        "y": 4.937,
+        "w": 56.0,
+        "h": 88.0
+      },
+      "proof": {
+        "x": 4.714,
+        "y": 81.919,
+        "w": 31.0,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 4.941,
+          "y": 8.18,
+          "w": 31.0,
+          "h": 68.0
+        },
+        {
+          "x": 4.714,
+          "y": 81.919,
+          "w": 31.0,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.061,
+        "y": 69.14,
+        "w": 86.0,
+        "h": 23.0
+      },
+      "art": {
+        "x": 5.144,
+        "y": 4.951,
+        "w": 90.0,
+        "h": 54.0
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 61.937,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.061,
+          "y": 69.14,
+          "w": 86.0,
+          "h": 23.0
+        },
+        {
+          "x": 6.792,
+          "y": 61.937,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "part_to_whole:annotation:segment-detail:data-left:part_to_whole:sticker-classroom:metric-cards:annotation-focus:full-bleed-chart:technical:chart-field:metric:part_to_whole--2--layout:art-monument-top",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

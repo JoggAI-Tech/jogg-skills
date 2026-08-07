@@ -1,0 +1,31 @@
+{
+  "id": "single_kpi--annotation",
+  "category_id": "data",
+  "category_name": "Data",
+  "scene_id": "single_kpi",
+  "name": "42 Hours Returned",
+  "presentation_form_id": "annotation",
+  "presentation_form_name": "Annotation",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "metric-cards",
+  "motion_profile": "annotation-focus",
+  "layout": "data-topline",
+  "layout_instance_id": "single_kpi--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "kpi-context",
+  "art_direction": "radial single_kpi with annotated decisive mark",
+  "composition_signature": "single_kpi:annotation:kpi-context:data-topline:single_kpi:kinetic-ivory:metric-cards:annotation-focus:radial-field:caption:radial:metric:single_kpi--2--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

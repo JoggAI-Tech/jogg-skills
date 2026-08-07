@@ -1,0 +1,115 @@
+{
+  "id": "stacked_composition--headline",
+  "scene_id": "stacked_composition",
+  "scene_title": "Revenue Mix Is Changing",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "headline",
+  "lens_name": "Headline",
+  "intent": "Turn the result into an editorial data statement",
+  "composition_name": "composition-lock",
+  "layout_grammar": "headline-bottom",
+  "layout_contract_id": "stacked_composition--expression-3",
+  "layout_instance_id": "stacked_composition--3--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_family": "full-bleed-chart",
+  "design_contract_id": "stacked_composition--full-bleed-chart--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "stacked_composition",
+  "support_components": [
+    "stacked_bars",
+    "category_legend",
+    "change_arrow"
+  ],
+  "semantic_slots": [
+    "starting_mix",
+    "change",
+    "ending_mix"
+  ],
+  "data_shape": "stacked_series",
+  "motion": "stack_shift",
+  "motion_profile": "number-resolve",
+  "visual_id": "atlas-blue",
+  "proof_mode": "metric-cards",
+  "copy_surface": "caption",
+  "art_surface": "chart-field",
+  "copy_mode": "headline",
+  "art_direction": "chart-field stacked_composition with oversized numeric conclusion",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.833,
+        "y": 70.18,
+        "w": 62.0,
+        "h": 24.0
+      },
+      "art": {
+        "x": 4.802,
+        "y": 4.937,
+        "w": 90.0,
+        "h": 61.0
+      },
+      "proof": {
+        "x": 70.286,
+        "y": 72.919,
+        "w": 25.0,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 5.833,
+          "y": 70.18,
+          "w": 62.0,
+          "h": 24.0
+        },
+        {
+          "x": 70.286,
+          "y": 72.919,
+          "w": 25.0,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.713,
+        "y": 5.14,
+        "w": 68.0,
+        "h": 24.0
+      },
+      "art": {
+        "x": 4.856,
+        "y": 31.951,
+        "w": 90.0,
+        "h": 61.0
+      },
+      "proof": {
+        "x": 78.208,
+        "y": 4.937,
+        "w": 15.0,
+        "h": 24
+      },
+      "avoid_zones": [
+        {
+          "x": 7.713,
+          "y": 5.14,
+          "w": 68.0,
+          "h": 24.0
+        },
+        {
+          "x": 78.208,
+          "y": 4.937,
+          "w": 15.0,
+          "h": 24
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "stacked_composition:headline:composition-lock:headline-bottom:stacked_composition:atlas-blue:metric-cards:number-resolve:full-bleed-chart:caption:chart-field:headline:stacked_composition--3--layout:cinema-caption-top",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,114 @@
+{
+  "id": "story_turn--thesis",
+  "scene_id": "story_turn",
+  "scene_title": "The Demo Became a Platform",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "thesis",
+  "lens_name": "Thesis",
+  "intent": "Turn the implication into a decisive editorial statement",
+  "composition_name": "turning-point-lock",
+  "layout_grammar": "poster-center",
+  "layout_contract_id": "story_turn--expression-3",
+  "layout_instance_id": "story_turn--3--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "composition_family": "diagonal-lock",
+  "design_contract_id": "story_turn--diagonal-lock--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "story_pivot",
+  "support_components": [
+    "before_state",
+    "after_state"
+  ],
+  "semantic_slots": [
+    "before",
+    "turn",
+    "after"
+  ],
+  "data_shape": "before_pivot_after",
+  "motion": "pivot_transition",
+  "motion_profile": "poster-slam",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "caption-line",
+  "copy_surface": "poster",
+  "art_surface": "diagonal",
+  "copy_mode": "statement",
+  "art_direction": "diagonal story_pivot with poster conclusion",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 17.849,
+        "y": 5.0,
+        "w": 64.44,
+        "h": 23.802
+      },
+      "art": {
+        "x": 14.099,
+        "y": 31.0,
+        "w": 71.692,
+        "h": 55.11
+      },
+      "proof": {
+        "x": 27.857,
+        "y": 89.0,
+        "w": 43.846,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 17.849,
+          "y": 5.0,
+          "w": 64.44,
+          "h": 23.802
+        },
+        {
+          "x": 27.857,
+          "y": 89.0,
+          "w": 43.846,
+          "h": 7
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 11.909,
+        "y": 5.0,
+        "w": 76.44,
+        "h": 22.802
+      },
+      "art": {
+        "x": 8.072,
+        "y": 31.0,
+        "w": 83.692,
+        "h": 44.11
+      },
+      "proof": {
+        "x": 11.896,
+        "y": 78.0,
+        "w": 75.846,
+        "h": 17
+      },
+      "avoid_zones": [
+        {
+          "x": 11.909,
+          "y": 5.0,
+          "w": 76.44,
+          "h": 22.802
+        },
+        {
+          "x": 11.896,
+          "y": 78.0,
+          "w": 75.846,
+          "h": 17
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "story_turn:thesis:turning-point-lock:poster-center:story_pivot:kinetic-ivory:caption-line:poster-slam:diagonal-lock:poster:diagonal:statement:story_turn--3--layout:center-lockup",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

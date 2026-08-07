@@ -1,0 +1,115 @@
+{
+  "id": "multi_case_synthesis--finding",
+  "scene_id": "multi_case_synthesis",
+  "scene_title": "Patterns Across Four AI Teams",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "lens_id": "finding",
+  "lens_name": "Finding",
+  "intent": "Lock the evidence into one defensible conclusion",
+  "composition_name": "synthesis-finding",
+  "layout_grammar": "diagonal-right",
+  "layout_contract_id": "multi_case_synthesis--expression-3",
+  "layout_instance_id": "multi_case_synthesis--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "composition_family": "bottom-statement-stage",
+  "design_contract_id": "multi_case_synthesis--bottom-statement-stage--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "multi_case_synthesis",
+  "support_components": [
+    "case_columns",
+    "shared_pattern",
+    "synthesis_statement"
+  ],
+  "semantic_slots": [
+    "cases",
+    "patterns",
+    "synthesis"
+  ],
+  "data_shape": "case_matrix",
+  "motion": "cases_converge",
+  "motion_profile": "finding-stamp",
+  "visual_id": "archive-dossier",
+  "proof_mode": "caption-line",
+  "copy_surface": "poster",
+  "art_surface": "wide-stage",
+  "copy_mode": "statement",
+  "art_direction": "wide-stage multi_case_synthesis with finding lockup",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 60.085,
+        "y": 7.82,
+        "w": 35.56,
+        "h": 58.198
+      },
+      "art": {
+        "x": 4.802,
+        "y": 6.063,
+        "w": 56.308,
+        "h": 86.89
+      },
+      "proof": {
+        "x": 60.286,
+        "y": 76.081,
+        "w": 35.154,
+        "h": 17
+      },
+      "avoid_zones": [
+        {
+          "x": 60.085,
+          "y": 7.82,
+          "w": 35.56,
+          "h": 58.198
+        },
+        {
+          "x": 60.286,
+          "y": 76.081,
+          "w": 35.154,
+          "h": 17
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.965,
+        "y": 69.86,
+        "w": 85.56,
+        "h": 25.198
+      },
+      "art": {
+        "x": 5.856,
+        "y": 5.049,
+        "w": 88.308,
+        "h": 52.89
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 60.063,
+        "w": 86.154,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 7.965,
+          "y": 69.86,
+          "w": 85.56,
+          "h": 25.198
+        },
+        {
+          "x": 7.208,
+          "y": 60.063,
+          "w": 86.154,
+          "h": 7
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "multi_case_synthesis:finding:synthesis-finding:diagonal-right:multi_case_synthesis:archive-dossier:caption-line:finding-stamp:bottom-statement-stage:poster:wide-stage:statement:multi_case_synthesis--3--layout:lower-lockup",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

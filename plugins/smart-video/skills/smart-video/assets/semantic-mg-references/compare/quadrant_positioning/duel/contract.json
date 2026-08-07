@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "quadrant_positioning",
+  "composition_id": "quadrant_positioning--duel",
+  "lens_id": "duel",
+  "visual_id": "chalkboard-lab",
+  "layout_instance_id": "quadrant_positioning--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "structural_fingerprint": "quadrant_positioning:duel:quadrant-map:full-width-stage:positioning_quadrant:chalkboard-lab:edge-tabs:opposed-wipe:force-quadrant:floating:quadrant:headline:quadrant_positioning--1--layout:top-compact",
+  "art_direction": "quadrant positioning_quadrant with opposed visual masses",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "1dfb508135affb01c7b231f195c6b6ae885458adf03b5e61c0aa996f52499824",
+    "9:16": "fe47016c42525b069646f9fafd584e8bff54b55a844dcbd27f2ee7f602e81494"
+  }
+}

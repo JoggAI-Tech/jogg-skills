@@ -1,0 +1,114 @@
+{
+  "id": "quote_lockup--thesis",
+  "scene_id": "quote_lockup",
+  "scene_title": "Build Where the Constraint Lives",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "thesis",
+  "lens_name": "Thesis",
+  "intent": "Turn the implication into a decisive editorial statement",
+  "composition_name": "type-poster",
+  "layout_grammar": "poster-offset-right",
+  "layout_contract_id": "quote_lockup--expression-3",
+  "layout_instance_id": "quote_lockup--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "center-symbol",
+  "design_contract_id": "quote_lockup--center-symbol--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "quote_lockup",
+  "support_components": [
+    "speaker_tag",
+    "argument_rule"
+  ],
+  "semantic_slots": [
+    "quote",
+    "speaker",
+    "interpretation"
+  ],
+  "data_shape": "quote_attribution",
+  "motion": "quote_wipe",
+  "motion_profile": "poster-slam",
+  "visual_id": "material-editorial",
+  "proof_mode": "center-badge",
+  "copy_surface": "floating",
+  "art_surface": "symbol",
+  "copy_mode": "statement",
+  "art_direction": "symbol quote_lockup with poster conclusion",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 57.253,
+        "y": 6.64,
+        "w": 38.44,
+        "h": 42.802
+      },
+      "art": {
+        "x": 4.901,
+        "y": 5.126,
+        "w": 48.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 57.143,
+        "y": 78.162,
+        "w": 37.846,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 57.253,
+          "y": 6.64,
+          "w": 38.44,
+          "h": 42.802
+        },
+        {
+          "x": 57.143,
+          "y": 78.162,
+          "w": 37.846,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.193,
+        "y": 4.72,
+        "w": 86.44,
+        "h": 31.802
+      },
+      "art": {
+        "x": 5.928,
+        "y": 40.098,
+        "w": 87.692,
+        "h": 49.11
+      },
+      "proof": {
+        "x": 7.104,
+        "y": 92.126,
+        "w": 85.846,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.193,
+          "y": 4.72,
+          "w": 86.44,
+          "h": 31.802
+        },
+        {
+          "x": 7.104,
+          "y": 92.126,
+          "w": 85.846,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "quote_lockup:thesis:type-poster:poster-offset-right:quote_lockup:material-editorial:center-badge:poster-slam:center-symbol:floating:symbol:statement:quote_lockup--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

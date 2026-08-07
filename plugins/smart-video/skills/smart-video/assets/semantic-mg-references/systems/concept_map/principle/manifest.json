@@ -1,0 +1,31 @@
+{
+  "id": "concept_map--principle",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "concept_map",
+  "name": "What Makes a Model Useful",
+  "presentation_form_id": "principle",
+  "presentation_form_name": "Principle",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "center-badge",
+  "motion_profile": "principle-lock",
+  "layout": "diagonal-right",
+  "layout_instance_id": "concept_map--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "composition_name": "concept-thesis",
+  "art_direction": "symbol concept_map with governing system rule",
+  "composition_signature": "concept_map:principle:concept-thesis:diagonal-right:concept_map:kinetic-ivory:center-badge:principle-lock:center-symbol:poster:symbol:statement:concept_map--3--layout:lower-lockup",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

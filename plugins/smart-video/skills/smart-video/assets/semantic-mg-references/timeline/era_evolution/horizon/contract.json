@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "era_evolution",
+  "composition_id": "era_evolution--horizon",
+  "lens_id": "horizon",
+  "visual_id": "cobalt-coral",
+  "layout_instance_id": "era_evolution--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "structural_fingerprint": "era_evolution:horizon:next-era-lock:poster-offset-right:era_evolution:cobalt-coral:caption-line:horizon-settle:bottom-statement-stage:floating:wide-stage:statement:era_evolution--3--layout:lower-lockup",
+  "art_direction": "wide-stage era_evolution with compressed time horizon",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "1706d15b4c29b07e73a8bfef6a17540a4bbcd32e863511310b2688ea13585f3e",
+    "9:16": "4cd0c31d918da246784946c3e90f7729ff870ff1998b4ba3051121d3acc188ff"
+  }
+}

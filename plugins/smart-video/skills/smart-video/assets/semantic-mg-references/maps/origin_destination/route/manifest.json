@@ -1,0 +1,31 @@
+{
+  "id": "origin_destination--route",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "scene_id": "origin_destination",
+  "name": "From Lab to Classroom",
+  "presentation_form_id": "route",
+  "presentation_form_name": "Route",
+  "visual_id": "atlas-blue",
+  "proof_mode": "floating-chips",
+  "motion_profile": "route-travel",
+  "layout": "full-width-stage",
+  "layout_instance_id": "origin_destination--1--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_name": "route-arc",
+  "art_direction": "route origin_destination with geographic route",
+  "composition_signature": "origin_destination:route:route-arc:full-width-stage:origin_destination:atlas-blue:floating-chips:route-travel:route-bridge:floating:route:headline:origin_destination--1--layout:cinema-caption-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

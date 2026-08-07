@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "concept_map",
+  "composition_id": "concept_map--architecture",
+  "lens_id": "architecture",
+  "visual_id": "sticker-classroom",
+  "layout_instance_id": "concept_map--1--layout",
+  "portrait_silhouette_id": "left-caption-stage",
+  "structural_fingerprint": "concept_map:architecture:concept-network:diagram-center:concept_map:sticker-classroom:edge-tabs:structure-assemble:network-radial:floating:network:editorial:concept_map--1--layout:left-caption-stage",
+  "art_direction": "network concept_map with structural blueprint",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "ceacfe442d774983edafa3201f399129629531b64181791e1f9b798d168bafed",
+    "9:16": "d6d0a751029dc35e81aacff9fe70c1221a73d88b18afc8e76f5dbda1a6763f8b"
+  }
+}

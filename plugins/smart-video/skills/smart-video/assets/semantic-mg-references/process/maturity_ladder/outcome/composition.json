@@ -1,0 +1,115 @@
+{
+  "id": "maturity_ladder--outcome",
+  "scene_id": "maturity_ladder",
+  "scene_title": "Five Levels of AI Operations",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "outcome",
+  "lens_name": "Outcome",
+  "intent": "Connect the process to its measurable result",
+  "composition_name": "maturity-target",
+  "layout_grammar": "diagonal-left",
+  "layout_contract_id": "maturity_ladder--expression-3",
+  "layout_instance_id": "maturity_ladder--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "composition_family": "number-monument",
+  "design_contract_id": "maturity_ladder--number-monument--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "maturity_ladder",
+  "support_components": [
+    "level_steps",
+    "current_marker",
+    "target_marker"
+  ],
+  "semantic_slots": [
+    "current",
+    "levels",
+    "target"
+  ],
+  "data_shape": "maturity_levels",
+  "motion": "ladder_climb",
+  "motion_profile": "outcome-resolve",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "caption-line",
+  "copy_surface": "poster",
+  "art_surface": "monument",
+  "copy_mode": "statement",
+  "art_direction": "monument maturity_ladder with result-bearing machine",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.101,
+        "y": 7.64,
+        "w": 36.0,
+        "h": 58.0
+      },
+      "art": {
+        "x": 39.099,
+        "y": 6.126,
+        "w": 56.0,
+        "h": 87.0
+      },
+      "proof": {
+        "x": 4.857,
+        "y": 76.162,
+        "w": 35.0,
+        "h": 17
+      },
+      "avoid_zones": [
+        {
+          "x": 5.101,
+          "y": 7.64,
+          "w": 36.0,
+          "h": 58.0
+        },
+        {
+          "x": 4.857,
+          "y": 76.162,
+          "w": 35.0,
+          "h": 17
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.161,
+        "y": 69.72,
+        "w": 86.0,
+        "h": 25.0
+      },
+      "art": {
+        "x": 6.072,
+        "y": 5.098,
+        "w": 88.0,
+        "h": 53.0
+      },
+      "proof": {
+        "x": 6.896,
+        "y": 60.126,
+        "w": 86.0,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 7.161,
+          "y": 69.72,
+          "w": 86.0,
+          "h": 25.0
+        },
+        {
+          "x": 6.896,
+          "y": 60.126,
+          "w": 86.0,
+          "h": 7
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "maturity_ladder:outcome:maturity-target:diagonal-left:maturity_ladder:cobalt-coral:caption-line:outcome-resolve:number-monument:poster:monument:statement:maturity_ladder--3--layout:lower-lockup",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

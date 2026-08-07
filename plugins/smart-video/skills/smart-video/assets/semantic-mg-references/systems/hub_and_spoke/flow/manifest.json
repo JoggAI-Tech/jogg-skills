@@ -1,0 +1,31 @@
+{
+  "id": "hub_and_spoke--flow",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "hub_and_spoke",
+  "name": "The AI Workspace Hub",
+  "presentation_form_id": "flow",
+  "presentation_form_name": "Flow",
+  "visual_id": "chalkboard-lab",
+  "proof_mode": "metric-cards",
+  "motion_profile": "flow-trace",
+  "layout": "data-left",
+  "layout_instance_id": "hub_and_spoke--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "spoke-detail",
+  "art_direction": "radial hub_spoke with directional exchange",
+  "composition_signature": "hub_and_spoke:flow:spoke-detail:data-left:hub_spoke:chalkboard-lab:metric-cards:flow-trace:radial-field:technical:radial:metric:hub_and_spoke--2--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

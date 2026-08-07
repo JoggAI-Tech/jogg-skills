@@ -1,0 +1,115 @@
+{
+  "id": "cycle_timeline--inflection",
+  "scene_id": "cycle_timeline",
+  "scene_title": "The Research Flywheel",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "inflection",
+  "lens_name": "Inflection",
+  "intent": "Magnify the moment that changes the trajectory",
+  "composition_name": "cycle-phase",
+  "layout_grammar": "data-right",
+  "layout_contract_id": "cycle_timeline--expression-2",
+  "layout_instance_id": "cycle_timeline--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "radial-field",
+  "design_contract_id": "cycle_timeline--radial-field--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "cycle_timeline",
+  "support_components": [
+    "cycle_nodes",
+    "return_arrow",
+    "iteration_counter"
+  ],
+  "semantic_slots": [
+    "input",
+    "iteration",
+    "learning"
+  ],
+  "data_shape": "cyclic_events",
+  "motion": "cycle_rotate",
+  "motion_profile": "pivot-magnify",
+  "visual_id": "electric-cyan",
+  "proof_mode": "metric-cards",
+  "copy_surface": "technical",
+  "art_surface": "radial",
+  "copy_mode": "metric",
+  "art_direction": "radial cycle_timeline with magnified inflection",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 64.219,
+        "y": 8.0,
+        "w": 31.22,
+        "h": 67.901
+      },
+      "art": {
+        "x": 5.0,
+        "y": 5.0,
+        "w": 55.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 64.0,
+        "y": 82.0,
+        "w": 30.923,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 64.219,
+          "y": 8.0,
+          "w": 31.22,
+          "h": 67.901
+        },
+        {
+          "x": 64.0,
+          "y": 82.0,
+          "w": 30.923,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.219,
+        "y": 69.0,
+        "w": 86.22,
+        "h": 22.901
+      },
+      "art": {
+        "x": 5.0,
+        "y": 5.0,
+        "w": 89.846,
+        "h": 54.055
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 62.0,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.219,
+          "y": 69.0,
+          "w": 86.22,
+          "h": 22.901
+        },
+        {
+          "x": 7.0,
+          "y": 62.0,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "cycle_timeline:inflection:cycle-phase:data-right:cycle_timeline:electric-cyan:metric-cards:pivot-magnify:radial-field:technical:radial:metric:cycle_timeline--2--layout:art-monument-top",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

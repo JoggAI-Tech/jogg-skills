@@ -1,0 +1,114 @@
+{
+  "id": "key_takeaway--signal",
+  "scene_id": "key_takeaway",
+  "scene_title": "Distribution Wins the Second Act",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "signal",
+  "lens_name": "Signal",
+  "intent": "Lead with the one idea the audience must remember",
+  "composition_name": "banner-sweep",
+  "layout_grammar": "timeline-band",
+  "layout_contract_id": "key_takeaway--expression-1",
+  "layout_instance_id": "key_takeaway--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "kinetic-ribbons",
+  "design_contract_id": "key_takeaway--kinetic-ribbons--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "takeaway_banner",
+  "support_components": [
+    "support_fact",
+    "action_prompt"
+  ],
+  "semantic_slots": [
+    "takeaway",
+    "evidence",
+    "action"
+  ],
+  "data_shape": "takeaway_support",
+  "motion": "highlight_sweep",
+  "motion_profile": "impact-lock",
+  "visual_id": "luminous-grid",
+  "proof_mode": "caption-line",
+  "copy_surface": "caption",
+  "art_surface": "ribbons",
+  "copy_mode": "headline",
+  "art_direction": "ribbons takeaway_banner with single dominant symbol",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.605,
+        "y": 4.82,
+        "w": 58.44,
+        "h": 31.802
+      },
+      "art": {
+        "x": 5.198,
+        "y": 41.063,
+        "w": 89.692,
+        "h": 52.11
+      },
+      "proof": {
+        "x": 65.714,
+        "y": 7.081,
+        "w": 28.846,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 4.605,
+          "y": 4.82,
+          "w": 58.44,
+          "h": 31.802
+        },
+        {
+          "x": 65.714,
+          "y": 7.081,
+          "w": 28.846,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.725,
+        "y": 68.86,
+        "w": 86.44,
+        "h": 22.802
+      },
+      "art": {
+        "x": 5.144,
+        "y": 5.049,
+        "w": 89.692,
+        "h": 54.11
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 62.063,
+        "w": 85.846,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.725,
+          "y": 68.86,
+          "w": 86.44,
+          "h": 22.802
+        },
+        {
+          "x": 6.792,
+          "y": 62.063,
+          "w": 85.846,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "key_takeaway:signal:banner-sweep:timeline-band:takeaway_banner:luminous-grid:caption-line:impact-lock:kinetic-ribbons:caption:ribbons:headline:key_takeaway--1--layout:art-monument-top",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

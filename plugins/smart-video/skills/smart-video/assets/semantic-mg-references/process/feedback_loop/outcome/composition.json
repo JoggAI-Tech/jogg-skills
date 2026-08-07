@@ -1,0 +1,115 @@
+{
+  "id": "feedback_loop--outcome",
+  "scene_id": "feedback_loop",
+  "scene_title": "The Evaluation Loop",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "outcome",
+  "lens_name": "Outcome",
+  "intent": "Connect the process to its measurable result",
+  "composition_name": "compounding-lock",
+  "layout_grammar": "timeline-caption",
+  "layout_contract_id": "feedback_loop--expression-3",
+  "layout_instance_id": "feedback_loop--3--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_family": "center-symbol",
+  "design_contract_id": "feedback_loop--center-symbol--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "feedback_loop",
+  "support_components": [
+    "loop_nodes",
+    "feedback_return",
+    "quality_gain"
+  ],
+  "semantic_slots": [
+    "observe",
+    "evaluate",
+    "improve"
+  ],
+  "data_shape": "feedback_cycle",
+  "motion": "loop_trace",
+  "motion_profile": "outcome-resolve",
+  "visual_id": "material-editorial",
+  "proof_mode": "center-badge",
+  "copy_surface": "editorial",
+  "art_surface": "symbol",
+  "copy_mode": "headline",
+  "art_direction": "symbol feedback_loop with result-bearing machine",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.836,
+        "y": 70.54,
+        "w": 48.22,
+        "h": 23.901
+      },
+      "art": {
+        "x": 5.198,
+        "y": 4.811,
+        "w": 89.846,
+        "h": 60.055
+      },
+      "proof": {
+        "x": 57.714,
+        "y": 72.757,
+        "w": 36.923,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 4.836,
+          "y": 70.54,
+          "w": 48.22,
+          "h": 23.901
+        },
+        {
+          "x": 57.714,
+          "y": 72.757,
+          "w": 36.923,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.956,
+        "y": 5.42,
+        "w": 86.22,
+        "h": 20.901
+      },
+      "art": {
+        "x": 5.144,
+        "y": 28.853,
+        "w": 89.846,
+        "h": 62.055
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 92.811,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.956,
+          "y": 5.42,
+          "w": 86.22,
+          "h": 20.901
+        },
+        {
+          "x": 6.792,
+          "y": 92.811,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "feedback_loop:outcome:compounding-lock:timeline-caption:feedback_loop:material-editorial:center-badge:outcome-resolve:center-symbol:editorial:symbol:headline:feedback_loop--3--layout:top-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

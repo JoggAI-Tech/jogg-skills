@@ -1,0 +1,115 @@
+{
+  "id": "cohort_heatmap--headline",
+  "scene_id": "cohort_heatmap",
+  "scene_title": "Retention Strengthens by Cohort",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "headline",
+  "lens_name": "Headline",
+  "intent": "Turn the result into an editorial data statement",
+  "composition_name": "retention-finding",
+  "layout_grammar": "data-right",
+  "layout_contract_id": "cohort_heatmap--expression-3",
+  "layout_instance_id": "cohort_heatmap--3--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_family": "editorial-margin",
+  "design_contract_id": "cohort_heatmap--editorial-margin--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "cohort_heatmap",
+  "support_components": [
+    "heat_cells",
+    "cohort_labels",
+    "pattern_highlight"
+  ],
+  "semantic_slots": [
+    "cohorts",
+    "periods",
+    "pattern"
+  ],
+  "data_shape": "matrix_values",
+  "motion": "heat_scan",
+  "motion_profile": "number-resolve",
+  "visual_id": "luminous-grid",
+  "proof_mode": "caption-line",
+  "copy_surface": "technical",
+  "art_surface": "framed-object",
+  "copy_mode": "metric",
+  "art_direction": "framed-object cohort_heatmap with oversized numeric conclusion",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 64.429,
+        "y": 8.54,
+        "w": 31.0,
+        "h": 68.0
+      },
+      "art": {
+        "x": 5.0,
+        "y": 4.811,
+        "w": 56.0,
+        "h": 88.0
+      },
+      "proof": {
+        "x": 64.0,
+        "y": 81.757,
+        "w": 31.0,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 64.429,
+          "y": 8.54,
+          "w": 31.0,
+          "h": 68.0
+        },
+        {
+          "x": 64.0,
+          "y": 81.757,
+          "w": 31.0,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.429,
+        "y": 5.42,
+        "w": 86.0,
+        "h": 23.0
+      },
+      "art": {
+        "x": 5.0,
+        "y": 35.853,
+        "w": 90.0,
+        "h": 57.0
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 29.811,
+        "w": 86.0,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 7.429,
+          "y": 5.42,
+          "w": 86.0,
+          "h": 23.0
+        },
+        {
+          "x": 7.0,
+          "y": 29.811,
+          "w": 86.0,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "cohort_heatmap:headline:retention-finding:data-right:cohort_heatmap:luminous-grid:caption-line:number-resolve:editorial-margin:technical:framed-object:metric:cohort_heatmap--3--layout:art-monument-bottom",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

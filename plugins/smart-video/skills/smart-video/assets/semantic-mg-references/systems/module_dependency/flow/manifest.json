@@ -1,0 +1,31 @@
+{
+  "id": "module_dependency--flow",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "module_dependency",
+  "name": "What the Answer Depends On",
+  "presentation_form_id": "flow",
+  "presentation_form_name": "Flow",
+  "visual_id": "electric-cyan",
+  "proof_mode": "vertical-index",
+  "motion_profile": "flow-trace",
+  "layout": "timeline-band",
+  "layout_instance_id": "module_dependency--2--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "composition_name": "dependency-path",
+  "art_direction": "pipeline module_dependency with directional exchange",
+  "composition_signature": "module_dependency:flow:dependency-path:timeline-band:module_dependency:electric-cyan:vertical-index:flow-trace:pipeline-spine:caption:pipeline:headline:module_dependency--2--layout:bottom-compact",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

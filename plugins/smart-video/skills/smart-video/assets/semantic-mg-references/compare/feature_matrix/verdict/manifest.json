@@ -1,0 +1,31 @@
+{
+  "id": "feature_matrix--verdict",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "scene_id": "feature_matrix",
+  "name": "Choosing an AI Workspace",
+  "presentation_form_id": "verdict",
+  "presentation_form_name": "Verdict",
+  "visual_id": "luminous-grid",
+  "proof_mode": "metric-cards",
+  "motion_profile": "verdict-lock",
+  "layout": "poster-offset-left",
+  "layout_instance_id": "feature_matrix--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_name": "matrix-conclusion",
+  "art_direction": "chart-field feature_matrix with decisive verdict object",
+  "composition_signature": "feature_matrix:verdict:matrix-conclusion:poster-offset-left:feature_matrix:luminous-grid:metric-cards:verdict-lock:full-bleed-chart:floating:chart-field:statement:feature_matrix--3--layout:poster-inset-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

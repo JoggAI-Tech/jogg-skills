@@ -1,0 +1,31 @@
+{
+  "id": "evidence_board--exhibit",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "scene_id": "evidence_board",
+  "name": "Tracing the Compute Shortage",
+  "presentation_form_id": "exhibit",
+  "presentation_form_name": "Exhibit",
+  "visual_id": "signal-noir",
+  "proof_mode": "stamp",
+  "motion_profile": "exhibit-uncover",
+  "layout": "full-width-stage",
+  "layout_instance_id": "evidence_board--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "evidence-board",
+  "art_direction": "evidence evidence_board with material source object",
+  "composition_signature": "evidence_board:exhibit:evidence-board:full-width-stage:evidence_board:signal-noir:stamp:exhibit-uncover:evidence-board:floating:evidence:headline:evidence_board--1--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

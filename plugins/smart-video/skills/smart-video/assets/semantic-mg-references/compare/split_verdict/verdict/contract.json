@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "split_verdict",
+  "composition_id": "split_verdict--verdict",
+  "lens_id": "verdict",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "split_verdict--3--layout",
+  "portrait_silhouette_id": "middle-story-band",
+  "structural_fingerprint": "split_verdict:verdict:verdict-gate:poster-offset-right:split_verdict:luminous-grid:center-badge:verdict-lock:center-symbol:floating:symbol:statement:split_verdict--3--layout:middle-story-band",
+  "art_direction": "symbol split_verdict with decisive verdict object",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "fecada77a752a2938ef0f027424f7054517575aa916374f8e53ef1ac9fabbc1e",
+    "9:16": "ba3e88daa1bc0eca645a6e403c1c6b9fba890de62194c302d9d0e056c3765bad"
+  }
+}

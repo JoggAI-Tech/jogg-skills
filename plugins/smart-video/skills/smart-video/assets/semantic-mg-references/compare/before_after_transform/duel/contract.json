@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "before_after_transform",
+  "composition_id": "before_after_transform--duel",
+  "lens_id": "duel",
+  "visual_id": "signal-noir",
+  "layout_instance_id": "before_after_transform--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "structural_fingerprint": "before_after_transform:duel:before-after-panels:diagram-center:before_after:signal-noir:center-badge:opposed-wipe:before-after-slab:floating:before-after:editorial:before_after_transform--1--layout:top-editorial",
+  "art_direction": "before-after before_after with opposed visual masses",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "98e572a211e1bae46ef47ec80a042d8770c187efd47798aba8a7b08149cc4704",
+    "9:16": "8217d2206bb304cff105f1865f3c5ebd5edeea18f8ccf059add79bbe55c59e6e"
+  }
+}

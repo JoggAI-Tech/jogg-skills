@@ -1,0 +1,115 @@
+{
+  "id": "module_dependency--architecture",
+  "scene_id": "module_dependency",
+  "scene_title": "What the Answer Depends On",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "architecture",
+  "lens_name": "Architecture",
+  "intent": "Make structure and dependency visible",
+  "composition_name": "dependency-map",
+  "layout_grammar": "diagram-right-rail",
+  "layout_contract_id": "module_dependency--expression-1",
+  "layout_instance_id": "module_dependency--1--layout",
+  "portrait_silhouette_id": "left-caption-stage",
+  "composition_family": "network-radial",
+  "design_contract_id": "module_dependency--network-radial--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "module_dependency",
+  "support_components": [
+    "dependency_nodes",
+    "required_links",
+    "failure_marker"
+  ],
+  "semantic_slots": [
+    "module",
+    "dependencies",
+    "result"
+  ],
+  "data_shape": "directed_graph",
+  "motion": "dependency_trace",
+  "motion_profile": "structure-assemble",
+  "visual_id": "chalkboard-lab",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "technical",
+  "art_surface": "network",
+  "copy_mode": "editorial",
+  "art_direction": "network module_dependency with structural blueprint",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.45,
+        "y": 7.46,
+        "w": 54.78,
+        "h": 42.099
+      },
+      "art": {
+        "x": 64.0,
+        "y": 5.189,
+        "w": 31.154,
+        "h": 87.945
+      },
+      "proof": {
+        "x": 5.0,
+        "y": 78.243,
+        "w": 55.077,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 5.45,
+          "y": 7.46,
+          "w": 54.78,
+          "h": 42.099
+        },
+        {
+          "x": 5.0,
+          "y": 78.243,
+          "w": 55.077,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.45,
+        "y": 4.58,
+        "w": 32.78,
+        "h": 67.099
+      },
+      "art": {
+        "x": 43.0,
+        "y": 5.147,
+        "w": 51.154,
+        "h": 79.945
+      },
+      "proof": {
+        "x": 6.0,
+        "y": 75.189,
+        "w": 33.077,
+        "h": 12
+      },
+      "avoid_zones": [
+        {
+          "x": 6.45,
+          "y": 4.58,
+          "w": 32.78,
+          "h": 67.099
+        },
+        {
+          "x": 6.0,
+          "y": 75.189,
+          "w": 33.077,
+          "h": 12
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "module_dependency:architecture:dependency-map:diagram-right-rail:module_dependency:chalkboard-lab:edge-tabs:structure-assemble:network-radial:technical:network:editorial:module_dependency--1--layout:left-caption-stage",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

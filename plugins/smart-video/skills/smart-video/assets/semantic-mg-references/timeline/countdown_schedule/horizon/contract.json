@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "countdown_schedule",
+  "composition_id": "countdown_schedule--horizon",
+  "lens_id": "horizon",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "countdown_schedule--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "structural_fingerprint": "countdown_schedule:horizon:launch-lock:metric-monument:countdown_schedule:luminous-grid:caption-line:horizon-settle:number-monument:poster:monument:metric:countdown_schedule--3--layout:poster-inset-top",
+  "art_direction": "monument countdown_schedule with compressed time horizon",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "4749cfba9b2fab89246ef9aa170e540c2e2b4e535b64c1dd274b76adb170d21e",
+    "9:16": "988174221bfd9b123a331d448907127f76daf203400b19f5fc7834bbe7bbf845"
+  }
+}

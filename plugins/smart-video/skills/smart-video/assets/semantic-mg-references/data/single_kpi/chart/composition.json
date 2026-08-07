@@ -1,0 +1,115 @@
+{
+  "id": "single_kpi--chart",
+  "scene_id": "single_kpi",
+  "scene_title": "42 Hours Returned",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "chart",
+  "lens_name": "Chart",
+  "intent": "Let the quantitative relationship carry the slide",
+  "composition_name": "kpi-monument",
+  "layout_grammar": "metric-monument",
+  "layout_contract_id": "single_kpi--expression-1",
+  "layout_instance_id": "single_kpi--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_family": "number-monument",
+  "design_contract_id": "single_kpi--number-monument--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "single_kpi",
+  "support_components": [
+    "unit_label",
+    "benchmark_line",
+    "context_note"
+  ],
+  "semantic_slots": [
+    "value",
+    "benchmark",
+    "meaning"
+  ],
+  "data_shape": "single_value",
+  "motion": "number_count",
+  "motion_profile": "chart-build",
+  "visual_id": "electric-cyan",
+  "proof_mode": "caption-line",
+  "copy_surface": "poster",
+  "art_surface": "monument",
+  "copy_mode": "metric",
+  "art_direction": "monument single_kpi with chart-dominant field",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.324,
+        "y": 8.64,
+        "w": 38.0,
+        "h": 61.0
+      },
+      "art": {
+        "x": 46.0,
+        "y": 4.126,
+        "w": 49.0,
+        "h": 90.0
+      },
+      "proof": {
+        "x": 5.0,
+        "y": 79.162,
+        "w": 38.0,
+        "h": 14
+      },
+      "avoid_zones": [
+        {
+          "x": 5.324,
+          "y": 8.64,
+          "w": 38.0,
+          "h": 61.0
+        },
+        {
+          "x": 5.0,
+          "y": 79.162,
+          "w": 38.0,
+          "h": 14
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.324,
+        "y": 4.72,
+        "w": 86.0,
+        "h": 21.0
+      },
+      "art": {
+        "x": 5.0,
+        "y": 29.098,
+        "w": 90.0,
+        "h": 62.0
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 93,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.324,
+          "y": 4.72,
+          "w": 86.0,
+          "h": 21.0
+        },
+        {
+          "x": 7.0,
+          "y": 93,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "single_kpi:chart:kpi-monument:metric-monument:single_kpi:electric-cyan:caption-line:chart-build:number-monument:poster:monument:metric:single_kpi--1--layout:top-compact",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

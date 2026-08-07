@@ -1,0 +1,114 @@
+{
+  "id": "milestone_rail--inflection",
+  "scene_id": "milestone_rail",
+  "scene_title": "The Five-Year Agent Shift",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "inflection",
+  "lens_name": "Inflection",
+  "intent": "Magnify the moment that changes the trajectory",
+  "composition_name": "milestone-zoom",
+  "layout_grammar": "evidence-right",
+  "layout_contract_id": "milestone_rail--expression-2",
+  "layout_instance_id": "milestone_rail--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_family": "archive-stack",
+  "design_contract_id": "milestone_rail--archive-stack--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "milestone_rail",
+  "support_components": [
+    "year_nodes",
+    "milestone_labels"
+  ],
+  "semantic_slots": [
+    "origin",
+    "milestones",
+    "destination"
+  ],
+  "data_shape": "dated_events",
+  "motion": "rail_draw",
+  "motion_profile": "pivot-magnify",
+  "visual_id": "luminous-grid",
+  "proof_mode": "stamp",
+  "copy_surface": "paper",
+  "art_surface": "paper-stack",
+  "copy_mode": "editorial",
+  "art_direction": "paper-stack milestone_rail with magnified inflection",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 63.825,
+        "y": 7.46,
+        "w": 32.22,
+        "h": 69.901
+      },
+      "art": {
+        "x": 4.703,
+        "y": 5.189,
+        "w": 54.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 63.429,
+        "y": 84.243,
+        "w": 31.923,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 63.825,
+          "y": 7.46,
+          "w": 32.22,
+          "h": 69.901
+        },
+        {
+          "x": 63.429,
+          "y": 84.243,
+          "w": 31.923,
+          "h": 9
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 52.645,
+        "y": 4.58,
+        "w": 42.22,
+        "h": 79.901
+      },
+      "art": {
+        "x": 5.784,
+        "y": 5.147,
+        "w": 42.846,
+        "h": 80.055
+      },
+      "proof": {
+        "x": 6.312,
+        "y": 88.189,
+        "w": 87.923,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 52.645,
+          "y": 4.58,
+          "w": 42.22,
+          "h": 79.901
+        },
+        {
+          "x": 6.312,
+          "y": 88.189,
+          "w": 87.923,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "milestone_rail:inflection:milestone-zoom:evidence-right:milestone_rail:luminous-grid:stamp:pivot-magnify:archive-stack:paper:paper-stack:editorial:milestone_rail--2--layout:offset-lower-right",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

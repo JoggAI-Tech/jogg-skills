@@ -1,0 +1,115 @@
+{
+  "id": "cycle_timeline--sequence",
+  "scene_id": "cycle_timeline",
+  "scene_title": "The Research Flywheel",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "sequence",
+  "lens_name": "Sequence",
+  "intent": "Make chronology the primary visual object",
+  "composition_name": "cycle-wheel",
+  "layout_grammar": "poster-center",
+  "layout_contract_id": "cycle_timeline--expression-1",
+  "layout_instance_id": "cycle_timeline--1--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "clock-orbit",
+  "design_contract_id": "cycle_timeline--clock-orbit--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "cycle_timeline",
+  "support_components": [
+    "cycle_nodes",
+    "return_arrow",
+    "iteration_counter"
+  ],
+  "semantic_slots": [
+    "input",
+    "iteration",
+    "learning"
+  ],
+  "data_shape": "cyclic_events",
+  "motion": "cycle_rotate",
+  "motion_profile": "rail-travel",
+  "visual_id": "sticker-classroom",
+  "proof_mode": "floating-chips",
+  "copy_surface": "poster",
+  "art_surface": "clock",
+  "copy_mode": "statement",
+  "art_direction": "clock cycle_timeline with directional time object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 17.996,
+        "y": 5.0,
+        "w": 64.22,
+        "h": 23.901
+      },
+      "art": {
+        "x": 14.099,
+        "y": 31.0,
+        "w": 71.846,
+        "h": 55.055
+      },
+      "proof": {
+        "x": 27.857,
+        "y": 89.0,
+        "w": 43.923,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 17.996,
+          "y": 5.0,
+          "w": 64.22,
+          "h": 23.901
+        },
+        {
+          "x": 27.857,
+          "y": 89.0,
+          "w": 43.923,
+          "h": 7
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.056,
+        "y": 5.0,
+        "w": 86.22,
+        "h": 31.901
+      },
+      "art": {
+        "x": 6.072,
+        "y": 40.0,
+        "w": 87.846,
+        "h": 49.055
+      },
+      "proof": {
+        "x": 6.896,
+        "y": 92.0,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.056,
+          "y": 5.0,
+          "w": 86.22,
+          "h": 31.901
+        },
+        {
+          "x": 6.896,
+          "y": 92.0,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "cycle_timeline:sequence:cycle-wheel:poster-center:cycle_timeline:sticker-classroom:floating-chips:rail-travel:clock-orbit:poster:clock:statement:cycle_timeline--1--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

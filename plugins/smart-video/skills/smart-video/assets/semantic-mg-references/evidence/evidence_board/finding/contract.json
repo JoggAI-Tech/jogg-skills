@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "evidence",
+  "scene_id": "evidence_board",
+  "composition_id": "evidence_board--finding",
+  "lens_id": "finding",
+  "visual_id": "paper-collage",
+  "layout_instance_id": "evidence_board--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "structural_fingerprint": "evidence_board:finding:evidence-verdict:poster-center:evidence_board:paper-collage:stamp:finding-stamp:redaction-sheet:poster:redaction:statement:evidence_board--3--layout:lower-lockup",
+  "art_direction": "redaction evidence_board with finding lockup",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "0f570e883e518222b02718f28c5900049287940da5cf1557be669f2eb3dee552",
+    "9:16": "8943c15aa6f9a169660f4b8f15eba0a1a4578ffd464dd0d8820a7a9e5840758d"
+  }
+}

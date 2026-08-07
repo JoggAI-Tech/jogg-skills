@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "process",
+  "scene_id": "linear_steps",
+  "composition_id": "linear_steps--walkthrough",
+  "lens_id": "walkthrough",
+  "visual_id": "chalkboard-lab",
+  "layout_instance_id": "linear_steps--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "structural_fingerprint": "linear_steps:walkthrough:step-focus:diagram-center:linear_steps:chalkboard-lab:vertical-index:guided-sequence:pipeline-spine:floating:pipeline:editorial:linear_steps--2--layout:bottom-editorial",
+  "art_direction": "pipeline linear_steps with guided operating path",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "bed58f5a653a10ea44ba27d2e2bcbd17e25492c3eb23e449d1a3ade1e2340a0d",
+    "9:16": "2ae179c30e78b1584348260f50ad815bfa5b97c33e5078e8289aca38060ce235"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "scenario_comparison--duel",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "scene_id": "scenario_comparison",
+  "name": "Cloud, Edge, or Hybrid",
+  "presentation_form_id": "duel",
+  "presentation_form_name": "Duel",
+  "visual_id": "atlas-blue",
+  "proof_mode": "vertical-index",
+  "motion_profile": "opposed-wipe",
+  "layout": "full-width-stage",
+  "layout_instance_id": "scenario_comparison--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "scenario-triptych",
+  "art_direction": "triptych scenario_compare with opposed visual masses",
+  "composition_signature": "scenario_comparison:duel:scenario-triptych:full-width-stage:scenario_compare:atlas-blue:vertical-index:opposed-wipe:triptych:floating:triptych:headline:scenario_comparison--1--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

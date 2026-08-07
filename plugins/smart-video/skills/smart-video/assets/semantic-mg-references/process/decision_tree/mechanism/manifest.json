@@ -1,0 +1,31 @@
+{
+  "id": "decision_tree--mechanism",
+  "category_id": "process",
+  "category_name": "Process",
+  "scene_id": "decision_tree",
+  "name": "When Should AI Act?",
+  "presentation_form_id": "mechanism",
+  "presentation_form_name": "Mechanism",
+  "visual_id": "signal-noir",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "mechanism-run",
+  "layout": "diagram-left-rail",
+  "layout_instance_id": "decision_tree--1--layout",
+  "portrait_silhouette_id": "offset-upper-left",
+  "composition_name": "decision-tree",
+  "art_direction": "network decision_tree with visible causal mechanism",
+  "composition_signature": "decision_tree:mechanism:decision-tree:diagram-left-rail:decision_tree:signal-noir:edge-tabs:mechanism-run:network-radial:technical:network:editorial:decision_tree--1--layout:offset-upper-left",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

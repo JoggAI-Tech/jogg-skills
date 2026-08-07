@@ -1,0 +1,31 @@
+{
+  "id": "story_turn--thesis",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "scene_id": "story_turn",
+  "name": "The Demo Became a Platform",
+  "presentation_form_id": "thesis",
+  "presentation_form_name": "Thesis",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "caption-line",
+  "motion_profile": "poster-slam",
+  "layout": "poster-center",
+  "layout_instance_id": "story_turn--3--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "composition_name": "turning-point-lock",
+  "art_direction": "diagonal story_pivot with poster conclusion",
+  "composition_signature": "story_turn:thesis:turning-point-lock:poster-center:story_pivot:kinetic-ivory:caption-line:poster-slam:diagonal-lock:poster:diagonal:statement:story_turn--3--layout:center-lockup",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

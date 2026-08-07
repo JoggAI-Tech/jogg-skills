@@ -1,0 +1,31 @@
+{
+  "id": "capital_flow_network--principle",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "capital_flow_network",
+  "name": "Capital Circulates Through AI",
+  "presentation_form_id": "principle",
+  "presentation_form_name": "Principle",
+  "visual_id": "luminous-grid",
+  "proof_mode": "metric-cards",
+  "motion_profile": "principle-lock",
+  "layout": "timeline-caption",
+  "layout_instance_id": "capital_flow_network--3--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_name": "capital-principle",
+  "art_direction": "bars capital_flow_network with governing system rule",
+  "composition_signature": "capital_flow_network:principle:capital-principle:timeline-caption:capital_flow_network:luminous-grid:metric-cards:principle-lock:bars-surge:editorial:bars:headline:capital_flow_network--3--layout:cinema-caption-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

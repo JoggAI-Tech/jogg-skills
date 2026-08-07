@@ -1,0 +1,31 @@
+{
+  "id": "feedback_loop--walkthrough",
+  "category_id": "process",
+  "category_name": "Process",
+  "scene_id": "feedback_loop",
+  "name": "The Evaluation Loop",
+  "presentation_form_id": "walkthrough",
+  "presentation_form_name": "Walkthrough",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "guided-sequence",
+  "layout": "editorial-right",
+  "layout_instance_id": "feedback_loop--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_name": "loop-intervention",
+  "art_direction": "network feedback_loop with guided operating path",
+  "composition_signature": "feedback_loop:walkthrough:loop-intervention:editorial-right:feedback_loop:kinetic-ivory:edge-tabs:guided-sequence:network-radial:editorial:network:editorial:feedback_loop--2--layout:offset-lower-right",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

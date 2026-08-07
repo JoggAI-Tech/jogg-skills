@@ -1,0 +1,115 @@
+{
+  "id": "forecast_band--headline",
+  "scene_id": "forecast_band",
+  "scene_title": "Three Paths to Scale",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "headline",
+  "lens_name": "Headline",
+  "intent": "Turn the result into an editorial data statement",
+  "composition_name": "forecast-headline",
+  "layout_grammar": "headline-top",
+  "layout_contract_id": "forecast_band--expression-3",
+  "layout_instance_id": "forecast_band--3--layout",
+  "portrait_silhouette_id": "cinema-caption-bottom",
+  "composition_family": "full-bleed-chart",
+  "design_contract_id": "forecast_band--full-bleed-chart--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "forecast_band",
+  "support_components": [
+    "history_line",
+    "confidence_band",
+    "scenario_lines"
+  ],
+  "semantic_slots": [
+    "history",
+    "range",
+    "outlook"
+  ],
+  "data_shape": "forecast_series",
+  "motion": "band_expand",
+  "motion_profile": "number-resolve",
+  "visual_id": "paper-collage",
+  "proof_mode": "metric-cards",
+  "copy_surface": "caption",
+  "art_surface": "chart-field",
+  "copy_mode": "headline",
+  "art_direction": "chart-field forecast_band with oversized numeric conclusion",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.366,
+        "y": 5.0,
+        "w": 62.0,
+        "h": 25.0
+      },
+      "art": {
+        "x": 5.0,
+        "y": 33.0,
+        "w": 90.0,
+        "h": 60.0
+      },
+      "proof": {
+        "x": 70.0,
+        "y": 7.0,
+        "w": 25.0,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 5.366,
+          "y": 5.0,
+          "w": 62.0,
+          "h": 25.0
+        },
+        {
+          "x": 70.0,
+          "y": 7.0,
+          "w": 25.0,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 25.366,
+        "y": 70.0,
+        "w": 68.0,
+        "h": 24.0
+      },
+      "art": {
+        "x": 5.0,
+        "y": 5.0,
+        "w": 90.0,
+        "h": 62.0
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 70.0,
+        "w": 15.0,
+        "h": 24
+      },
+      "avoid_zones": [
+        {
+          "x": 25.366,
+          "y": 70.0,
+          "w": 68.0,
+          "h": 24.0
+        },
+        {
+          "x": 7.0,
+          "y": 70.0,
+          "w": 15.0,
+          "h": 24
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "forecast_band:headline:forecast-headline:headline-top:forecast_band:paper-collage:metric-cards:number-resolve:full-bleed-chart:caption:chart-field:headline:forecast_band--3--layout:cinema-caption-bottom",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

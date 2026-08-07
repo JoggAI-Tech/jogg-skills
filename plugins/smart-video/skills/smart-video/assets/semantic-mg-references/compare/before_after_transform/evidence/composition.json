@@ -1,0 +1,115 @@
+{
+  "id": "before_after_transform--evidence",
+  "scene_id": "before_after_transform",
+  "scene_title": "From Manual Queue to Agent Loop",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "evidence",
+  "lens_name": "Evidence",
+  "intent": "Explain the difference through concrete proof",
+  "composition_name": "delta-bridge",
+  "layout_grammar": "data-right",
+  "layout_contract_id": "before_after_transform--expression-2",
+  "layout_instance_id": "before_after_transform--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "path-curve",
+  "design_contract_id": "before_after_transform--path-curve--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "before_after",
+  "support_components": [
+    "before_panel",
+    "after_panel",
+    "delta_badge"
+  ],
+  "semantic_slots": [
+    "before",
+    "change",
+    "after"
+  ],
+  "data_shape": "state_change",
+  "motion": "wipe_transform",
+  "motion_profile": "evidence-build",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "floating-chips",
+  "copy_surface": "technical",
+  "art_surface": "path",
+  "copy_mode": "metric",
+  "art_direction": "path before_after with measured proof field",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 63.424,
+        "y": 8.18,
+        "w": 31.44,
+        "h": 67.802
+      },
+      "art": {
+        "x": 5.297,
+        "y": 4.937,
+        "w": 55.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 63.571,
+        "y": 81.919,
+        "w": 30.846,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 63.424,
+          "y": 8.18,
+          "w": 31.44,
+          "h": 67.802
+        },
+        {
+          "x": 63.571,
+          "y": 81.919,
+          "w": 30.846,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.604,
+        "y": 69.14,
+        "w": 86.44,
+        "h": 22.802
+      },
+      "art": {
+        "x": 5.216,
+        "y": 4.951,
+        "w": 89.692,
+        "h": 54.11
+      },
+      "proof": {
+        "x": 6.688,
+        "y": 61.937,
+        "w": 85.846,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.604,
+          "y": 69.14,
+          "w": 86.44,
+          "h": 22.802
+        },
+        {
+          "x": 6.688,
+          "y": 61.937,
+          "w": 85.846,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "before_after_transform:evidence:delta-bridge:data-right:before_after:kinetic-ivory:floating-chips:evidence-build:path-curve:technical:path:metric:before_after_transform--2--layout:art-monument-top",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

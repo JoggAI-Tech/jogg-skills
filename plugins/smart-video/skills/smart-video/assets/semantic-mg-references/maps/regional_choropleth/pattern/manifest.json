@@ -1,0 +1,31 @@
+{
+  "id": "regional_choropleth--pattern",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "scene_id": "regional_choropleth",
+  "name": "AI Adoption by Region",
+  "presentation_form_id": "pattern",
+  "presentation_form_name": "Pattern",
+  "visual_id": "paper-collage",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "region-emerge",
+  "layout": "editorial-left",
+  "layout_instance_id": "regional_choropleth--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "composition_name": "region-contrast",
+  "art_direction": "taxonomy regional_choropleth with spatial concentration",
+  "composition_signature": "regional_choropleth:pattern:region-contrast:editorial-left:regional_choropleth:paper-collage:edge-tabs:region-emerge:taxonomy-grid:editorial:taxonomy:editorial:regional_choropleth--2--layout:right-caption-stage",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

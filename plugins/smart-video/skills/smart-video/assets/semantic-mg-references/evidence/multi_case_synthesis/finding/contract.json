@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "evidence",
+  "scene_id": "multi_case_synthesis",
+  "composition_id": "multi_case_synthesis--finding",
+  "lens_id": "finding",
+  "visual_id": "archive-dossier",
+  "layout_instance_id": "multi_case_synthesis--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "structural_fingerprint": "multi_case_synthesis:finding:synthesis-finding:diagonal-right:multi_case_synthesis:archive-dossier:caption-line:finding-stamp:bottom-statement-stage:poster:wide-stage:statement:multi_case_synthesis--3--layout:lower-lockup",
+  "art_direction": "wide-stage multi_case_synthesis with finding lockup",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "62365e2f78399d0c886266da7899df757960b569cb1cfb0cbba3a38b4e781bf0",
+    "9:16": "20ae61adebf0c0c92045b548cd7b66fac9924fdab3d5d3bdfd7871b49572866a"
+  }
+}

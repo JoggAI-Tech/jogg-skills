@@ -1,0 +1,31 @@
+{
+  "id": "architecture_stack--architecture",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "architecture_stack",
+  "name": "An Enterprise Agent Stack",
+  "presentation_form_id": "architecture",
+  "presentation_form_name": "Architecture",
+  "visual_id": "signal-noir",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "structure-assemble",
+  "layout": "diagram-left-rail",
+  "layout_instance_id": "architecture_stack--1--layout",
+  "portrait_silhouette_id": "offset-upper-left",
+  "composition_name": "architecture-stack",
+  "art_direction": "layers architecture_stack with structural blueprint",
+  "composition_signature": "architecture_stack:architecture:architecture-stack:diagram-left-rail:architecture_stack:signal-noir:edge-tabs:structure-assemble:layered-stack:technical:layers:editorial:architecture_stack--1--layout:offset-upper-left",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

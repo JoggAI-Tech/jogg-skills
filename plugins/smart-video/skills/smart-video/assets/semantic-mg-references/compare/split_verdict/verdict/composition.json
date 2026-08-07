@@ -1,0 +1,115 @@
+{
+  "id": "split_verdict--verdict",
+  "scene_id": "split_verdict",
+  "scene_title": "Open or Controlled?",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "verdict",
+  "lens_name": "Verdict",
+  "intent": "Resolve the trade-off with a usable decision rule",
+  "composition_name": "verdict-gate",
+  "layout_grammar": "poster-offset-right",
+  "layout_contract_id": "split_verdict--expression-3",
+  "layout_instance_id": "split_verdict--3--layout",
+  "portrait_silhouette_id": "middle-story-band",
+  "composition_family": "center-symbol",
+  "design_contract_id": "split_verdict--center-symbol--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "split_verdict",
+  "support_components": [
+    "option_a",
+    "option_b",
+    "verdict_rule"
+  ],
+  "semantic_slots": [
+    "option_a",
+    "option_b",
+    "verdict"
+  ],
+  "data_shape": "binary_compare",
+  "motion": "split_open",
+  "motion_profile": "verdict-lock",
+  "visual_id": "luminous-grid",
+  "proof_mode": "center-badge",
+  "copy_surface": "floating",
+  "art_surface": "symbol",
+  "copy_mode": "statement",
+  "art_direction": "symbol split_verdict with decisive verdict object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 57.518,
+        "y": 7.0,
+        "w": 38.44,
+        "h": 42.802
+      },
+      "art": {
+        "x": 4.802,
+        "y": 5.0,
+        "w": 48.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 57.286,
+        "y": 78.0,
+        "w": 37.846,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 57.518,
+          "y": 7.0,
+          "w": 38.44,
+          "h": 42.802
+        },
+        {
+          "x": 57.286,
+          "y": 78.0,
+          "w": 37.846,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.398,
+        "y": 42.0,
+        "w": 86.44,
+        "h": 39.802
+      },
+      "art": {
+        "x": 4.856,
+        "y": 5.0,
+        "w": 89.692,
+        "h": 34.11
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 85.0,
+        "w": 85.846,
+        "h": 10
+      },
+      "avoid_zones": [
+        {
+          "x": 7.398,
+          "y": 42.0,
+          "w": 86.44,
+          "h": 39.802
+        },
+        {
+          "x": 7.208,
+          "y": 85.0,
+          "w": 85.846,
+          "h": 10
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "split_verdict:verdict:verdict-gate:poster-offset-right:split_verdict:luminous-grid:center-badge:verdict-lock:center-symbol:floating:symbol:statement:split_verdict--3--layout:middle-story-band",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

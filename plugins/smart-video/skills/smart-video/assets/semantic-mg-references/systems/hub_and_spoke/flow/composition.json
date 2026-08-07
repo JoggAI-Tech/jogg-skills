@@ -1,0 +1,115 @@
+{
+  "id": "hub_and_spoke--flow",
+  "scene_id": "hub_and_spoke",
+  "scene_title": "The AI Workspace Hub",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "flow",
+  "lens_name": "Flow",
+  "intent": "Show movement between actors, layers, or resources",
+  "composition_name": "spoke-detail",
+  "layout_grammar": "data-left",
+  "layout_contract_id": "hub_and_spoke--expression-2",
+  "layout_instance_id": "hub_and_spoke--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "radial-field",
+  "design_contract_id": "hub_and_spoke--radial-field--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "hub_spoke",
+  "support_components": [
+    "central_hub",
+    "spoke_nodes",
+    "connection_lines"
+  ],
+  "semantic_slots": [
+    "hub",
+    "services",
+    "coordination"
+  ],
+  "data_shape": "network_star",
+  "motion": "spokes_connect",
+  "motion_profile": "flow-trace",
+  "visual_id": "chalkboard-lab",
+  "proof_mode": "metric-cards",
+  "copy_surface": "technical",
+  "art_surface": "radial",
+  "copy_mode": "metric",
+  "art_direction": "radial hub_spoke with directional exchange",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.875,
+        "y": 8.54,
+        "w": 31.0,
+        "h": 68.0
+      },
+      "art": {
+        "x": 38.802,
+        "y": 4.811,
+        "w": 56.0,
+        "h": 88.0
+      },
+      "proof": {
+        "x": 5.286,
+        "y": 81.757,
+        "w": 31.0,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 5.875,
+          "y": 8.54,
+          "w": 31.0,
+          "h": 68.0
+        },
+        {
+          "x": 5.286,
+          "y": 81.757,
+          "w": 31.0,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.755,
+        "y": 69.42,
+        "w": 86.0,
+        "h": 23.0
+      },
+      "art": {
+        "x": 4.856,
+        "y": 4.853,
+        "w": 90.0,
+        "h": 54.0
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 61.811,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.755,
+          "y": 69.42,
+          "w": 86.0,
+          "h": 23.0
+        },
+        {
+          "x": 7.208,
+          "y": 61.811,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "hub_and_spoke:flow:spoke-detail:data-left:hub_spoke:chalkboard-lab:metric-cards:flow-trace:radial-field:technical:radial:metric:hub_and_spoke--2--layout:art-monument-top",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,31 @@
+{
+  "id": "user_journey--outcome",
+  "category_id": "process",
+  "category_name": "Process",
+  "scene_id": "user_journey",
+  "name": "A Teacher's AI Workflow",
+  "presentation_form_id": "outcome",
+  "presentation_form_name": "Outcome",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "floating-chips",
+  "motion_profile": "outcome-resolve",
+  "layout": "poster-offset-left",
+  "layout_instance_id": "user_journey--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_name": "journey-outcome",
+  "art_direction": "path user_journey with result-bearing machine",
+  "composition_signature": "user_journey:outcome:journey-outcome:poster-offset-left:user_journey:kinetic-ivory:floating-chips:outcome-resolve:path-curve:floating:path:statement:user_journey--3--layout:poster-inset-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

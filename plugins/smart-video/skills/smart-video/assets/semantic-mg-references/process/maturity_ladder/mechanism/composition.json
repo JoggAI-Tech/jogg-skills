@@ -1,0 +1,115 @@
+{
+  "id": "maturity_ladder--mechanism",
+  "scene_id": "maturity_ladder",
+  "scene_title": "Five Levels of AI Operations",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "mechanism",
+  "lens_name": "Mechanism",
+  "intent": "Expose the causal engine inside the process",
+  "composition_name": "maturity-steps",
+  "layout_grammar": "diagram-center",
+  "layout_contract_id": "maturity_ladder--expression-1",
+  "layout_instance_id": "maturity_ladder--1--layout",
+  "portrait_silhouette_id": "left-caption-stage",
+  "composition_family": "step-rail",
+  "design_contract_id": "maturity_ladder--step-rail--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "maturity_ladder",
+  "support_components": [
+    "level_steps",
+    "current_marker",
+    "target_marker"
+  ],
+  "semantic_slots": [
+    "current",
+    "levels",
+    "target"
+  ],
+  "data_shape": "maturity_levels",
+  "motion": "ladder_climb",
+  "motion_profile": "mechanism-run",
+  "visual_id": "atlas-blue",
+  "proof_mode": "vertical-index",
+  "copy_surface": "floating",
+  "art_surface": "rail",
+  "copy_mode": "editorial",
+  "art_direction": "rail maturity_ladder with visible causal mechanism",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.655,
+        "y": 5.64,
+        "w": 38.0,
+        "h": 40.0
+      },
+      "art": {
+        "x": 26.297,
+        "y": 16.126,
+        "w": 69.0,
+        "h": 70.0
+      },
+      "proof": {
+        "x": 4.571,
+        "y": 78.162,
+        "w": 34.0,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 4.655,
+          "y": 5.64,
+          "w": 38.0,
+          "h": 40.0
+        },
+        {
+          "x": 4.571,
+          "y": 78.162,
+          "w": 34.0,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 5.835,
+        "y": 4.72,
+        "w": 33.0,
+        "h": 67.0
+      },
+      "art": {
+        "x": 43.216,
+        "y": 5.098,
+        "w": 51.0,
+        "h": 80.0
+      },
+      "proof": {
+        "x": 5.688,
+        "y": 75.126,
+        "w": 33.0,
+        "h": 12
+      },
+      "avoid_zones": [
+        {
+          "x": 5.835,
+          "y": 4.72,
+          "w": 33.0,
+          "h": 67.0
+        },
+        {
+          "x": 5.688,
+          "y": 75.126,
+          "w": 33.0,
+          "h": 12
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "maturity_ladder:mechanism:maturity-steps:diagram-center:maturity_ladder:atlas-blue:vertical-index:mechanism-run:step-rail:floating:rail:editorial:maturity_ladder--1--layout:left-caption-stage",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

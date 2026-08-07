@@ -1,0 +1,1 @@
+Use the complete HTML reference for 'Most Teams Cluster Near the Median' as a composition reference. Preserve the Annotation information intent, outlier-lens composition, semantic surfaces, and five-second motion sequence. Replace all visible copy and values with the user's content. Do not reuse the wider asset library, add dashboard chrome, or place decorative shapes above text.

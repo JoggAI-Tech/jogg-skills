@@ -1,0 +1,114 @@
+{
+  "id": "contrarian_reveal--reveal",
+  "scene_id": "contrarian_reveal",
+  "scene_title": "Bigger Models Are Not the Moat",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "reveal",
+  "lens_name": "Reveal",
+  "intent": "Build tension and reveal the proof behind the idea",
+  "composition_name": "evidence-switch",
+  "layout_grammar": "editorial-right",
+  "layout_contract_id": "contrarian_reveal--expression-2",
+  "layout_instance_id": "contrarian_reveal--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_family": "myth-wheel",
+  "design_contract_id": "contrarian_reveal--myth-wheel--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "contrarian_switch",
+  "support_components": [
+    "crossed_assumption",
+    "replacement_claim"
+  ],
+  "semantic_slots": [
+    "assumption",
+    "reversal",
+    "reason"
+  ],
+  "data_shape": "claim_reversal",
+  "motion": "strike_and_replace",
+  "motion_profile": "reveal-cut",
+  "visual_id": "signal-noir",
+  "proof_mode": "center-badge",
+  "copy_surface": "editorial",
+  "art_surface": "myth-wheel",
+  "copy_mode": "editorial",
+  "art_direction": "myth-wheel contrarian_switch with editorial reveal",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 60.497,
+        "y": 7.82,
+        "w": 35.44,
+        "h": 65.802
+      },
+      "art": {
+        "x": 4.802,
+        "y": 5.063,
+        "w": 51.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 60.286,
+        "y": 80.081,
+        "w": 34.846,
+        "h": 13
+      },
+      "avoid_zones": [
+        {
+          "x": 60.497,
+          "y": 7.82,
+          "w": 35.44,
+          "h": 65.802
+        },
+        {
+          "x": 60.286,
+          "y": 80.081,
+          "w": 34.846,
+          "h": 13
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 52.377,
+        "y": 4.86,
+        "w": 42.44,
+        "h": 79.802
+      },
+      "art": {
+        "x": 5.856,
+        "y": 5.049,
+        "w": 42.692,
+        "h": 80.11
+      },
+      "proof": {
+        "x": 6.208,
+        "y": 88.063,
+        "w": 87.846,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 52.377,
+          "y": 4.86,
+          "w": 42.44,
+          "h": 79.802
+        },
+        {
+          "x": 6.208,
+          "y": 88.063,
+          "w": 87.846,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "contrarian_reveal:reveal:evidence-switch:editorial-right:contrarian_switch:signal-noir:center-badge:reveal-cut:myth-wheel:editorial:myth-wheel:editorial:contrarian_reveal--2--layout:offset-lower-right",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

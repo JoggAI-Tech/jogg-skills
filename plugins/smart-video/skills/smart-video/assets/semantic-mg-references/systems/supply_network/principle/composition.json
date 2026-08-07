@@ -1,0 +1,115 @@
+{
+  "id": "supply_network--principle",
+  "scene_id": "supply_network",
+  "scene_title": "The Compute Supply Network",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "principle",
+  "lens_name": "Principle",
+  "intent": "Reveal the governing idea behind the system",
+  "composition_name": "supply-principle",
+  "layout_grammar": "metric-monument",
+  "layout_contract_id": "supply_network--expression-3",
+  "layout_instance_id": "supply_network--3--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "composition_family": "bars-surge",
+  "design_contract_id": "supply_network--bars-surge--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "supply_network",
+  "support_components": [
+    "supply_nodes",
+    "capacity_links",
+    "constraint_marker"
+  ],
+  "semantic_slots": [
+    "inputs",
+    "constraints",
+    "delivery"
+  ],
+  "data_shape": "supply_graph",
+  "motion": "supply_route",
+  "motion_profile": "principle-lock",
+  "visual_id": "signal-noir",
+  "proof_mode": "metric-cards",
+  "copy_surface": "poster",
+  "art_surface": "bars",
+  "copy_mode": "metric",
+  "art_direction": "bars supply_network with governing system rule",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.959,
+        "y": 9.0,
+        "w": 37.78,
+        "h": 61.099
+      },
+      "art": {
+        "x": 45.802,
+        "y": 4.0,
+        "w": 49.154,
+        "h": 89.945
+      },
+      "proof": {
+        "x": 5.286,
+        "y": 79.0,
+        "w": 38.077,
+        "h": 14
+      },
+      "avoid_zones": [
+        {
+          "x": 5.959,
+          "y": 9.0,
+          "w": 37.78,
+          "h": 61.099
+        },
+        {
+          "x": 5.286,
+          "y": 79.0,
+          "w": 38.077,
+          "h": 14
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.839,
+        "y": 72.0,
+        "w": 85.78,
+        "h": 21.099
+      },
+      "art": {
+        "x": 4.856,
+        "y": 5.0,
+        "w": 90.154,
+        "h": 60.945
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 67.0,
+        "w": 86.077,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 7.839,
+          "y": 72.0,
+          "w": 85.78,
+          "h": 21.099
+        },
+        {
+          "x": 7.208,
+          "y": 67.0,
+          "w": 86.077,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "supply_network:principle:supply-principle:metric-monument:supply_network:signal-noir:metric-cards:principle-lock:bars-surge:poster:bars:metric:supply_network--3--layout:bottom-compact",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

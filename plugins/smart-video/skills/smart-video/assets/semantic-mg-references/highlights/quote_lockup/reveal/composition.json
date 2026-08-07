@@ -1,0 +1,114 @@
+{
+  "id": "quote_lockup--reveal",
+  "scene_id": "quote_lockup",
+  "scene_title": "Build Where the Constraint Lives",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "reveal",
+  "lens_name": "Reveal",
+  "intent": "Build tension and reveal the proof behind the idea",
+  "composition_name": "source-margin",
+  "layout_grammar": "editorial-right",
+  "layout_contract_id": "quote_lockup--expression-2",
+  "layout_instance_id": "quote_lockup--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_family": "archive-stack",
+  "design_contract_id": "quote_lockup--archive-stack--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "quote_lockup",
+  "support_components": [
+    "speaker_tag",
+    "argument_rule"
+  ],
+  "semantic_slots": [
+    "quote",
+    "speaker",
+    "interpretation"
+  ],
+  "data_shape": "quote_attribution",
+  "motion": "quote_wipe",
+  "motion_profile": "reveal-cut",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "stamp",
+  "copy_surface": "editorial",
+  "art_surface": "paper-stack",
+  "copy_mode": "editorial",
+  "art_direction": "paper-stack quote_lockup with editorial reveal",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 60.03,
+        "y": 7.64,
+        "w": 35.44,
+        "h": 65.802
+      },
+      "art": {
+        "x": 5.0,
+        "y": 5.126,
+        "w": 51.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 60.0,
+        "y": 80.162,
+        "w": 34.846,
+        "h": 13
+      },
+      "avoid_zones": [
+        {
+          "x": 60.03,
+          "y": 7.64,
+          "w": 35.44,
+          "h": 65.802
+        },
+        {
+          "x": 60.0,
+          "y": 80.162,
+          "w": 34.846,
+          "h": 13
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 52.03,
+        "y": 4.72,
+        "w": 42.44,
+        "h": 79.802
+      },
+      "art": {
+        "x": 6.0,
+        "y": 5.098,
+        "w": 42.692,
+        "h": 80.11
+      },
+      "proof": {
+        "x": 6.0,
+        "y": 88.126,
+        "w": 87.846,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 52.03,
+          "y": 4.72,
+          "w": 42.44,
+          "h": 79.802
+        },
+        {
+          "x": 6.0,
+          "y": 88.126,
+          "w": 87.846,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "quote_lockup:reveal:source-margin:editorial-right:quote_lockup:kinetic-ivory:stamp:reveal-cut:archive-stack:editorial:paper-stack:editorial:quote_lockup--2--layout:offset-lower-right",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

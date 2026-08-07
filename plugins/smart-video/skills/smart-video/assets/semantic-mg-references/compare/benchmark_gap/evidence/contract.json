@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "benchmark_gap",
+  "composition_id": "benchmark_gap--evidence",
+  "lens_id": "evidence",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "benchmark_gap--2--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "structural_fingerprint": "benchmark_gap:evidence:benchmark-callout:data-topline:benchmark_gap:kinetic-ivory:metric-cards:evidence-build:full-bleed-chart:caption:chart-field:metric:benchmark_gap--2--layout:center-lockup",
+  "art_direction": "chart-field benchmark_gap with measured proof field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "0b953a094c44ecac0de350af7f57b8238942b14c117c5b74d2934f009891ed7e",
+    "9:16": "b8b9bde906be2c47750595f44223274bd0249b04221669578caa4dabc862b2a9"
+  }
+}

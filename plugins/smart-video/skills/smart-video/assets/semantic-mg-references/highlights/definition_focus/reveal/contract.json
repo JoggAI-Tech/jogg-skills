@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "highlights",
+  "scene_id": "definition_focus",
+  "composition_id": "definition_focus--reveal",
+  "lens_id": "reveal",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "definition_focus--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "structural_fingerprint": "definition_focus:reveal:anatomy-board:editorial-left:term_definition:electric-cyan:edge-tabs:reveal-cut:taxonomy-grid:editorial:taxonomy:editorial:definition_focus--2--layout:right-caption-stage",
+  "art_direction": "taxonomy term_definition with editorial reveal",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "a31dbffa230a80f3645652b9ed63a59d41698ac519f0bdc8ff5a114657bff251",
+    "9:16": "b4d69f01d8f948d520df8e76795e95933c0733a269671a809d474ef6be70e2c4"
+  }
+}

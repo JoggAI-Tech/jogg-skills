@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "ranked_comparison",
+  "composition_id": "ranked_comparison--evidence",
+  "lens_id": "evidence",
+  "visual_id": "signal-noir",
+  "layout_instance_id": "ranked_comparison--2--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "structural_fingerprint": "ranked_comparison:evidence:winner-detail:data-left:ranked_list:signal-noir:stamp:evidence-build:evidence-board:technical:evidence:metric:ranked_comparison--2--layout:bottom-compact",
+  "art_direction": "evidence ranked_list with measured proof field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "94bdeb582df4d314b87d12a6c895cdeec8d1796f6ade0fc22c490d9823337fe1",
+    "9:16": "d9ad93b161bedda3ad80fe1ae06018941dc1691e7abb99ea1b794d5bea262479"
+  }
+}

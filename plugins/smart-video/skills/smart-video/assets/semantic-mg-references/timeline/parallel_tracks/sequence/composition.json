@@ -1,0 +1,115 @@
+{
+  "id": "parallel_tracks--sequence",
+  "scene_id": "parallel_tracks",
+  "scene_title": "Models and Chips Co-Evolve",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "sequence",
+  "lens_name": "Sequence",
+  "intent": "Make chronology the primary visual object",
+  "composition_name": "dual-track",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "parallel_tracks--expression-1",
+  "layout_instance_id": "parallel_tracks--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_family": "pipeline-spine",
+  "design_contract_id": "parallel_tracks--pipeline-spine--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "parallel_tracks",
+  "support_components": [
+    "track_a",
+    "track_b",
+    "sync_bridges"
+  ],
+  "semantic_slots": [
+    "track_a",
+    "track_b",
+    "convergence"
+  ],
+  "data_shape": "parallel_events",
+  "motion": "dual_track_draw",
+  "motion_profile": "rail-travel",
+  "visual_id": "atlas-blue",
+  "proof_mode": "vertical-index",
+  "copy_surface": "floating",
+  "art_surface": "pipeline",
+  "copy_mode": "headline",
+  "art_direction": "pipeline parallel_tracks with directional time object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.529,
+        "y": 4.82,
+        "w": 46.22,
+        "h": 27.901
+      },
+      "art": {
+        "x": 5.297,
+        "y": 36.063,
+        "w": 89.846,
+        "h": 57.055
+      },
+      "proof": {
+        "x": 55.571,
+        "y": 7.081,
+        "w": 38.923,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 4.529,
+          "y": 4.82,
+          "w": 46.22,
+          "h": 27.901
+        },
+        {
+          "x": 55.571,
+          "y": 7.081,
+          "w": 38.923,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.709,
+        "y": 4.86,
+        "w": 86.22,
+        "h": 20.901
+      },
+      "art": {
+        "x": 5.216,
+        "y": 29.049,
+        "w": 89.846,
+        "h": 62.055
+      },
+      "proof": {
+        "x": 6.688,
+        "y": 93,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.709,
+          "y": 4.86,
+          "w": 86.22,
+          "h": 20.901
+        },
+        {
+          "x": 6.688,
+          "y": 93,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "parallel_tracks:sequence:dual-track:full-width-stage:parallel_tracks:atlas-blue:vertical-index:rail-travel:pipeline-spine:floating:pipeline:headline:parallel_tracks--1--layout:top-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

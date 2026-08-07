@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "supply_network",
+  "composition_id": "supply_network--architecture",
+  "lens_id": "architecture",
+  "visual_id": "atlas-blue",
+  "layout_instance_id": "supply_network--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "structural_fingerprint": "supply_network:architecture:supply-web:full-width-stage:supply_network:atlas-blue:floating-chips:structure-assemble:route-bridge:floating:route:headline:supply_network--1--layout:top-compact",
+  "art_direction": "route supply_network with structural blueprint",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "fc7a638322e96a9c91f213f57fd71b7bcc3d62ae9625dca99c6a33caf5d7c83f",
+    "9:16": "2ea22d13704ba9d5592054f9d5184b37e92058b59137c07163bc4619c7bce6b1"
+  }
+}

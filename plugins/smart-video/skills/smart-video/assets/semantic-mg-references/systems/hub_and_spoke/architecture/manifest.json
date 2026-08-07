@@ -1,0 +1,31 @@
+{
+  "id": "hub_and_spoke--architecture",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "hub_and_spoke",
+  "name": "The AI Workspace Hub",
+  "presentation_form_id": "architecture",
+  "presentation_form_name": "Architecture",
+  "visual_id": "electric-cyan",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "structure-assemble",
+  "layout": "diagram-center",
+  "layout_instance_id": "hub_and_spoke--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "composition_name": "hub-network",
+  "art_direction": "network hub_spoke with structural blueprint",
+  "composition_signature": "hub_and_spoke:architecture:hub-network:diagram-center:hub_spoke:electric-cyan:edge-tabs:structure-assemble:network-radial:floating:network:editorial:hub_and_spoke--1--layout:top-editorial",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "capital_flow_network--architecture",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "capital_flow_network",
+  "name": "Capital Circulates Through AI",
+  "presentation_form_id": "architecture",
+  "presentation_form_name": "Architecture",
+  "visual_id": "electric-cyan",
+  "proof_mode": "caption-line",
+  "motion_profile": "structure-assemble",
+  "layout": "diagram-center",
+  "layout_instance_id": "capital_flow_network--1--layout",
+  "portrait_silhouette_id": "offset-upper-left",
+  "composition_name": "capital-river",
+  "art_direction": "flow-river capital_flow_network with structural blueprint",
+  "composition_signature": "capital_flow_network:architecture:capital-river:diagram-center:capital_flow_network:electric-cyan:caption-line:structure-assemble:river-flow:floating:flow-river:editorial:capital_flow_network--1--layout:offset-upper-left",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

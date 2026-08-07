@@ -1,0 +1,31 @@
+{
+  "id": "ranked_comparison--duel",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "scene_id": "ranked_comparison",
+  "name": "Where Teams Save Time",
+  "presentation_form_id": "duel",
+  "presentation_form_name": "Duel",
+  "visual_id": "paper-collage",
+  "proof_mode": "metric-cards",
+  "motion_profile": "opposed-wipe",
+  "layout": "diagram-left-rail",
+  "layout_instance_id": "ranked_comparison--1--layout",
+  "portrait_silhouette_id": "left-caption-stage",
+  "composition_name": "rank-ladder",
+  "art_direction": "bars ranked_list with opposed visual masses",
+  "composition_signature": "ranked_comparison:duel:rank-ladder:diagram-left-rail:ranked_list:paper-collage:metric-cards:opposed-wipe:bars-surge:technical:bars:editorial:ranked_comparison--1--layout:left-caption-stage",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "key_takeaway--signal",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "scene_id": "key_takeaway",
+  "name": "Distribution Wins the Second Act",
+  "presentation_form_id": "signal",
+  "presentation_form_name": "Signal",
+  "visual_id": "luminous-grid",
+  "proof_mode": "caption-line",
+  "motion_profile": "impact-lock",
+  "layout": "timeline-band",
+  "layout_instance_id": "key_takeaway--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "banner-sweep",
+  "art_direction": "ribbons takeaway_banner with single dominant symbol",
+  "composition_signature": "key_takeaway:signal:banner-sweep:timeline-band:takeaway_banner:luminous-grid:caption-line:impact-lock:kinetic-ribbons:caption:ribbons:headline:key_takeaway--1--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

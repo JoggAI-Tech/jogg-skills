@@ -1,0 +1,115 @@
+{
+  "id": "ecosystem_network--principle",
+  "scene_id": "ecosystem_network",
+  "scene_title": "The New AI Supply Web",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "principle",
+  "lens_name": "Principle",
+  "intent": "Reveal the governing idea behind the system",
+  "composition_name": "ecosystem-principle",
+  "layout_grammar": "poster-center",
+  "layout_contract_id": "ecosystem_network--expression-3",
+  "layout_instance_id": "ecosystem_network--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "force-quadrant",
+  "design_contract_id": "ecosystem_network--force-quadrant--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "ecosystem_network",
+  "support_components": [
+    "actor_clusters",
+    "exchange_links",
+    "leverage_tags"
+  ],
+  "semantic_slots": [
+    "actors",
+    "exchange",
+    "leverage"
+  ],
+  "data_shape": "network_graph",
+  "motion": "network_pulse",
+  "motion_profile": "principle-lock",
+  "visual_id": "atlas-blue",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "poster",
+  "art_surface": "quadrant",
+  "copy_mode": "statement",
+  "art_direction": "quadrant ecosystem_network with governing system rule",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 18.025,
+        "y": 4.64,
+        "w": 63.78,
+        "h": 24.099
+      },
+      "art": {
+        "x": 14.198,
+        "y": 31.126,
+        "w": 72.154,
+        "h": 54.945
+      },
+      "proof": {
+        "x": 27.714,
+        "y": 89.162,
+        "w": 44.077,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 18.025,
+          "y": 4.64,
+          "w": 63.78,
+          "h": 24.099
+        },
+        {
+          "x": 27.714,
+          "y": 89.162,
+          "w": 44.077,
+          "h": 7
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.145,
+        "y": 4.72,
+        "w": 85.78,
+        "h": 32.099
+      },
+      "art": {
+        "x": 6.144,
+        "y": 40.098,
+        "w": 88.154,
+        "h": 48.945
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 92.126,
+        "w": 86.077,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.145,
+          "y": 4.72,
+          "w": 85.78,
+          "h": 32.099
+        },
+        {
+          "x": 6.792,
+          "y": 92.126,
+          "w": 86.077,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "ecosystem_network:principle:ecosystem-principle:poster-center:ecosystem_network:atlas-blue:edge-tabs:principle-lock:force-quadrant:poster:quadrant:statement:ecosystem_network--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

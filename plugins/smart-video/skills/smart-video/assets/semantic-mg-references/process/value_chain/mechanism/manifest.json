@@ -1,0 +1,31 @@
+{
+  "id": "value_chain--mechanism",
+  "category_id": "process",
+  "category_name": "Process",
+  "scene_id": "value_chain",
+  "name": "Where AI SaaS Creates Value",
+  "presentation_form_id": "mechanism",
+  "presentation_form_name": "Mechanism",
+  "visual_id": "electric-cyan",
+  "proof_mode": "caption-line",
+  "motion_profile": "mechanism-run",
+  "layout": "full-width-stage",
+  "layout_instance_id": "value_chain--1--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_name": "value-ribbon",
+  "art_direction": "flow-river value_chain with visible causal mechanism",
+  "composition_signature": "value_chain:mechanism:value-ribbon:full-width-stage:value_chain:electric-cyan:caption-line:mechanism-run:river-flow:floating:flow-river:headline:value_chain--1--layout:cinema-caption-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "process",
+  "scene_id": "value_chain",
+  "composition_id": "value_chain--walkthrough",
+  "lens_id": "walkthrough",
+  "visual_id": "paper-collage",
+  "layout_instance_id": "value_chain--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "structural_fingerprint": "value_chain:walkthrough:value-bottleneck:diagram-right-rail:value_chain:paper-collage:vertical-index:guided-sequence:pipeline-spine:technical:pipeline:editorial:value_chain--2--layout:right-caption-stage",
+  "art_direction": "pipeline value_chain with guided operating path",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "ca934eb3bb1c27a6cc34d6cac7473de6ea935720895e025c4877c81a40448ecf",
+    "9:16": "c4d92b29484be4ca2fae3e1a3374d8016508f9cd2c4a7f6222ff3319a24e4f7b"
+  }
+}

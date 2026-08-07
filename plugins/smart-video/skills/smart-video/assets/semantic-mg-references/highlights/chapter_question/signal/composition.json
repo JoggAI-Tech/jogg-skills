@@ -1,0 +1,114 @@
+{
+  "id": "chapter_question--signal",
+  "scene_id": "chapter_question",
+  "scene_title": "Who Pays for the Next Model?",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "signal",
+  "lens_name": "Signal",
+  "intent": "Lead with the one idea the audience must remember",
+  "composition_name": "orbit-question",
+  "layout_grammar": "split-decision",
+  "layout_contract_id": "chapter_question--expression-1",
+  "layout_instance_id": "chapter_question--1--layout",
+  "portrait_silhouette_id": "middle-story-band",
+  "composition_family": "orbit-poster",
+  "design_contract_id": "chapter_question--orbit-poster--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "question_arc",
+  "support_components": [
+    "answer_capsule",
+    "evidence_tick"
+  ],
+  "semantic_slots": [
+    "question",
+    "tension",
+    "answer"
+  ],
+  "data_shape": "question_answer",
+  "motion": "question_to_answer",
+  "motion_profile": "impact-lock",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "caption",
+  "art_surface": "orbit",
+  "copy_mode": "duel",
+  "art_direction": "orbit question_arc with single dominant symbol",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.009,
+        "y": 5.46,
+        "w": 35.44,
+        "h": 47.802
+      },
+      "art": {
+        "x": 43.0,
+        "y": 5.189,
+        "w": 51.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 5.0,
+        "y": 73.243,
+        "w": 34.846,
+        "h": 20
+      },
+      "avoid_zones": [
+        {
+          "x": 5.009,
+          "y": 5.46,
+          "w": 35.44,
+          "h": 47.802
+        },
+        {
+          "x": 5.0,
+          "y": 73.243,
+          "w": 34.846,
+          "h": 20
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.009,
+        "y": 41.58,
+        "w": 86.44,
+        "h": 39.802
+      },
+      "art": {
+        "x": 5.0,
+        "y": 5.147,
+        "w": 89.692,
+        "h": 34.11
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 85.189,
+        "w": 85.846,
+        "h": 10
+      },
+      "avoid_zones": [
+        {
+          "x": 7.009,
+          "y": 41.58,
+          "w": 86.44,
+          "h": 39.802
+        },
+        {
+          "x": 7.0,
+          "y": 85.189,
+          "w": 85.846,
+          "h": 10
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "chapter_question:signal:orbit-question:split-decision:question_arc:cobalt-coral:edge-tabs:impact-lock:orbit-poster:caption:orbit:duel:chapter_question--1--layout:middle-story-band",
+  "copy_density": "duel",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

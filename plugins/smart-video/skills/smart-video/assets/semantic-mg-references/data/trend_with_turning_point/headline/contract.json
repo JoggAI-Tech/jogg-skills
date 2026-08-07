@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "data",
+  "scene_id": "trend_with_turning_point",
+  "composition_id": "trend_with_turning_point--headline",
+  "lens_id": "headline",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "trend_with_turning_point--3--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "trend_with_turning_point:headline:trend-headline:full-width-stage:trend_turning_point:luminous-grid:edge-tabs:number-resolve:wave-horizon:floating:wave-field:headline:trend_with_turning_point--3--layout:art-monument-top",
+  "art_direction": "wave-field trend_turning_point with oversized numeric conclusion",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "d6a3d4f2711aaedd373c595aa66950c6b7767e5dfe4e40dfdefe763e312a24f9",
+    "9:16": "475f9aab513bc8278f9f8b733b9b14ae045843bc4840a0631b14669e7aefe609"
+  }
+}

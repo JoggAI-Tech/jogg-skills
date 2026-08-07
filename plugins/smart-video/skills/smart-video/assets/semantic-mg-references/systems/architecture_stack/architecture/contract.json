@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "architecture_stack",
+  "composition_id": "architecture_stack--architecture",
+  "lens_id": "architecture",
+  "visual_id": "signal-noir",
+  "layout_instance_id": "architecture_stack--1--layout",
+  "portrait_silhouette_id": "offset-upper-left",
+  "structural_fingerprint": "architecture_stack:architecture:architecture-stack:diagram-left-rail:architecture_stack:signal-noir:edge-tabs:structure-assemble:layered-stack:technical:layers:editorial:architecture_stack--1--layout:offset-upper-left",
+  "art_direction": "layers architecture_stack with structural blueprint",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "1bb686f1342be7e2bc66c157293e2a96c36b477f7edd1d4dfcd854d2ac91f294",
+    "9:16": "484c1bfbb513fc6dcd14efa6885e3606ab1c25cdfb9cf6296794e34f2b8d4f68"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "distribution_and_outlier--headline",
+  "category_id": "data",
+  "category_name": "Data",
+  "scene_id": "distribution_and_outlier",
+  "name": "Most Teams Cluster Near the Median",
+  "presentation_form_id": "headline",
+  "presentation_form_name": "Headline",
+  "visual_id": "electric-cyan",
+  "proof_mode": "caption-line",
+  "motion_profile": "number-resolve",
+  "layout": "metric-monument",
+  "layout_instance_id": "distribution_and_outlier--3--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "composition_name": "outlier-finding",
+  "art_direction": "monument distribution_outlier with oversized numeric conclusion",
+  "composition_signature": "distribution_and_outlier:headline:outlier-finding:metric-monument:distribution_outlier:electric-cyan:caption-line:number-resolve:number-monument:poster:monument:metric:distribution_and_outlier--3--layout:center-lockup",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

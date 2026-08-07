@@ -1,0 +1,31 @@
+{
+  "id": "scenario_comparison--verdict",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "scene_id": "scenario_comparison",
+  "name": "Cloud, Edge, or Hybrid",
+  "presentation_form_id": "verdict",
+  "presentation_form_name": "Verdict",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "center-badge",
+  "motion_profile": "verdict-lock",
+  "layout": "split-decision",
+  "layout_instance_id": "scenario_comparison--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "composition_name": "scenario-choice",
+  "art_direction": "opposed scenario_compare with decisive verdict object",
+  "composition_signature": "scenario_comparison:verdict:scenario-choice:split-decision:scenario_compare:cobalt-coral:center-badge:verdict-lock:opposed-cards:caption:opposed:duel:scenario_comparison--3--layout:lower-lockup",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

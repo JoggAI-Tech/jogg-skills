@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "before_after_transform",
+  "composition_id": "before_after_transform--evidence",
+  "lens_id": "evidence",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "before_after_transform--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "before_after_transform:evidence:delta-bridge:data-right:before_after:kinetic-ivory:floating-chips:evidence-build:path-curve:technical:path:metric:before_after_transform--2--layout:art-monument-top",
+  "art_direction": "path before_after with measured proof field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "281e96e940a394f0110e5508642981c71a4e8730288ec78fd67cf0e0997703fd",
+    "9:16": "532bcd5647d45a20ca8ed039293c5cc90e32b25adc514e3c059de019bc0898d5"
+  }
+}

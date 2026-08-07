@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "hub_and_spoke",
+  "composition_id": "hub_and_spoke--flow",
+  "lens_id": "flow",
+  "visual_id": "chalkboard-lab",
+  "layout_instance_id": "hub_and_spoke--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "hub_and_spoke:flow:spoke-detail:data-left:hub_spoke:chalkboard-lab:metric-cards:flow-trace:radial-field:technical:radial:metric:hub_and_spoke--2--layout:art-monument-top",
+  "art_direction": "radial hub_spoke with directional exchange",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "f9d2dcc1224ba453df41498da5e8e272e2016dec31d5fa2ee65912faeb9c4a06",
+    "9:16": "d01735b642b08ed5f861e293f039bd157e918394a3deb251177f3408aeb6526b"
+  }
+}

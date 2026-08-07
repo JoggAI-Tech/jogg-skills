@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "process",
+  "scene_id": "decision_tree",
+  "composition_id": "decision_tree--mechanism",
+  "lens_id": "mechanism",
+  "visual_id": "signal-noir",
+  "layout_instance_id": "decision_tree--1--layout",
+  "portrait_silhouette_id": "offset-upper-left",
+  "structural_fingerprint": "decision_tree:mechanism:decision-tree:diagram-left-rail:decision_tree:signal-noir:edge-tabs:mechanism-run:network-radial:technical:network:editorial:decision_tree--1--layout:offset-upper-left",
+  "art_direction": "network decision_tree with visible causal mechanism",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "692b79d67bed112f8e2a2ac25bda123dc3a0cce0248eeca97a85af0aef3e630f",
+    "9:16": "30b2f35582e4ed618f1aef3e2b42fb45283920668f2ff55a0d295d4db875a543"
+  }
+}

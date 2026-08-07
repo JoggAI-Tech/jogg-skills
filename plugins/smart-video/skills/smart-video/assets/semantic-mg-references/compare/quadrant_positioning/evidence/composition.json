@@ -1,0 +1,115 @@
+{
+  "id": "quadrant_positioning--evidence",
+  "scene_id": "quadrant_positioning",
+  "scene_title": "The Agent Market Map",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "evidence",
+  "lens_name": "Evidence",
+  "intent": "Explain the difference through concrete proof",
+  "composition_name": "position-callout",
+  "layout_grammar": "editorial-left",
+  "layout_contract_id": "quadrant_positioning--expression-2",
+  "layout_instance_id": "quadrant_positioning--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_family": "full-bleed-chart",
+  "design_contract_id": "quadrant_positioning--full-bleed-chart--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "positioning_quadrant",
+  "support_components": [
+    "axis_labels",
+    "market_dots",
+    "focus_zone"
+  ],
+  "semantic_slots": [
+    "x_axis",
+    "y_axis",
+    "position"
+  ],
+  "data_shape": "xy_positions",
+  "motion": "plot_and_focus",
+  "motion_profile": "evidence-build",
+  "visual_id": "atlas-blue",
+  "proof_mode": "metric-cards",
+  "copy_surface": "editorial",
+  "art_surface": "chart-field",
+  "copy_mode": "editorial",
+  "art_direction": "chart-field positioning_quadrant with measured proof field",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.358,
+        "y": 8.54,
+        "w": 35.44,
+        "h": 65.802
+      },
+      "art": {
+        "x": 42.901,
+        "y": 4.811,
+        "w": 51.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 5.143,
+        "y": 79.757,
+        "w": 34.846,
+        "h": 13
+      },
+      "avoid_zones": [
+        {
+          "x": 5.358,
+          "y": 8.54,
+          "w": 35.44,
+          "h": 65.802
+        },
+        {
+          "x": 5.143,
+          "y": 79.757,
+          "w": 34.846,
+          "h": 13
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 52.298,
+        "y": 5.42,
+        "w": 42.44,
+        "h": 79.802
+      },
+      "art": {
+        "x": 5.928,
+        "y": 4.853,
+        "w": 42.692,
+        "h": 80.11
+      },
+      "proof": {
+        "x": 6.104,
+        "y": 87.811,
+        "w": 87.846,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 52.298,
+          "y": 5.42,
+          "w": 42.44,
+          "h": 79.802
+        },
+        {
+          "x": 6.104,
+          "y": 87.811,
+          "w": 87.846,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "quadrant_positioning:evidence:position-callout:editorial-left:positioning_quadrant:atlas-blue:metric-cards:evidence-build:full-bleed-chart:editorial:chart-field:editorial:quadrant_positioning--2--layout:offset-lower-right",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

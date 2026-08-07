@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "quadrant_positioning",
+  "composition_id": "quadrant_positioning--verdict",
+  "lens_id": "verdict",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "quadrant_positioning--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "structural_fingerprint": "quadrant_positioning:verdict:quadrant-verdict:poster-center:positioning_quadrant:kinetic-ivory:center-badge:verdict-lock:center-symbol:poster:symbol:statement:quadrant_positioning--3--layout:poster-inset-top",
+  "art_direction": "symbol positioning_quadrant with decisive verdict object",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "7573b0628abfe89522fa5a91cbec0406dc59e8a28aaf45d22d3bc0f436f4e167",
+    "9:16": "28f16176492a0866b74dad00cfaa159ef789498fc16ee00592dda34dea112e1b"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "era_evolution",
+  "composition_id": "era_evolution--inflection",
+  "lens_id": "inflection",
+  "visual_id": "material-editorial",
+  "layout_instance_id": "era_evolution--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "structural_fingerprint": "era_evolution:inflection:era-transition:evidence-left:era_evolution:material-editorial:stamp:pivot-magnify:archive-stack:paper:paper-stack:editorial:era_evolution--2--layout:bottom-editorial",
+  "art_direction": "paper-stack era_evolution with magnified inflection",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "3d54769615c427a43f17051550559d1c780ff1df08cd4c0fd948306cee8d4f02",
+    "9:16": "82c43a9e8f81cf240e3499d16a804e614d15c0efbc2c5692ae62be26725aaaec"
+  }
+}

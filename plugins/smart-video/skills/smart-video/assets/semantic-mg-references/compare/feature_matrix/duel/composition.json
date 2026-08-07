@@ -1,0 +1,115 @@
+{
+  "id": "feature_matrix--duel",
+  "scene_id": "feature_matrix",
+  "scene_title": "Choosing an AI Workspace",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "duel",
+  "lens_name": "Duel",
+  "intent": "Make the alternatives directly and fairly comparable",
+  "composition_name": "matrix-dominant",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "feature_matrix--expression-1",
+  "layout_instance_id": "feature_matrix--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_family": "taxonomy-grid",
+  "design_contract_id": "feature_matrix--taxonomy-grid--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "feature_matrix",
+  "support_components": [
+    "product_headers",
+    "capability_rows",
+    "winner_marks"
+  ],
+  "semantic_slots": [
+    "options",
+    "criteria",
+    "decision"
+  ],
+  "data_shape": "matrix_boolean",
+  "motion": "matrix_scan",
+  "motion_profile": "opposed-wipe",
+  "visual_id": "atlas-blue",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "floating",
+  "art_surface": "taxonomy",
+  "copy_mode": "headline",
+  "art_direction": "taxonomy feature_matrix with opposed visual masses",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.668,
+        "y": 5.36,
+        "w": 46.44,
+        "h": 27.802
+      },
+      "art": {
+        "x": 5.198,
+        "y": 35.874,
+        "w": 89.692,
+        "h": 57.11
+      },
+      "proof": {
+        "x": 55.714,
+        "y": 6.838,
+        "w": 38.846,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 4.668,
+          "y": 5.36,
+          "w": 46.44,
+          "h": 27.802
+        },
+        {
+          "x": 55.714,
+          "y": 6.838,
+          "w": 38.846,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.788,
+        "y": 5.28,
+        "w": 86.44,
+        "h": 20.802
+      },
+      "art": {
+        "x": 5.144,
+        "y": 28.902,
+        "w": 89.692,
+        "h": 62.11
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 92.874,
+        "w": 85.846,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.788,
+          "y": 5.28,
+          "w": 86.44,
+          "h": 20.802
+        },
+        {
+          "x": 6.792,
+          "y": 92.874,
+          "w": 85.846,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "feature_matrix:duel:matrix-dominant:full-width-stage:feature_matrix:atlas-blue:edge-tabs:opposed-wipe:taxonomy-grid:floating:taxonomy:headline:feature_matrix--1--layout:top-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

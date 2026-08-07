@@ -1,0 +1,115 @@
+{
+  "id": "pros_and_limits--duel",
+  "scene_id": "pros_and_limits",
+  "scene_title": "Speed Has a Cost",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "duel",
+  "lens_name": "Duel",
+  "intent": "Make the alternatives directly and fairly comparable",
+  "composition_name": "tradeoff-scale",
+  "layout_grammar": "data-left",
+  "layout_contract_id": "pros_and_limits--expression-1",
+  "layout_instance_id": "pros_and_limits--1--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_family": "force-quadrant",
+  "design_contract_id": "pros_and_limits--force-quadrant--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "pros_limits",
+  "support_components": [
+    "benefit_list",
+    "limit_list",
+    "boundary_note"
+  ],
+  "semantic_slots": [
+    "benefits",
+    "limits",
+    "boundary"
+  ],
+  "data_shape": "benefit_risk",
+  "motion": "balanced_stagger",
+  "motion_profile": "opposed-wipe",
+  "visual_id": "luminous-grid",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "technical",
+  "art_surface": "quadrant",
+  "copy_mode": "metric",
+  "art_direction": "quadrant pros_limits with opposed visual masses",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.539,
+        "y": 8.18,
+        "w": 31.44,
+        "h": 67.802
+      },
+      "art": {
+        "x": 38.802,
+        "y": 4.937,
+        "w": 55.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 5.286,
+        "y": 81.919,
+        "w": 30.846,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 5.539,
+          "y": 8.18,
+          "w": 31.44,
+          "h": 67.802
+        },
+        {
+          "x": 5.286,
+          "y": 81.919,
+          "w": 30.846,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.419,
+        "y": 5.14,
+        "w": 86.44,
+        "h": 22.802
+      },
+      "art": {
+        "x": 4.856,
+        "y": 35.951,
+        "w": 89.692,
+        "h": 57.11
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 29.937,
+        "w": 85.846,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 7.419,
+          "y": 5.14,
+          "w": 86.44,
+          "h": 22.802
+        },
+        {
+          "x": 7.208,
+          "y": 29.937,
+          "w": 85.846,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "pros_and_limits:duel:tradeoff-scale:data-left:pros_limits:luminous-grid:edge-tabs:opposed-wipe:force-quadrant:technical:quadrant:metric:pros_and_limits--1--layout:art-monument-bottom",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,115 @@
+{
+  "id": "user_journey--walkthrough",
+  "scene_id": "user_journey",
+  "scene_title": "A Teacher's AI Workflow",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "walkthrough",
+  "lens_name": "Walkthrough",
+  "intent": "Guide the viewer through the operating sequence",
+  "composition_name": "moment-of-truth",
+  "layout_grammar": "evidence-right",
+  "layout_contract_id": "user_journey--expression-2",
+  "layout_instance_id": "user_journey--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_family": "case-window",
+  "design_contract_id": "user_journey--case-window--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "user_journey",
+  "support_components": [
+    "touchpoints",
+    "emotion_curve",
+    "outcome_flag"
+  ],
+  "semantic_slots": [
+    "need",
+    "experience",
+    "outcome"
+  ],
+  "data_shape": "journey_stages",
+  "motion": "journey_travel",
+  "motion_profile": "guided-sequence",
+  "visual_id": "material-editorial",
+  "proof_mode": "vertical-index",
+  "copy_surface": "paper",
+  "art_surface": "case-window",
+  "copy_mode": "editorial",
+  "art_direction": "case-window user_journey with guided operating path",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 63.08,
+        "y": 7.46,
+        "w": 32.0,
+        "h": 70.0
+      },
+      "art": {
+        "x": 5.099,
+        "y": 5.189,
+        "w": 55.0,
+        "h": 88.0
+      },
+      "proof": {
+        "x": 62.857,
+        "y": 84.243,
+        "w": 32.0,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 63.08,
+          "y": 7.46,
+          "w": 32.0,
+          "h": 70.0
+        },
+        {
+          "x": 62.857,
+          "y": 84.243,
+          "w": 32.0,
+          "h": 9
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 52.14,
+        "y": 4.58,
+        "w": 42.0,
+        "h": 80.0
+      },
+      "art": {
+        "x": 6.072,
+        "y": 5.147,
+        "w": 43.0,
+        "h": 80.0
+      },
+      "proof": {
+        "x": 5.896,
+        "y": 88.189,
+        "w": 88.0,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 52.14,
+          "y": 4.58,
+          "w": 42.0,
+          "h": 80.0
+        },
+        {
+          "x": 5.896,
+          "y": 88.189,
+          "w": 88.0,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "user_journey:walkthrough:moment-of-truth:evidence-right:user_journey:material-editorial:vertical-index:guided-sequence:case-window:paper:case-window:editorial:user_journey--2--layout:offset-lower-right",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

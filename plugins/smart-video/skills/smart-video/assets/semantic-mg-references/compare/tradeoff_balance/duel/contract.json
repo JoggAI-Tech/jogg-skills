@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "tradeoff_balance",
+  "composition_id": "tradeoff_balance--duel",
+  "lens_id": "duel",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "tradeoff_balance--1--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "structural_fingerprint": "tradeoff_balance:duel:weighted-balance:poster-offset-left:tradeoff_scale:kinetic-ivory:center-badge:opposed-wipe:center-symbol:floating:symbol:statement:tradeoff_balance--1--layout:center-lockup",
+  "art_direction": "symbol tradeoff_scale with opposed visual masses",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "c6ba1a906d8646175a6ece485077951ce8ab4a159f62deb4a085ae49ad544297",
+    "9:16": "594d920192b5fa83f72094b5eb27c6cbdba4c34c9c870c5040a51ea07ba43ba3"
+  }
+}

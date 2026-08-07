@@ -1,0 +1,114 @@
+{
+  "id": "linear_steps--outcome",
+  "scene_id": "linear_steps",
+  "scene_title": "How an Agent Completes Work",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "outcome",
+  "lens_name": "Outcome",
+  "intent": "Connect the process to its measurable result",
+  "composition_name": "completion-lock",
+  "layout_grammar": "headline-bottom",
+  "layout_contract_id": "linear_steps--expression-3",
+  "layout_instance_id": "linear_steps--3--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_family": "route-bridge",
+  "design_contract_id": "linear_steps--route-bridge--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "linear_steps",
+  "support_components": [
+    "step_nodes",
+    "direction_line"
+  ],
+  "semantic_slots": [
+    "input",
+    "steps",
+    "result"
+  ],
+  "data_shape": "ordered_steps",
+  "motion": "step_progress",
+  "motion_profile": "outcome-resolve",
+  "visual_id": "atlas-blue",
+  "proof_mode": "floating-chips",
+  "copy_surface": "caption",
+  "art_surface": "route",
+  "copy_mode": "headline",
+  "art_direction": "route linear_steps with result-bearing machine",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.24,
+        "y": 70.18,
+        "w": 62.22,
+        "h": 23.901
+      },
+      "art": {
+        "x": 5.0,
+        "y": 4.937,
+        "w": 89.846,
+        "h": 61.055
+      },
+      "proof": {
+        "x": 70.0,
+        "y": 72.919,
+        "w": 24.923,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 5.24,
+          "y": 70.18,
+          "w": 62.22,
+          "h": 23.901
+        },
+        {
+          "x": 70.0,
+          "y": 72.919,
+          "w": 24.923,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.24,
+        "y": 5.14,
+        "w": 86.22,
+        "h": 22.901
+      },
+      "art": {
+        "x": 5.0,
+        "y": 35.951,
+        "w": 89.846,
+        "h": 57.055
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 29.937,
+        "w": 85.923,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 7.24,
+          "y": 5.14,
+          "w": 86.22,
+          "h": 22.901
+        },
+        {
+          "x": 7.0,
+          "y": 29.937,
+          "w": 85.923,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "linear_steps:outcome:completion-lock:headline-bottom:linear_steps:atlas-blue:floating-chips:outcome-resolve:route-bridge:caption:route:headline:linear_steps--3--layout:art-monument-bottom",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

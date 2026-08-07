@@ -1,0 +1,115 @@
+{
+  "id": "product_roadmap--inflection",
+  "scene_id": "product_roadmap",
+  "scene_title": "From Copilot to Operator",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "inflection",
+  "lens_name": "Inflection",
+  "intent": "Magnify the moment that changes the trajectory",
+  "composition_name": "release-focus",
+  "layout_grammar": "diagram-center",
+  "layout_contract_id": "product_roadmap--expression-2",
+  "layout_instance_id": "product_roadmap--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "composition_family": "step-rail",
+  "design_contract_id": "product_roadmap--step-rail--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "product_roadmap",
+  "support_components": [
+    "release_cards",
+    "capability_steps",
+    "destination_flag"
+  ],
+  "semantic_slots": [
+    "now",
+    "next",
+    "later"
+  ],
+  "data_shape": "roadmap_releases",
+  "motion": "roadmap_advance",
+  "motion_profile": "pivot-magnify",
+  "visual_id": "atlas-blue",
+  "proof_mode": "vertical-index",
+  "copy_surface": "floating",
+  "art_surface": "rail",
+  "copy_mode": "editorial",
+  "art_direction": "rail product_roadmap with magnified inflection",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.55,
+        "y": 6.0,
+        "w": 38.22,
+        "h": 39.901
+      },
+      "art": {
+        "x": 26.297,
+        "y": 16.0,
+        "w": 68.846,
+        "h": 70.055
+      },
+      "proof": {
+        "x": 4.571,
+        "y": 78.0,
+        "w": 33.923,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 4.55,
+          "y": 6.0,
+          "w": 38.22,
+          "h": 39.901
+        },
+        {
+          "x": 4.571,
+          "y": 78.0,
+          "w": 33.923,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.73,
+        "y": 68.0,
+        "w": 86.22,
+        "h": 24.901
+      },
+      "art": {
+        "x": 6.216,
+        "y": 5.0,
+        "w": 87.846,
+        "h": 56.055
+      },
+      "proof": {
+        "x": 6.688,
+        "y": 61.0,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.73,
+          "y": 68.0,
+          "w": 86.22,
+          "h": 24.901
+        },
+        {
+          "x": 6.688,
+          "y": 61.0,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "product_roadmap:inflection:release-focus:diagram-center:product_roadmap:atlas-blue:vertical-index:pivot-magnify:step-rail:floating:rail:editorial:product_roadmap--2--layout:bottom-editorial",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "evidence",
+  "scene_id": "evidence_board",
+  "composition_id": "evidence_board--exhibit",
+  "lens_id": "exhibit",
+  "visual_id": "signal-noir",
+  "layout_instance_id": "evidence_board--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "evidence_board:exhibit:evidence-board:full-width-stage:evidence_board:signal-noir:stamp:exhibit-uncover:evidence-board:floating:evidence:headline:evidence_board--1--layout:art-monument-top",
+  "art_direction": "evidence evidence_board with material source object",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "b8c0b8cde7ea457a2bb03d3d317439e2cd2f2aa4c41b667b3104121cee7e251a",
+    "9:16": "60cb3b19d0c1b43c4cd1b0caecaa2fd60919ac0e236ddbca9080421dcb670a9f"
+  }
+}

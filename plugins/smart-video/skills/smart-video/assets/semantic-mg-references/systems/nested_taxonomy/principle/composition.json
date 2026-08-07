@@ -1,0 +1,115 @@
+{
+  "id": "nested_taxonomy--principle",
+  "scene_id": "nested_taxonomy",
+  "scene_title": "A Taxonomy of Agent Work",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "principle",
+  "lens_name": "Principle",
+  "intent": "Reveal the governing idea behind the system",
+  "composition_name": "taxonomy-principle",
+  "layout_grammar": "poster-center",
+  "layout_contract_id": "nested_taxonomy--expression-3",
+  "layout_instance_id": "nested_taxonomy--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "editorial-margin",
+  "design_contract_id": "nested_taxonomy--editorial-margin--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "nested_taxonomy",
+  "support_components": [
+    "category_shells",
+    "subtype_nodes",
+    "classification_keys"
+  ],
+  "semantic_slots": [
+    "domain",
+    "categories",
+    "types"
+  ],
+  "data_shape": "nested_sets",
+  "motion": "taxonomy_unfold",
+  "motion_profile": "principle-lock",
+  "visual_id": "paper-collage",
+  "proof_mode": "caption-line",
+  "copy_surface": "poster",
+  "art_surface": "framed-object",
+  "copy_mode": "statement",
+  "art_direction": "framed-object nested_taxonomy with governing system rule",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 18.492,
+        "y": 4.82,
+        "w": 63.78,
+        "h": 24.099
+      },
+      "art": {
+        "x": 14.0,
+        "y": 31.063,
+        "w": 72.154,
+        "h": 54.945
+      },
+      "proof": {
+        "x": 28.0,
+        "y": 89.081,
+        "w": 44.077,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 18.492,
+          "y": 4.82,
+          "w": 63.78,
+          "h": 24.099
+        },
+        {
+          "x": 28.0,
+          "y": 89.081,
+          "w": 44.077,
+          "h": 7
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.492,
+        "y": 4.86,
+        "w": 85.78,
+        "h": 32.099
+      },
+      "art": {
+        "x": 6.0,
+        "y": 40.049,
+        "w": 88.154,
+        "h": 48.945
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 92.063,
+        "w": 86.077,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.492,
+          "y": 4.86,
+          "w": 85.78,
+          "h": 32.099
+        },
+        {
+          "x": 7.0,
+          "y": 92.063,
+          "w": 86.077,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "nested_taxonomy:principle:taxonomy-principle:poster-center:nested_taxonomy:paper-collage:caption-line:principle-lock:editorial-margin:poster:framed-object:statement:nested_taxonomy--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

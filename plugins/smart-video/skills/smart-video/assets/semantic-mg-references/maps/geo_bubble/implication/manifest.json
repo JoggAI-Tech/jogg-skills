@@ -1,0 +1,31 @@
+{
+  "id": "geo_bubble--implication",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "scene_id": "geo_bubble",
+  "name": "Where Inference Demand Grows",
+  "presentation_form_id": "implication",
+  "presentation_form_name": "Implication",
+  "visual_id": "atlas-blue",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "impact-arrive",
+  "layout": "full-width-stage",
+  "layout_instance_id": "geo_bubble--3--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "hotspot-impact",
+  "art_direction": "network geo_bubble with geographic consequence",
+  "composition_signature": "geo_bubble:implication:hotspot-impact:full-width-stage:geo_bubble:atlas-blue:edge-tabs:impact-arrive:network-radial:floating:network:headline:geo_bubble--3--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

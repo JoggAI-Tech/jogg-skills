@@ -1,0 +1,31 @@
+{
+  "id": "concept_map--architecture",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "concept_map",
+  "name": "What Makes a Model Useful",
+  "presentation_form_id": "architecture",
+  "presentation_form_name": "Architecture",
+  "visual_id": "sticker-classroom",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "structure-assemble",
+  "layout": "diagram-center",
+  "layout_instance_id": "concept_map--1--layout",
+  "portrait_silhouette_id": "left-caption-stage",
+  "composition_name": "concept-network",
+  "art_direction": "network concept_map with structural blueprint",
+  "composition_signature": "concept_map:architecture:concept-network:diagram-center:concept_map:sticker-classroom:edge-tabs:structure-assemble:network-radial:floating:network:editorial:concept_map--1--layout:left-caption-stage",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "product_roadmap--sequence",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "product_roadmap",
+  "name": "From Copilot to Operator",
+  "presentation_form_id": "sequence",
+  "presentation_form_name": "Sequence",
+  "visual_id": "luminous-grid",
+  "proof_mode": "floating-chips",
+  "motion_profile": "rail-travel",
+  "layout": "timeline-band",
+  "layout_instance_id": "product_roadmap--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "roadmap-lanes",
+  "art_direction": "route product_roadmap with directional time object",
+  "composition_signature": "product_roadmap:sequence:roadmap-lanes:timeline-band:product_roadmap:luminous-grid:floating-chips:rail-travel:route-bridge:caption:route:headline:product_roadmap--1--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

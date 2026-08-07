@@ -1,0 +1,115 @@
+{
+  "id": "input_process_output--walkthrough",
+  "scene_id": "input_process_output",
+  "scene_title": "From Lecture to Mastery",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "walkthrough",
+  "lens_name": "Walkthrough",
+  "intent": "Guide the viewer through the operating sequence",
+  "composition_name": "process-window",
+  "layout_grammar": "split-decision",
+  "layout_contract_id": "input_process_output--expression-2",
+  "layout_instance_id": "input_process_output--2--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "composition_family": "gate-split",
+  "design_contract_id": "input_process_output--gate-split--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "input_process_output",
+  "support_components": [
+    "input_bin",
+    "process_engine",
+    "output_bin"
+  ],
+  "semantic_slots": [
+    "input",
+    "process",
+    "output"
+  ],
+  "data_shape": "input_output",
+  "motion": "process_transform",
+  "motion_profile": "guided-sequence",
+  "visual_id": "paper-collage",
+  "proof_mode": "center-badge",
+  "copy_surface": "caption",
+  "art_surface": "hard-split",
+  "copy_mode": "duel",
+  "art_direction": "hard-split input_process_output with guided operating path",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.815,
+        "y": 6.36,
+        "w": 35.22,
+        "h": 47.901
+      },
+      "art": {
+        "x": 43.198,
+        "y": 4.874,
+        "w": 51.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 4.714,
+        "y": 72.838,
+        "w": 34.923,
+        "h": 20
+      },
+      "avoid_zones": [
+        {
+          "x": 4.815,
+          "y": 6.36,
+          "w": 35.22,
+          "h": 47.901
+        },
+        {
+          "x": 4.714,
+          "y": 72.838,
+          "w": 34.923,
+          "h": 20
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 11.935,
+        "y": 5.28,
+        "w": 76.22,
+        "h": 22.901
+      },
+      "art": {
+        "x": 8.144,
+        "y": 30.902,
+        "w": 83.846,
+        "h": 44.055
+      },
+      "proof": {
+        "x": 11.792,
+        "y": 77.874,
+        "w": 75.923,
+        "h": 17
+      },
+      "avoid_zones": [
+        {
+          "x": 11.935,
+          "y": 5.28,
+          "w": 76.22,
+          "h": 22.901
+        },
+        {
+          "x": 11.792,
+          "y": 77.874,
+          "w": 75.923,
+          "h": 17
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "input_process_output:walkthrough:process-window:split-decision:input_process_output:paper-collage:center-badge:guided-sequence:gate-split:caption:hard-split:duel:input_process_output--2--layout:center-lockup",
+  "copy_density": "duel",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

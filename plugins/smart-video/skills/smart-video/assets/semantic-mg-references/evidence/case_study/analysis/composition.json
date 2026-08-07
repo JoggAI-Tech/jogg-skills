@@ -1,0 +1,115 @@
+{
+  "id": "case_study--analysis",
+  "scene_id": "case_study",
+  "scene_title": "How a School Cut Planning Time",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "lens_id": "analysis",
+  "lens_name": "Analysis",
+  "intent": "Connect evidence fragments into an argument",
+  "composition_name": "case-analysis",
+  "layout_grammar": "evidence-right",
+  "layout_contract_id": "case_study--expression-2",
+  "layout_instance_id": "case_study--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "composition_family": "triptych",
+  "design_contract_id": "case_study--triptych--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "case_study",
+  "support_components": [
+    "context_panel",
+    "intervention_panel",
+    "result_panel"
+  ],
+  "semantic_slots": [
+    "context",
+    "intervention",
+    "result"
+  ],
+  "data_shape": "case_outcome",
+  "motion": "case_progress",
+  "motion_profile": "analysis-connect",
+  "visual_id": "archive-dossier",
+  "proof_mode": "vertical-index",
+  "copy_surface": "paper",
+  "art_surface": "triptych",
+  "copy_mode": "editorial",
+  "art_direction": "triptych case_study with connected evidence fragments",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 64.266,
+        "y": 7.46,
+        "w": 31.56,
+        "h": 70.198
+      },
+      "art": {
+        "x": 4.703,
+        "y": 5.189,
+        "w": 55.308,
+        "h": 87.89
+      },
+      "proof": {
+        "x": 63.429,
+        "y": 84.243,
+        "w": 32.154,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 64.266,
+          "y": 7.46,
+          "w": 31.56,
+          "h": 70.198
+        },
+        {
+          "x": 63.429,
+          "y": 84.243,
+          "w": 32.154,
+          "h": 9
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 62.086,
+        "y": 4.58,
+        "w": 32.56,
+        "h": 67.198
+      },
+      "art": {
+        "x": 5.784,
+        "y": 5.147,
+        "w": 51.308,
+        "h": 79.89
+      },
+      "proof": {
+        "x": 61.312,
+        "y": 75.189,
+        "w": 33.154,
+        "h": 12
+      },
+      "avoid_zones": [
+        {
+          "x": 62.086,
+          "y": 4.58,
+          "w": 32.56,
+          "h": 67.198
+        },
+        {
+          "x": 61.312,
+          "y": 75.189,
+          "w": 33.154,
+          "h": 12
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "case_study:analysis:case-analysis:evidence-right:case_study:archive-dossier:vertical-index:analysis-connect:triptych:paper:triptych:editorial:case_study--2--layout:right-caption-stage",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

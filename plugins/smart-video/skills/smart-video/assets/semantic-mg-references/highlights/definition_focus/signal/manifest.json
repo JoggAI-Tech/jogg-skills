@@ -1,0 +1,31 @@
+{
+  "id": "definition_focus--signal",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "scene_id": "definition_focus",
+  "name": "Inference Economy",
+  "presentation_form_id": "signal",
+  "presentation_form_name": "Signal",
+  "visual_id": "sticker-classroom",
+  "proof_mode": "floating-chips",
+  "motion_profile": "impact-lock",
+  "layout": "diagram-right-rail",
+  "layout_instance_id": "definition_focus--1--layout",
+  "portrait_silhouette_id": "offset-upper-left",
+  "composition_name": "term-orbit",
+  "art_direction": "mascot term_definition with single dominant symbol",
+  "composition_signature": "definition_focus:signal:term-orbit:diagram-right-rail:term_definition:sticker-classroom:floating-chips:impact-lock:sticker-mascot:technical:mascot:editorial:definition_focus--1--layout:offset-upper-left",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

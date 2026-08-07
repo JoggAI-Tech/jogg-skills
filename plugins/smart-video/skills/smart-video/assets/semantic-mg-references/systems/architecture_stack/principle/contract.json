@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "architecture_stack",
+  "composition_id": "architecture_stack--principle",
+  "lens_id": "principle",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "architecture_stack--3--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "structural_fingerprint": "architecture_stack:principle:stack-principle:headline-bottom:architecture_stack:luminous-grid:caption-line:principle-lock:bottom-statement-stage:caption:wide-stage:headline:architecture_stack--3--layout:cinema-caption-top",
+  "art_direction": "wide-stage architecture_stack with governing system rule",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "e879d7aff7c80f132d429833f4011861015f04be2ec1fd14a1ae004009d9fffe",
+    "9:16": "115750cea631b3045dc089f6bccbbbb35b8aacfb728670c714ae32bc08fd8047"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "highlights",
+  "scene_id": "contrarian_reveal",
+  "composition_id": "contrarian_reveal--reveal",
+  "lens_id": "reveal",
+  "visual_id": "signal-noir",
+  "layout_instance_id": "contrarian_reveal--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "structural_fingerprint": "contrarian_reveal:reveal:evidence-switch:editorial-right:contrarian_switch:signal-noir:center-badge:reveal-cut:myth-wheel:editorial:myth-wheel:editorial:contrarian_reveal--2--layout:offset-lower-right",
+  "art_direction": "myth-wheel contrarian_switch with editorial reveal",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "c21a6ce590d3427c3fd701375872aec5660afa66a47336482cbd6c43886608ef",
+    "9:16": "46d41ba8eab5afdf8e890de1896beb5a18fac7f4dde91c6934f2bc1db066cb02"
+  }
+}
