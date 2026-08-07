@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "highlights",
+  "scene_id": "story_turn",
+  "composition_id": "story_turn--signal",
+  "lens_id": "signal",
+  "visual_id": "paper-collage",
+  "layout_instance_id": "story_turn--1--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "structural_fingerprint": "story_turn:signal:pivot-scene:timeline-caption:story_pivot:paper-collage:center-badge:impact-lock:before-after-slab:editorial:before-after:headline:story_turn--1--layout:cinema-caption-top",
+  "art_direction": "before-after story_pivot with single dominant symbol",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "17c744f5ad558460761b45a4a717a195e2bb9466b37b912d836c83df6cb3f9a4",
+    "9:16": "cb1b53a1f52abc728c8ab37ab666a48fd01190986ddf711748fb6b5ef9136bce"
+  }
+}

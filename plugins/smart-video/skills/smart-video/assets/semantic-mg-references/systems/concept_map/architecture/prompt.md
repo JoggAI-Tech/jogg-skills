@@ -1,0 +1,1 @@
+Use the complete HTML reference for 'What Makes a Model Useful' as a composition reference. Preserve the Architecture information intent, concept-network composition, semantic surfaces, and five-second motion sequence. Replace all visible copy and values with the user's content. Do not reuse the wider asset library, add dashboard chrome, or place decorative shapes above text.

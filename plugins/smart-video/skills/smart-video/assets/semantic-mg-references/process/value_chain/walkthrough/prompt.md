@@ -1,0 +1,1 @@
+Use the complete HTML reference for 'Where AI SaaS Creates Value' as a composition reference. Preserve the Walkthrough information intent, value-bottleneck composition, semantic surfaces, and five-second motion sequence. Replace all visible copy and values with the user's content. Do not reuse the wider asset library, add dashboard chrome, or place decorative shapes above text.

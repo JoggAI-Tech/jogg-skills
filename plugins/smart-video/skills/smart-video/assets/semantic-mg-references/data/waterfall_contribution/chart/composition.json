@@ -1,0 +1,115 @@
+{
+  "id": "waterfall_contribution--chart",
+  "scene_id": "waterfall_contribution",
+  "scene_title": "How Margin Improved",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "chart",
+  "lens_name": "Chart",
+  "intent": "Let the quantitative relationship carry the slide",
+  "composition_name": "waterfall-stage",
+  "layout_grammar": "diagram-right-rail",
+  "layout_contract_id": "waterfall_contribution--expression-1",
+  "layout_instance_id": "waterfall_contribution--1--layout",
+  "portrait_silhouette_id": "offset-upper-left",
+  "composition_family": "bars-surge",
+  "design_contract_id": "waterfall_contribution--bars-surge--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "waterfall",
+  "support_components": [
+    "bridge_bars",
+    "gain_loss_tags",
+    "total_bar"
+  ],
+  "semantic_slots": [
+    "starting_value",
+    "drivers",
+    "ending_value"
+  ],
+  "data_shape": "waterfall_values",
+  "motion": "waterfall_build",
+  "motion_profile": "chart-build",
+  "visual_id": "electric-cyan",
+  "proof_mode": "metric-cards",
+  "copy_surface": "technical",
+  "art_surface": "bars",
+  "copy_mode": "editorial",
+  "art_direction": "bars waterfall with chart-dominant field",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.854,
+        "y": 8.36,
+        "w": 55.0,
+        "h": 42.0
+      },
+      "art": {
+        "x": 63.802,
+        "y": 4.874,
+        "w": 31.0,
+        "h": 88.0
+      },
+      "proof": {
+        "x": 5.286,
+        "y": 77.838,
+        "w": 55.0,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 5.854,
+          "y": 8.36,
+          "w": 55.0,
+          "h": 42.0
+        },
+        {
+          "x": 5.286,
+          "y": 77.838,
+          "w": 55.0,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.734,
+        "y": 5.28,
+        "w": 42.0,
+        "h": 80.0
+      },
+      "art": {
+        "x": 50.856,
+        "y": 4.902,
+        "w": 43.0,
+        "h": 80.0
+      },
+      "proof": {
+        "x": 6.208,
+        "y": 87.874,
+        "w": 88.0,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 6.734,
+          "y": 5.28,
+          "w": 42.0,
+          "h": 80.0
+        },
+        {
+          "x": 6.208,
+          "y": 87.874,
+          "w": 88.0,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "waterfall_contribution:chart:waterfall-stage:diagram-right-rail:waterfall:electric-cyan:metric-cards:chart-build:bars-surge:technical:bars:editorial:waterfall_contribution--1--layout:offset-upper-left",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

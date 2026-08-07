@@ -1,0 +1,31 @@
+{
+  "id": "supply_network--flow",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "supply_network",
+  "name": "The Compute Supply Network",
+  "presentation_form_id": "flow",
+  "presentation_form_name": "Flow",
+  "visual_id": "luminous-grid",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "flow-trace",
+  "layout": "data-left",
+  "layout_instance_id": "supply_network--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "supply-bottleneck",
+  "art_direction": "network supply_network with directional exchange",
+  "composition_signature": "supply_network:flow:supply-bottleneck:data-left:supply_network:luminous-grid:edge-tabs:flow-trace:network-radial:technical:network:metric:supply_network--2--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

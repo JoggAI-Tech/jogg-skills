@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "maps",
+  "scene_id": "migration_flow",
+  "composition_id": "migration_flow--pattern",
+  "lens_id": "pattern",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "migration_flow--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "migration_flow:pattern:flow-concentration:data-right:migration_flow:kinetic-ivory:floating-chips:region-emerge:route-bridge:technical:route:metric:migration_flow--2--layout:art-monument-top",
+  "art_direction": "route migration_flow with spatial concentration",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "d37f751b61f4ce27f034a573f1de32eb01221cdc523797a8f3964a349248a459",
+    "9:16": "14160fc62afabd72f31418d31a36d86004b961aaf9030b853ed3abad94803320"
+  }
+}

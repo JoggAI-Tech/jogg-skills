@@ -1,0 +1,115 @@
+{
+  "id": "migration_flow--route",
+  "scene_id": "migration_flow",
+  "scene_title": "Talent Moves Toward Compute",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "lens_id": "route",
+  "lens_name": "Route",
+  "intent": "Make geographic movement the primary narrative",
+  "composition_name": "migration-stream",
+  "layout_grammar": "diagram-center",
+  "layout_contract_id": "migration_flow--expression-1",
+  "layout_instance_id": "migration_flow--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "composition_family": "river-flow",
+  "design_contract_id": "migration_flow--river-flow--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "migration_flow",
+  "support_components": [
+    "source_regions",
+    "flow_arcs",
+    "destination_clusters"
+  ],
+  "semantic_slots": [
+    "origins",
+    "movement",
+    "destinations"
+  ],
+  "data_shape": "geo_flows",
+  "motion": "flows_travel",
+  "motion_profile": "route-travel",
+  "visual_id": "electric-cyan",
+  "proof_mode": "caption-line",
+  "copy_surface": "floating",
+  "art_surface": "flow-river",
+  "copy_mode": "editorial",
+  "art_direction": "flow-river migration_flow with geographic route",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.98,
+        "y": 6.18,
+        "w": 37.78,
+        "h": 40.099
+      },
+      "art": {
+        "x": 25.802,
+        "y": 15.937,
+        "w": 69.154,
+        "h": 69.945
+      },
+      "proof": {
+        "x": 5.286,
+        "y": 77.919,
+        "w": 34.077,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 5.98,
+          "y": 6.18,
+          "w": 37.78,
+          "h": 40.099
+        },
+        {
+          "x": 5.286,
+          "y": 77.919,
+          "w": 34.077,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.86,
+        "y": 5.14,
+        "w": 85.78,
+        "h": 25.099
+      },
+      "art": {
+        "x": 5.856,
+        "y": 32.951,
+        "w": 88.154,
+        "h": 55.945
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 91.937,
+        "w": 86.077,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.86,
+          "y": 5.14,
+          "w": 85.78,
+          "h": 25.099
+        },
+        {
+          "x": 7.208,
+          "y": 91.937,
+          "w": 86.077,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "migration_flow:route:migration-stream:diagram-center:migration_flow:electric-cyan:caption-line:route-travel:river-flow:floating:flow-river:editorial:migration_flow--1--layout:top-editorial",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

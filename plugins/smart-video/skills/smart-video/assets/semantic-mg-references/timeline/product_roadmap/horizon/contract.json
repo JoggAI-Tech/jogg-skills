@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "product_roadmap",
+  "composition_id": "product_roadmap--horizon",
+  "lens_id": "horizon",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "product_roadmap--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "structural_fingerprint": "product_roadmap:horizon:roadmap-destination:poster-offset-left:product_roadmap:kinetic-ivory:caption-line:horizon-settle:diagonal-lock:floating:diagonal:statement:product_roadmap--3--layout:lower-lockup",
+  "art_direction": "diagonal product_roadmap with compressed time horizon",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "0e52d838b56e52abcd2849a6d0e77d5db6d63c88ef41350854010864b6742d47",
+    "9:16": "443195fd33ab0fa21c33d2844ed3715cfab599af0d4c17e7713917ba20caff41"
+  }
+}

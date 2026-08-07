@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "scenario_comparison",
+  "composition_id": "scenario_comparison--verdict",
+  "lens_id": "verdict",
+  "visual_id": "cobalt-coral",
+  "layout_instance_id": "scenario_comparison--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "structural_fingerprint": "scenario_comparison:verdict:scenario-choice:split-decision:scenario_compare:cobalt-coral:center-badge:verdict-lock:opposed-cards:caption:opposed:duel:scenario_comparison--3--layout:lower-lockup",
+  "art_direction": "opposed scenario_compare with decisive verdict object",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "f0eed9c0b37d1f2c4f65ab9f695b0c778869b57d58227183a1437b324a1c4521",
+    "9:16": "606b99e90c8c4c27eaf0c510a2273668be9e688f108f96ecb96fe5884058b73b"
+  }
+}

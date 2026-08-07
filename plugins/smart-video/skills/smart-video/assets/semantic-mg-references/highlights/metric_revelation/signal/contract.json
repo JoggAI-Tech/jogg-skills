@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "highlights",
+  "scene_id": "metric_revelation",
+  "composition_id": "metric_revelation--signal",
+  "lens_id": "signal",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "metric_revelation--1--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "structural_fingerprint": "metric_revelation:signal:number-field:data-left:metric_reveal:electric-cyan:caption-line:impact-lock:number-monument:technical:monument:metric:metric_revelation--1--layout:art-monument-bottom",
+  "art_direction": "monument metric_reveal with single dominant symbol",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "1ce9028f58f1e64deecf784d11cdb71fda1d8f7b8594a2782f5b5e5ca62dc37a",
+    "9:16": "0175bdf93c5871bda7840fcb6d6feeba0d9bc3a52129346af298c6228d15fa2c"
+  }
+}

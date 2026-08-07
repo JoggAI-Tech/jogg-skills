@@ -1,0 +1,31 @@
+{
+  "id": "annotated_object--exhibit",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "scene_id": "annotated_object",
+  "name": "Inside an AI Server Rack",
+  "presentation_form_id": "exhibit",
+  "presentation_form_name": "Exhibit",
+  "visual_id": "redaction-paper",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "exhibit-uncover",
+  "layout": "diagram-left-rail",
+  "layout_instance_id": "annotated_object--1--layout",
+  "portrait_silhouette_id": "left-caption-stage",
+  "composition_name": "object-exhibit",
+  "art_direction": "object annotated_object with material source object",
+  "composition_signature": "annotated_object:exhibit:object-exhibit:diagram-left-rail:annotated_object:redaction-paper:edge-tabs:exhibit-uncover:left-object:technical:object:editorial:annotated_object--1--layout:left-caption-stage",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

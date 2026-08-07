@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "turning_point_timeline",
+  "composition_id": "turning_point_timeline--sequence",
+  "lens_id": "sequence",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "turning_point_timeline--1--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "structural_fingerprint": "turning_point_timeline:sequence:inflection-curve:data-left:timeline_inflection:electric-cyan:floating-chips:rail-travel:technical-curve:technical:curve:metric:turning_point_timeline--1--layout:poster-inset-top",
+  "art_direction": "curve timeline_inflection with directional time object",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "defc225cba4ffe1ef5a5f0671549ef55f16b505ea905f58e1a994e50d5ea947c",
+    "9:16": "a51411ff1c4f2e028e358bfd6daf1843db99b9d3b86716b4506cbd80d590cc21"
+  }
+}

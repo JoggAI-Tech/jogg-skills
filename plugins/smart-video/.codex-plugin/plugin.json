@@ -1,0 +1,43 @@
+{
+  "name": "smart-video",
+  "version": "0.8.9+codex.20260807130037",
+  "description": "Create, edit, preview, and render long-form videos locally with Jogg assets.",
+  "author": {
+    "name": "JoggAI",
+    "email": "support@jogg.ai",
+    "url": "https://app.jogg.ai/"
+  },
+  "homepage": "https://app.jogg.ai/",
+  "repository": "https://github.com/JoggAI-Tech/jogg-skills",
+  "license": "UNLICENSED",
+  "keywords": [
+    "video",
+    "slides",
+    "motion-graphics",
+    "text-to-speech",
+    "avatar"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Smart Video",
+    "shortDescription": "Build and render Jogg-powered videos locally.",
+    "longDescription": "Runs the Smart Video editor and renderer locally, using Jogg for per-shot speech and selected avatar scenes plus optional Pexels or Pixabay B-roll.",
+    "developerName": "JoggAI",
+    "category": "Creativity",
+    "capabilities": [
+      "Write",
+      "Network",
+      "Interactive"
+    ],
+    "websiteURL": "https://app.jogg.ai/",
+    "brandColor": "#2E5CFF",
+    "composerIcon": "./assets/branding/jogg-icon.png",
+    "logo": "./assets/branding/jogg-icon.png",
+    "logoDark": "./assets/branding/jogg-icon.png",
+    "defaultPrompt": [
+      "Generate a 3-minute English teaching video on how to ask for directions in an unfamiliar place.",
+      "Open and edit my Smart Video project.",
+      "Resume an unfinished local video render."
+    ]
+  }
+}

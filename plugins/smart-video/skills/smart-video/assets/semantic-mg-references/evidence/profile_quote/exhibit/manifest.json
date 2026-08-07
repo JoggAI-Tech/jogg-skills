@@ -1,0 +1,31 @@
+{
+  "id": "profile_quote--exhibit",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "scene_id": "profile_quote",
+  "name": "The Operator Behind the System",
+  "presentation_form_id": "exhibit",
+  "presentation_form_name": "Exhibit",
+  "visual_id": "material-editorial",
+  "proof_mode": "vertical-index",
+  "motion_profile": "exhibit-uncover",
+  "layout": "evidence-right",
+  "layout_instance_id": "profile_quote--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "composition_name": "profile-exhibit",
+  "art_direction": "case-window profile_quote with material source object",
+  "composition_signature": "profile_quote:exhibit:profile-exhibit:evidence-right:profile_quote:material-editorial:vertical-index:exhibit-uncover:case-window:paper:case-window:editorial:profile_quote--1--layout:top-editorial",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

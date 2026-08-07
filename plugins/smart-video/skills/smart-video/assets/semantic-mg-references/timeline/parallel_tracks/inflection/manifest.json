@@ -1,0 +1,31 @@
+{
+  "id": "parallel_tracks--inflection",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "parallel_tracks",
+  "name": "Models and Chips Co-Evolve",
+  "presentation_form_id": "inflection",
+  "presentation_form_name": "Inflection",
+  "visual_id": "electric-cyan",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "pivot-magnify",
+  "layout": "diagram-right-rail",
+  "layout_instance_id": "parallel_tracks--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_name": "track-crossover",
+  "art_direction": "wave-field parallel_tracks with magnified inflection",
+  "composition_signature": "parallel_tracks:inflection:track-crossover:diagram-right-rail:parallel_tracks:electric-cyan:edge-tabs:pivot-magnify:wave-horizon:technical:wave-field:editorial:parallel_tracks--2--layout:offset-lower-right",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

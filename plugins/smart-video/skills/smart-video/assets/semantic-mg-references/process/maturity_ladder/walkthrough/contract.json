@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "process",
+  "scene_id": "maturity_ladder",
+  "composition_id": "maturity_ladder--walkthrough",
+  "lens_id": "walkthrough",
+  "visual_id": "chalkboard-lab",
+  "layout_instance_id": "maturity_ladder--2--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "structural_fingerprint": "maturity_ladder:walkthrough:stage-diagnostic:data-right:maturity_ladder:chalkboard-lab:edge-tabs:guided-sequence:layered-stack:technical:layers:metric:maturity_ladder--2--layout:bottom-compact",
+  "art_direction": "layers maturity_ladder with guided operating path",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "96ff14391b9eaf777612496aa42c4003522e9a53f9f83d3084ad53bbc5d6b5ab",
+    "9:16": "e9ab649847ea0231949981b4d3773e7591b5740956ddcf8631f8be70cc8da45a"
+  }
+}

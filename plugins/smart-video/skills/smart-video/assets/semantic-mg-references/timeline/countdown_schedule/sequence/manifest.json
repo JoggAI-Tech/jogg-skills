@@ -1,0 +1,31 @@
+{
+  "id": "countdown_schedule--sequence",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "countdown_schedule",
+  "name": "Seven Days to Launch",
+  "presentation_form_id": "sequence",
+  "presentation_form_name": "Sequence",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "floating-chips",
+  "motion_profile": "rail-travel",
+  "layout": "timeline-band",
+  "layout_instance_id": "countdown_schedule--1--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_name": "countdown-ring",
+  "art_direction": "clock countdown_schedule with directional time object",
+  "composition_signature": "countdown_schedule:sequence:countdown-ring:timeline-band:countdown_schedule:kinetic-ivory:floating-chips:rail-travel:clock-orbit:caption:clock:headline:countdown_schedule--1--layout:cinema-caption-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

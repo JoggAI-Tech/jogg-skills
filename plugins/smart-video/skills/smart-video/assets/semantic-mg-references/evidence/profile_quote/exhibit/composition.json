@@ -1,0 +1,115 @@
+{
+  "id": "profile_quote--exhibit",
+  "scene_id": "profile_quote",
+  "scene_title": "The Operator Behind the System",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "lens_id": "exhibit",
+  "lens_name": "Exhibit",
+  "intent": "Present the source or object as the hero evidence",
+  "composition_name": "profile-exhibit",
+  "layout_grammar": "evidence-right",
+  "layout_contract_id": "profile_quote--expression-1",
+  "layout_instance_id": "profile_quote--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "composition_family": "case-window",
+  "design_contract_id": "profile_quote--case-window--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "profile_quote",
+  "support_components": [
+    "portrait_frame",
+    "quote_block",
+    "credential_tag"
+  ],
+  "semantic_slots": [
+    "person",
+    "quote",
+    "context"
+  ],
+  "data_shape": "profile_quote",
+  "motion": "portrait_quote",
+  "motion_profile": "exhibit-uncover",
+  "visual_id": "material-editorial",
+  "proof_mode": "vertical-index",
+  "copy_surface": "paper",
+  "art_surface": "case-window",
+  "copy_mode": "editorial",
+  "art_direction": "case-window profile_quote with material source object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 63.374,
+        "y": 7.46,
+        "w": 31.56,
+        "h": 70.198
+      },
+      "art": {
+        "x": 5.099,
+        "y": 5.189,
+        "w": 55.308,
+        "h": 87.89
+      },
+      "proof": {
+        "x": 62.857,
+        "y": 84.243,
+        "w": 32.154,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 63.374,
+          "y": 7.46,
+          "w": 31.56,
+          "h": 70.198
+        },
+        {
+          "x": 62.857,
+          "y": 84.243,
+          "w": 32.154,
+          "h": 9
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.434,
+        "y": 4.58,
+        "w": 85.56,
+        "h": 25.198
+      },
+      "art": {
+        "x": 6.072,
+        "y": 33.147,
+        "w": 88.308,
+        "h": 55.89
+      },
+      "proof": {
+        "x": 6.896,
+        "y": 92.189,
+        "w": 86.154,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.434,
+          "y": 4.58,
+          "w": 85.56,
+          "h": 25.198
+        },
+        {
+          "x": 6.896,
+          "y": 92.189,
+          "w": 86.154,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "profile_quote:exhibit:profile-exhibit:evidence-right:profile_quote:material-editorial:vertical-index:exhibit-uncover:case-window:paper:case-window:editorial:profile_quote--1--layout:top-editorial",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

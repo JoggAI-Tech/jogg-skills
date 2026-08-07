@@ -1,0 +1,115 @@
+{
+  "id": "causal_chain--outcome",
+  "scene_id": "causal_chain",
+  "scene_title": "Why Inference Costs Fall",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "outcome",
+  "lens_name": "Outcome",
+  "intent": "Connect the process to its measurable result",
+  "composition_name": "effect-headline",
+  "layout_grammar": "poster-offset-right",
+  "layout_contract_id": "causal_chain--expression-3",
+  "layout_instance_id": "causal_chain--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "diagonal-lock",
+  "design_contract_id": "causal_chain--diagonal-lock--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "causal_chain",
+  "support_components": [
+    "cause_nodes",
+    "effect_links",
+    "outcome"
+  ],
+  "semantic_slots": [
+    "cause",
+    "mechanism",
+    "effect"
+  ],
+  "data_shape": "causal_links",
+  "motion": "cause_propagate",
+  "motion_profile": "outcome-resolve",
+  "visual_id": "electric-cyan",
+  "proof_mode": "caption-line",
+  "copy_surface": "floating",
+  "art_surface": "diagonal",
+  "copy_mode": "statement",
+  "art_direction": "diagonal causal_chain with result-bearing machine",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 57.909,
+        "y": 7.18,
+        "w": 38.22,
+        "h": 42.901
+      },
+      "art": {
+        "x": 4.703,
+        "y": 4.937,
+        "w": 48.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 57.429,
+        "y": 77.919,
+        "w": 37.923,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 57.909,
+          "y": 7.18,
+          "w": 38.22,
+          "h": 42.901
+        },
+        {
+          "x": 57.429,
+          "y": 77.919,
+          "w": 37.923,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.729,
+        "y": 5.14,
+        "w": 86.22,
+        "h": 31.901
+      },
+      "art": {
+        "x": 5.784,
+        "y": 39.951,
+        "w": 87.846,
+        "h": 49.055
+      },
+      "proof": {
+        "x": 7.312,
+        "y": 91.937,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.729,
+          "y": 5.14,
+          "w": 86.22,
+          "h": 31.901
+        },
+        {
+          "x": 7.312,
+          "y": 91.937,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "causal_chain:outcome:effect-headline:poster-offset-right:causal_chain:electric-cyan:caption-line:outcome-resolve:diagonal-lock:floating:diagonal:statement:causal_chain--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

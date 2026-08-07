@@ -1,0 +1,31 @@
+{
+  "id": "multi_stop_route--route",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "scene_id": "multi_stop_route",
+  "name": "The Global Chip Journey",
+  "presentation_form_id": "route",
+  "presentation_form_name": "Route",
+  "visual_id": "luminous-grid",
+  "proof_mode": "floating-chips",
+  "motion_profile": "route-travel",
+  "layout": "timeline-band",
+  "layout_instance_id": "multi_stop_route--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "multi-stop-map",
+  "art_direction": "route multi_stop_route with geographic route",
+  "composition_signature": "multi_stop_route:route:multi-stop-map:timeline-band:multi_stop_route:luminous-grid:floating-chips:route-travel:route-bridge:caption:route:headline:multi_stop_route--1--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

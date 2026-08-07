@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "myth_vs_fact",
+  "composition_id": "myth_vs_fact--evidence",
+  "lens_id": "evidence",
+  "visual_id": "archive-dossier",
+  "layout_instance_id": "myth_vs_fact--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "structural_fingerprint": "myth_vs_fact:evidence:correction-file:evidence-right:myth_fact:archive-dossier:stamp:evidence-build:evidence-board:paper:evidence:editorial:myth_vs_fact--2--layout:right-caption-stage",
+  "art_direction": "evidence myth_fact with measured proof field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "08fc2e854b5366fff8f0304de40e7dc916a87954ad23f82850eac05a812bc88f",
+    "9:16": "46e0ea8df168f68f6231e31a00cb3be395865f59ab6c35f53ac1a36f80e408b8"
+  }
+}

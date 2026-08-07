@@ -1,0 +1,115 @@
+{
+  "id": "past_present_future--sequence",
+  "scene_id": "past_present_future",
+  "scene_title": "Learning Platforms, Rewritten",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "sequence",
+  "lens_name": "Sequence",
+  "intent": "Make chronology the primary visual object",
+  "composition_name": "three-horizons",
+  "layout_grammar": "split-decision",
+  "layout_contract_id": "past_present_future--expression-1",
+  "layout_instance_id": "past_present_future--1--layout",
+  "portrait_silhouette_id": "middle-story-band",
+  "composition_family": "triptych",
+  "design_contract_id": "past_present_future--triptych--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "past_present_future",
+  "support_components": [
+    "past_panel",
+    "present_panel",
+    "future_panel"
+  ],
+  "semantic_slots": [
+    "past",
+    "present",
+    "future"
+  ],
+  "data_shape": "three_periods",
+  "motion": "horizon_shift",
+  "motion_profile": "rail-travel",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "vertical-index",
+  "copy_surface": "caption",
+  "art_surface": "triptych",
+  "copy_mode": "duel",
+  "art_direction": "triptych past_present_future with directional time object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.198,
+        "y": 5.82,
+        "w": 35.22,
+        "h": 47.901
+      },
+      "art": {
+        "x": 43.0,
+        "y": 5.063,
+        "w": 51.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 5.0,
+        "y": 73.081,
+        "w": 34.923,
+        "h": 20
+      },
+      "avoid_zones": [
+        {
+          "x": 5.198,
+          "y": 5.82,
+          "w": 35.22,
+          "h": 47.901
+        },
+        {
+          "x": 5.0,
+          "y": 73.081,
+          "w": 34.923,
+          "h": 20
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.198,
+        "y": 41.86,
+        "w": 86.22,
+        "h": 39.901
+      },
+      "art": {
+        "x": 5.0,
+        "y": 5.049,
+        "w": 89.846,
+        "h": 34.055
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 85.063,
+        "w": 85.923,
+        "h": 10
+      },
+      "avoid_zones": [
+        {
+          "x": 7.198,
+          "y": 41.86,
+          "w": 86.22,
+          "h": 39.901
+        },
+        {
+          "x": 7.0,
+          "y": 85.063,
+          "w": 85.923,
+          "h": 10
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "past_present_future:sequence:three-horizons:split-decision:past_present_future:cobalt-coral:vertical-index:rail-travel:triptych:caption:triptych:duel:past_present_future--1--layout:middle-story-band",
+  "copy_density": "duel",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

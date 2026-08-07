@@ -1,0 +1,115 @@
+{
+  "id": "value_chain--outcome",
+  "scene_id": "value_chain",
+  "scene_title": "Where AI SaaS Creates Value",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "outcome",
+  "lens_name": "Outcome",
+  "intent": "Connect the process to its measurable result",
+  "composition_name": "value-result",
+  "layout_grammar": "headline-bottom",
+  "layout_contract_id": "value_chain--expression-3",
+  "layout_instance_id": "value_chain--3--layout",
+  "portrait_silhouette_id": "cinema-caption-bottom",
+  "composition_family": "bars-surge",
+  "design_contract_id": "value_chain--bars-surge--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "value_chain",
+  "support_components": [
+    "layer_blocks",
+    "value_arrows",
+    "margin_tags"
+  ],
+  "semantic_slots": [
+    "inputs",
+    "transformation",
+    "value"
+  ],
+  "data_shape": "value_stages",
+  "motion": "value_flow",
+  "motion_profile": "outcome-resolve",
+  "visual_id": "luminous-grid",
+  "proof_mode": "metric-cards",
+  "copy_surface": "caption",
+  "art_surface": "bars",
+  "copy_mode": "headline",
+  "art_direction": "bars value_chain with result-bearing machine",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.972,
+        "y": 69.46,
+        "w": 62.0,
+        "h": 24.0
+      },
+      "art": {
+        "x": 4.703,
+        "y": 5.189,
+        "w": 90.0,
+        "h": 61.0
+      },
+      "proof": {
+        "x": 70.429,
+        "y": 73.243,
+        "w": 25.0,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 5.972,
+          "y": 69.46,
+          "w": 62.0,
+          "h": 24.0
+        },
+        {
+          "x": 70.429,
+          "y": 73.243,
+          "w": 25.0,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 25.792,
+        "y": 69.58,
+        "w": 68.0,
+        "h": 24.0
+      },
+      "art": {
+        "x": 4.784,
+        "y": 5.147,
+        "w": 90.0,
+        "h": 62.0
+      },
+      "proof": {
+        "x": 7.312,
+        "y": 70.189,
+        "w": 15.0,
+        "h": 24
+      },
+      "avoid_zones": [
+        {
+          "x": 25.792,
+          "y": 69.58,
+          "w": 68.0,
+          "h": 24.0
+        },
+        {
+          "x": 7.312,
+          "y": 70.189,
+          "w": 15.0,
+          "h": 24
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "value_chain:outcome:value-result:headline-bottom:value_chain:luminous-grid:metric-cards:outcome-resolve:bars-surge:caption:bars:headline:value_chain--3--layout:cinema-caption-bottom",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

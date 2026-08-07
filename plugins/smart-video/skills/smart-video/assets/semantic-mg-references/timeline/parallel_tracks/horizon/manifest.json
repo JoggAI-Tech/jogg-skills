@@ -1,0 +1,31 @@
+{
+  "id": "parallel_tracks--horizon",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "parallel_tracks",
+  "name": "Models and Chips Co-Evolve",
+  "presentation_form_id": "horizon",
+  "presentation_form_name": "Horizon",
+  "visual_id": "luminous-grid",
+  "proof_mode": "floating-chips",
+  "motion_profile": "horizon-settle",
+  "layout": "timeline-caption",
+  "layout_instance_id": "parallel_tracks--3--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "composition_name": "convergence-lock",
+  "art_direction": "route parallel_tracks with compressed time horizon",
+  "composition_signature": "parallel_tracks:horizon:convergence-lock:timeline-caption:parallel_tracks:luminous-grid:floating-chips:horizon-settle:route-bridge:editorial:route:headline:parallel_tracks--3--layout:bottom-compact",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

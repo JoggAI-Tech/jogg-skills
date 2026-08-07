@@ -1,0 +1,63 @@
+# B-roll Selection
+
+This contract keeps low-cost selection deterministic: ordered search, rule-based
+filtering, and first-qualified download. It does not invoke another model or rank
+candidate footage with AI.
+
+## Input
+
+Every B-roll shot receives:
+
+```json
+{
+  "search_queries": [
+    "Japanese office workers commuting Tokyo 1990s",
+    "Japan recession closed storefront",
+    "Tokyo business district documentary"
+  ],
+  "must_include": ["Japan", "real people"],
+  "exclude": ["animation", "illustration", "unrelated geography"],
+  "search_language": "en"
+}
+```
+
+Queries are ordered. The first qualified candidate becomes the default, so the
+first query is specific and later queries are controlled fallbacks. Adjacent
+shots must not share the same primary query.
+
+## Retrieval And Selection
+
+Index multiple shots with up to four concurrent Pexels searches. Then process
+shots in Storyboard order:
+
+1. Search only the configured Pexels video provider in this release.
+2. Normalize provider metadata and choose the nearest landscape/720p variant.
+3. Reject excluded concepts and known irrelevant categories using provider-owned
+   titles, descriptions, tags, and keywords.
+4. Reject provider assets already selected by another shot.
+5. Reject clips that cannot cover measured shot duration without looping.
+6. Download only from approved provider domains.
+7. Serially download the first candidate that succeeds for each shot.
+
+Keep only preview metadata for other qualified candidates; do not download them.
+Do not silently reuse a source,
+loop a short clip, or invent a local fallback. Return `blocked_broll` with its
+resumable checkpoint when retrieval fails.
+
+## Audio
+
+B-roll is muted by default. A conversational request may enable reduced source
+audio for selected shots without another search or download. This release does
+not add a fixed audio switch to the editor. Narration remains the primary audio.
+
+## User Replacement
+
+A user-selected candidate overrides the automatic default for that shot. Keep
+alternatives available. `refresh-broll` runs only after an explicit material
+redo and preserves narration, HTML, avatar, voice, and local uploads.
+
+## Boundary
+
+[content-orchestration.md](content-orchestration.md) decides what footage is
+needed. This contract chooses the provider result. HTML reference selection does
+not participate in retrieval.

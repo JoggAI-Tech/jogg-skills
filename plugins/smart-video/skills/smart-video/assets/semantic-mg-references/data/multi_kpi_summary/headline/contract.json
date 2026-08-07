@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "data",
+  "scene_id": "multi_kpi_summary",
+  "composition_id": "multi_kpi_summary--headline",
+  "lens_id": "headline",
+  "visual_id": "cobalt-coral",
+  "layout_instance_id": "multi_kpi_summary--3--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "structural_fingerprint": "multi_kpi_summary:headline:metric-verdict:headline-bottom:multi_kpi:cobalt-coral:caption-line:number-resolve:number-monument:caption:monument:headline:multi_kpi_summary--3--layout:cinema-caption-top",
+  "art_direction": "monument multi_kpi with oversized numeric conclusion",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "7ff5cba4b0217d577fae71b60b06caa045290904cf518319da8c8ca0fd68dcc9",
+    "9:16": "544adfe9cc2857f23d6ec93d092d29c37bd01ff828136a9f41ac76fa1d81d027"
+  }
+}

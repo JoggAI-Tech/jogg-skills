@@ -1,0 +1,31 @@
+{
+  "id": "product_roadmap--horizon",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "product_roadmap",
+  "name": "From Copilot to Operator",
+  "presentation_form_id": "horizon",
+  "presentation_form_name": "Horizon",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "caption-line",
+  "motion_profile": "horizon-settle",
+  "layout": "poster-offset-left",
+  "layout_instance_id": "product_roadmap--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "composition_name": "roadmap-destination",
+  "art_direction": "diagonal product_roadmap with compressed time horizon",
+  "composition_signature": "product_roadmap:horizon:roadmap-destination:poster-offset-left:product_roadmap:kinetic-ivory:caption-line:horizon-settle:diagonal-lock:floating:diagonal:statement:product_roadmap--3--layout:lower-lockup",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "cycle_timeline--inflection",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "cycle_timeline",
+  "name": "The Research Flywheel",
+  "presentation_form_id": "inflection",
+  "presentation_form_name": "Inflection",
+  "visual_id": "electric-cyan",
+  "proof_mode": "metric-cards",
+  "motion_profile": "pivot-magnify",
+  "layout": "data-right",
+  "layout_instance_id": "cycle_timeline--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_name": "cycle-phase",
+  "art_direction": "radial cycle_timeline with magnified inflection",
+  "composition_signature": "cycle_timeline:inflection:cycle-phase:data-right:cycle_timeline:electric-cyan:metric-cards:pivot-magnify:radial-field:technical:radial:metric:cycle_timeline--2--layout:art-monument-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

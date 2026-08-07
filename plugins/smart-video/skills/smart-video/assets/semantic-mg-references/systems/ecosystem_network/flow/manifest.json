@@ -1,0 +1,31 @@
+{
+  "id": "ecosystem_network--flow",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "ecosystem_network",
+  "name": "The New AI Supply Web",
+  "presentation_form_id": "flow",
+  "presentation_form_name": "Flow",
+  "visual_id": "signal-noir",
+  "proof_mode": "caption-line",
+  "motion_profile": "flow-trace",
+  "layout": "diagram-left-rail",
+  "layout_instance_id": "ecosystem_network--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_name": "actor-exchange",
+  "art_direction": "flow-river ecosystem_network with directional exchange",
+  "composition_signature": "ecosystem_network:flow:actor-exchange:diagram-left-rail:ecosystem_network:signal-noir:caption-line:flow-trace:river-flow:technical:flow-river:editorial:ecosystem_network--2--layout:offset-lower-right",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

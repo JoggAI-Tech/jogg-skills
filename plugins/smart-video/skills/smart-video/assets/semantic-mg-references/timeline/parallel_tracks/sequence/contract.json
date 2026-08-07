@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "parallel_tracks",
+  "composition_id": "parallel_tracks--sequence",
+  "lens_id": "sequence",
+  "visual_id": "atlas-blue",
+  "layout_instance_id": "parallel_tracks--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "structural_fingerprint": "parallel_tracks:sequence:dual-track:full-width-stage:parallel_tracks:atlas-blue:vertical-index:rail-travel:pipeline-spine:floating:pipeline:headline:parallel_tracks--1--layout:top-compact",
+  "art_direction": "pipeline parallel_tracks with directional time object",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "ac5d0136d86da55e170ccf5631701feb332a9a42a7d739d65c321bddf5753d67",
+    "9:16": "74ff6900fc03976f2851b62b630b93da0c455afed7d48ca92bf5d3ee597d43cc"
+  }
+}

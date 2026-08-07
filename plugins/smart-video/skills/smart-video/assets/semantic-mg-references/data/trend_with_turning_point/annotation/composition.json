@@ -1,0 +1,115 @@
+{
+  "id": "trend_with_turning_point--annotation",
+  "scene_id": "trend_with_turning_point",
+  "scene_title": "Adoption Accelerates After Week Six",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "annotation",
+  "lens_name": "Annotation",
+  "intent": "Explain the decisive data point in context",
+  "composition_name": "turning-point-note",
+  "layout_grammar": "timeline-caption",
+  "layout_contract_id": "trend_with_turning_point--expression-2",
+  "layout_instance_id": "trend_with_turning_point--2--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "composition_family": "full-bleed-chart",
+  "design_contract_id": "trend_with_turning_point--full-bleed-chart--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "trend_turning_point",
+  "support_components": [
+    "trend_line",
+    "event_marker",
+    "delta_label"
+  ],
+  "semantic_slots": [
+    "baseline",
+    "turning_point",
+    "trend"
+  ],
+  "data_shape": "time_series",
+  "motion": "line_draw_event",
+  "motion_profile": "annotation-focus",
+  "visual_id": "paper-collage",
+  "proof_mode": "metric-cards",
+  "copy_surface": "editorial",
+  "art_surface": "chart-field",
+  "copy_mode": "headline",
+  "art_direction": "chart-field trend_turning_point with annotated decisive mark",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.345,
+        "y": 69.82,
+        "w": 48.0,
+        "h": 24.0
+      },
+      "art": {
+        "x": 5.0,
+        "y": 5.063,
+        "w": 90.0,
+        "h": 60.0
+      },
+      "proof": {
+        "x": 58.0,
+        "y": 73.081,
+        "w": 37.0,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 5.345,
+          "y": 69.82,
+          "w": 48.0,
+          "h": 24.0
+        },
+        {
+          "x": 58.0,
+          "y": 73.081,
+          "w": 37.0,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.345,
+        "y": 71.86,
+        "w": 86.0,
+        "h": 21.0
+      },
+      "art": {
+        "x": 5.0,
+        "y": 5.049,
+        "w": 90.0,
+        "h": 61.0
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 67.063,
+        "w": 86.0,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 7.345,
+          "y": 71.86,
+          "w": 86.0,
+          "h": 21.0
+        },
+        {
+          "x": 7.0,
+          "y": 67.063,
+          "w": 86.0,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "trend_with_turning_point:annotation:turning-point-note:timeline-caption:trend_turning_point:paper-collage:metric-cards:annotation-focus:full-bleed-chart:editorial:chart-field:headline:trend_with_turning_point--2--layout:bottom-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

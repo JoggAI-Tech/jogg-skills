@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "data",
+  "scene_id": "trend_with_turning_point",
+  "composition_id": "trend_with_turning_point--annotation",
+  "lens_id": "annotation",
+  "visual_id": "paper-collage",
+  "layout_instance_id": "trend_with_turning_point--2--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "structural_fingerprint": "trend_with_turning_point:annotation:turning-point-note:timeline-caption:trend_turning_point:paper-collage:metric-cards:annotation-focus:full-bleed-chart:editorial:chart-field:headline:trend_with_turning_point--2--layout:bottom-compact",
+  "art_direction": "chart-field trend_turning_point with annotated decisive mark",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "0fa1e9fb341daa7575c51acf90b375356cb3a8f292b15bbbfe5ba3976b8625d0",
+    "9:16": "bb9b4076d41ee9720533a46ce0db3c82abb295f7a0c9782c3a6cdd17b590284b"
+  }
+}

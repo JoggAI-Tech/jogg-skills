@@ -1,0 +1,115 @@
+{
+  "id": "myth_vs_fact--evidence",
+  "scene_id": "myth_vs_fact",
+  "scene_title": "AI Adoption: Myth vs Fact",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "evidence",
+  "lens_name": "Evidence",
+  "intent": "Explain the difference through concrete proof",
+  "composition_name": "correction-file",
+  "layout_grammar": "evidence-right",
+  "layout_contract_id": "myth_vs_fact--expression-2",
+  "layout_instance_id": "myth_vs_fact--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "composition_family": "evidence-board",
+  "design_contract_id": "myth_vs_fact--evidence-board--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "myth_fact",
+  "support_components": [
+    "myth_card",
+    "fact_card",
+    "evidence_stamp"
+  ],
+  "semantic_slots": [
+    "myth",
+    "fact",
+    "evidence"
+  ],
+  "data_shape": "claim_evidence",
+  "motion": "stamp_correction",
+  "motion_profile": "evidence-build",
+  "visual_id": "archive-dossier",
+  "proof_mode": "stamp",
+  "copy_surface": "paper",
+  "art_surface": "evidence",
+  "copy_mode": "editorial",
+  "art_direction": "evidence myth_fact with measured proof field",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 63.093,
+        "y": 8.18,
+        "w": 32.44,
+        "h": 69.802
+      },
+      "art": {
+        "x": 5.0,
+        "y": 4.937,
+        "w": 54.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 63.0,
+        "y": 83.919,
+        "w": 31.846,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 63.093,
+          "y": 8.18,
+          "w": 32.44,
+          "h": 69.802
+        },
+        {
+          "x": 63.0,
+          "y": 83.919,
+          "w": 31.846,
+          "h": 9
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 61.093,
+        "y": 5.14,
+        "w": 33.44,
+        "h": 66.802
+      },
+      "art": {
+        "x": 6.0,
+        "y": 4.951,
+        "w": 50.692,
+        "h": 80.11
+      },
+      "proof": {
+        "x": 61.0,
+        "y": 74.937,
+        "w": 32.846,
+        "h": 12
+      },
+      "avoid_zones": [
+        {
+          "x": 61.093,
+          "y": 5.14,
+          "w": 33.44,
+          "h": 66.802
+        },
+        {
+          "x": 61.0,
+          "y": 74.937,
+          "w": 32.846,
+          "h": 12
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "myth_vs_fact:evidence:correction-file:evidence-right:myth_fact:archive-dossier:stamp:evidence-build:evidence-board:paper:evidence:editorial:myth_vs_fact--2--layout:right-caption-stage",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

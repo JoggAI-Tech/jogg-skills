@@ -1,0 +1,114 @@
+{
+  "id": "quote_lockup--signal",
+  "scene_id": "quote_lockup",
+  "scene_title": "Build Where the Constraint Lives",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "signal",
+  "lens_name": "Signal",
+  "intent": "Lead with the one idea the audience must remember",
+  "composition_name": "quote-stage",
+  "layout_grammar": "evidence-left",
+  "layout_contract_id": "quote_lockup--expression-1",
+  "layout_instance_id": "quote_lockup--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "composition_family": "editorial-margin",
+  "design_contract_id": "quote_lockup--editorial-margin--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "quote_lockup",
+  "support_components": [
+    "speaker_tag",
+    "argument_rule"
+  ],
+  "semantic_slots": [
+    "quote",
+    "speaker",
+    "interpretation"
+  ],
+  "data_shape": "quote_attribution",
+  "motion": "quote_wipe",
+  "motion_profile": "impact-lock",
+  "visual_id": "archive-dossier",
+  "proof_mode": "caption-line",
+  "copy_surface": "paper",
+  "art_surface": "framed-object",
+  "copy_mode": "editorial",
+  "art_direction": "framed-object quote_lockup with single dominant symbol",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.807,
+        "y": 7.64,
+        "w": 32.44,
+        "h": 69.802
+      },
+      "art": {
+        "x": 40.099,
+        "y": 5.126,
+        "w": 54.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 4.857,
+        "y": 84.162,
+        "w": 31.846,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 4.807,
+          "y": 7.64,
+          "w": 32.44,
+          "h": 69.802
+        },
+        {
+          "x": 4.857,
+          "y": 84.162,
+          "w": 31.846,
+          "h": 9
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.867,
+        "y": 4.72,
+        "w": 86.44,
+        "h": 24.802
+      },
+      "art": {
+        "x": 6.072,
+        "y": 33.098,
+        "w": 87.692,
+        "h": 56.11
+      },
+      "proof": {
+        "x": 6.896,
+        "y": 92.126,
+        "w": 85.846,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.867,
+          "y": 4.72,
+          "w": 86.44,
+          "h": 24.802
+        },
+        {
+          "x": 6.896,
+          "y": 92.126,
+          "w": 85.846,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "quote_lockup:signal:quote-stage:evidence-left:quote_lockup:archive-dossier:caption-line:impact-lock:editorial-margin:paper:framed-object:editorial:quote_lockup--1--layout:top-editorial",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "feature_matrix",
+  "composition_id": "feature_matrix--evidence",
+  "lens_id": "evidence",
+  "visual_id": "material-editorial",
+  "layout_instance_id": "feature_matrix--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "structural_fingerprint": "feature_matrix:evidence:selected-cell:editorial-right:feature_matrix:material-editorial:stamp:evidence-build:evidence-board:editorial:evidence:editorial:feature_matrix--2--layout:offset-lower-right",
+  "art_direction": "evidence feature_matrix with measured proof field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "6c723f55a1cbee9fe41d329a7cbe6a642ed5e90500caae5b95e434c6578e3044",
+    "9:16": "9692f142906abe40db3745433235357ab96706088011362e6ccdb38345aab8af"
+  }
+}

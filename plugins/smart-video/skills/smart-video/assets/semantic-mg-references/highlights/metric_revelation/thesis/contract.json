@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "highlights",
+  "scene_id": "metric_revelation",
+  "composition_id": "metric_revelation--thesis",
+  "lens_id": "thesis",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "metric_revelation--3--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "structural_fingerprint": "metric_revelation:thesis:editorial-number:metric-monument:metric_reveal:luminous-grid:metric-cards:poster-slam:full-bleed-chart:poster:chart-field:metric:metric_revelation--3--layout:center-lockup",
+  "art_direction": "chart-field metric_reveal with poster conclusion",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "25932da104c490954cd883eae3abf2aaa10eaf6319b19e04e4c003ecdaa6c18b",
+    "9:16": "e8c6d065323d879a47b3c4bd856ff9118d1390c499fa7354e9d362f06ec41937"
+  }
+}

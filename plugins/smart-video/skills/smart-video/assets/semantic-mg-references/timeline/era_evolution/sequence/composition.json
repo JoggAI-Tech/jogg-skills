@@ -1,0 +1,114 @@
+{
+  "id": "era_evolution--sequence",
+  "scene_id": "era_evolution",
+  "scene_title": "Three Eras of AI Products",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "sequence",
+  "lens_name": "Sequence",
+  "intent": "Make chronology the primary visual object",
+  "composition_name": "era-panels",
+  "layout_grammar": "headline-top",
+  "layout_contract_id": "era_evolution--expression-1",
+  "layout_instance_id": "era_evolution--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "triptych",
+  "design_contract_id": "era_evolution--triptych--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "era_evolution",
+  "support_components": [
+    "era_panels",
+    "transition_arrows"
+  ],
+  "semantic_slots": [
+    "era_one",
+    "era_two",
+    "era_three"
+  ],
+  "data_shape": "periods",
+  "motion": "era_replace",
+  "motion_profile": "rail-travel",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "vertical-index",
+  "copy_surface": "caption",
+  "art_surface": "triptych",
+  "copy_mode": "headline",
+  "art_direction": "triptych era_evolution with directional time object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.4,
+        "y": 4.64,
+        "w": 62.22,
+        "h": 24.901
+      },
+      "art": {
+        "x": 4.901,
+        "y": 33.126,
+        "w": 89.846,
+        "h": 60.055
+      },
+      "proof": {
+        "x": 70.143,
+        "y": 7.162,
+        "w": 24.923,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 5.4,
+          "y": 4.64,
+          "w": 62.22,
+          "h": 24.901
+        },
+        {
+          "x": 70.143,
+          "y": 7.162,
+          "w": 24.923,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.34,
+        "y": 68.72,
+        "w": 86.22,
+        "h": 22.901
+      },
+      "art": {
+        "x": 4.928,
+        "y": 5.098,
+        "w": 89.846,
+        "h": 54.055
+      },
+      "proof": {
+        "x": 7.104,
+        "y": 62.126,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.34,
+          "y": 68.72,
+          "w": 86.22,
+          "h": 22.901
+        },
+        {
+          "x": 7.104,
+          "y": 62.126,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "era_evolution:sequence:era-panels:headline-top:era_evolution:kinetic-ivory:vertical-index:rail-travel:triptych:caption:triptych:headline:era_evolution--1--layout:art-monument-top",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

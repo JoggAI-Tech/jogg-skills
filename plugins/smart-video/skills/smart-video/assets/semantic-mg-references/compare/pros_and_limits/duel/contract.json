@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "pros_and_limits",
+  "composition_id": "pros_and_limits--duel",
+  "lens_id": "duel",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "pros_and_limits--1--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "structural_fingerprint": "pros_and_limits:duel:tradeoff-scale:data-left:pros_limits:luminous-grid:edge-tabs:opposed-wipe:force-quadrant:technical:quadrant:metric:pros_and_limits--1--layout:art-monument-bottom",
+  "art_direction": "quadrant pros_limits with opposed visual masses",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "ca6d84064ceb3f6be72f8778f0c3c7ff50ab715eb29f98a52916e88a9f99748c",
+    "9:16": "3614a51e6c9f1a22c6ae8b07f3abb6e4d7fa332c86cf0b226b6d6ee21e9972c0"
+  }
+}

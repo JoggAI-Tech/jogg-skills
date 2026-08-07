@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "highlights",
+  "scene_id": "statement_monument",
+  "composition_id": "statement_monument--reveal",
+  "lens_id": "reveal",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "statement_monument--2--layout",
+  "portrait_silhouette_id": "cinema-caption-bottom",
+  "structural_fingerprint": "statement_monument:reveal:diagonal-reveal:headline-top:claim_monument:kinetic-ivory:edge-tabs:reveal-cut:orbit-poster:caption:orbit:headline:statement_monument--2--layout:cinema-caption-bottom",
+  "art_direction": "orbit claim_monument with editorial reveal",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "608bfab3c7ac40bff9ec95b4f81378e946fcc9427a559525614ee80b636af196",
+    "9:16": "1396b1b0b432e194b0e407e01552ebe5f05a2ebf3e6316bedc4ec8ec413ec9f3"
+  }
+}

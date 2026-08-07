@@ -1,0 +1,115 @@
+{
+  "id": "source_claim_binding--finding",
+  "scene_id": "source_claim_binding",
+  "scene_title": "Every Claim Has a Source",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "lens_id": "finding",
+  "lens_name": "Finding",
+  "intent": "Lock the evidence into one defensible conclusion",
+  "composition_name": "source-verdict",
+  "layout_grammar": "headline-bottom",
+  "layout_contract_id": "source_claim_binding--expression-3",
+  "layout_instance_id": "source_claim_binding--3--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_family": "redaction-sheet",
+  "design_contract_id": "source_claim_binding--redaction-sheet--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "source_claim_binding",
+  "support_components": [
+    "source_cards",
+    "claim_cards",
+    "binding_lines"
+  ],
+  "semantic_slots": [
+    "sources",
+    "claims",
+    "confidence"
+  ],
+  "data_shape": "source_claim_pairs",
+  "motion": "bindings_draw",
+  "motion_profile": "finding-stamp",
+  "visual_id": "atlas-blue",
+  "proof_mode": "stamp",
+  "copy_surface": "caption",
+  "art_surface": "redaction",
+  "copy_mode": "headline",
+  "art_direction": "redaction source_claim_binding with finding lockup",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.416,
+        "y": 69.82,
+        "w": 61.56,
+        "h": 24.198
+      },
+      "art": {
+        "x": 5.099,
+        "y": 5.063,
+        "w": 90.308,
+        "h": 60.89
+      },
+      "proof": {
+        "x": 69.857,
+        "y": 73.081,
+        "w": 25.154,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 5.416,
+          "y": 69.82,
+          "w": 61.56,
+          "h": 24.198
+        },
+        {
+          "x": 69.857,
+          "y": 73.081,
+          "w": 25.154,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.476,
+        "y": 4.86,
+        "w": 67.56,
+        "h": 24.198
+      },
+      "art": {
+        "x": 5.072,
+        "y": 32.049,
+        "w": 90.308,
+        "h": 60.89
+      },
+      "proof": {
+        "x": 77.896,
+        "y": 5.063,
+        "w": 15.154,
+        "h": 24
+      },
+      "avoid_zones": [
+        {
+          "x": 7.476,
+          "y": 4.86,
+          "w": 67.56,
+          "h": 24.198
+        },
+        {
+          "x": 77.896,
+          "y": 5.063,
+          "w": 15.154,
+          "h": 24
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "source_claim_binding:finding:source-verdict:headline-bottom:source_claim_binding:atlas-blue:stamp:finding-stamp:redaction-sheet:caption:redaction:headline:source_claim_binding--3--layout:cinema-caption-top",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "evidence",
+  "scene_id": "annotated_object",
+  "composition_id": "annotated_object--analysis",
+  "lens_id": "analysis",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "annotated_object--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "structural_fingerprint": "annotated_object:analysis:object-cutaway:evidence-left:annotated_object:electric-cyan:stamp:analysis-connect:evidence-board:paper:evidence:editorial:annotated_object--2--layout:bottom-editorial",
+  "art_direction": "evidence annotated_object with connected evidence fragments",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "03bbfa72dbce629cfd202e14c7d706fcf444bc5c2e3126f79a700c3092016f19",
+    "9:16": "9cc0236e21944bc8070694b93728e949c09fb71124084517a922d9ed3264e803"
+  }
+}

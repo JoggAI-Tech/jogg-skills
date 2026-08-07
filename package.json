@@ -1,0 +1,25 @@
+{
+  "name": "jogg-skills",
+  "version": "1.0.0",
+  "description": "This repository is initialized as an Agent Skills project based on the Agent Skills specification.",
+  "main": "app.js",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JoggAI-Tech/jogg-skills.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/JoggAI-Tech/jogg-skills/issues"
+  },
+  "homepage": "https://github.com/JoggAI-Tech/jogg-skills#readme"
+}

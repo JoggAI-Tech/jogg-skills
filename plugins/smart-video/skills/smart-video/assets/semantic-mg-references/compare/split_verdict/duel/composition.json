@@ -1,0 +1,115 @@
+{
+  "id": "split_verdict--duel",
+  "scene_id": "split_verdict",
+  "scene_title": "Open or Controlled?",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "duel",
+  "lens_name": "Duel",
+  "intent": "Make the alternatives directly and fairly comparable",
+  "composition_name": "hard-split",
+  "layout_grammar": "split-decision",
+  "layout_contract_id": "split_verdict--expression-1",
+  "layout_instance_id": "split_verdict--1--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "composition_family": "gate-split",
+  "design_contract_id": "split_verdict--gate-split--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "split_verdict",
+  "support_components": [
+    "option_a",
+    "option_b",
+    "verdict_rule"
+  ],
+  "semantic_slots": [
+    "option_a",
+    "option_b",
+    "verdict"
+  ],
+  "data_shape": "binary_compare",
+  "motion": "split_open",
+  "motion_profile": "opposed-wipe",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "center-badge",
+  "copy_surface": "caption",
+  "art_surface": "hard-split",
+  "copy_mode": "duel",
+  "art_direction": "hard-split split_verdict with opposed visual masses",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.072,
+        "y": 6.0,
+        "w": 35.44,
+        "h": 47.802
+      },
+      "art": {
+        "x": 43.0,
+        "y": 5.0,
+        "w": 51.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 5.0,
+        "y": 73.0,
+        "w": 34.846,
+        "h": 20
+      },
+      "avoid_zones": [
+        {
+          "x": 5.072,
+          "y": 6.0,
+          "w": 35.44,
+          "h": 47.802
+        },
+        {
+          "x": 5.0,
+          "y": 73.0,
+          "w": 34.846,
+          "h": 20
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.072,
+        "y": 70.0,
+        "w": 86.44,
+        "h": 24.802
+      },
+      "art": {
+        "x": 6.0,
+        "y": 5.0,
+        "w": 87.692,
+        "h": 53.11
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 60.0,
+        "w": 85.846,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 7.072,
+          "y": 70.0,
+          "w": 86.44,
+          "h": 24.802
+        },
+        {
+          "x": 7.0,
+          "y": 60.0,
+          "w": 85.846,
+          "h": 7
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "split_verdict:duel:hard-split:split-decision:split_verdict:cobalt-coral:center-badge:opposed-wipe:gate-split:caption:hard-split:duel:split_verdict--1--layout:lower-lockup",
+  "copy_density": "duel",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

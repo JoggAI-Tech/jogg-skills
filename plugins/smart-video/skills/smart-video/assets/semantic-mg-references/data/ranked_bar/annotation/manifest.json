@@ -1,0 +1,31 @@
+{
+  "id": "ranked_bar--annotation",
+  "category_id": "data",
+  "category_name": "Data",
+  "scene_id": "ranked_bar",
+  "name": "Top Workflows by Time Saved",
+  "presentation_form_id": "annotation",
+  "presentation_form_name": "Annotation",
+  "visual_id": "signal-noir",
+  "proof_mode": "vertical-index",
+  "motion_profile": "annotation-focus",
+  "layout": "data-topline",
+  "layout_instance_id": "ranked_bar--2--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "composition_name": "leader-callout",
+  "art_direction": "rail ranked_bar with annotated decisive mark",
+  "composition_signature": "ranked_bar:annotation:leader-callout:data-topline:ranked_bar:signal-noir:vertical-index:annotation-focus:step-rail:caption:rail:metric:ranked_bar--2--layout:bottom-compact",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "id": "forecast_band--annotation",
+  "scene_id": "forecast_band",
+  "scene_title": "Three Paths to Scale",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "annotation",
+  "lens_name": "Annotation",
+  "intent": "Explain the decisive data point in context",
+  "composition_name": "forecast-range",
+  "layout_grammar": "data-right",
+  "layout_contract_id": "forecast_band--expression-2",
+  "layout_instance_id": "forecast_band--2--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "composition_family": "technical-curve",
+  "design_contract_id": "forecast_band--technical-curve--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "forecast_band",
+  "support_components": [
+    "history_line",
+    "confidence_band",
+    "scenario_lines"
+  ],
+  "semantic_slots": [
+    "history",
+    "range",
+    "outlook"
+  ],
+  "data_shape": "forecast_series",
+  "motion": "band_expand",
+  "motion_profile": "annotation-focus",
+  "visual_id": "electric-cyan",
+  "proof_mode": "floating-chips",
+  "copy_surface": "technical",
+  "art_surface": "curve",
+  "copy_mode": "metric",
+  "art_direction": "curve forecast_band with annotated decisive mark",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 64.143,
+        "y": 8.0,
+        "w": 31.0,
+        "h": 68.0
+      },
+      "art": {
+        "x": 5.099,
+        "y": 5.0,
+        "w": 56.0,
+        "h": 88.0
+      },
+      "proof": {
+        "x": 63.857,
+        "y": 82.0,
+        "w": 31.0,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 64.143,
+          "y": 8.0,
+          "w": 31.0,
+          "h": 68.0
+        },
+        {
+          "x": 63.857,
+          "y": 82.0,
+          "w": 31.0,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 12.203,
+        "y": 5.0,
+        "w": 76.0,
+        "h": 23.0
+      },
+      "art": {
+        "x": 8.072,
+        "y": 31.0,
+        "w": 84.0,
+        "h": 44.0
+      },
+      "proof": {
+        "x": 11.896,
+        "y": 78.0,
+        "w": 76.0,
+        "h": 17
+      },
+      "avoid_zones": [
+        {
+          "x": 12.203,
+          "y": 5.0,
+          "w": 76.0,
+          "h": 23.0
+        },
+        {
+          "x": 11.896,
+          "y": 78.0,
+          "w": 76.0,
+          "h": 17
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "forecast_band:annotation:forecast-range:data-right:forecast_band:electric-cyan:floating-chips:annotation-focus:technical-curve:technical:curve:metric:forecast_band--2--layout:center-lockup",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,115 @@
+{
+  "id": "architecture_stack--flow",
+  "scene_id": "architecture_stack",
+  "scene_title": "An Enterprise Agent Stack",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "flow",
+  "lens_name": "Flow",
+  "intent": "Show movement between actors, layers, or resources",
+  "composition_name": "layer-cutaway",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "architecture_stack--expression-2",
+  "layout_instance_id": "architecture_stack--2--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_family": "technical-curve",
+  "design_contract_id": "architecture_stack--technical-curve--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "architecture_stack",
+  "support_components": [
+    "stack_layers",
+    "trust_spine",
+    "interface_caps"
+  ],
+  "semantic_slots": [
+    "foundation",
+    "services",
+    "experience"
+  ],
+  "data_shape": "architecture_layers",
+  "motion": "stack_assemble",
+  "motion_profile": "flow-trace",
+  "visual_id": "atlas-blue",
+  "proof_mode": "floating-chips",
+  "copy_surface": "floating",
+  "art_surface": "curve",
+  "copy_mode": "headline",
+  "art_direction": "curve architecture_stack with directional exchange",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.004,
+        "y": 4.46,
+        "w": 45.78,
+        "h": 28.099
+      },
+      "art": {
+        "x": 5.198,
+        "y": 36.189,
+        "w": 90.154,
+        "h": 56.945
+      },
+      "proof": {
+        "x": 55.714,
+        "y": 7.243,
+        "w": 39.077,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 5.004,
+          "y": 4.46,
+          "w": 45.78,
+          "h": 28.099
+        },
+        {
+          "x": 55.714,
+          "y": 7.243,
+          "w": 39.077,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.124,
+        "y": 4.58,
+        "w": 85.78,
+        "h": 23.099
+      },
+      "art": {
+        "x": 5.144,
+        "y": 36.147,
+        "w": 90.154,
+        "h": 56.945
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 30.189,
+        "w": 86.077,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 7.124,
+          "y": 4.58,
+          "w": 85.78,
+          "h": 23.099
+        },
+        {
+          "x": 6.792,
+          "y": 30.189,
+          "w": 86.077,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "architecture_stack:flow:layer-cutaway:full-width-stage:architecture_stack:atlas-blue:floating-chips:flow-trace:technical-curve:floating:curve:headline:architecture_stack--2--layout:art-monument-bottom",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "process",
+  "scene_id": "causal_chain",
+  "composition_id": "causal_chain--outcome",
+  "lens_id": "outcome",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "causal_chain--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "structural_fingerprint": "causal_chain:outcome:effect-headline:poster-offset-right:causal_chain:electric-cyan:caption-line:outcome-resolve:diagonal-lock:floating:diagonal:statement:causal_chain--3--layout:poster-inset-top",
+  "art_direction": "diagonal causal_chain with result-bearing machine",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "f27a797adbac044697a077647a1f96591f13071e0a27695f436001f016ab20b6",
+    "9:16": "d5e77ed43a908bcdb0084bc8e56c3b90c045c74850d2011ebde31865de0ca598"
+  }
+}

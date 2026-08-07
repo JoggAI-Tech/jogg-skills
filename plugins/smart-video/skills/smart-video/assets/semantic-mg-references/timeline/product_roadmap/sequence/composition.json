@@ -1,0 +1,115 @@
+{
+  "id": "product_roadmap--sequence",
+  "scene_id": "product_roadmap",
+  "scene_title": "From Copilot to Operator",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "sequence",
+  "lens_name": "Sequence",
+  "intent": "Make chronology the primary visual object",
+  "composition_name": "roadmap-lanes",
+  "layout_grammar": "timeline-band",
+  "layout_contract_id": "product_roadmap--expression-1",
+  "layout_instance_id": "product_roadmap--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "route-bridge",
+  "design_contract_id": "product_roadmap--route-bridge--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "product_roadmap",
+  "support_components": [
+    "release_cards",
+    "capability_steps",
+    "destination_flag"
+  ],
+  "semantic_slots": [
+    "now",
+    "next",
+    "later"
+  ],
+  "data_shape": "roadmap_releases",
+  "motion": "roadmap_advance",
+  "motion_profile": "rail-travel",
+  "visual_id": "luminous-grid",
+  "proof_mode": "floating-chips",
+  "copy_surface": "caption",
+  "art_surface": "route",
+  "copy_mode": "headline",
+  "art_direction": "route product_roadmap with directional time object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.867,
+        "y": 4.82,
+        "w": 58.22,
+        "h": 31.901
+      },
+      "art": {
+        "x": 4.703,
+        "y": 41.063,
+        "w": 89.846,
+        "h": 52.055
+      },
+      "proof": {
+        "x": 66.429,
+        "y": 7.081,
+        "w": 28.923,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 5.867,
+          "y": 4.82,
+          "w": 58.22,
+          "h": 31.901
+        },
+        {
+          "x": 66.429,
+          "y": 7.081,
+          "w": 28.923,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.687,
+        "y": 68.86,
+        "w": 86.22,
+        "h": 22.901
+      },
+      "art": {
+        "x": 4.784,
+        "y": 5.049,
+        "w": 89.846,
+        "h": 54.055
+      },
+      "proof": {
+        "x": 7.312,
+        "y": 62.063,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.687,
+          "y": 68.86,
+          "w": 86.22,
+          "h": 22.901
+        },
+        {
+          "x": 7.312,
+          "y": 62.063,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "product_roadmap:sequence:roadmap-lanes:timeline-band:product_roadmap:luminous-grid:floating-chips:rail-travel:route-bridge:caption:route:headline:product_roadmap--1--layout:art-monument-top",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

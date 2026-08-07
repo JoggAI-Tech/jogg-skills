@@ -1,0 +1,115 @@
+{
+  "id": "maturity_ladder--walkthrough",
+  "scene_id": "maturity_ladder",
+  "scene_title": "Five Levels of AI Operations",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "walkthrough",
+  "lens_name": "Walkthrough",
+  "intent": "Guide the viewer through the operating sequence",
+  "composition_name": "stage-diagnostic",
+  "layout_grammar": "data-right",
+  "layout_contract_id": "maturity_ladder--expression-2",
+  "layout_instance_id": "maturity_ladder--2--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "composition_family": "layered-stack",
+  "design_contract_id": "maturity_ladder--layered-stack--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "maturity_ladder",
+  "support_components": [
+    "level_steps",
+    "current_marker",
+    "target_marker"
+  ],
+  "semantic_slots": [
+    "current",
+    "levels",
+    "target"
+  ],
+  "data_shape": "maturity_levels",
+  "motion": "ladder_climb",
+  "motion_profile": "guided-sequence",
+  "visual_id": "chalkboard-lab",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "technical",
+  "art_surface": "layers",
+  "copy_mode": "metric",
+  "art_direction": "layers maturity_ladder with guided operating path",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 63.878,
+        "y": 7.64,
+        "w": 31.0,
+        "h": 68.0
+      },
+      "art": {
+        "x": 5.198,
+        "y": 5.126,
+        "w": 56.0,
+        "h": 88.0
+      },
+      "proof": {
+        "x": 63.714,
+        "y": 82.162,
+        "w": 31.0,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 63.878,
+          "y": 7.64,
+          "w": 31.0,
+          "h": 68.0
+        },
+        {
+          "x": 63.714,
+          "y": 82.162,
+          "w": 31.0,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.998,
+        "y": 71.72,
+        "w": 86.0,
+        "h": 21.0
+      },
+      "art": {
+        "x": 5.144,
+        "y": 5.098,
+        "w": 90.0,
+        "h": 61.0
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 67.126,
+        "w": 86.0,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 6.998,
+          "y": 71.72,
+          "w": 86.0,
+          "h": 21.0
+        },
+        {
+          "x": 6.792,
+          "y": 67.126,
+          "w": 86.0,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "maturity_ladder:walkthrough:stage-diagnostic:data-right:maturity_ladder:chalkboard-lab:edge-tabs:guided-sequence:layered-stack:technical:layers:metric:maturity_ladder--2--layout:bottom-compact",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

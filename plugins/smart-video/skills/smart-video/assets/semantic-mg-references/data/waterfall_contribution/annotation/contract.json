@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "data",
+  "scene_id": "waterfall_contribution",
+  "composition_id": "waterfall_contribution--annotation",
+  "lens_id": "annotation",
+  "visual_id": "chalkboard-lab",
+  "layout_instance_id": "waterfall_contribution--2--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "structural_fingerprint": "waterfall_contribution:annotation:driver-focus:data-topline:waterfall:chalkboard-lab:vertical-index:annotation-focus:step-rail:caption:rail:metric:waterfall_contribution--2--layout:center-lockup",
+  "art_direction": "rail waterfall with annotated decisive mark",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "40c71b8922adfaf433cfa771996a18528ad247f433602ea091bab9029e790f4d",
+    "9:16": "a1a26dd6b91e2d575f294e6b9a71031196c6167ef744390cd6372cf336a8b75f"
+  }
+}

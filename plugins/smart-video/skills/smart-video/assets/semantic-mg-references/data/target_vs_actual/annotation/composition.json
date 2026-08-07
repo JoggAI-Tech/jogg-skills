@@ -1,0 +1,115 @@
+{
+  "id": "target_vs_actual--annotation",
+  "scene_id": "target_vs_actual",
+  "scene_title": "Usage Outruns the Plan",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "annotation",
+  "lens_name": "Annotation",
+  "intent": "Explain the decisive data point in context",
+  "composition_name": "gap-annotation",
+  "layout_grammar": "data-left",
+  "layout_contract_id": "target_vs_actual--expression-2",
+  "layout_instance_id": "target_vs_actual--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "force-quadrant",
+  "design_contract_id": "target_vs_actual--force-quadrant--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "target_actual",
+  "support_components": [
+    "target_marker",
+    "actual_bar",
+    "variance_badge"
+  ],
+  "semantic_slots": [
+    "target",
+    "actual",
+    "variance"
+  ],
+  "data_shape": "target_actual",
+  "motion": "bar_to_target",
+  "motion_profile": "annotation-focus",
+  "visual_id": "signal-noir",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "technical",
+  "art_surface": "quadrant",
+  "copy_mode": "metric",
+  "art_direction": "quadrant target_actual with annotated decisive mark",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 6.014,
+        "y": 7.82,
+        "w": 31.0,
+        "h": 68.0
+      },
+      "art": {
+        "x": 38.703,
+        "y": 5.063,
+        "w": 56.0,
+        "h": 88.0
+      },
+      "proof": {
+        "x": 5.429,
+        "y": 82.081,
+        "w": 31.0,
+        "h": 11
+      },
+      "avoid_zones": [
+        {
+          "x": 6.014,
+          "y": 7.82,
+          "w": 31.0,
+          "h": 68.0
+        },
+        {
+          "x": 5.429,
+          "y": 82.081,
+          "w": 31.0,
+          "h": 11
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.834,
+        "y": 68.86,
+        "w": 86.0,
+        "h": 23.0
+      },
+      "art": {
+        "x": 4.784,
+        "y": 5.049,
+        "w": 90.0,
+        "h": 54.0
+      },
+      "proof": {
+        "x": 7.312,
+        "y": 62.063,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.834,
+          "y": 68.86,
+          "w": 86.0,
+          "h": 23.0
+        },
+        {
+          "x": 7.312,
+          "y": 62.063,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "target_vs_actual:annotation:gap-annotation:data-left:target_actual:signal-noir:edge-tabs:annotation-focus:force-quadrant:technical:quadrant:metric:target_vs_actual--2--layout:art-monument-top",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

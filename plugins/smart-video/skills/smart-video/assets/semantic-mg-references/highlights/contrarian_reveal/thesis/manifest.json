@@ -1,0 +1,31 @@
+{
+  "id": "contrarian_reveal--thesis",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "scene_id": "contrarian_reveal",
+  "name": "Bigger Models Are Not the Moat",
+  "presentation_form_id": "thesis",
+  "presentation_form_name": "Thesis",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "center-badge",
+  "motion_profile": "poster-slam",
+  "layout": "diagonal-left",
+  "layout_instance_id": "contrarian_reveal--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_name": "contrarian-poster",
+  "art_direction": "opposed contrarian_switch with poster conclusion",
+  "composition_signature": "contrarian_reveal:thesis:contrarian-poster:diagonal-left:contrarian_switch:cobalt-coral:center-badge:poster-slam:opposed-cards:poster:opposed:statement:contrarian_reveal--3--layout:poster-inset-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

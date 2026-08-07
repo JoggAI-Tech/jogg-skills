@@ -1,0 +1,115 @@
+{
+  "id": "nested_taxonomy--architecture",
+  "scene_id": "nested_taxonomy",
+  "scene_title": "A Taxonomy of Agent Work",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "architecture",
+  "lens_name": "Architecture",
+  "intent": "Make structure and dependency visible",
+  "composition_name": "nested-taxonomy",
+  "layout_grammar": "diagram-left-rail",
+  "layout_contract_id": "nested_taxonomy--expression-1",
+  "layout_instance_id": "nested_taxonomy--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "composition_family": "taxonomy-grid",
+  "design_contract_id": "nested_taxonomy--taxonomy-grid--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "nested_taxonomy",
+  "support_components": [
+    "category_shells",
+    "subtype_nodes",
+    "classification_keys"
+  ],
+  "semantic_slots": [
+    "domain",
+    "categories",
+    "types"
+  ],
+  "data_shape": "nested_sets",
+  "motion": "taxonomy_unfold",
+  "motion_profile": "structure-assemble",
+  "visual_id": "chalkboard-lab",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "technical",
+  "art_surface": "taxonomy",
+  "copy_mode": "editorial",
+  "art_direction": "taxonomy nested_taxonomy with structural blueprint",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 40.046,
+        "y": 7.82,
+        "w": 54.78,
+        "h": 42.099
+      },
+      "art": {
+        "x": 5.198,
+        "y": 5.063,
+        "w": 31.154,
+        "h": 87.945
+      },
+      "proof": {
+        "x": 39.714,
+        "y": 78.081,
+        "w": 55.077,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 40.046,
+          "y": 7.82,
+          "w": 54.78,
+          "h": 42.099
+        },
+        {
+          "x": 39.714,
+          "y": 78.081,
+          "w": 55.077,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.166,
+        "y": 4.86,
+        "w": 85.78,
+        "h": 25.099
+      },
+      "art": {
+        "x": 6.144,
+        "y": 33.049,
+        "w": 88.154,
+        "h": 55.945
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 92.063,
+        "w": 86.077,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.166,
+          "y": 4.86,
+          "w": 85.78,
+          "h": 25.099
+        },
+        {
+          "x": 6.792,
+          "y": 92.063,
+          "w": 86.077,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "nested_taxonomy:architecture:nested-taxonomy:diagram-left-rail:nested_taxonomy:chalkboard-lab:edge-tabs:structure-assemble:taxonomy-grid:technical:taxonomy:editorial:nested_taxonomy--1--layout:top-editorial",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

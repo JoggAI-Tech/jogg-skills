@@ -1,0 +1,115 @@
+{
+  "id": "document_reveal--exhibit",
+  "scene_id": "document_reveal",
+  "scene_title": "The Memo That Changed the Roadmap",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "lens_id": "exhibit",
+  "lens_name": "Exhibit",
+  "intent": "Present the source or object as the hero evidence",
+  "composition_name": "document-exhibit",
+  "layout_grammar": "evidence-left",
+  "layout_contract_id": "document_reveal--expression-1",
+  "layout_instance_id": "document_reveal--1--layout",
+  "portrait_silhouette_id": "offset-upper-left",
+  "composition_family": "archive-stack",
+  "design_contract_id": "document_reveal--archive-stack--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "document_reveal",
+  "support_components": [
+    "document_page",
+    "highlight_box",
+    "finding_note"
+  ],
+  "semantic_slots": [
+    "source",
+    "excerpt",
+    "finding"
+  ],
+  "data_shape": "document_excerpt",
+  "motion": "document_uncover",
+  "motion_profile": "exhibit-uncover",
+  "visual_id": "archive-dossier",
+  "proof_mode": "stamp",
+  "copy_surface": "paper",
+  "art_surface": "paper-stack",
+  "copy_mode": "editorial",
+  "art_direction": "paper-stack document_reveal with material source object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.576,
+        "y": 8.54,
+        "w": 31.78,
+        "h": 70.099
+      },
+      "art": {
+        "x": 40.0,
+        "y": 4.811,
+        "w": 55.154,
+        "h": 87.945
+      },
+      "proof": {
+        "x": 5.0,
+        "y": 83.757,
+        "w": 32.077,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 5.576,
+          "y": 8.54,
+          "w": 31.78,
+          "h": 70.099
+        },
+        {
+          "x": 5.0,
+          "y": 83.757,
+          "w": 32.077,
+          "h": 9
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.576,
+        "y": 5.42,
+        "w": 41.78,
+        "h": 80.099
+      },
+      "art": {
+        "x": 51.0,
+        "y": 4.853,
+        "w": 43.154,
+        "h": 79.945
+      },
+      "proof": {
+        "x": 6.0,
+        "y": 87.811,
+        "w": 88.077,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 6.576,
+          "y": 5.42,
+          "w": 41.78,
+          "h": 80.099
+        },
+        {
+          "x": 6.0,
+          "y": 87.811,
+          "w": 88.077,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "document_reveal:exhibit:document-exhibit:evidence-left:document_reveal:archive-dossier:stamp:exhibit-uncover:archive-stack:paper:paper-stack:editorial:document_reveal--1--layout:offset-upper-left",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "data",
+  "scene_id": "forecast_band",
+  "composition_id": "forecast_band--chart",
+  "lens_id": "chart",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "forecast_band--1--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "structural_fingerprint": "forecast_band:chart:forecast-field:full-width-stage:forecast_band:luminous-grid:edge-tabs:chart-build:wave-horizon:floating:wave-field:headline:forecast_band--1--layout:cinema-caption-top",
+  "art_direction": "wave-field forecast_band with chart-dominant field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "8f4e224ad84626f07138169e1510eb011d46fc157cee257344c03ef69c74a3ac",
+    "9:16": "2aa678f40bc6876a07f2fa70851a2ae318c623bfa675415572206fbde892a008"
+  }
+}

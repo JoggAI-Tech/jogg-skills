@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "maps",
+  "scene_id": "migration_flow",
+  "composition_id": "migration_flow--implication",
+  "lens_id": "implication",
+  "visual_id": "atlas-blue",
+  "layout_instance_id": "migration_flow--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "structural_fingerprint": "migration_flow:implication:migration-impact:poster-center:migration_flow:atlas-blue:metric-cards:impact-arrive:radial-field:poster:radial:statement:migration_flow--3--layout:poster-inset-top",
+  "art_direction": "radial migration_flow with geographic consequence",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "84d79b2378b7cd14f6145981b8df9931c26dc54e4f2ec84430001e36335c2bbe",
+    "9:16": "9fce3ba0d1f280e8101001b3cfc3e07bde256306cd3a2144c76b406f5d2b7fbb"
+  }
+}

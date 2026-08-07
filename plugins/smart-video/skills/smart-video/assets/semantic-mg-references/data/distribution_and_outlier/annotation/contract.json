@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "data",
+  "scene_id": "distribution_and_outlier",
+  "composition_id": "distribution_and_outlier--annotation",
+  "lens_id": "annotation",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "distribution_and_outlier--2--layout",
+  "portrait_silhouette_id": "poster-inset-bottom",
+  "structural_fingerprint": "distribution_and_outlier:annotation:outlier-lens:poster-offset-right:distribution_outlier:kinetic-ivory:metric-cards:annotation-focus:radial-field:floating:radial:statement:distribution_and_outlier--2--layout:poster-inset-bottom",
+  "art_direction": "radial distribution_outlier with annotated decisive mark",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "d73bcff869ab506d91fe98d4e84fd5372c7b8cb9e99174bd226e0185f073c300",
+    "9:16": "cb0453f399624d5c52887a7638a07e4280bc73b81574e3394af0a28eeeee859a"
+  }
+}

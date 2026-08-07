@@ -1,0 +1,31 @@
+{
+  "id": "statement_monument--signal",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "scene_id": "statement_monument",
+  "name": "Intelligence Becomes Infrastructure",
+  "presentation_form_id": "signal",
+  "presentation_form_name": "Signal",
+  "visual_id": "electric-cyan",
+  "proof_mode": "caption-line",
+  "motion_profile": "impact-lock",
+  "layout": "metric-monument",
+  "layout_instance_id": "statement_monument--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_name": "poster-monument",
+  "art_direction": "monument claim_monument with single dominant symbol",
+  "composition_signature": "statement_monument:signal:poster-monument:metric-monument:claim_monument:electric-cyan:caption-line:impact-lock:number-monument:poster:monument:metric:statement_monument--1--layout:top-compact",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

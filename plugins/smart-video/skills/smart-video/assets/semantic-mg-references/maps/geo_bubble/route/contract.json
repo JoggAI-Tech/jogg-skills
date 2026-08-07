@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "maps",
+  "scene_id": "geo_bubble",
+  "composition_id": "geo_bubble--route",
+  "lens_id": "route",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "geo_bubble--1--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "structural_fingerprint": "geo_bubble:route:geo-bubbles:data-left:geo_bubble:electric-cyan:metric-cards:route-travel:radial-field:technical:radial:metric:geo_bubble--1--layout:art-monument-bottom",
+  "art_direction": "radial geo_bubble with geographic route",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "2539ca552c046c33ec73a0e04fe50ea31b75cd6f39bba246d07f107876b5ae73",
+    "9:16": "6aff5a50df320be6ac464625896091f9cad6571a8e63dad831591783f7e6f38e"
+  }
+}

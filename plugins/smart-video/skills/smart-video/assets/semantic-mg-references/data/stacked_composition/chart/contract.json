@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "data",
+  "scene_id": "stacked_composition",
+  "composition_id": "stacked_composition--chart",
+  "lens_id": "chart",
+  "visual_id": "chalkboard-lab",
+  "layout_instance_id": "stacked_composition--1--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "structural_fingerprint": "stacked_composition:chart:stacked-stage:data-right:stacked_composition:chalkboard-lab:edge-tabs:chart-build:layered-stack:technical:layers:metric:stacked_composition--1--layout:poster-inset-top",
+  "art_direction": "layers stacked_composition with chart-dominant field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "c31a3fb637d229662d80c0a525e58e4d2e84f857c92d69bf284361d0f748fd5b",
+    "9:16": "bacdd1574ab3ae40af2b04f4b03f074eea0ef0bd6bed925f266d72fecbd4283c"
+  }
+}

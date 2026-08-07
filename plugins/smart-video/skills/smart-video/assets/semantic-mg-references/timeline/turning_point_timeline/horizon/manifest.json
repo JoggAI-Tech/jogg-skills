@@ -1,0 +1,31 @@
+{
+  "id": "turning_point_timeline--horizon",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "turning_point_timeline",
+  "name": "The Cost Curve Breaks",
+  "presentation_form_id": "horizon",
+  "presentation_form_name": "Horizon",
+  "visual_id": "chalkboard-lab",
+  "proof_mode": "edge-tabs",
+  "motion_profile": "horizon-settle",
+  "layout": "full-width-stage",
+  "layout_instance_id": "turning_point_timeline--3--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_name": "after-horizon",
+  "art_direction": "wave-field timeline_inflection with compressed time horizon",
+  "composition_signature": "turning_point_timeline:horizon:after-horizon:full-width-stage:timeline_inflection:chalkboard-lab:edge-tabs:horizon-settle:wave-horizon:floating:wave-field:headline:turning_point_timeline--3--layout:cinema-caption-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

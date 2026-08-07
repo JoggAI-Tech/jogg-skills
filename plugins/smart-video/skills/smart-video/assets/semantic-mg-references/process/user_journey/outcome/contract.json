@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "process",
+  "scene_id": "user_journey",
+  "composition_id": "user_journey--outcome",
+  "lens_id": "outcome",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "user_journey--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "structural_fingerprint": "user_journey:outcome:journey-outcome:poster-offset-left:user_journey:kinetic-ivory:floating-chips:outcome-resolve:path-curve:floating:path:statement:user_journey--3--layout:poster-inset-top",
+  "art_direction": "path user_journey with result-bearing machine",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "0382ece1b2bbe350d408f0478469727fb8e27bda88bc41aab2cb300f0dbf04ce",
+    "9:16": "6c5871a5621fde8ed0ff5903da4dfc7ecc5dbd826e13f004c8e6460662382348"
+  }
+}

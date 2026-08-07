@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "timeline",
+  "scene_id": "milestone_rail",
+  "composition_id": "milestone_rail--sequence",
+  "lens_id": "sequence",
+  "visual_id": "archive-dossier",
+  "layout_instance_id": "milestone_rail--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "structural_fingerprint": "milestone_rail:sequence:milestone-rail:timeline-band:milestone_rail:archive-dossier:vertical-index:rail-travel:step-rail:caption:rail:headline:milestone_rail--1--layout:top-compact",
+  "art_direction": "rail milestone_rail with directional time object",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "89bb73fc1e594e1101de4a395e4757b845e3a0dfe45895c253d25157f0b83104",
+    "9:16": "6c7b77f2596e9fce9eeb77c03624501e61a804c75ff9d88b1b3023bb5e660081"
+  }
+}

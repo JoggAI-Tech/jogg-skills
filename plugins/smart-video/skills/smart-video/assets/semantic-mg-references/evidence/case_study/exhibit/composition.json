@@ -1,0 +1,115 @@
+{
+  "id": "case_study--exhibit",
+  "scene_id": "case_study",
+  "scene_title": "How a School Cut Planning Time",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "lens_id": "exhibit",
+  "lens_name": "Exhibit",
+  "intent": "Present the source or object as the hero evidence",
+  "composition_name": "case-stage",
+  "layout_grammar": "split-decision",
+  "layout_contract_id": "case_study--expression-1",
+  "layout_instance_id": "case_study--1--layout",
+  "portrait_silhouette_id": "middle-story-band",
+  "composition_family": "case-window",
+  "design_contract_id": "case_study--case-window--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "case_study",
+  "support_components": [
+    "context_panel",
+    "intervention_panel",
+    "result_panel"
+  ],
+  "semantic_slots": [
+    "context",
+    "intervention",
+    "result"
+  ],
+  "data_shape": "case_outcome",
+  "motion": "case_progress",
+  "motion_profile": "exhibit-uncover",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "vertical-index",
+  "copy_surface": "caption",
+  "art_surface": "case-window",
+  "copy_mode": "duel",
+  "art_direction": "case-window case_study with material source object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 6.043,
+        "y": 5.46,
+        "w": 34.56,
+        "h": 48.198
+      },
+      "art": {
+        "x": 42.802,
+        "y": 5.189,
+        "w": 52.308,
+        "h": 87.89
+      },
+      "proof": {
+        "x": 5.286,
+        "y": 73.243,
+        "w": 35.154,
+        "h": 20
+      },
+      "avoid_zones": [
+        {
+          "x": 6.043,
+          "y": 5.46,
+          "w": 34.56,
+          "h": 48.198
+        },
+        {
+          "x": 5.286,
+          "y": 73.243,
+          "w": 35.154,
+          "h": 20
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.923,
+        "y": 41.58,
+        "w": 85.56,
+        "h": 40.198
+      },
+      "art": {
+        "x": 4.856,
+        "y": 5.147,
+        "w": 90.308,
+        "h": 33.89
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 85.189,
+        "w": 86.154,
+        "h": 10
+      },
+      "avoid_zones": [
+        {
+          "x": 7.923,
+          "y": 41.58,
+          "w": 85.56,
+          "h": 40.198
+        },
+        {
+          "x": 7.208,
+          "y": 85.189,
+          "w": 86.154,
+          "h": 10
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "case_study:exhibit:case-stage:split-decision:case_study:cobalt-coral:vertical-index:exhibit-uncover:case-window:caption:case-window:duel:case_study--1--layout:middle-story-band",
+  "copy_density": "duel",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

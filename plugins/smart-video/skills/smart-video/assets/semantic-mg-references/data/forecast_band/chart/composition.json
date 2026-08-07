@@ -1,0 +1,115 @@
+{
+  "id": "forecast_band--chart",
+  "scene_id": "forecast_band",
+  "scene_title": "Three Paths to Scale",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "chart",
+  "lens_name": "Chart",
+  "intent": "Let the quantitative relationship carry the slide",
+  "composition_name": "forecast-field",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "forecast_band--expression-1",
+  "layout_instance_id": "forecast_band--1--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_family": "wave-horizon",
+  "design_contract_id": "forecast_band--wave-horizon--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "forecast_band",
+  "support_components": [
+    "history_line",
+    "confidence_band",
+    "scenario_lines"
+  ],
+  "semantic_slots": [
+    "history",
+    "range",
+    "outlook"
+  ],
+  "data_shape": "forecast_series",
+  "motion": "band_expand",
+  "motion_profile": "chart-build",
+  "visual_id": "luminous-grid",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "floating",
+  "art_surface": "wave-field",
+  "copy_mode": "headline",
+  "art_direction": "wave-field forecast_band with chart-dominant field",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.92,
+        "y": 5.0,
+        "w": 46.0,
+        "h": 28.0
+      },
+      "art": {
+        "x": 5.198,
+        "y": 36.0,
+        "w": 90.0,
+        "h": 57.0
+      },
+      "proof": {
+        "x": 55.714,
+        "y": 7.0,
+        "w": 39.0,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 4.92,
+          "y": 5.0,
+          "w": 46.0,
+          "h": 28.0
+        },
+        {
+          "x": 55.714,
+          "y": 7.0,
+          "w": 39.0,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.04,
+        "y": 5.0,
+        "w": 68.0,
+        "h": 24.0
+      },
+      "art": {
+        "x": 5.144,
+        "y": 32.0,
+        "w": 90.0,
+        "h": 61.0
+      },
+      "proof": {
+        "x": 77.792,
+        "y": 5.0,
+        "w": 15.0,
+        "h": 24
+      },
+      "avoid_zones": [
+        {
+          "x": 7.04,
+          "y": 5.0,
+          "w": 68.0,
+          "h": 24.0
+        },
+        {
+          "x": 77.792,
+          "y": 5.0,
+          "w": 15.0,
+          "h": 24
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "forecast_band:chart:forecast-field:full-width-stage:forecast_band:luminous-grid:edge-tabs:chart-build:wave-horizon:floating:wave-field:headline:forecast_band--1--layout:cinema-caption-top",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

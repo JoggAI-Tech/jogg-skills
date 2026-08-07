@@ -1,0 +1,31 @@
+{
+  "id": "case_study--finding",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "scene_id": "case_study",
+  "name": "How a School Cut Planning Time",
+  "presentation_form_id": "finding",
+  "presentation_form_name": "Finding",
+  "visual_id": "atlas-blue",
+  "proof_mode": "center-badge",
+  "motion_profile": "finding-stamp",
+  "layout": "headline-bottom",
+  "layout_instance_id": "case_study--3--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_name": "case-result",
+  "art_direction": "before-after case_study with finding lockup",
+  "composition_signature": "case_study:finding:case-result:headline-bottom:case_study:atlas-blue:center-badge:finding-stamp:before-after-slab:caption:before-after:headline:case_study--3--layout:cinema-caption-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

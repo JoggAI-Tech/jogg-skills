@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "module_dependency",
+  "composition_id": "module_dependency--flow",
+  "lens_id": "flow",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "module_dependency--2--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "structural_fingerprint": "module_dependency:flow:dependency-path:timeline-band:module_dependency:electric-cyan:vertical-index:flow-trace:pipeline-spine:caption:pipeline:headline:module_dependency--2--layout:bottom-compact",
+  "art_direction": "pipeline module_dependency with directional exchange",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "9407a2065bc125506f2f131177bc593d3ec881cbd0393feebf93b48ea360929f",
+    "9:16": "94f5e8b389dabb96f5a9493c76a2dfec2dbd4b521b776eb902d41b08b02d522e"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "supply_network",
+  "composition_id": "supply_network--flow",
+  "lens_id": "flow",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "supply_network--2--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "supply_network:flow:supply-bottleneck:data-left:supply_network:luminous-grid:edge-tabs:flow-trace:network-radial:technical:network:metric:supply_network--2--layout:art-monument-top",
+  "art_direction": "network supply_network with directional exchange",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "fe8ad25286f96b2b6cbf8c3d5dca374a1e619c6e119c2a97cd4c501f2a0c84e9",
+    "9:16": "0103f8f1bb115d1040a0a575edfbd6b02d87da410d650d58f442a82e82587fd6"
+  }
+}

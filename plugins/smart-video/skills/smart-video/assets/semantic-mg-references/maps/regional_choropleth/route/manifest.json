@@ -1,0 +1,31 @@
+{
+  "id": "regional_choropleth--route",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "scene_id": "regional_choropleth",
+  "name": "AI Adoption by Region",
+  "presentation_form_id": "route",
+  "presentation_form_name": "Route",
+  "visual_id": "atlas-blue",
+  "proof_mode": "metric-cards",
+  "motion_profile": "route-travel",
+  "layout": "full-width-stage",
+  "layout_instance_id": "regional_choropleth--1--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_name": "region-field",
+  "art_direction": "chart-field regional_choropleth with geographic route",
+  "composition_signature": "regional_choropleth:route:region-field:full-width-stage:regional_choropleth:atlas-blue:metric-cards:route-travel:full-bleed-chart:floating:chart-field:headline:regional_choropleth--1--layout:cinema-caption-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

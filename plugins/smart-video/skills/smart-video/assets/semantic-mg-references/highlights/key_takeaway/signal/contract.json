@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "highlights",
+  "scene_id": "key_takeaway",
+  "composition_id": "key_takeaway--signal",
+  "lens_id": "signal",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "key_takeaway--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "key_takeaway:signal:banner-sweep:timeline-band:takeaway_banner:luminous-grid:caption-line:impact-lock:kinetic-ribbons:caption:ribbons:headline:key_takeaway--1--layout:art-monument-top",
+  "art_direction": "ribbons takeaway_banner with single dominant symbol",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "2f8f15b01d66a68561d0fb082987b9a1892153f53d530a733a3a63a9efd4423d",
+    "9:16": "2b5a80ee5f6e2482a0990e53806e8b723555cfa583034ed3a486b138c9afa2b5"
+  }
+}

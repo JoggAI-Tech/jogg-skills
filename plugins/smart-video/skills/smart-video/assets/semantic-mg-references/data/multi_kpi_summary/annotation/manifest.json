@@ -1,0 +1,31 @@
+{
+  "id": "multi_kpi_summary--annotation",
+  "category_id": "data",
+  "category_name": "Data",
+  "scene_id": "multi_kpi_summary",
+  "name": "The AI SaaS Health Check",
+  "presentation_form_id": "annotation",
+  "presentation_form_name": "Annotation",
+  "visual_id": "atlas-blue",
+  "proof_mode": "metric-cards",
+  "motion_profile": "annotation-focus",
+  "layout": "full-width-stage",
+  "layout_instance_id": "multi_kpi_summary--2--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_name": "metric-priority",
+  "art_direction": "chart-field multi_kpi with annotated decisive mark",
+  "composition_signature": "multi_kpi_summary:annotation:metric-priority:full-width-stage:multi_kpi:atlas-blue:metric-cards:annotation-focus:full-bleed-chart:floating:chart-field:headline:multi_kpi_summary--2--layout:art-monument-bottom",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

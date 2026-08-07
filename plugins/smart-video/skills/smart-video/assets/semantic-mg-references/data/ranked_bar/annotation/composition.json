@@ -1,0 +1,115 @@
+{
+  "id": "ranked_bar--annotation",
+  "scene_id": "ranked_bar",
+  "scene_title": "Top Workflows by Time Saved",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "annotation",
+  "lens_name": "Annotation",
+  "intent": "Explain the decisive data point in context",
+  "composition_name": "leader-callout",
+  "layout_grammar": "data-topline",
+  "layout_contract_id": "ranked_bar--expression-2",
+  "layout_instance_id": "ranked_bar--2--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "composition_family": "step-rail",
+  "design_contract_id": "ranked_bar--step-rail--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "ranked_bar",
+  "support_components": [
+    "horizontal_bars",
+    "rank_numbers",
+    "leader_note"
+  ],
+  "semantic_slots": [
+    "leader",
+    "middle",
+    "tail"
+  ],
+  "data_shape": "ranked_values",
+  "motion": "bars_rank",
+  "motion_profile": "annotation-focus",
+  "visual_id": "signal-noir",
+  "proof_mode": "vertical-index",
+  "copy_surface": "caption",
+  "art_surface": "rail",
+  "copy_mode": "metric",
+  "art_direction": "rail ranked_bar with annotated decisive mark",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.812,
+        "y": 5.0,
+        "w": 48.0,
+        "h": 24.0
+      },
+      "art": {
+        "x": 4.802,
+        "y": 32.0,
+        "w": 90.0,
+        "h": 61.0
+      },
+      "proof": {
+        "x": 57.286,
+        "y": 7.0,
+        "w": 38.0,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 5.812,
+          "y": 5.0,
+          "w": 48.0,
+          "h": 24.0
+        },
+        {
+          "x": 57.286,
+          "y": 7.0,
+          "w": 38.0,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.692,
+        "y": 72.0,
+        "w": 86.0,
+        "h": 21.0
+      },
+      "art": {
+        "x": 4.856,
+        "y": 5.0,
+        "w": 90.0,
+        "h": 61.0
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 67.0,
+        "w": 86.0,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 7.692,
+          "y": 72.0,
+          "w": 86.0,
+          "h": 21.0
+        },
+        {
+          "x": 7.208,
+          "y": 67.0,
+          "w": 86.0,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "ranked_bar:annotation:leader-callout:data-topline:ranked_bar:signal-noir:vertical-index:annotation-focus:step-rail:caption:rail:metric:ranked_bar--2--layout:bottom-compact",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,31 @@
+{
+  "id": "countdown_schedule--horizon",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "countdown_schedule",
+  "name": "Seven Days to Launch",
+  "presentation_form_id": "horizon",
+  "presentation_form_name": "Horizon",
+  "visual_id": "luminous-grid",
+  "proof_mode": "caption-line",
+  "motion_profile": "horizon-settle",
+  "layout": "metric-monument",
+  "layout_instance_id": "countdown_schedule--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_name": "launch-lock",
+  "art_direction": "monument countdown_schedule with compressed time horizon",
+  "composition_signature": "countdown_schedule:horizon:launch-lock:metric-monument:countdown_schedule:luminous-grid:caption-line:horizon-settle:number-monument:poster:monument:metric:countdown_schedule--3--layout:poster-inset-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

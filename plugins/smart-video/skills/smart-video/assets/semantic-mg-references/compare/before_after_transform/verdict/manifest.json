@@ -1,0 +1,31 @@
+{
+  "id": "before_after_transform--verdict",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "scene_id": "before_after_transform",
+  "name": "From Manual Queue to Agent Loop",
+  "presentation_form_id": "verdict",
+  "presentation_form_name": "Verdict",
+  "visual_id": "paper-collage",
+  "proof_mode": "caption-line",
+  "motion_profile": "verdict-lock",
+  "layout": "headline-bottom",
+  "layout_instance_id": "before_after_transform--3--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_name": "result-slab",
+  "art_direction": "diagonal before_after with decisive verdict object",
+  "composition_signature": "before_after_transform:verdict:result-slab:headline-bottom:before_after:paper-collage:caption-line:verdict-lock:diagonal-lock:caption:diagonal:headline:before_after_transform--3--layout:top-compact",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

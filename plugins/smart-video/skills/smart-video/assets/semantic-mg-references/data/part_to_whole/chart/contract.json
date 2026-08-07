@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "data",
+  "scene_id": "part_to_whole",
+  "composition_id": "part_to_whole--chart",
+  "lens_id": "chart",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "part_to_whole--1--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "structural_fingerprint": "part_to_whole:chart:donut-stage:poster-center:part_to_whole:electric-cyan:metric-cards:chart-build:radial-field:poster:radial:statement:part_to_whole--1--layout:poster-inset-top",
+  "art_direction": "radial part_to_whole with chart-dominant field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "4d2915606ce35f098e32de395075dea04fb0fd4b6da0963e3554b278c9a371b7",
+    "9:16": "092f21d3afc7272fee4231e160dcaf8dc7e78f17272ce25375a5929a0216a6d1"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "organization_tree",
+  "composition_id": "organization_tree--principle",
+  "lens_id": "principle",
+  "visual_id": "kinetic-ivory",
+  "layout_instance_id": "organization_tree--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "structural_fingerprint": "organization_tree:principle:organization-rule:poster-offset-left:organization_tree:kinetic-ivory:center-badge:principle-lock:center-symbol:floating:symbol:statement:organization_tree--3--layout:lower-lockup",
+  "art_direction": "symbol organization_tree with governing system rule",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "98307573ebf57b825a3d4f117f136d87364001199c7dd2685ac6a26a2af7f085",
+    "9:16": "97d92f03664ea6f8ca1bf7633472da810e2ddbd899ccb18b34086f35b1c0da97"
+  }
+}

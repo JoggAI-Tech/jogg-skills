@@ -1,0 +1,115 @@
+{
+  "id": "user_journey--outcome",
+  "scene_id": "user_journey",
+  "scene_title": "A Teacher's AI Workflow",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "outcome",
+  "lens_name": "Outcome",
+  "intent": "Connect the process to its measurable result",
+  "composition_name": "journey-outcome",
+  "layout_grammar": "poster-offset-left",
+  "layout_contract_id": "user_journey--expression-3",
+  "layout_instance_id": "user_journey--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "path-curve",
+  "design_contract_id": "user_journey--path-curve--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "user_journey",
+  "support_components": [
+    "touchpoints",
+    "emotion_curve",
+    "outcome_flag"
+  ],
+  "semantic_slots": [
+    "need",
+    "experience",
+    "outcome"
+  ],
+  "data_shape": "journey_stages",
+  "motion": "journey_travel",
+  "motion_profile": "outcome-resolve",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "floating-chips",
+  "copy_surface": "floating",
+  "art_surface": "path",
+  "copy_mode": "statement",
+  "art_direction": "path user_journey with result-bearing machine",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.303,
+        "y": 6.46,
+        "w": 38.0,
+        "h": 43.0
+      },
+      "art": {
+        "x": 46.0,
+        "y": 5.189,
+        "w": 49.0,
+        "h": 88.0
+      },
+      "proof": {
+        "x": 5.0,
+        "y": 78.243,
+        "w": 38.0,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 5.303,
+          "y": 6.46,
+          "w": 38.0,
+          "h": 43.0
+        },
+        {
+          "x": 5.0,
+          "y": 78.243,
+          "w": 38.0,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.303,
+        "y": 4.58,
+        "w": 86.0,
+        "h": 32.0
+      },
+      "art": {
+        "x": 6.0,
+        "y": 40.147,
+        "w": 88.0,
+        "h": 49.0
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 92.189,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.303,
+          "y": 4.58,
+          "w": 86.0,
+          "h": 32.0
+        },
+        {
+          "x": 7.0,
+          "y": 92.189,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "user_journey:outcome:journey-outcome:poster-offset-left:user_journey:kinetic-ivory:floating-chips:outcome-resolve:path-curve:floating:path:statement:user_journey--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

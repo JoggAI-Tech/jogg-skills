@@ -1,0 +1,115 @@
+{
+  "id": "evidence_board--analysis",
+  "scene_id": "evidence_board",
+  "scene_title": "Tracing the Compute Shortage",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "lens_id": "analysis",
+  "lens_name": "Analysis",
+  "intent": "Connect evidence fragments into an argument",
+  "composition_name": "evidence-thread",
+  "layout_grammar": "evidence-left",
+  "layout_contract_id": "evidence_board--expression-2",
+  "layout_instance_id": "evidence_board--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "composition_family": "network-radial",
+  "design_contract_id": "evidence_board--network-radial--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "evidence_board",
+  "support_components": [
+    "evidence_cards",
+    "thread_lines",
+    "conclusion_tag"
+  ],
+  "semantic_slots": [
+    "evidence",
+    "connections",
+    "conclusion"
+  ],
+  "data_shape": "evidence_graph",
+  "motion": "evidence_pin",
+  "motion_profile": "analysis-connect",
+  "visual_id": "archive-dossier",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "paper",
+  "art_surface": "network",
+  "copy_mode": "editorial",
+  "art_direction": "network evidence_board with connected evidence fragments",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.928,
+        "y": 7.46,
+        "w": 31.56,
+        "h": 70.198
+      },
+      "art": {
+        "x": 40.297,
+        "y": 5.189,
+        "w": 55.308,
+        "h": 87.89
+      },
+      "proof": {
+        "x": 4.571,
+        "y": 84.243,
+        "w": 32.154,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 4.928,
+          "y": 7.46,
+          "w": 31.56,
+          "h": 70.198
+        },
+        {
+          "x": 4.571,
+          "y": 84.243,
+          "w": 32.154,
+          "h": 9
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.108,
+        "y": 67.58,
+        "w": 85.56,
+        "h": 25.198
+      },
+      "art": {
+        "x": 6.216,
+        "y": 5.147,
+        "w": 88.308,
+        "h": 55.89
+      },
+      "proof": {
+        "x": 6.688,
+        "y": 61.189,
+        "w": 86.154,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.108,
+          "y": 67.58,
+          "w": 85.56,
+          "h": 25.198
+        },
+        {
+          "x": 6.688,
+          "y": 61.189,
+          "w": 86.154,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "evidence_board:analysis:evidence-thread:evidence-left:evidence_board:archive-dossier:edge-tabs:analysis-connect:network-radial:paper:network:editorial:evidence_board--2--layout:bottom-editorial",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

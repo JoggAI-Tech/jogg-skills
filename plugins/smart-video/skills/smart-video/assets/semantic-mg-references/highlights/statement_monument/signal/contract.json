@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "highlights",
+  "scene_id": "statement_monument",
+  "composition_id": "statement_monument--signal",
+  "lens_id": "signal",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "statement_monument--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "structural_fingerprint": "statement_monument:signal:poster-monument:metric-monument:claim_monument:electric-cyan:caption-line:impact-lock:number-monument:poster:monument:metric:statement_monument--1--layout:top-compact",
+  "art_direction": "monument claim_monument with single dominant symbol",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "94c469f9d62a54d8e006db782ce46431655cdd8cd4568f2572aa03b17f7b714d",
+    "9:16": "be3323c0273e0a9d0e9d540623cd0985b93db8434be7d5c5f6daee5e4651d5bd"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "highlights",
+  "scene_id": "story_turn",
+  "composition_id": "story_turn--reveal",
+  "lens_id": "reveal",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "story_turn--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "structural_fingerprint": "story_turn:reveal:before-after-arc:evidence-right:story_pivot:luminous-grid:floating-chips:reveal-cut:path-curve:paper:path:editorial:story_turn--2--layout:right-caption-stage",
+  "art_direction": "path story_pivot with editorial reveal",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "bfa818ee618e0e5d57b10c41af8a6ae9f847a06f7a75e8d8857ebe71f6f50d93",
+    "9:16": "879132f248c4bf797a381564e2c318a49213724b7087bdcfdee44ea042614f05"
+  }
+}

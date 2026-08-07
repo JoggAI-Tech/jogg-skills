@@ -1,0 +1,115 @@
+{
+  "id": "stacked_composition--annotation",
+  "scene_id": "stacked_composition",
+  "scene_title": "Revenue Mix Is Changing",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "annotation",
+  "lens_name": "Annotation",
+  "intent": "Explain the decisive data point in context",
+  "composition_name": "mix-shift",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "stacked_composition--expression-2",
+  "layout_instance_id": "stacked_composition--2--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_family": "bars-surge",
+  "design_contract_id": "stacked_composition--bars-surge--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "stacked_composition",
+  "support_components": [
+    "stacked_bars",
+    "category_legend",
+    "change_arrow"
+  ],
+  "semantic_slots": [
+    "starting_mix",
+    "change",
+    "ending_mix"
+  ],
+  "data_shape": "stacked_series",
+  "motion": "stack_shift",
+  "motion_profile": "annotation-focus",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "metric-cards",
+  "copy_surface": "floating",
+  "art_surface": "bars",
+  "copy_mode": "headline",
+  "art_direction": "bars stacked_composition with annotated decisive mark",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.61,
+        "y": 5.18,
+        "w": 46.0,
+        "h": 28.0
+      },
+      "art": {
+        "x": 4.901,
+        "y": 35.937,
+        "w": 90.0,
+        "h": 57.0
+      },
+      "proof": {
+        "x": 56.143,
+        "y": 6.919,
+        "w": 39.0,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 5.61,
+          "y": 5.18,
+          "w": 46.0,
+          "h": 28.0
+        },
+        {
+          "x": 56.143,
+          "y": 6.919,
+          "w": 39.0,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.55,
+        "y": 5.14,
+        "w": 86.0,
+        "h": 23.0
+      },
+      "art": {
+        "x": 4.928,
+        "y": 35.951,
+        "w": 90.0,
+        "h": 57.0
+      },
+      "proof": {
+        "x": 7.104,
+        "y": 29.937,
+        "w": 86.0,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 7.55,
+          "y": 5.14,
+          "w": 86.0,
+          "h": 23.0
+        },
+        {
+          "x": 7.104,
+          "y": 29.937,
+          "w": 86.0,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "stacked_composition:annotation:mix-shift:full-width-stage:stacked_composition:cobalt-coral:metric-cards:annotation-focus:bars-surge:floating:bars:headline:stacked_composition--2--layout:art-monument-bottom",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

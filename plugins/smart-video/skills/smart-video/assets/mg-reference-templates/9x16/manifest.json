@@ -1,0 +1,1974 @@
+{
+  "version": "jogg_mg_template_pack_v1",
+  "ratio": "9:16",
+  "template_count": 16,
+  "duration_seconds": 5,
+  "loop": false,
+  "categories": [
+    {
+      "id": "01-documentary-editorial",
+      "label": "Stories",
+      "directory": "01-Stories",
+      "label_zh": "编辑叙事与文化档案",
+      "fit": "纪录片章节、人物事件、历史文化、城市记忆、档案研究与艺术叙事",
+      "templates": [
+        "terracotta-editorial",
+        "retro-duotone-print",
+        "emerald-deco",
+        "archive-typewriter",
+        "cubist-collage"
+      ]
+    },
+    {
+      "id": "02-education-explainer",
+      "label": "Explainers",
+      "directory": "02-Explainers",
+      "label_zh": "教学科普与轻量解释",
+      "fit": "课程知识点、方法拆解、自然科普、学习流程与柔和的概念解释",
+      "templates": [
+        "highlighter-notebook",
+        "soft-organic-gradient",
+        "doodle-explainer",
+        "blush-watercolor"
+      ]
+    },
+    {
+      "id": "03-impact-manifesto",
+      "label": "Bold Ideas",
+      "directory": "03-Bold-Ideas",
+      "label_zh": "观点冲击与实验海报",
+      "fit": "核心结论、争议观点、品牌宣言、议题警示、强节奏标题与冲击型开场",
+      "templates": [
+        "black-yellow-type",
+        "electric-impact-type",
+        "acid-script-poster",
+        "grainy-heatwave"
+      ]
+    },
+    {
+      "id": "04-tech-data-business",
+      "label": "Tech & Data",
+      "directory": "04-Tech-Data",
+      "label_zh": "科技数据与商业表达",
+      "fit": "AI SaaS、商业指标、科技趋势、数据看板、产品与团队协作",
+      "templates": [
+        "neon-grid-commerce",
+        "pale-tech-dashboard",
+        "liquid-aura"
+      ]
+    }
+  ],
+  "templates": [
+    {
+      "number": 1,
+      "template_id": "terracotta-editorial",
+      "name": "暖灰编辑",
+      "name_en": "Warm Editorial",
+      "category_id": "01-documentary-editorial",
+      "category": "Stories",
+      "suitable_for": "纪录片章节、人物事件、历史文化、城市记忆、档案研究与艺术叙事",
+      "layout": "editorial-split",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Warm editorial split with a dominant display lockup, measured data rhythm, and restrained documentary pacing.",
+          "style_tags": [
+            "editorial",
+            "warm-neutral",
+            "documentary",
+            "asymmetric"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#F2EFEA"
+            },
+            {
+              "role": "text",
+              "value": "#171717"
+            },
+            {
+              "role": "accent",
+              "value": "#A6845B"
+            },
+            {
+              "role": "accent",
+              "value": "#C7B59D"
+            },
+            {
+              "role": "muted",
+              "value": "rgba(23,23,23,.58)"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "heavy sans display"
+            },
+            "body": {
+              "character": "neutral sans body"
+            },
+            "editorial_accent": {
+              "character": "serif italic accent"
+            },
+            "labels": {
+              "character": "tracked uppercase labels"
+            }
+          },
+          "composition": {
+            "strategy": "editorial split",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "chapter title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "person",
+                "placement": "identity anchor zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "principles",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "quote",
+                "placement": "supporting conclusion zone"
+              },
+              {
+                "role": "timeline",
+                "placement": "closing progression zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "editorial rules",
+            "rectangular metric bars",
+            "thin timeline rail"
+          ],
+          "motifs": [
+            "profile marker",
+            "metric bars",
+            "quote rule",
+            "timeline nodes"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "measured layered reveal with a stable final editorial frame",
+            "intensity": "medium",
+            "techniques": [
+              "weighted settle",
+              "staggered bar growth",
+              "masked title reveal",
+              "line draw"
+            ]
+          }
+        }
+      },
+      "file": "01-Stories/01-warm-editorial.html"
+    },
+    {
+      "number": 2,
+      "template_id": "retro-duotone-print",
+      "name": "复古双色印刷",
+      "name_en": "Retro Duotone Print",
+      "category_id": "01-documentary-editorial",
+      "category": "Stories",
+      "suitable_for": "纪录片章节、人物事件、历史文化、城市记忆、档案研究与艺术叙事",
+      "layout": "print-six-zone",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Duotone print composition with oversized outlined type, halftone texture, archival zones, and mechanical reveals.",
+          "style_tags": [
+            "retro-print",
+            "duotone",
+            "archive",
+            "bold-type"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#F2EDE4"
+            },
+            {
+              "role": "text",
+              "value": "#1E3A6E"
+            },
+            {
+              "role": "accent",
+              "value": "#E05030"
+            },
+            {
+              "role": "accent",
+              "value": "#1E3A6E"
+            },
+            {
+              "role": "muted",
+              "value": "#59657A"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "condensed display"
+            },
+            "body": {
+              "character": "neutral sans body"
+            },
+            "editorial_accent": {
+              "character": "script accent"
+            },
+            "labels": {
+              "character": "compact utility labels"
+            }
+          },
+          "composition": {
+            "strategy": "print six zone",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "display title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "archive title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "top timeline",
+                "placement": "closing progression zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "principles",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "quote",
+                "placement": "supporting conclusion zone"
+              },
+              {
+                "role": "stamp",
+                "placement": "supporting information zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "hard print blocks",
+            "halftone fields",
+            "stamp circles",
+            "horizontal rules"
+          ],
+          "motifs": [
+            "archive stamp",
+            "outlined headline",
+            "halftone texture",
+            "dated timeline"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "mechanical print assembly with crisp staged accents",
+            "intensity": "high",
+            "techniques": [
+              "stepped type reveal",
+              "linear rule draw",
+              "stamp pop",
+              "sequential year reveal"
+            ]
+          }
+        }
+      },
+      "file": "01-Stories/02-retro-archive.html"
+    },
+    {
+      "number": 6,
+      "template_id": "emerald-deco",
+      "name": "现代装饰艺术",
+      "name_en": "Modern Art Deco",
+      "category_id": "01-documentary-editorial",
+      "category": "Stories",
+      "suitable_for": "纪录片章节、人物事件、历史文化、城市记忆、档案研究与艺术叙事",
+      "layout": "deco-register",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Symmetrical heritage composition framed by restrained metallic geometry and a formal central hierarchy.",
+          "style_tags": [
+            "art-deco",
+            "heritage",
+            "premium",
+            "symmetrical"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#172A3A"
+            },
+            {
+              "role": "text",
+              "value": "#F4EBDD"
+            },
+            {
+              "role": "accent",
+              "value": "#C8B08A"
+            },
+            {
+              "role": "accent",
+              "value": "#C96B5A"
+            },
+            {
+              "role": "muted",
+              "value": "#C9C0B2"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "elegant serif display"
+            },
+            "body": {
+              "character": "serif body"
+            },
+            "editorial_accent": {
+              "character": "italic editorial accent"
+            },
+            "labels": {
+              "character": "spaced small caps"
+            }
+          },
+          "composition": {
+            "strategy": "deco register",
+            "alignment": "centered or symmetrical",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "deco frame",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "title plaque",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "person plaque",
+                "placement": "identity anchor zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "principles",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "quote",
+                "placement": "supporting conclusion zone"
+              },
+              {
+                "role": "era timeline",
+                "placement": "closing progression zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "double-line frame",
+            "diamond nodes",
+            "ornamental plaques",
+            "geometric corners"
+          ],
+          "motifs": [
+            "deco frame",
+            "central plaque",
+            "diamond timeline",
+            "metallic rules"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "formal measured assembly with a composed final tableau",
+            "intensity": "medium",
+            "techniques": [
+              "frame draw",
+              "plaque settle",
+              "diamond node reveal",
+              "controlled line growth"
+            ]
+          }
+        }
+      },
+      "file": "01-Stories/06-emerald-heritage.html"
+    },
+    {
+      "number": 15,
+      "template_id": "archive-typewriter",
+      "name": "时代档案智能",
+      "name_en": "Heritage Intelligence Archive",
+      "category_id": "01-documentary-editorial",
+      "category": "Stories",
+      "suitable_for": "纪录片章节、人物事件、历史文化、城市记忆、档案研究与艺术叙事",
+      "layout": "archive-editorial",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Evidence-led archive page with typewriter hierarchy, framed metrics, and a chronological documentary rail.",
+          "style_tags": [
+            "archive",
+            "typewriter",
+            "evidence",
+            "documentary"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#F3EBDD"
+            },
+            {
+              "role": "text",
+              "value": "#171512"
+            },
+            {
+              "role": "accent",
+              "value": "#B08A45"
+            },
+            {
+              "role": "accent",
+              "value": "#D8C7A8"
+            },
+            {
+              "role": "muted",
+              "value": "#71695D"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "typewriter display"
+            },
+            "body": {
+              "character": "typewriter body"
+            },
+            "editorial_accent": {
+              "character": "minimal editorial accent"
+            },
+            "labels": {
+              "character": "archival labels"
+            }
+          },
+          "composition": {
+            "strategy": "archive editorial",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "media tag",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "points",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "long title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "quote",
+                "placement": "supporting conclusion zone"
+              },
+              {
+                "role": "timeline",
+                "placement": "closing progression zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "paper field",
+            "archive borders",
+            "wavy separator",
+            "chronology rail"
+          ],
+          "motifs": [
+            "media tag",
+            "evidence list",
+            "typewritten title",
+            "historical timeline"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "methodical evidence sequence with discrete archival beats",
+            "intensity": "medium",
+            "techniques": [
+              "typewriter reveal",
+              "linear bar fill",
+              "border draw",
+              "chronological stagger"
+            ]
+          }
+        }
+      },
+      "file": "01-Stories/15-city-archive.html"
+    },
+    {
+      "number": 16,
+      "template_id": "cubist-collage",
+      "name": "现代立体主义工作室",
+      "name_en": "Modern Cubist Studio",
+      "category_id": "01-documentary-editorial",
+      "category": "Stories",
+      "suitable_for": "纪录片章节、人物事件、历史文化、城市记忆、档案研究与艺术叙事",
+      "layout": "cubist-profile",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Asymmetric collage combining saturated geometric planes, editorial typography, and playful spatial transitions.",
+          "style_tags": [
+            "collage",
+            "cubist",
+            "artistic",
+            "asymmetric"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#FAF8F2"
+            },
+            {
+              "role": "text",
+              "value": "#181818"
+            },
+            {
+              "role": "accent",
+              "value": "#E7B83A"
+            },
+            {
+              "role": "accent",
+              "value": "#C65340"
+            },
+            {
+              "role": "muted",
+              "value": "#67625C"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "editorial serif display"
+            },
+            "body": {
+              "character": "handwritten accent"
+            },
+            "editorial_accent": {
+              "character": "clear sans support"
+            },
+            "labels": {
+              "character": "compact labels"
+            }
+          },
+          "composition": {
+            "strategy": "cubist profile",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "person",
+                "placement": "identity anchor zone"
+              },
+              {
+                "role": "quote",
+                "placement": "supporting conclusion zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "principles",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "timeline",
+                "placement": "closing progression zone"
+              },
+              {
+                "role": "geometry",
+                "placement": "supporting information zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "overlapping polygons",
+            "colored planes",
+            "offset circles",
+            "angled connectors"
+          ],
+          "motifs": [
+            "geometric portrait",
+            "collage blocks",
+            "mixed-type title",
+            "color timeline"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "playful multi-direction assembly ending in a balanced collage",
+            "intensity": "high",
+            "techniques": [
+              "block assembly",
+              "directional slide",
+              "shape rotation",
+              "elastic node reveal"
+            ]
+          }
+        }
+      },
+      "file": "01-Stories/16-cubist-time.html"
+    },
+    {
+      "number": 3,
+      "template_id": "highlighter-notebook",
+      "name": "设计师手账",
+      "name_en": "Designer Notebook",
+      "category_id": "02-education-explainer",
+      "category": "Explainers",
+      "suitable_for": "课程知识点、方法拆解、自然科普、学习流程与柔和的概念解释",
+      "layout": "notebook-sheet",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Layered notebook sheet with highlighted learning hierarchy, tactile paper details, and friendly hand-drawn motion.",
+          "style_tags": [
+            "notebook",
+            "education",
+            "paper",
+            "friendly"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#D7E3DD"
+            },
+            {
+              "role": "text",
+              "value": "#222222"
+            },
+            {
+              "role": "accent",
+              "value": "#E8C547"
+            },
+            {
+              "role": "accent",
+              "value": "#C96B4B"
+            },
+            {
+              "role": "muted",
+              "value": "#65706A"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "handwritten display"
+            },
+            "body": {
+              "character": "clear sans body"
+            },
+            "editorial_accent": {
+              "character": "serif note accent"
+            },
+            "labels": {
+              "character": "compact annotation labels"
+            }
+          },
+          "composition": {
+            "strategy": "notebook sheet",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "paper",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "headline",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "sticky person",
+                "placement": "identity anchor zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "checklist",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "quote",
+                "placement": "supporting conclusion zone"
+              },
+              {
+                "role": "review steps",
+                "placement": "supporting information zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "paper sheet",
+            "marker strokes",
+            "sticky note",
+            "dashed process line"
+          ],
+          "motifs": [
+            "grid paper",
+            "highlighter stroke",
+            "check marks",
+            "review steps"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "friendly instructional sequence with clear pauses between groups",
+            "intensity": "medium",
+            "techniques": [
+              "highlighter sweep",
+              "check draw",
+              "paper settle",
+              "sequential node reveal"
+            ]
+          }
+        }
+      },
+      "file": "02-Explainers/03-learning-notes.html"
+    },
+    {
+      "number": 4,
+      "template_id": "soft-organic-gradient",
+      "name": "暖调有机编辑",
+      "name_en": "Warm Organic Editorial",
+      "category_id": "02-education-explainer",
+      "category": "Explainers",
+      "suitable_for": "课程知识点、方法拆解、自然科普、学习流程与柔和的概念解释",
+      "layout": "section-title",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Minimal organic chapter layout with generous negative space, soft color fields, and a single refined data focus.",
+          "style_tags": [
+            "organic",
+            "minimal",
+            "soft-gradient",
+            "editorial"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#F4EFE7"
+            },
+            {
+              "role": "text",
+              "value": "#242824"
+            },
+            {
+              "role": "accent",
+              "value": "#C98268"
+            },
+            {
+              "role": "accent",
+              "value": "#9CAF91"
+            },
+            {
+              "role": "muted",
+              "value": "rgba(36,40,36,.62)"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "refined serif display"
+            },
+            "body": {
+              "character": "quiet sans body"
+            },
+            "editorial_accent": {
+              "character": "italic editorial accent"
+            },
+            "labels": {
+              "character": "widely tracked labels"
+            }
+          },
+          "composition": {
+            "strategy": "section title",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "section title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "summary",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "timeline",
+                "placement": "closing progression zone"
+              },
+              {
+                "role": "author",
+                "placement": "identity anchor zone"
+              },
+              {
+                "role": "segmented donut",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "swatches",
+                "placement": "supporting information zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "soft radial fields",
+            "fine rules",
+            "segmented ring",
+            "small color swatches"
+          ],
+          "motifs": [
+            "chapter numeral",
+            "organic wash",
+            "segmented donut",
+            "minimal timeline"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "slow refined reveal with protected negative space",
+            "intensity": "low",
+            "techniques": [
+              "soft bloom",
+              "smooth settle",
+              "ring reveal",
+              "fine line draw"
+            ]
+          }
+        }
+      },
+      "file": "02-Explainers/04-organic-chapter.html"
+    },
+    {
+      "number": 5,
+      "template_id": "doodle-explainer",
+      "name": "创意编辑手账",
+      "name_en": "Creative Editorial Notebook",
+      "category_id": "02-education-explainer",
+      "category": "Explainers",
+      "suitable_for": "课程知识点、方法拆解、自然科普、学习流程与柔和的概念解释",
+      "layout": "doodle-profile",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Playful explainer layout with one large rounded headline, hand-drawn accents, and elastic information reveals.",
+          "style_tags": [
+            "doodle",
+            "explainer",
+            "playful",
+            "high-clarity"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#E8E6D9"
+            },
+            {
+              "role": "text",
+              "value": "#19332F"
+            },
+            {
+              "role": "accent",
+              "value": "#D8A84E"
+            },
+            {
+              "role": "accent",
+              "value": "#E86A45"
+            },
+            {
+              "role": "muted",
+              "value": "#6B7565"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "rounded bold display"
+            },
+            "body": {
+              "character": "friendly sans body"
+            },
+            "editorial_accent": {
+              "character": "handwritten accent"
+            },
+            "labels": {
+              "character": "simple labels"
+            }
+          },
+          "composition": {
+            "strategy": "doodle profile",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "headline",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "person card",
+                "placement": "identity anchor zone"
+              },
+              {
+                "role": "principles",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "quote card",
+                "placement": "supporting conclusion zone"
+              },
+              {
+                "role": "process",
+                "placement": "supporting information zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "rough outlines",
+            "rounded tags",
+            "stars and crosses",
+            "hand-drawn connectors"
+          ],
+          "motifs": [
+            "doodle stars",
+            "profile tag",
+            "metric bars",
+            "process steps"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "energetic teaching rhythm with distinct object-level beats",
+            "intensity": "high",
+            "techniques": [
+              "elastic pop",
+              "hand-drawn line reveal",
+              "staggered points",
+              "node bounce"
+            ]
+          }
+        }
+      },
+      "file": "02-Explainers/05-doodle-explainer.html"
+    },
+    {
+      "number": 14,
+      "template_id": "blush-watercolor",
+      "name": "绽放艺术工作室",
+      "name_en": "Bloom Atelier Interface",
+      "category_id": "02-education-explainer",
+      "category": "Explainers",
+      "suitable_for": "课程知识点、方法拆解、自然科普、学习流程与柔和的概念解释",
+      "layout": "watercolor-profile",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Soft watercolor editorial composition with delicate washes, a calm title column, and a refined circular data focus.",
+          "style_tags": [
+            "watercolor",
+            "organic",
+            "soft",
+            "editorial"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#F8E9E7"
+            },
+            {
+              "role": "text",
+              "value": "#2D2430"
+            },
+            {
+              "role": "accent",
+              "value": "#EFA7B8"
+            },
+            {
+              "role": "accent",
+              "value": "#A9C9E8"
+            },
+            {
+              "role": "muted",
+              "value": "#756B72"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "light serif display"
+            },
+            "body": {
+              "character": "neutral sans body"
+            },
+            "editorial_accent": {
+              "character": "italic editorial accent"
+            },
+            "labels": {
+              "character": "fine labels"
+            }
+          },
+          "composition": {
+            "strategy": "watercolor profile",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "intro",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "summary",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "vertical timeline",
+                "placement": "closing progression zone"
+              },
+              {
+                "role": "segmented donut",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "author",
+                "placement": "identity anchor zone"
+              },
+              {
+                "role": "swatches",
+                "placement": "supporting information zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "watercolor washes",
+            "segmented ring",
+            "fine vertical rule",
+            "small swatches"
+          ],
+          "motifs": [
+            "paint wash",
+            "botanical spacing",
+            "vertical timeline",
+            "segmented donut"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "gentle layered dissolve with long readable holds",
+            "intensity": "low",
+            "techniques": [
+              "wash dissolve",
+              "smooth text settle",
+              "ring reveal",
+              "fine rule draw"
+            ]
+          }
+        }
+      },
+      "file": "02-Explainers/14-watercolor-nature.html"
+    },
+    {
+      "number": 7,
+      "template_id": "black-yellow-type",
+      "name": "未来霓虹编辑",
+      "name_en": "Futuristic Neon Editorial",
+      "category_id": "03-impact-manifesto",
+      "category": "Bold Ideas",
+      "suitable_for": "核心结论、争议观点、品牌宣言、议题警示、强节奏标题与冲击型开场",
+      "layout": "type-manifesto",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Brutalist typography system with one monumental statement, electric contrast, and sparse supporting evidence.",
+          "style_tags": [
+            "brutalist",
+            "bold-type",
+            "high-contrast",
+            "manifesto"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#090D18"
+            },
+            {
+              "role": "text",
+              "value": "#F5F7FA"
+            },
+            {
+              "role": "accent",
+              "value": "#00E5FF"
+            },
+            {
+              "role": "accent",
+              "value": "#FFC857"
+            },
+            {
+              "role": "muted",
+              "value": "#9AA6B2"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "ultra-bold condensed display"
+            },
+            "body": {
+              "character": "strong sans body"
+            },
+            "editorial_accent": {
+              "character": "minimal accent type"
+            },
+            "labels": {
+              "character": "uppercase labels"
+            }
+          },
+          "composition": {
+            "strategy": "type manifesto",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "display title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "principles",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "director tag",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "quote",
+                "placement": "supporting conclusion zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "timeline",
+                "placement": "closing progression zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "hard signal bars",
+            "solid blocks",
+            "thin data rails",
+            "circular nodes"
+          ],
+          "motifs": [
+            "monumental headline",
+            "signal mark",
+            "metric rail",
+            "hard-cut timeline"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "fast decisive statement followed by compact supporting beats",
+            "intensity": "high",
+            "techniques": [
+              "hard masked reveal",
+              "linear bar fill",
+              "short slide-in",
+              "sequential node light"
+            ]
+          }
+        }
+      },
+      "file": "03-Bold-Ideas/07-bold-signal.html"
+    },
+    {
+      "number": 8,
+      "template_id": "electric-impact-type",
+      "name": "高端数字编辑",
+      "name_en": "Premium Digital Editorial",
+      "category_id": "03-impact-manifesto",
+      "category": "Bold Ideas",
+      "suitable_for": "核心结论、争议观点、品牌宣言、议题警示、强节奏标题与冲击型开场",
+      "layout": "impact-manifesto",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Industrial impact poster with oversized condensed typography, directional color blocks, and forceful evidence staging.",
+          "style_tags": [
+            "industrial",
+            "impact",
+            "poster",
+            "directional"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#10182E"
+            },
+            {
+              "role": "text",
+              "value": "#F7F8FA"
+            },
+            {
+              "role": "accent",
+              "value": "#E89B3C"
+            },
+            {
+              "role": "muted",
+              "value": "#65708A"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "monumental condensed display"
+            },
+            "body": {
+              "character": "bold sans body"
+            },
+            "editorial_accent": {
+              "character": "italic emphasis"
+            },
+            "labels": {
+              "character": "technical labels"
+            }
+          },
+          "composition": {
+            "strategy": "impact manifesto",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "display title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "director",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "principles",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "quote",
+                "placement": "supporting conclusion zone"
+              },
+              {
+                "role": "timeline",
+                "placement": "closing progression zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "directional bars",
+            "hard-edged panels",
+            "signal squares",
+            "horizontal rails"
+          ],
+          "motifs": [
+            "impact headline",
+            "factory signal",
+            "metric stack",
+            "redline timeline"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "forceful opening hit with rapid evidence lock-in",
+            "intensity": "high",
+            "techniques": [
+              "word-block reveal",
+              "directional wipe",
+              "staggered metrics",
+              "hard line draw"
+            ]
+          }
+        }
+      },
+      "file": "03-Bold-Ideas/08-industrial-impact.html"
+    },
+    {
+      "number": 9,
+      "template_id": "acid-script-poster",
+      "name": "酸性实验海报",
+      "name_en": "Acid Experimental Poster",
+      "category_id": "03-impact-manifesto",
+      "category": "Bold Ideas",
+      "suitable_for": "核心结论、争议观点、品牌宣言、议题警示、强节奏标题与冲击型开场",
+      "layout": "script-poster",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Experimental type poster combining monumental condensed forms, calligraphic flourishes, and sparse side annotations.",
+          "style_tags": [
+            "experimental-type",
+            "acid",
+            "poster",
+            "calligraphic"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#080808"
+            },
+            {
+              "role": "text",
+              "value": "#FFFFFF"
+            },
+            {
+              "role": "accent",
+              "value": "#BFFF00"
+            },
+            {
+              "role": "accent",
+              "value": "#FF3CAC"
+            },
+            {
+              "role": "muted",
+              "value": "#C8C8C8"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "oversized condensed display"
+            },
+            "body": {
+              "character": "script display accent"
+            },
+            "editorial_accent": {
+              "character": "compact sans body"
+            },
+            "labels": {
+              "character": "badge labels"
+            }
+          },
+          "composition": {
+            "strategy": "script poster",
+            "alignment": "centered or symmetrical",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "display title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "script lettering",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "process",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "features",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "quote",
+                "placement": "supporting conclusion zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "calligraphic curves",
+            "pill badge",
+            "asterisk mark",
+            "thin process rails"
+          ],
+          "motifs": [
+            "mixed-type lockup",
+            "drawn flourishes",
+            "process strip",
+            "asterisk seal"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "theatrical type construction with delayed peripheral details",
+            "intensity": "high",
+            "techniques": [
+              "calligraphic line draw",
+              "letterform reveal",
+              "badge spring",
+              "annotation stagger"
+            ]
+          }
+        }
+      },
+      "file": "03-Bold-Ideas/09-experimental-type.html"
+    },
+    {
+      "number": 13,
+      "template_id": "grainy-heatwave",
+      "name": "彩色艺术智能",
+      "name_en": "Chromatic Art Intelligence",
+      "category_id": "03-impact-manifesto",
+      "category": "Bold Ideas",
+      "suitable_for": "核心结论、争议观点、品牌宣言、议题警示、强节奏标题与冲击型开场",
+      "layout": "heatwave-exhibition",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Exhibition poster built on a saturated thermal field, tactile grain, and isolated white editorial statements.",
+          "style_tags": [
+            "experimental",
+            "thermal",
+            "grain",
+            "exhibition"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#2E1065"
+            },
+            {
+              "role": "text",
+              "value": "#FFFFFF"
+            },
+            {
+              "role": "accent",
+              "value": "#FF7A18"
+            },
+            {
+              "role": "accent",
+              "value": "#EC4899"
+            },
+            {
+              "role": "muted",
+              "value": "rgba(255,255,255,.7)"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "serif italic display"
+            },
+            "body": {
+              "character": "bold sans support"
+            },
+            "editorial_accent": {
+              "character": "minimal labels"
+            },
+            "labels": {
+              "character": "gallery index type"
+            }
+          },
+          "composition": {
+            "strategy": "heatwave exhibition",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "quote",
+                "placement": "supporting conclusion zone"
+              },
+              {
+                "role": "year",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "principles",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "display title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "studio index",
+                "placement": "supporting information zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "full-bleed color field",
+            "grain texture",
+            "corner annotations",
+            "minimal rules"
+          ],
+          "motifs": [
+            "thermal gradient",
+            "gallery title",
+            "studio index",
+            "corner evidence"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "slow atmospheric emergence with a strong central lockup",
+            "intensity": "medium",
+            "techniques": [
+              "grain emergence",
+              "slow title settle",
+              "corner stagger",
+              "soft material reveal"
+            ]
+          }
+        }
+      },
+      "file": "03-Bold-Ideas/13-heatwave-poster.html"
+    },
+    {
+      "number": 10,
+      "template_id": "neon-grid-commerce",
+      "name": "赛博编辑看板",
+      "name_en": "Cyber Editorial Dashboard",
+      "category_id": "04-tech-data-business",
+      "category": "Tech & Data",
+      "suitable_for": "AI SaaS、商业指标、科技趋势、数据看板、产品与团队协作",
+      "layout": "commerce-2x3",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Modular commerce grid with luminous technical borders, dense but ordered metrics, and crisp panel sequencing.",
+          "style_tags": [
+            "technology",
+            "commerce",
+            "grid",
+            "neon"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#050505"
+            },
+            {
+              "role": "text",
+              "value": "#F5F5F5"
+            },
+            {
+              "role": "accent",
+              "value": "#B6FF00"
+            },
+            {
+              "role": "accent",
+              "value": "#00E5FF"
+            },
+            {
+              "role": "muted",
+              "value": "#A8A8A8"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "condensed display"
+            },
+            "body": {
+              "character": "monospace labels"
+            },
+            "editorial_accent": {
+              "character": "clear sans body"
+            },
+            "labels": {
+              "character": "numeric display"
+            }
+          },
+          "composition": {
+            "strategy": "commerce 2x3",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "chapter",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "identity",
+                "placement": "identity anchor zone"
+              },
+              {
+                "role": "strategy",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "vision",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "roadmap",
+                "placement": "closing progression zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "outlined grid cells",
+            "neon rails",
+            "rectangular badges",
+            "data bars"
+          ],
+          "motifs": [
+            "six-zone grid",
+            "commerce metrics",
+            "roadmap rail",
+            "technical annotations"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "crisp modular sequence with one panel group revealed at a time",
+            "intensity": "high",
+            "techniques": [
+              "grid snap",
+              "panel pop",
+              "monospace reveal",
+              "neon line growth"
+            ]
+          }
+        }
+      },
+      "file": "04-Tech-Data/10-neon-commerce.html"
+    },
+    {
+      "number": 11,
+      "template_id": "pale-tech-dashboard",
+      "name": "未来研究界面",
+      "name_en": "Neo Research Interface",
+      "category_id": "04-tech-data-business",
+      "category": "Tech & Data",
+      "suitable_for": "AI SaaS、商业指标、科技趋势、数据看板、产品与团队协作",
+      "layout": "tech-open-field",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Open technical field with a quiet information hierarchy, translucent data glow, and restrained analytical motion.",
+          "style_tags": [
+            "technology",
+            "data",
+            "light-surface",
+            "minimal"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#F7F8FC"
+            },
+            {
+              "role": "text",
+              "value": "#111827"
+            },
+            {
+              "role": "accent",
+              "value": "#7C5CFF"
+            },
+            {
+              "role": "accent",
+              "value": "#35B8FF"
+            },
+            {
+              "role": "muted",
+              "value": "#64748B"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "monospace display"
+            },
+            "body": {
+              "character": "neutral sans body"
+            },
+            "editorial_accent": {
+              "character": "display numerals"
+            },
+            "labels": {
+              "character": "technical labels"
+            }
+          },
+          "composition": {
+            "strategy": "tech open field",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "ghost year",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "intro",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "summary",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "timeline",
+                "placement": "closing progression zone"
+              },
+              {
+                "role": "author",
+                "placement": "identity anchor zone"
+              },
+              {
+                "role": "swatches",
+                "placement": "supporting information zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "soft glow fields",
+            "thin timeline",
+            "horizontal metrics",
+            "small swatches"
+          ],
+          "motifs": [
+            "ghost numeral",
+            "sensor bars",
+            "technical timeline",
+            "signal swatches"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "calm analytical reveal with late data emphasis",
+            "intensity": "low",
+            "techniques": [
+              "blur-to-clear",
+              "late bar growth",
+              "number settle",
+              "fine line draw"
+            ]
+          }
+        }
+      },
+      "file": "04-Tech-Data/11-ocean-data.html"
+    },
+    {
+      "number": 12,
+      "template_id": "liquid-aura",
+      "name": "液态智能界面",
+      "name_en": "Liquid Intelligence Interface",
+      "category_id": "04-tech-data-business",
+      "category": "Tech & Data",
+      "suitable_for": "AI SaaS、商业指标、科技趋势、数据看板、产品与团队协作",
+      "layout": "aura-presentation",
+      "ratio": "9:16",
+      "duration_seconds": 5,
+      "loop": false,
+      "playback": "play_once_hold",
+      "visual_manifest": {
+        "schema_version": "1.0",
+        "visual": {
+          "summary": "Immersive dark presentation with liquid color depth, diagonal editorial type, and luminous circular metrics.",
+          "style_tags": [
+            "liquid",
+            "immersive",
+            "collaboration",
+            "cinematic"
+          ],
+          "palette": [
+            {
+              "role": "background",
+              "value": "#09051A"
+            },
+            {
+              "role": "text",
+              "value": "#FFFFFF"
+            },
+            {
+              "role": "accent",
+              "value": "#8B5CFF"
+            },
+            {
+              "role": "accent",
+              "value": "#FF4FD8"
+            },
+            {
+              "role": "muted",
+              "value": "#94A3B8"
+            }
+          ],
+          "typography": {
+            "display": {
+              "character": "italic sans display"
+            },
+            "body": {
+              "character": "neutral sans body"
+            },
+            "editorial_accent": {
+              "character": "light editorial accent"
+            },
+            "labels": {
+              "character": "small phase labels"
+            }
+          },
+          "composition": {
+            "strategy": "aura presentation",
+            "alignment": "asymmetric",
+            "whitespace": "protected around the primary focal hierarchy",
+            "regions": [
+              {
+                "role": "person",
+                "placement": "identity anchor zone"
+              },
+              {
+                "role": "intro",
+                "placement": "supporting information zone"
+              },
+              {
+                "role": "title",
+                "placement": "primary focal zone"
+              },
+              {
+                "role": "ring metrics",
+                "placement": "secondary data zone"
+              },
+              {
+                "role": "phase line",
+                "placement": "closing progression zone"
+              },
+              {
+                "role": "pager",
+                "placement": "closing progression zone"
+              }
+            ]
+          },
+          "shape_language": [
+            "blurred liquid fields",
+            "progress rings",
+            "phase rail",
+            "soft profile capsule"
+          ],
+          "motifs": [
+            "liquid aura",
+            "ring metrics",
+            "project phases",
+            "presentation pager"
+          ],
+          "motion": {
+            "duration_seconds": 5,
+            "playback": "once-hold",
+            "pacing": "immersive layered entrance with continuous low-frequency atmosphere",
+            "intensity": "medium",
+            "techniques": [
+              "liquid drift",
+              "opposed text entrances",
+              "ring draw",
+              "phase-line reveal"
+            ]
+          }
+        }
+      },
+      "file": "04-Tech-Data/12-liquid-collaboration.html"
+    }
+  ]
+}

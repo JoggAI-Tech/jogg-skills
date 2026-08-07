@@ -1,0 +1,115 @@
+{
+  "id": "map_rank_morph--route",
+  "scene_id": "map_rank_morph",
+  "scene_title": "The Geography of AI Investment",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "lens_id": "route",
+  "lens_name": "Route",
+  "intent": "Make geographic movement the primary narrative",
+  "composition_name": "map-rank",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "map_rank_morph--expression-1",
+  "layout_instance_id": "map_rank_morph--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_family": "route-bridge",
+  "design_contract_id": "map_rank_morph--route-bridge--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "map_rank_morph",
+  "support_components": [
+    "map_positions",
+    "rank_bars",
+    "morph_links"
+  ],
+  "semantic_slots": [
+    "geography",
+    "ranking",
+    "shift"
+  ],
+  "data_shape": "geo_rank",
+  "motion": "map_to_rank",
+  "motion_profile": "route-travel",
+  "visual_id": "paper-collage",
+  "proof_mode": "floating-chips",
+  "copy_surface": "floating",
+  "art_surface": "route",
+  "copy_mode": "headline",
+  "art_direction": "route map_rank_morph with geographic route",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.907,
+        "y": 5.54,
+        "w": 45.78,
+        "h": 28.099
+      },
+      "art": {
+        "x": 5.297,
+        "y": 35.811,
+        "w": 90.154,
+        "h": 56.945
+      },
+      "proof": {
+        "x": 55.571,
+        "y": 6.757,
+        "w": 39.077,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 4.907,
+          "y": 5.54,
+          "w": 45.78,
+          "h": 28.099
+        },
+        {
+          "x": 55.571,
+          "y": 6.757,
+          "w": 39.077,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.087,
+        "y": 5.42,
+        "w": 85.78,
+        "h": 21.099
+      },
+      "art": {
+        "x": 5.216,
+        "y": 28.853,
+        "w": 90.154,
+        "h": 61.945
+      },
+      "proof": {
+        "x": 6.688,
+        "y": 92.811,
+        "w": 86.077,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.087,
+          "y": 5.42,
+          "w": 85.78,
+          "h": 21.099
+        },
+        {
+          "x": 6.688,
+          "y": 92.811,
+          "w": 86.077,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "map_rank_morph:route:map-rank:full-width-stage:map_rank_morph:paper-collage:floating-chips:route-travel:route-bridge:floating:route:headline:map_rank_morph--1--layout:top-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

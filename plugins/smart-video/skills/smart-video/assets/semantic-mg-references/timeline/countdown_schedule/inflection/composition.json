@@ -1,0 +1,115 @@
+{
+  "id": "countdown_schedule--inflection",
+  "scene_id": "countdown_schedule",
+  "scene_title": "Seven Days to Launch",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "inflection",
+  "lens_name": "Inflection",
+  "intent": "Magnify the moment that changes the trajectory",
+  "composition_name": "deadline-focus",
+  "layout_grammar": "diagram-left-rail",
+  "layout_contract_id": "countdown_schedule--expression-2",
+  "layout_instance_id": "countdown_schedule--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "composition_family": "checklist-rail",
+  "design_contract_id": "countdown_schedule--checklist-rail--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "countdown_schedule",
+  "support_components": [
+    "day_blocks",
+    "critical_path",
+    "launch_marker"
+  ],
+  "semantic_slots": [
+    "prepare",
+    "verify",
+    "launch"
+  ],
+  "data_shape": "countdown_tasks",
+  "motion": "countdown_tick",
+  "motion_profile": "pivot-magnify",
+  "visual_id": "archive-dossier",
+  "proof_mode": "vertical-index",
+  "copy_surface": "technical",
+  "art_surface": "checklist",
+  "copy_mode": "editorial",
+  "art_direction": "checklist countdown_schedule with magnified inflection",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 40.888,
+        "y": 8.0,
+        "w": 55.22,
+        "h": 41.901
+      },
+      "art": {
+        "x": 4.703,
+        "y": 5.0,
+        "w": 30.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 40.429,
+        "y": 78.0,
+        "w": 54.923,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 40.888,
+          "y": 8.0,
+          "w": 55.22,
+          "h": 41.901
+        },
+        {
+          "x": 40.429,
+          "y": 78.0,
+          "w": 54.923,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 61.708,
+        "y": 5.0,
+        "w": 33.22,
+        "h": 66.901
+      },
+      "art": {
+        "x": 5.784,
+        "y": 5.0,
+        "w": 50.846,
+        "h": 80.055
+      },
+      "proof": {
+        "x": 61.312,
+        "y": 75.0,
+        "w": 32.923,
+        "h": 12
+      },
+      "avoid_zones": [
+        {
+          "x": 61.708,
+          "y": 5.0,
+          "w": 33.22,
+          "h": 66.901
+        },
+        {
+          "x": 61.312,
+          "y": 75.0,
+          "w": 32.923,
+          "h": 12
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "countdown_schedule:inflection:deadline-focus:diagram-left-rail:countdown_schedule:archive-dossier:vertical-index:pivot-magnify:checklist-rail:technical:checklist:editorial:countdown_schedule--2--layout:right-caption-stage",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

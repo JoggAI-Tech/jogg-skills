@@ -1,0 +1,115 @@
+{
+  "id": "annotated_object--finding",
+  "scene_id": "annotated_object",
+  "scene_title": "Inside an AI Server Rack",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "lens_id": "finding",
+  "lens_name": "Finding",
+  "intent": "Lock the evidence into one defensible conclusion",
+  "composition_name": "object-finding",
+  "layout_grammar": "metric-monument",
+  "layout_contract_id": "annotated_object--expression-3",
+  "layout_instance_id": "annotated_object--3--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_family": "right-object",
+  "design_contract_id": "annotated_object--right-object--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "annotated_object",
+  "support_components": [
+    "object_silhouette",
+    "callout_lines",
+    "part_labels"
+  ],
+  "semantic_slots": [
+    "object",
+    "parts",
+    "function"
+  ],
+  "data_shape": "object_parts",
+  "motion": "annotations_draw",
+  "motion_profile": "finding-stamp",
+  "visual_id": "material-editorial",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "poster",
+  "art_surface": "object",
+  "copy_mode": "metric",
+  "art_direction": "object annotated_object with finding lockup",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.618,
+        "y": 8.64,
+        "w": 37.56,
+        "h": 61.198
+      },
+      "art": {
+        "x": 46.0,
+        "y": 4.126,
+        "w": 49.308,
+        "h": 89.89
+      },
+      "proof": {
+        "x": 5.0,
+        "y": 79.162,
+        "w": 38.154,
+        "h": 14
+      },
+      "avoid_zones": [
+        {
+          "x": 5.618,
+          "y": 8.64,
+          "w": 37.56,
+          "h": 61.198
+        },
+        {
+          "x": 5.0,
+          "y": 79.162,
+          "w": 38.154,
+          "h": 14
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.618,
+        "y": 4.72,
+        "w": 85.56,
+        "h": 23.198
+      },
+      "art": {
+        "x": 5.0,
+        "y": 36.098,
+        "w": 90.308,
+        "h": 56.89
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 30.126,
+        "w": 86.154,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 7.618,
+          "y": 4.72,
+          "w": 85.56,
+          "h": 23.198
+        },
+        {
+          "x": 7.0,
+          "y": 30.126,
+          "w": 86.154,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "annotated_object:finding:object-finding:metric-monument:annotated_object:material-editorial:edge-tabs:finding-stamp:right-object:poster:object:metric:annotated_object--3--layout:art-monument-bottom",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

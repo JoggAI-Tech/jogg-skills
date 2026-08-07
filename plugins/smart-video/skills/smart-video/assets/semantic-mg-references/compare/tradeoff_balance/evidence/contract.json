@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "tradeoff_balance",
+  "composition_id": "tradeoff_balance--evidence",
+  "lens_id": "evidence",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "tradeoff_balance--2--layout",
+  "portrait_silhouette_id": "top-compact",
+  "structural_fingerprint": "tradeoff_balance:evidence:cost-benefit-proof:data-right:tradeoff_scale:electric-cyan:center-badge:evidence-build:gate-split:technical:hard-split:metric:tradeoff_balance--2--layout:top-compact",
+  "art_direction": "hard-split tradeoff_scale with measured proof field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "ba3db2ed1d97b1b69528d4b0551950a80ce786996926b07b87982757fc29def8",
+    "9:16": "b1215a0c8e69e4176d872c2441e023dd94170127f2f7544d460a5584ae2c62ce"
+  }
+}

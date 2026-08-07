@@ -1,0 +1,115 @@
+{
+  "id": "parallel_tracks--inflection",
+  "scene_id": "parallel_tracks",
+  "scene_title": "Models and Chips Co-Evolve",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "inflection",
+  "lens_name": "Inflection",
+  "intent": "Magnify the moment that changes the trajectory",
+  "composition_name": "track-crossover",
+  "layout_grammar": "diagram-right-rail",
+  "layout_contract_id": "parallel_tracks--expression-2",
+  "layout_instance_id": "parallel_tracks--2--layout",
+  "portrait_silhouette_id": "offset-lower-right",
+  "composition_family": "wave-horizon",
+  "design_contract_id": "parallel_tracks--wave-horizon--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "parallel_tracks",
+  "support_components": [
+    "track_a",
+    "track_b",
+    "sync_bridges"
+  ],
+  "semantic_slots": [
+    "track_a",
+    "track_b",
+    "convergence"
+  ],
+  "data_shape": "parallel_events",
+  "motion": "dual_track_draw",
+  "motion_profile": "pivot-magnify",
+  "visual_id": "electric-cyan",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "technical",
+  "art_surface": "wave-field",
+  "copy_mode": "editorial",
+  "art_direction": "wave-field parallel_tracks with magnified inflection",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.752,
+        "y": 7.82,
+        "w": 55.22,
+        "h": 41.901
+      },
+      "art": {
+        "x": 64.198,
+        "y": 5.063,
+        "w": 30.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 4.714,
+        "y": 78.081,
+        "w": 54.923,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 4.752,
+          "y": 7.82,
+          "w": 55.22,
+          "h": 41.901
+        },
+        {
+          "x": 4.714,
+          "y": 78.081,
+          "w": 54.923,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 51.872,
+        "y": 4.86,
+        "w": 42.22,
+        "h": 79.901
+      },
+      "art": {
+        "x": 6.144,
+        "y": 5.049,
+        "w": 42.846,
+        "h": 80.055
+      },
+      "proof": {
+        "x": 5.792,
+        "y": 88.063,
+        "w": 87.923,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 51.872,
+          "y": 4.86,
+          "w": 42.22,
+          "h": 79.901
+        },
+        {
+          "x": 5.792,
+          "y": 88.063,
+          "w": 87.923,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "parallel_tracks:inflection:track-crossover:diagram-right-rail:parallel_tracks:electric-cyan:edge-tabs:pivot-magnify:wave-horizon:technical:wave-field:editorial:parallel_tracks--2--layout:offset-lower-right",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

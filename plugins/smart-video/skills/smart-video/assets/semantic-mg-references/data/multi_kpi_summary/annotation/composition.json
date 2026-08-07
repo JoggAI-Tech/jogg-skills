@@ -1,0 +1,115 @@
+{
+  "id": "multi_kpi_summary--annotation",
+  "scene_id": "multi_kpi_summary",
+  "scene_title": "The AI SaaS Health Check",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "annotation",
+  "lens_name": "Annotation",
+  "intent": "Explain the decisive data point in context",
+  "composition_name": "metric-priority",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "multi_kpi_summary--expression-2",
+  "layout_instance_id": "multi_kpi_summary--2--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_family": "full-bleed-chart",
+  "design_contract_id": "multi_kpi_summary--full-bleed-chart--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "multi_kpi",
+  "support_components": [
+    "metric_tiles",
+    "health_signal",
+    "summary_line"
+  ],
+  "semantic_slots": [
+    "growth",
+    "retention",
+    "efficiency"
+  ],
+  "data_shape": "multi_metric",
+  "motion": "metric_cascade",
+  "motion_profile": "annotation-focus",
+  "visual_id": "atlas-blue",
+  "proof_mode": "metric-cards",
+  "copy_surface": "floating",
+  "art_surface": "chart-field",
+  "copy_mode": "headline",
+  "art_direction": "chart-field multi_kpi with annotated decisive mark",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.676,
+        "y": 4.82,
+        "w": 46.0,
+        "h": 28.0
+      },
+      "art": {
+        "x": 5.297,
+        "y": 36.063,
+        "w": 90.0,
+        "h": 57.0
+      },
+      "proof": {
+        "x": 55.571,
+        "y": 7.081,
+        "w": 39.0,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 4.676,
+          "y": 4.82,
+          "w": 46.0,
+          "h": 28.0
+        },
+        {
+          "x": 55.571,
+          "y": 7.081,
+          "w": 39.0,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.856,
+        "y": 4.86,
+        "w": 86.0,
+        "h": 23.0
+      },
+      "art": {
+        "x": 5.216,
+        "y": 36.049,
+        "w": 90.0,
+        "h": 57.0
+      },
+      "proof": {
+        "x": 6.688,
+        "y": 30.063,
+        "w": 86.0,
+        "h": 4
+      },
+      "avoid_zones": [
+        {
+          "x": 6.856,
+          "y": 4.86,
+          "w": 86.0,
+          "h": 23.0
+        },
+        {
+          "x": 6.688,
+          "y": 30.063,
+          "w": 86.0,
+          "h": 4
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "multi_kpi_summary:annotation:metric-priority:full-width-stage:multi_kpi:atlas-blue:metric-cards:annotation-focus:full-bleed-chart:floating:chart-field:headline:multi_kpi_summary--2--layout:art-monument-bottom",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

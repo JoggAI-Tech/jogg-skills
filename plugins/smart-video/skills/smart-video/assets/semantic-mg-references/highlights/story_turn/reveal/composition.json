@@ -1,0 +1,114 @@
+{
+  "id": "story_turn--reveal",
+  "scene_id": "story_turn",
+  "scene_title": "The Demo Became a Platform",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "reveal",
+  "lens_name": "Reveal",
+  "intent": "Build tension and reveal the proof behind the idea",
+  "composition_name": "before-after-arc",
+  "layout_grammar": "evidence-right",
+  "layout_contract_id": "story_turn--expression-2",
+  "layout_instance_id": "story_turn--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "composition_family": "path-curve",
+  "design_contract_id": "story_turn--path-curve--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "story_pivot",
+  "support_components": [
+    "before_state",
+    "after_state"
+  ],
+  "semantic_slots": [
+    "before",
+    "turn",
+    "after"
+  ],
+  "data_shape": "before_pivot_after",
+  "motion": "pivot_transition",
+  "motion_profile": "reveal-cut",
+  "visual_id": "luminous-grid",
+  "proof_mode": "floating-chips",
+  "copy_surface": "paper",
+  "art_surface": "path",
+  "copy_mode": "editorial",
+  "art_direction": "path story_pivot with editorial reveal",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 62.626,
+        "y": 8.0,
+        "w": 32.44,
+        "h": 69.802
+      },
+      "art": {
+        "x": 5.198,
+        "y": 5.0,
+        "w": 54.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 62.714,
+        "y": 84.0,
+        "w": 31.846,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 62.626,
+          "y": 8.0,
+          "w": 32.44,
+          "h": 69.802
+        },
+        {
+          "x": 62.714,
+          "y": 84.0,
+          "w": 31.846,
+          "h": 9
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 60.746,
+        "y": 5.0,
+        "w": 33.44,
+        "h": 66.802
+      },
+      "art": {
+        "x": 6.144,
+        "y": 5.0,
+        "w": 50.692,
+        "h": 80.11
+      },
+      "proof": {
+        "x": 60.792,
+        "y": 75.0,
+        "w": 32.846,
+        "h": 12
+      },
+      "avoid_zones": [
+        {
+          "x": 60.746,
+          "y": 5.0,
+          "w": 33.44,
+          "h": 66.802
+        },
+        {
+          "x": 60.792,
+          "y": 75.0,
+          "w": 32.846,
+          "h": 12
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "story_turn:reveal:before-after-arc:evidence-right:story_pivot:luminous-grid:floating-chips:reveal-cut:path-curve:paper:path:editorial:story_turn--2--layout:right-caption-stage",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

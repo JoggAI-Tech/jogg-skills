@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "highlights",
+  "scene_id": "key_takeaway",
+  "composition_id": "key_takeaway--reveal",
+  "lens_id": "reveal",
+  "visual_id": "cobalt-coral",
+  "layout_instance_id": "key_takeaway--2--layout",
+  "portrait_silhouette_id": "poster-inset-bottom",
+  "structural_fingerprint": "key_takeaway:reveal:proof-corner:poster-offset-left:takeaway_banner:cobalt-coral:vertical-index:reveal-cut:step-rail:floating:rail:statement:key_takeaway--2--layout:poster-inset-bottom",
+  "art_direction": "rail takeaway_banner with editorial reveal",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "5785e6b2d4a8257cc7725243aea62cf191316e7ab5e107a57ad62b22e152e61c",
+    "9:16": "4d9b73b19d6c2344694ba69f6fa0e17fbe19c68c4f3810369ffb5b6cd468b070"
+  }
+}

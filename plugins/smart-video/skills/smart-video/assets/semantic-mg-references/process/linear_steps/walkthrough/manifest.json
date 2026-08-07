@@ -1,0 +1,31 @@
+{
+  "id": "linear_steps--walkthrough",
+  "category_id": "process",
+  "category_name": "Process",
+  "scene_id": "linear_steps",
+  "name": "How an Agent Completes Work",
+  "presentation_form_id": "walkthrough",
+  "presentation_form_name": "Walkthrough",
+  "visual_id": "chalkboard-lab",
+  "proof_mode": "vertical-index",
+  "motion_profile": "guided-sequence",
+  "layout": "diagram-center",
+  "layout_instance_id": "linear_steps--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "composition_name": "step-focus",
+  "art_direction": "pipeline linear_steps with guided operating path",
+  "composition_signature": "linear_steps:walkthrough:step-focus:diagram-center:linear_steps:chalkboard-lab:vertical-index:guided-sequence:pipeline-spine:floating:pipeline:editorial:linear_steps--2--layout:bottom-editorial",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

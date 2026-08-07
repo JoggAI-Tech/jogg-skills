@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "pros_and_limits",
+  "composition_id": "pros_and_limits--evidence",
+  "lens_id": "evidence",
+  "visual_id": "cobalt-coral",
+  "layout_instance_id": "pros_and_limits--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "structural_fingerprint": "pros_and_limits:evidence:paired-evidence:split-decision:pros_limits:cobalt-coral:center-badge:evidence-build:gate-split:caption:hard-split:duel:pros_and_limits--2--layout:bottom-editorial",
+  "art_direction": "hard-split pros_limits with measured proof field",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "8605b62e17dafa2c683fc657bd7291c825d436d5ed4a139b33e1885a9da0b902",
+    "9:16": "e38338780160f5f8121bf3fe225e935a79b5566c615d421567b4633b32cad466"
+  }
+}

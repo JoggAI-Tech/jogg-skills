@@ -1,0 +1,114 @@
+{
+  "id": "era_evolution--horizon",
+  "scene_id": "era_evolution",
+  "scene_title": "Three Eras of AI Products",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "horizon",
+  "lens_name": "Horizon",
+  "intent": "Compress time into a before-now-next argument",
+  "composition_name": "next-era-lock",
+  "layout_grammar": "poster-offset-right",
+  "layout_contract_id": "era_evolution--expression-3",
+  "layout_instance_id": "era_evolution--3--layout",
+  "portrait_silhouette_id": "lower-lockup",
+  "composition_family": "bottom-statement-stage",
+  "design_contract_id": "era_evolution--bottom-statement-stage--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "era_evolution",
+  "support_components": [
+    "era_panels",
+    "transition_arrows"
+  ],
+  "semantic_slots": [
+    "era_one",
+    "era_two",
+    "era_three"
+  ],
+  "data_shape": "periods",
+  "motion": "era_replace",
+  "motion_profile": "horizon-settle",
+  "visual_id": "cobalt-coral",
+  "proof_mode": "caption-line",
+  "copy_surface": "floating",
+  "art_surface": "wide-stage",
+  "copy_mode": "statement",
+  "art_direction": "wide-stage era_evolution with compressed time horizon",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 57.846,
+        "y": 6.64,
+        "w": 38.22,
+        "h": 42.901
+      },
+      "art": {
+        "x": 4.703,
+        "y": 5.126,
+        "w": 48.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 57.429,
+        "y": 78.162,
+        "w": 37.923,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 57.846,
+          "y": 6.64,
+          "w": 38.22,
+          "h": 42.901
+        },
+        {
+          "x": 57.429,
+          "y": 78.162,
+          "w": 37.923,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.666,
+        "y": 69.72,
+        "w": 86.22,
+        "h": 24.901
+      },
+      "art": {
+        "x": 5.784,
+        "y": 5.098,
+        "w": 87.846,
+        "h": 53.055
+      },
+      "proof": {
+        "x": 7.312,
+        "y": 60.126,
+        "w": 85.923,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 7.666,
+          "y": 69.72,
+          "w": 86.22,
+          "h": 24.901
+        },
+        {
+          "x": 7.312,
+          "y": 60.126,
+          "w": 85.923,
+          "h": 7
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "era_evolution:horizon:next-era-lock:poster-offset-right:era_evolution:cobalt-coral:caption-line:horizon-settle:bottom-statement-stage:floating:wide-stage:statement:era_evolution--3--layout:lower-lockup",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

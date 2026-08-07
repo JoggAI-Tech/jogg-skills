@@ -1,0 +1,31 @@
+{
+  "id": "technology_layers--principle",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "scene_id": "technology_layers",
+  "name": "Six Layers of AI Delivery",
+  "presentation_form_id": "principle",
+  "presentation_form_name": "Principle",
+  "visual_id": "material-editorial",
+  "proof_mode": "caption-line",
+  "motion_profile": "principle-lock",
+  "layout": "headline-bottom",
+  "layout_instance_id": "technology_layers--3--layout",
+  "portrait_silhouette_id": "cinema-caption-top",
+  "composition_name": "technology-rule",
+  "art_direction": "wide-stage technology_layers with governing system rule",
+  "composition_signature": "technology_layers:principle:technology-rule:headline-bottom:technology_layers:material-editorial:caption-line:principle-lock:bottom-statement-stage:caption:wide-stage:headline:technology_layers--3--layout:cinema-caption-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

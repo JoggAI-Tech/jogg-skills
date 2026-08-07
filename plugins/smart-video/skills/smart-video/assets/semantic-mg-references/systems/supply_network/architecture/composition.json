@@ -1,0 +1,115 @@
+{
+  "id": "supply_network--architecture",
+  "scene_id": "supply_network",
+  "scene_title": "The Compute Supply Network",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "architecture",
+  "lens_name": "Architecture",
+  "intent": "Make structure and dependency visible",
+  "composition_name": "supply-web",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "supply_network--expression-1",
+  "layout_instance_id": "supply_network--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_family": "route-bridge",
+  "design_contract_id": "supply_network--route-bridge--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "supply_network",
+  "support_components": [
+    "supply_nodes",
+    "capacity_links",
+    "constraint_marker"
+  ],
+  "semantic_slots": [
+    "inputs",
+    "constraints",
+    "delivery"
+  ],
+  "data_shape": "supply_graph",
+  "motion": "supply_route",
+  "motion_profile": "structure-assemble",
+  "visual_id": "atlas-blue",
+  "proof_mode": "floating-chips",
+  "copy_surface": "floating",
+  "art_surface": "route",
+  "copy_mode": "headline",
+  "art_direction": "route supply_network with structural blueprint",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.513,
+        "y": 5.0,
+        "w": 45.78,
+        "h": 28.099
+      },
+      "art": {
+        "x": 5.0,
+        "y": 36.0,
+        "w": 90.154,
+        "h": 56.945
+      },
+      "proof": {
+        "x": 56.0,
+        "y": 7.0,
+        "w": 39.077,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 5.513,
+          "y": 5.0,
+          "w": 45.78,
+          "h": 28.099
+        },
+        {
+          "x": 56.0,
+          "y": 7.0,
+          "w": 39.077,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.513,
+        "y": 5.0,
+        "w": 85.78,
+        "h": 21.099
+      },
+      "art": {
+        "x": 5.0,
+        "y": 29.0,
+        "w": 90.154,
+        "h": 61.945
+      },
+      "proof": {
+        "x": 7.0,
+        "y": 93.0,
+        "w": 86.077,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.513,
+          "y": 5.0,
+          "w": 85.78,
+          "h": 21.099
+        },
+        {
+          "x": 7.0,
+          "y": 93.0,
+          "w": 86.077,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "supply_network:architecture:supply-web:full-width-stage:supply_network:atlas-blue:floating-chips:structure-assemble:route-bridge:floating:route:headline:supply_network--1--layout:top-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

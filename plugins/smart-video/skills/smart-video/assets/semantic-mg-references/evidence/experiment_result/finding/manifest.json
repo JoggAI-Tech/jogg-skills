@@ -1,0 +1,31 @@
+{
+  "id": "experiment_result--finding",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "scene_id": "experiment_result",
+  "name": "What the Classroom Trial Found",
+  "presentation_form_id": "finding",
+  "presentation_form_name": "Finding",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "stamp",
+  "motion_profile": "finding-stamp",
+  "layout": "poster-center",
+  "layout_instance_id": "experiment_result--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_name": "experiment-finding",
+  "art_direction": "redaction experiment_result with finding lockup",
+  "composition_signature": "experiment_result:finding:experiment-finding:poster-center:experiment_result:kinetic-ivory:stamp:finding-stamp:redaction-sheet:poster:redaction:statement:experiment_result--3--layout:poster-inset-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

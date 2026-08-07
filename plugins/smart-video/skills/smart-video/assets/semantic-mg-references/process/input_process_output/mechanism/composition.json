@@ -1,0 +1,115 @@
+{
+  "id": "input_process_output--mechanism",
+  "scene_id": "input_process_output",
+  "scene_title": "From Lecture to Mastery",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "mechanism",
+  "lens_name": "Mechanism",
+  "intent": "Expose the causal engine inside the process",
+  "composition_name": "ipo-machine",
+  "layout_grammar": "diagram-center",
+  "layout_contract_id": "input_process_output--expression-1",
+  "layout_instance_id": "input_process_output--1--layout",
+  "portrait_silhouette_id": "offset-upper-left",
+  "composition_family": "pipeline-spine",
+  "design_contract_id": "input_process_output--pipeline-spine--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "input_process_output",
+  "support_components": [
+    "input_bin",
+    "process_engine",
+    "output_bin"
+  ],
+  "semantic_slots": [
+    "input",
+    "process",
+    "output"
+  ],
+  "data_shape": "input_output",
+  "motion": "process_transform",
+  "motion_profile": "mechanism-run",
+  "visual_id": "chalkboard-lab",
+  "proof_mode": "vertical-index",
+  "copy_surface": "floating",
+  "art_surface": "pipeline",
+  "copy_mode": "editorial",
+  "art_direction": "pipeline input_process_output with visible causal mechanism",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.592,
+        "y": 6.36,
+        "w": 38.22,
+        "h": 39.901
+      },
+      "art": {
+        "x": 26.297,
+        "y": 15.874,
+        "w": 68.846,
+        "h": 70.055
+      },
+      "proof": {
+        "x": 4.571,
+        "y": 77.838,
+        "w": 33.923,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 4.592,
+          "y": 6.36,
+          "w": 38.22,
+          "h": 39.901
+        },
+        {
+          "x": 4.571,
+          "y": 77.838,
+          "w": 33.923,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 5.772,
+        "y": 5.28,
+        "w": 42.22,
+        "h": 79.901
+      },
+      "art": {
+        "x": 51.216,
+        "y": 4.902,
+        "w": 42.846,
+        "h": 80.055
+      },
+      "proof": {
+        "x": 5.688,
+        "y": 87.874,
+        "w": 87.923,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 5.772,
+          "y": 5.28,
+          "w": 42.22,
+          "h": 79.901
+        },
+        {
+          "x": 5.688,
+          "y": 87.874,
+          "w": 87.923,
+          "h": 9
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "input_process_output:mechanism:ipo-machine:diagram-center:input_process_output:chalkboard-lab:vertical-index:mechanism-run:pipeline-spine:floating:pipeline:editorial:input_process_output--1--layout:offset-upper-left",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

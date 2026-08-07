@@ -1,0 +1,31 @@
+{
+  "id": "geo_bubble--route",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "scene_id": "geo_bubble",
+  "name": "Where Inference Demand Grows",
+  "presentation_form_id": "route",
+  "presentation_form_name": "Route",
+  "visual_id": "electric-cyan",
+  "proof_mode": "metric-cards",
+  "motion_profile": "route-travel",
+  "layout": "data-left",
+  "layout_instance_id": "geo_bubble--1--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_name": "geo-bubbles",
+  "art_direction": "radial geo_bubble with geographic route",
+  "composition_signature": "geo_bubble:route:geo-bubbles:data-left:geo_bubble:electric-cyan:metric-cards:route-travel:radial-field:technical:radial:metric:geo_bubble--1--layout:art-monument-bottom",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

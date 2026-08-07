@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "evidence",
+  "scene_id": "case_study",
+  "composition_id": "case_study--exhibit",
+  "lens_id": "exhibit",
+  "visual_id": "cobalt-coral",
+  "layout_instance_id": "case_study--1--layout",
+  "portrait_silhouette_id": "middle-story-band",
+  "structural_fingerprint": "case_study:exhibit:case-stage:split-decision:case_study:cobalt-coral:vertical-index:exhibit-uncover:case-window:caption:case-window:duel:case_study--1--layout:middle-story-band",
+  "art_direction": "case-window case_study with material source object",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "5432ea7fbd9926a557471e3c0a470c3c31ce0e478bcd8a7867bfc2f2ceef976a",
+    "9:16": "06432036773ede5b09c9560706ae919ee2acf3bce7738c8ae502b21951c9e4d9"
+  }
+}

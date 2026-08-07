@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "process",
+  "scene_id": "user_journey",
+  "composition_id": "user_journey--mechanism",
+  "lens_id": "mechanism",
+  "visual_id": "sticker-classroom",
+  "layout_instance_id": "user_journey--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "structural_fingerprint": "user_journey:mechanism:journey-path:timeline-band:user_journey:sticker-classroom:floating-chips:mechanism-run:route-bridge:caption:route:headline:user_journey--1--layout:top-compact",
+  "art_direction": "route user_journey with visible causal mechanism",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "330834bb297de4cc7c7617b2bbcbf3cd3276742f3df867550461be238000522a",
+    "9:16": "bbf64005758fc13f24c1264443f11169a205d65a6bdf114b45da8108e732ca08"
+  }
+}

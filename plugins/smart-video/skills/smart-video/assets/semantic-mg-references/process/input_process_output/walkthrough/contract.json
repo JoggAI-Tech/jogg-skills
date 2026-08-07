@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "process",
+  "scene_id": "input_process_output",
+  "composition_id": "input_process_output--walkthrough",
+  "lens_id": "walkthrough",
+  "visual_id": "paper-collage",
+  "layout_instance_id": "input_process_output--2--layout",
+  "portrait_silhouette_id": "center-lockup",
+  "structural_fingerprint": "input_process_output:walkthrough:process-window:split-decision:input_process_output:paper-collage:center-badge:guided-sequence:gate-split:caption:hard-split:duel:input_process_output--2--layout:center-lockup",
+  "art_direction": "hard-split input_process_output with guided operating path",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "336c05acbf787a84880a40ceb2bd472aa46c8125ef626589105efaac6ebdf7c2",
+    "9:16": "d4eb925f9f457e116edb865f2bb6d46aebdd35564814420a030afbd1978b15f1"
+  }
+}

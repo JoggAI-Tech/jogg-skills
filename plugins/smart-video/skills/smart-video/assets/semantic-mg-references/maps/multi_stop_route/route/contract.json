@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "maps",
+  "scene_id": "multi_stop_route",
+  "composition_id": "multi_stop_route--route",
+  "lens_id": "route",
+  "visual_id": "luminous-grid",
+  "layout_instance_id": "multi_stop_route--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "multi_stop_route:route:multi-stop-map:timeline-band:multi_stop_route:luminous-grid:floating-chips:route-travel:route-bridge:caption:route:headline:multi_stop_route--1--layout:art-monument-top",
+  "art_direction": "route multi_stop_route with geographic route",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "1e243a47caa9918514d842b87f25c611e5f26b31a1eaa6af66978dae3c7e4370",
+    "9:16": "4941a4170aa89b3dd239b0e77e01cf7ade9b05e2c1aaf4fa3d9429e3ee7e64e8"
+  }
+}

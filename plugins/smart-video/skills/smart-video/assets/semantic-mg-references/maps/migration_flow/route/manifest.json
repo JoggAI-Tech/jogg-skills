@@ -1,0 +1,31 @@
+{
+  "id": "migration_flow--route",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "scene_id": "migration_flow",
+  "name": "Talent Moves Toward Compute",
+  "presentation_form_id": "route",
+  "presentation_form_name": "Route",
+  "visual_id": "electric-cyan",
+  "proof_mode": "caption-line",
+  "motion_profile": "route-travel",
+  "layout": "diagram-center",
+  "layout_instance_id": "migration_flow--1--layout",
+  "portrait_silhouette_id": "top-editorial",
+  "composition_name": "migration-stream",
+  "art_direction": "flow-river migration_flow with geographic route",
+  "composition_signature": "migration_flow:route:migration-stream:diagram-center:migration_flow:electric-cyan:caption-line:route-travel:river-flow:floating:flow-river:editorial:migration_flow--1--layout:top-editorial",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

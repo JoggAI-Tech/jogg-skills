@@ -1,0 +1,115 @@
+{
+  "id": "user_journey--mechanism",
+  "scene_id": "user_journey",
+  "scene_title": "A Teacher's AI Workflow",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "mechanism",
+  "lens_name": "Mechanism",
+  "intent": "Expose the causal engine inside the process",
+  "composition_name": "journey-path",
+  "layout_grammar": "timeline-band",
+  "layout_contract_id": "user_journey--expression-1",
+  "layout_instance_id": "user_journey--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_family": "route-bridge",
+  "design_contract_id": "user_journey--route-bridge--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "user_journey",
+  "support_components": [
+    "touchpoints",
+    "emotion_curve",
+    "outcome_flag"
+  ],
+  "semantic_slots": [
+    "need",
+    "experience",
+    "outcome"
+  ],
+  "data_shape": "journey_stages",
+  "motion": "journey_travel",
+  "motion_profile": "mechanism-run",
+  "visual_id": "sticker-classroom",
+  "proof_mode": "floating-chips",
+  "copy_surface": "caption",
+  "art_surface": "route",
+  "copy_mode": "headline",
+  "art_direction": "route user_journey with visible causal mechanism",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.857,
+        "y": 4.46,
+        "w": 58.0,
+        "h": 32.0
+      },
+      "art": {
+        "x": 5.198,
+        "y": 41.189,
+        "w": 90.0,
+        "h": 52.0
+      },
+      "proof": {
+        "x": 65.714,
+        "y": 7.243,
+        "w": 29.0,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 4.857,
+          "y": 4.46,
+          "w": 58.0,
+          "h": 32.0
+        },
+        {
+          "x": 65.714,
+          "y": 7.243,
+          "w": 29.0,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.977,
+        "y": 4.58,
+        "w": 86.0,
+        "h": 21.0
+      },
+      "art": {
+        "x": 5.144,
+        "y": 29.147,
+        "w": 90.0,
+        "h": 62.0
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 93,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.977,
+          "y": 4.58,
+          "w": 86.0,
+          "h": 21.0
+        },
+        {
+          "x": 6.792,
+          "y": 93,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "user_journey:mechanism:journey-path:timeline-band:user_journey:sticker-classroom:floating-chips:mechanism-run:route-bridge:caption:route:headline:user_journey--1--layout:top-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

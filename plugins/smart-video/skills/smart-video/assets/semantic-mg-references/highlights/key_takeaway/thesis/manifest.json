@@ -1,0 +1,31 @@
+{
+  "id": "key_takeaway--thesis",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "scene_id": "key_takeaway",
+  "name": "Distribution Wins the Second Act",
+  "presentation_form_id": "thesis",
+  "presentation_form_name": "Thesis",
+  "visual_id": "material-editorial",
+  "proof_mode": "caption-line",
+  "motion_profile": "poster-slam",
+  "layout": "headline-bottom",
+  "layout_instance_id": "key_takeaway--3--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_name": "takeaway-lock",
+  "art_direction": "wide-stage takeaway_banner with poster conclusion",
+  "composition_signature": "key_takeaway:thesis:takeaway-lock:headline-bottom:takeaway_banner:material-editorial:caption-line:poster-slam:bottom-statement-stage:caption:wide-stage:headline:key_takeaway--3--layout:art-monument-bottom",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

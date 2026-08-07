@@ -1,0 +1,114 @@
+{
+  "id": "statement_monument--reveal",
+  "scene_id": "statement_monument",
+  "scene_title": "Intelligence Becomes Infrastructure",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "lens_id": "reveal",
+  "lens_name": "Reveal",
+  "intent": "Build tension and reveal the proof behind the idea",
+  "composition_name": "diagonal-reveal",
+  "layout_grammar": "headline-top",
+  "layout_contract_id": "statement_monument--expression-2",
+  "layout_instance_id": "statement_monument--2--layout",
+  "portrait_silhouette_id": "cinema-caption-bottom",
+  "composition_family": "orbit-poster",
+  "design_contract_id": "statement_monument--orbit-poster--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "claim_monument",
+  "support_components": [
+    "proof_strip",
+    "context_caption"
+  ],
+  "semantic_slots": [
+    "claim",
+    "proof",
+    "implication"
+  ],
+  "data_shape": "claim_evidence",
+  "motion": "monument_reveal",
+  "motion_profile": "reveal-cut",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "caption",
+  "art_surface": "orbit",
+  "copy_mode": "headline",
+  "art_direction": "orbit claim_monument with editorial reveal",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.563,
+        "y": 4.46,
+        "w": 62.44,
+        "h": 24.802
+      },
+      "art": {
+        "x": 5.198,
+        "y": 33.189,
+        "w": 89.692,
+        "h": 60.11
+      },
+      "proof": {
+        "x": 69.714,
+        "y": 7.243,
+        "w": 24.846,
+        "h": 18
+      },
+      "avoid_zones": [
+        {
+          "x": 4.563,
+          "y": 4.46,
+          "w": 62.44,
+          "h": 24.802
+        },
+        {
+          "x": 69.714,
+          "y": 7.243,
+          "w": 24.846,
+          "h": 18
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 24.683,
+        "y": 69.58,
+        "w": 68.44,
+        "h": 23.802
+      },
+      "art": {
+        "x": 5.144,
+        "y": 5.147,
+        "w": 89.692,
+        "h": 62.11
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 70.189,
+        "w": 14.846,
+        "h": 24
+      },
+      "avoid_zones": [
+        {
+          "x": 24.683,
+          "y": 69.58,
+          "w": 68.44,
+          "h": 23.802
+        },
+        {
+          "x": 6.792,
+          "y": 70.189,
+          "w": 14.846,
+          "h": 24
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "statement_monument:reveal:diagonal-reveal:headline-top:claim_monument:kinetic-ivory:edge-tabs:reveal-cut:orbit-poster:caption:orbit:headline:statement_monument--2--layout:cinema-caption-bottom",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

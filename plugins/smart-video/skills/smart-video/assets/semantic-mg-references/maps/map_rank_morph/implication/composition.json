@@ -1,0 +1,115 @@
+{
+  "id": "map_rank_morph--implication",
+  "scene_id": "map_rank_morph",
+  "scene_title": "The Geography of AI Investment",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "lens_id": "implication",
+  "lens_name": "Implication",
+  "intent": "Connect geography to the consequence",
+  "composition_name": "rank-implication",
+  "layout_grammar": "diagonal-left",
+  "layout_contract_id": "map_rank_morph--expression-3",
+  "layout_instance_id": "map_rank_morph--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "before-after-slab",
+  "design_contract_id": "map_rank_morph--before-after-slab--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "map_rank_morph",
+  "support_components": [
+    "map_positions",
+    "rank_bars",
+    "morph_links"
+  ],
+  "semantic_slots": [
+    "geography",
+    "ranking",
+    "shift"
+  ],
+  "data_shape": "geo_rank",
+  "motion": "map_to_rank",
+  "motion_profile": "impact-arrive",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "center-badge",
+  "copy_surface": "poster",
+  "art_surface": "before-after",
+  "copy_mode": "statement",
+  "art_direction": "before-after map_rank_morph with geographic consequence",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.353,
+        "y": 8.54,
+        "w": 35.78,
+        "h": 58.099
+      },
+      "art": {
+        "x": 39.099,
+        "y": 5.811,
+        "w": 56.154,
+        "h": 86.945
+      },
+      "proof": {
+        "x": 4.857,
+        "y": 75.757,
+        "w": 35.077,
+        "h": 17
+      },
+      "avoid_zones": [
+        {
+          "x": 5.353,
+          "y": 8.54,
+          "w": 35.78,
+          "h": 58.099
+        },
+        {
+          "x": 4.857,
+          "y": 75.757,
+          "w": 35.077,
+          "h": 17
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.413,
+        "y": 5.42,
+        "w": 85.78,
+        "h": 32.099
+      },
+      "art": {
+        "x": 6.072,
+        "y": 39.853,
+        "w": 88.154,
+        "h": 48.945
+      },
+      "proof": {
+        "x": 6.896,
+        "y": 91.811,
+        "w": 86.077,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.413,
+          "y": 5.42,
+          "w": 85.78,
+          "h": 32.099
+        },
+        {
+          "x": 6.896,
+          "y": 91.811,
+          "w": 86.077,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "map_rank_morph:implication:rank-implication:diagonal-left:map_rank_morph:kinetic-ivory:center-badge:impact-arrive:before-after-slab:poster:before-after:statement:map_rank_morph--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

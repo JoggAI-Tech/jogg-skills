@@ -1,0 +1,115 @@
+{
+  "id": "conversion_funnel--walkthrough",
+  "scene_id": "conversion_funnel",
+  "scene_title": "The AI Activation Funnel",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "walkthrough",
+  "lens_name": "Walkthrough",
+  "intent": "Guide the viewer through the operating sequence",
+  "composition_name": "leak-annotation",
+  "layout_grammar": "diagram-right-rail",
+  "layout_contract_id": "conversion_funnel--expression-2",
+  "layout_instance_id": "conversion_funnel--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "composition_family": "step-rail",
+  "design_contract_id": "conversion_funnel--step-rail--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "conversion_funnel",
+  "support_components": [
+    "funnel_stages",
+    "dropoff_labels",
+    "conversion_badge"
+  ],
+  "semantic_slots": [
+    "awareness",
+    "activation",
+    "value"
+  ],
+  "data_shape": "funnel_values",
+  "motion": "funnel_fill",
+  "motion_profile": "guided-sequence",
+  "visual_id": "atlas-blue",
+  "proof_mode": "vertical-index",
+  "copy_surface": "technical",
+  "art_surface": "rail",
+  "copy_mode": "editorial",
+  "art_direction": "rail conversion_funnel with guided operating path",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.484,
+        "y": 8.36,
+        "w": 55.22,
+        "h": 41.901
+      },
+      "art": {
+        "x": 63.901,
+        "y": 4.874,
+        "w": 30.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 5.143,
+        "y": 77.838,
+        "w": 54.923,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 5.484,
+          "y": 8.36,
+          "w": 55.22,
+          "h": 41.901
+        },
+        {
+          "x": 5.143,
+          "y": 77.838,
+          "w": 54.923,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.424,
+        "y": 68.28,
+        "w": 86.22,
+        "h": 24.901
+      },
+      "art": {
+        "x": 5.928,
+        "y": 4.902,
+        "w": 87.846,
+        "h": 56.055
+      },
+      "proof": {
+        "x": 7.104,
+        "y": 60.874,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.424,
+          "y": 68.28,
+          "w": 86.22,
+          "h": 24.901
+        },
+        {
+          "x": 7.104,
+          "y": 60.874,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "conversion_funnel:walkthrough:leak-annotation:diagram-right-rail:conversion_funnel:atlas-blue:vertical-index:guided-sequence:step-rail:technical:rail:editorial:conversion_funnel--2--layout:bottom-editorial",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

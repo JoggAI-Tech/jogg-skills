@@ -1,0 +1,114 @@
+{
+  "id": "milestone_rail--sequence",
+  "scene_id": "milestone_rail",
+  "scene_title": "The Five-Year Agent Shift",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "sequence",
+  "lens_name": "Sequence",
+  "intent": "Make chronology the primary visual object",
+  "composition_name": "milestone-rail",
+  "layout_grammar": "timeline-band",
+  "layout_contract_id": "milestone_rail--expression-1",
+  "layout_instance_id": "milestone_rail--1--layout",
+  "portrait_silhouette_id": "top-compact",
+  "composition_family": "step-rail",
+  "design_contract_id": "milestone_rail--step-rail--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "milestone_rail",
+  "support_components": [
+    "year_nodes",
+    "milestone_labels"
+  ],
+  "semantic_slots": [
+    "origin",
+    "milestones",
+    "destination"
+  ],
+  "data_shape": "dated_events",
+  "motion": "rail_draw",
+  "motion_profile": "rail-travel",
+  "visual_id": "archive-dossier",
+  "proof_mode": "vertical-index",
+  "copy_surface": "caption",
+  "art_surface": "rail",
+  "copy_mode": "headline",
+  "art_direction": "rail milestone_rail with directional time object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.602,
+        "y": 4.46,
+        "w": 58.22,
+        "h": 31.901
+      },
+      "art": {
+        "x": 4.802,
+        "y": 41.189,
+        "w": 89.846,
+        "h": 52.055
+      },
+      "proof": {
+        "x": 66.286,
+        "y": 7.243,
+        "w": 28.923,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 5.602,
+          "y": 4.46,
+          "w": 58.22,
+          "h": 31.901
+        },
+        {
+          "x": 66.286,
+          "y": 7.243,
+          "w": 28.923,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.482,
+        "y": 4.58,
+        "w": 86.22,
+        "h": 20.901
+      },
+      "art": {
+        "x": 4.856,
+        "y": 29.147,
+        "w": 89.846,
+        "h": 62.055
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 93,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.482,
+          "y": 4.58,
+          "w": 86.22,
+          "h": 20.901
+        },
+        {
+          "x": 7.208,
+          "y": 93,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "milestone_rail:sequence:milestone-rail:timeline-band:milestone_rail:archive-dossier:vertical-index:rail-travel:step-rail:caption:rail:headline:milestone_rail--1--layout:top-compact",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

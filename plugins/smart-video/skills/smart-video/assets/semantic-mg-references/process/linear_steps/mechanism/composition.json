@@ -1,0 +1,114 @@
+{
+  "id": "linear_steps--mechanism",
+  "scene_id": "linear_steps",
+  "scene_title": "How an Agent Completes Work",
+  "category_id": "process",
+  "category_name": "Process",
+  "lens_id": "mechanism",
+  "lens_name": "Mechanism",
+  "intent": "Expose the causal engine inside the process",
+  "composition_name": "step-ribbon",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "linear_steps--expression-1",
+  "layout_instance_id": "linear_steps--1--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "step-rail",
+  "design_contract_id": "linear_steps--step-rail--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "linear_steps",
+  "support_components": [
+    "step_nodes",
+    "direction_line"
+  ],
+  "semantic_slots": [
+    "input",
+    "steps",
+    "result"
+  ],
+  "data_shape": "ordered_steps",
+  "motion": "step_progress",
+  "motion_profile": "mechanism-run",
+  "visual_id": "sticker-classroom",
+  "proof_mode": "vertical-index",
+  "copy_surface": "floating",
+  "art_surface": "rail",
+  "copy_mode": "headline",
+  "art_direction": "rail linear_steps with visible causal mechanism",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 4.794,
+        "y": 5.18,
+        "w": 46.22,
+        "h": 27.901
+      },
+      "art": {
+        "x": 5.198,
+        "y": 35.937,
+        "w": 89.846,
+        "h": 57.055
+      },
+      "proof": {
+        "x": 55.714,
+        "y": 6.919,
+        "w": 38.923,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 4.794,
+          "y": 5.18,
+          "w": 46.22,
+          "h": 27.901
+        },
+        {
+          "x": 55.714,
+          "y": 6.919,
+          "w": 38.923,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 6.914,
+        "y": 69.14,
+        "w": 86.22,
+        "h": 22.901
+      },
+      "art": {
+        "x": 5.144,
+        "y": 4.951,
+        "w": 89.846,
+        "h": 54.055
+      },
+      "proof": {
+        "x": 6.792,
+        "y": 61.937,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 6.914,
+          "y": 69.14,
+          "w": 86.22,
+          "h": 22.901
+        },
+        {
+          "x": 6.792,
+          "y": 61.937,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "linear_steps:mechanism:step-ribbon:full-width-stage:linear_steps:sticker-classroom:vertical-index:mechanism-run:step-rail:floating:rail:headline:linear_steps--1--layout:art-monument-top",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

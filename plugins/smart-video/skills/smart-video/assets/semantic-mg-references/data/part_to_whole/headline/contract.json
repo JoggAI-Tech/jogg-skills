@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "data",
+  "scene_id": "part_to_whole",
+  "composition_id": "part_to_whole--headline",
+  "lens_id": "headline",
+  "visual_id": "material-editorial",
+  "layout_instance_id": "part_to_whole--3--layout",
+  "portrait_silhouette_id": "top-compact",
+  "structural_fingerprint": "part_to_whole:headline:share-headline:metric-monument:part_to_whole:material-editorial:center-badge:number-resolve:center-symbol:poster:symbol:metric:part_to_whole--3--layout:top-compact",
+  "art_direction": "symbol part_to_whole with oversized numeric conclusion",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "daa229fe714fe5e73e4ed7980bdaa4fa3f61653963f9a32bf535753a08d8f4ee",
+    "9:16": "49542f8bd0645106243ea66114c7d856fdf38296c0bc1228e67dd6cb67ae0dbb"
+  }
+}

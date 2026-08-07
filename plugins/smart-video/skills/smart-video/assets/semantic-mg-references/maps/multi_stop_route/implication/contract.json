@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "maps",
+  "scene_id": "multi_stop_route",
+  "composition_id": "multi_stop_route--implication",
+  "lens_id": "implication",
+  "visual_id": "material-editorial",
+  "layout_instance_id": "multi_stop_route--3--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "structural_fingerprint": "multi_stop_route:implication:route-outcome:headline-bottom:multi_stop_route:material-editorial:vertical-index:impact-arrive:triptych:caption:triptych:headline:multi_stop_route--3--layout:art-monument-bottom",
+  "art_direction": "triptych multi_stop_route with geographic consequence",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "26ca8da4926a91b440af189845641b8dfd8b9d8645c0d028414d47ac2ebf40f4",
+    "9:16": "e27a32d71d9d51453b5ca9cbf9a225b372cccd248539ef26e84f85f6fb0e262a"
+  }
+}

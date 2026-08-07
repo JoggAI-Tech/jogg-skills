@@ -27,12 +27,12 @@ Install the repository Skills with:
 npx skills add JoggAI-Tech/jogg-skills
 ```
 
-Smart Slides is an optional Codex plugin in the same repository at
-[`plugins/smart-slides`](plugins/smart-slides). Register the repository marketplace and install it with:
+Smart Video is an optional Codex plugin in the same repository at
+[`plugins/smart-video`](plugins/smart-video). Register the repository marketplace and install it with:
 
 ```bash
 codex plugin marketplace add JoggAI-Tech/jogg-skills --ref main
-codex plugin add smart-slides@jogg-skills
+codex plugin add smart-video@jogg-skills
 ```
 
 ## Product site

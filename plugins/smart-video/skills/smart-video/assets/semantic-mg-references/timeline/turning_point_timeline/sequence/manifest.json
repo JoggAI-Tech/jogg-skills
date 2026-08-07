@@ -1,0 +1,31 @@
+{
+  "id": "turning_point_timeline--sequence",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "scene_id": "turning_point_timeline",
+  "name": "The Cost Curve Breaks",
+  "presentation_form_id": "sequence",
+  "presentation_form_name": "Sequence",
+  "visual_id": "electric-cyan",
+  "proof_mode": "floating-chips",
+  "motion_profile": "rail-travel",
+  "layout": "data-left",
+  "layout_instance_id": "turning_point_timeline--1--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_name": "inflection-curve",
+  "art_direction": "curve timeline_inflection with directional time object",
+  "composition_signature": "turning_point_timeline:sequence:inflection-curve:data-left:timeline_inflection:electric-cyan:floating-chips:rail-travel:technical-curve:technical:curve:metric:turning_point_timeline--1--layout:poster-inset-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

@@ -1,0 +1,115 @@
+{
+  "id": "hub_and_spoke--principle",
+  "scene_id": "hub_and_spoke",
+  "scene_title": "The AI Workspace Hub",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "principle",
+  "lens_name": "Principle",
+  "intent": "Reveal the governing idea behind the system",
+  "composition_name": "hub-principle",
+  "layout_grammar": "poster-offset-right",
+  "layout_contract_id": "hub_and_spoke--expression-3",
+  "layout_instance_id": "hub_and_spoke--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "center-symbol",
+  "design_contract_id": "hub_and_spoke--center-symbol--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "hub_spoke",
+  "support_components": [
+    "central_hub",
+    "spoke_nodes",
+    "connection_lines"
+  ],
+  "semantic_slots": [
+    "hub",
+    "services",
+    "coordination"
+  ],
+  "data_shape": "network_star",
+  "motion": "spokes_connect",
+  "motion_profile": "principle-lock",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "center-badge",
+  "copy_surface": "floating",
+  "art_surface": "symbol",
+  "copy_mode": "statement",
+  "art_direction": "symbol hub_spoke with governing system rule",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 58.098,
+        "y": 7.54,
+        "w": 38.0,
+        "h": 43.0
+      },
+      "art": {
+        "x": 4.703,
+        "y": 4.811,
+        "w": 49.0,
+        "h": 88.0
+      },
+      "proof": {
+        "x": 57.429,
+        "y": 77.757,
+        "w": 38.0,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 58.098,
+          "y": 7.54,
+          "w": 38.0,
+          "h": 43.0
+        },
+        {
+          "x": 57.429,
+          "y": 77.757,
+          "w": 38.0,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.918,
+        "y": 5.42,
+        "w": 86.0,
+        "h": 32.0
+      },
+      "art": {
+        "x": 5.784,
+        "y": 39.853,
+        "w": 88.0,
+        "h": 49.0
+      },
+      "proof": {
+        "x": 7.312,
+        "y": 91.811,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.918,
+          "y": 5.42,
+          "w": 86.0,
+          "h": 32.0
+        },
+        {
+          "x": 7.312,
+          "y": 91.811,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "hub_and_spoke:principle:hub-principle:poster-offset-right:hub_spoke:kinetic-ivory:center-badge:principle-lock:center-symbol:floating:symbol:statement:hub_and_spoke--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

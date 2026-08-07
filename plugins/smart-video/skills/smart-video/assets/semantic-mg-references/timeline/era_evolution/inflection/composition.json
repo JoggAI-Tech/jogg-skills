@@ -1,0 +1,114 @@
+{
+  "id": "era_evolution--inflection",
+  "scene_id": "era_evolution",
+  "scene_title": "Three Eras of AI Products",
+  "category_id": "timeline",
+  "category_name": "Timeline",
+  "lens_id": "inflection",
+  "lens_name": "Inflection",
+  "intent": "Magnify the moment that changes the trajectory",
+  "composition_name": "era-transition",
+  "layout_grammar": "evidence-left",
+  "layout_contract_id": "era_evolution--expression-2",
+  "layout_instance_id": "era_evolution--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "composition_family": "archive-stack",
+  "design_contract_id": "era_evolution--archive-stack--2",
+  "reading_order": [
+    "context",
+    "semantic_art",
+    "annotation"
+  ],
+  "art_component": "era_evolution",
+  "support_components": [
+    "era_panels",
+    "transition_arrows"
+  ],
+  "semantic_slots": [
+    "era_one",
+    "era_two",
+    "era_three"
+  ],
+  "data_shape": "periods",
+  "motion": "era_replace",
+  "motion_profile": "pivot-magnify",
+  "visual_id": "material-editorial",
+  "proof_mode": "stamp",
+  "copy_surface": "paper",
+  "art_surface": "paper-stack",
+  "copy_mode": "editorial",
+  "art_direction": "paper-stack era_evolution with magnified inflection",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.623,
+        "y": 7.64,
+        "w": 32.22,
+        "h": 69.901
+      },
+      "art": {
+        "x": 39.802,
+        "y": 5.126,
+        "w": 54.846,
+        "h": 88.055
+      },
+      "proof": {
+        "x": 5.286,
+        "y": 84.162,
+        "w": 31.923,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 5.623,
+          "y": 7.64,
+          "w": 32.22,
+          "h": 69.901
+        },
+        {
+          "x": 5.286,
+          "y": 84.162,
+          "w": 31.923,
+          "h": 9
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.503,
+        "y": 67.72,
+        "w": 86.22,
+        "h": 24.901
+      },
+      "art": {
+        "x": 5.856,
+        "y": 5.098,
+        "w": 87.846,
+        "h": 56.055
+      },
+      "proof": {
+        "x": 7.208,
+        "y": 61.126,
+        "w": 85.923,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.503,
+          "y": 67.72,
+          "w": 86.22,
+          "h": 24.901
+        },
+        {
+          "x": 7.208,
+          "y": 61.126,
+          "w": 85.923,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "era_evolution:inflection:era-transition:evidence-left:era_evolution:material-editorial:stamp:pivot-magnify:archive-stack:paper:paper-stack:editorial:era_evolution--2--layout:bottom-editorial",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

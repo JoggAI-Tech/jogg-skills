@@ -1,0 +1,31 @@
+{
+  "id": "quadrant_positioning--verdict",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "scene_id": "quadrant_positioning",
+  "name": "The Agent Market Map",
+  "presentation_form_id": "verdict",
+  "presentation_form_name": "Verdict",
+  "visual_id": "kinetic-ivory",
+  "proof_mode": "center-badge",
+  "motion_profile": "verdict-lock",
+  "layout": "poster-center",
+  "layout_instance_id": "quadrant_positioning--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_name": "quadrant-verdict",
+  "art_direction": "symbol positioning_quadrant with decisive verdict object",
+  "composition_signature": "quadrant_positioning:verdict:quadrant-verdict:poster-center:positioning_quadrant:kinetic-ivory:center-badge:verdict-lock:center-symbol:poster:symbol:statement:quadrant_positioning--3--layout:poster-inset-top",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

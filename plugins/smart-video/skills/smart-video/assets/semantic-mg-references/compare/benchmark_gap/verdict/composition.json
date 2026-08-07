@@ -1,0 +1,115 @@
+{
+  "id": "benchmark_gap--verdict",
+  "scene_id": "benchmark_gap",
+  "scene_title": "The Reliability Gap",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "verdict",
+  "lens_name": "Verdict",
+  "intent": "Resolve the trade-off with a usable decision rule",
+  "composition_name": "gap-headline",
+  "layout_grammar": "metric-monument",
+  "layout_contract_id": "benchmark_gap--expression-3",
+  "layout_instance_id": "benchmark_gap--3--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "number-monument",
+  "design_contract_id": "benchmark_gap--number-monument--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "benchmark_gap",
+  "support_components": [
+    "benchmark_bar",
+    "actual_bar",
+    "gap_annotation"
+  ],
+  "semantic_slots": [
+    "benchmark",
+    "actual",
+    "gap"
+  ],
+  "data_shape": "paired_metric",
+  "motion": "gap_expand",
+  "motion_profile": "verdict-lock",
+  "visual_id": "chalkboard-lab",
+  "proof_mode": "caption-line",
+  "copy_surface": "poster",
+  "art_surface": "monument",
+  "copy_mode": "metric",
+  "art_direction": "monument benchmark_gap with decisive verdict object",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.783,
+        "y": 9.36,
+        "w": 38.44,
+        "h": 60.802
+      },
+      "art": {
+        "x": 45.703,
+        "y": 3.874,
+        "w": 48.692,
+        "h": 90.11
+      },
+      "proof": {
+        "x": 5.429,
+        "y": 78.838,
+        "w": 37.846,
+        "h": 14
+      },
+      "avoid_zones": [
+        {
+          "x": 5.783,
+          "y": 9.36,
+          "w": 38.44,
+          "h": 60.802
+        },
+        {
+          "x": 5.429,
+          "y": 78.838,
+          "w": 37.846,
+          "h": 14
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.603,
+        "y": 69.28,
+        "w": 86.44,
+        "h": 22.802
+      },
+      "art": {
+        "x": 4.784,
+        "y": 4.902,
+        "w": 89.692,
+        "h": 54.11
+      },
+      "proof": {
+        "x": 7.312,
+        "y": 61.874,
+        "w": 85.846,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.603,
+          "y": 69.28,
+          "w": 86.44,
+          "h": 22.802
+        },
+        {
+          "x": 7.312,
+          "y": 61.874,
+          "w": 85.846,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "benchmark_gap:verdict:gap-headline:metric-monument:benchmark_gap:chalkboard-lab:caption-line:verdict-lock:number-monument:poster:monument:metric:benchmark_gap--3--layout:art-monument-top",
+  "copy_density": "metric",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,115 @@
+{
+  "id": "migration_flow--implication",
+  "scene_id": "migration_flow",
+  "scene_title": "Talent Moves Toward Compute",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "lens_id": "implication",
+  "lens_name": "Implication",
+  "intent": "Connect geography to the consequence",
+  "composition_name": "migration-impact",
+  "layout_grammar": "poster-center",
+  "layout_contract_id": "migration_flow--expression-3",
+  "layout_instance_id": "migration_flow--3--layout",
+  "portrait_silhouette_id": "poster-inset-top",
+  "composition_family": "radial-field",
+  "design_contract_id": "migration_flow--radial-field--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "migration_flow",
+  "support_components": [
+    "source_regions",
+    "flow_arcs",
+    "destination_clusters"
+  ],
+  "semantic_slots": [
+    "origins",
+    "movement",
+    "destinations"
+  ],
+  "data_shape": "geo_flows",
+  "motion": "flows_travel",
+  "motion_profile": "impact-arrive",
+  "visual_id": "atlas-blue",
+  "proof_mode": "metric-cards",
+  "copy_surface": "poster",
+  "art_surface": "radial",
+  "copy_mode": "statement",
+  "art_direction": "radial migration_flow with geographic consequence",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 17.886,
+        "y": 5.36,
+        "w": 63.78,
+        "h": 24.099
+      },
+      "art": {
+        "x": 14.297,
+        "y": 30.874,
+        "w": 72.154,
+        "h": 54.945
+      },
+      "proof": {
+        "x": 27.571,
+        "y": 88.838,
+        "w": 44.077,
+        "h": 7
+      },
+      "avoid_zones": [
+        {
+          "x": 17.886,
+          "y": 5.36,
+          "w": 63.78,
+          "h": 24.099
+        },
+        {
+          "x": 27.571,
+          "y": 88.838,
+          "w": 44.077,
+          "h": 7
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.066,
+        "y": 5.28,
+        "w": 85.78,
+        "h": 32.099
+      },
+      "art": {
+        "x": 6.216,
+        "y": 39.902,
+        "w": 88.154,
+        "h": 48.945
+      },
+      "proof": {
+        "x": 6.688,
+        "y": 91.874,
+        "w": 86.077,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.066,
+          "y": 5.28,
+          "w": 85.78,
+          "h": 32.099
+        },
+        {
+          "x": 6.688,
+          "y": 91.874,
+          "w": 86.077,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "migration_flow:implication:migration-impact:poster-center:migration_flow:atlas-blue:metric-cards:impact-arrive:radial-field:poster:radial:statement:migration_flow--3--layout:poster-inset-top",
+  "copy_density": "statement",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

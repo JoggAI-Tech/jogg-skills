@@ -1,0 +1,31 @@
+{
+  "id": "origin_destination--pattern",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "scene_id": "origin_destination",
+  "name": "From Lab to Classroom",
+  "presentation_form_id": "pattern",
+  "presentation_form_name": "Pattern",
+  "visual_id": "paper-collage",
+  "proof_mode": "floating-chips",
+  "motion_profile": "region-emerge",
+  "layout": "timeline-caption",
+  "layout_instance_id": "origin_destination--2--layout",
+  "portrait_silhouette_id": "art-monument-bottom",
+  "composition_name": "route-milestone",
+  "art_direction": "path origin_destination with spatial concentration",
+  "composition_signature": "origin_destination:pattern:route-milestone:timeline-caption:origin_destination:paper-collage:floating-chips:region-emerge:path-curve:editorial:path:headline:origin_destination--2--layout:art-monument-bottom",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

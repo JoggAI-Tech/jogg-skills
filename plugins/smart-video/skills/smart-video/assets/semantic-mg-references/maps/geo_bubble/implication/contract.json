@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "maps",
+  "scene_id": "geo_bubble",
+  "composition_id": "geo_bubble--implication",
+  "lens_id": "implication",
+  "visual_id": "atlas-blue",
+  "layout_instance_id": "geo_bubble--3--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "structural_fingerprint": "geo_bubble:implication:hotspot-impact:full-width-stage:geo_bubble:atlas-blue:edge-tabs:impact-arrive:network-radial:floating:network:headline:geo_bubble--3--layout:art-monument-top",
+  "art_direction": "network geo_bubble with geographic consequence",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "204aae155b9266564502471f8274a0668e380cd7b6458ac26bfc9faead6cb65a",
+    "9:16": "07de2781643de5f7a4f38e53d7476ebd88d9b29ad86fcbd0c7f6c675ba7f426b"
+  }
+}

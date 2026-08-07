@@ -1,0 +1,31 @@
+{
+  "id": "metric_revelation--reveal",
+  "category_id": "highlights",
+  "category_name": "Highlights",
+  "scene_id": "metric_revelation",
+  "name": "68% Moves Into Compute",
+  "presentation_form_id": "reveal",
+  "presentation_form_name": "Reveal",
+  "visual_id": "paper-collage",
+  "proof_mode": "metric-cards",
+  "motion_profile": "reveal-cut",
+  "layout": "data-topline",
+  "layout_instance_id": "metric_revelation--2--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "composition_name": "radial-proof",
+  "art_direction": "radial metric_reveal with editorial reveal",
+  "composition_signature": "metric_revelation:reveal:radial-proof:data-topline:metric_reveal:paper-collage:metric-cards:reveal-cut:radial-field:caption:radial:metric:metric_revelation--2--layout:bottom-compact",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

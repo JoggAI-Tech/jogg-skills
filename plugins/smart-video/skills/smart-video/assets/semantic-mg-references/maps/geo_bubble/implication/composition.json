@@ -1,0 +1,115 @@
+{
+  "id": "geo_bubble--implication",
+  "scene_id": "geo_bubble",
+  "scene_title": "Where Inference Demand Grows",
+  "category_id": "maps",
+  "category_name": "Maps",
+  "lens_id": "implication",
+  "lens_name": "Implication",
+  "intent": "Connect geography to the consequence",
+  "composition_name": "hotspot-impact",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "geo_bubble--expression-3",
+  "layout_instance_id": "geo_bubble--3--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "network-radial",
+  "design_contract_id": "geo_bubble--network-radial--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "geo_bubble",
+  "support_components": [
+    "map_field",
+    "location_bubbles",
+    "scale_legend"
+  ],
+  "semantic_slots": [
+    "locations",
+    "magnitude",
+    "cluster"
+  ],
+  "data_shape": "geo_points",
+  "motion": "bubbles_emerge",
+  "motion_profile": "impact-arrive",
+  "visual_id": "atlas-blue",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "floating",
+  "art_surface": "network",
+  "copy_mode": "headline",
+  "art_direction": "network geo_bubble with geographic consequence",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 6.224,
+        "y": 5.36,
+        "w": 45.78,
+        "h": 28.099
+      },
+      "art": {
+        "x": 4.703,
+        "y": 35.874,
+        "w": 90.154,
+        "h": 56.945
+      },
+      "proof": {
+        "x": 56.429,
+        "y": 6.838,
+        "w": 39.077,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 6.224,
+          "y": 5.36,
+          "w": 45.78,
+          "h": 28.099
+        },
+        {
+          "x": 56.429,
+          "y": 6.838,
+          "w": 39.077,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 8.044,
+        "y": 69.28,
+        "w": 85.78,
+        "h": 23.099
+      },
+      "art": {
+        "x": 4.784,
+        "y": 4.902,
+        "w": 90.154,
+        "h": 53.945
+      },
+      "proof": {
+        "x": 7.312,
+        "y": 61.874,
+        "w": 86.077,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 8.044,
+          "y": 69.28,
+          "w": 85.78,
+          "h": 23.099
+        },
+        {
+          "x": 7.312,
+          "y": 61.874,
+          "w": 86.077,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "geo_bubble:implication:hotspot-impact:full-width-stage:geo_bubble:atlas-blue:edge-tabs:impact-arrive:network-radial:floating:network:headline:geo_bubble--3--layout:art-monument-top",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

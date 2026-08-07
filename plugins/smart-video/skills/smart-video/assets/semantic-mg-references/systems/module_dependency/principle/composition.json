@@ -1,0 +1,115 @@
+{
+  "id": "module_dependency--principle",
+  "scene_id": "module_dependency",
+  "scene_title": "What the Answer Depends On",
+  "category_id": "systems",
+  "category_name": "Systems",
+  "lens_id": "principle",
+  "lens_name": "Principle",
+  "intent": "Reveal the governing idea behind the system",
+  "composition_name": "dependency-rule",
+  "layout_grammar": "evidence-left",
+  "layout_contract_id": "module_dependency--expression-3",
+  "layout_instance_id": "module_dependency--3--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "composition_family": "redaction-sheet",
+  "design_contract_id": "module_dependency--redaction-sheet--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "module_dependency",
+  "support_components": [
+    "dependency_nodes",
+    "required_links",
+    "failure_marker"
+  ],
+  "semantic_slots": [
+    "module",
+    "dependencies",
+    "result"
+  ],
+  "data_shape": "directed_graph",
+  "motion": "dependency_trace",
+  "motion_profile": "principle-lock",
+  "visual_id": "redaction-paper",
+  "proof_mode": "stamp",
+  "copy_surface": "paper",
+  "art_surface": "redaction",
+  "copy_mode": "editorial",
+  "art_direction": "redaction module_dependency with governing system rule",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.896,
+        "y": 7.46,
+        "w": 31.78,
+        "h": 70.099
+      },
+      "art": {
+        "x": 39.802,
+        "y": 5.189,
+        "w": 55.154,
+        "h": 87.945
+      },
+      "proof": {
+        "x": 5.286,
+        "y": 84.243,
+        "w": 32.077,
+        "h": 9
+      },
+      "avoid_zones": [
+        {
+          "x": 5.896,
+          "y": 7.46,
+          "w": 31.78,
+          "h": 70.099
+        },
+        {
+          "x": 5.286,
+          "y": 84.243,
+          "w": 32.077,
+          "h": 9
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 61.776,
+        "y": 4.58,
+        "w": 32.78,
+        "h": 67.099
+      },
+      "art": {
+        "x": 5.856,
+        "y": 5.147,
+        "w": 51.154,
+        "h": 79.945
+      },
+      "proof": {
+        "x": 61.208,
+        "y": 75.189,
+        "w": 33.077,
+        "h": 12
+      },
+      "avoid_zones": [
+        {
+          "x": 61.776,
+          "y": 4.58,
+          "w": 32.78,
+          "h": 67.099
+        },
+        {
+          "x": 61.208,
+          "y": 75.189,
+          "w": 33.077,
+          "h": 12
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "module_dependency:principle:dependency-rule:evidence-left:module_dependency:redaction-paper:stamp:principle-lock:redaction-sheet:paper:redaction:editorial:module_dependency--3--layout:right-caption-stage",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

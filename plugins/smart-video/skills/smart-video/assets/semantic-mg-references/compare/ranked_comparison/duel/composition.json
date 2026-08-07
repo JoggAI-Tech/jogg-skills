@@ -1,0 +1,114 @@
+{
+  "id": "ranked_comparison--duel",
+  "scene_id": "ranked_comparison",
+  "scene_title": "Where Teams Save Time",
+  "category_id": "compare",
+  "category_name": "Compare",
+  "lens_id": "duel",
+  "lens_name": "Duel",
+  "intent": "Make the alternatives directly and fairly comparable",
+  "composition_name": "rank-ladder",
+  "layout_grammar": "diagram-left-rail",
+  "layout_contract_id": "ranked_comparison--expression-1",
+  "layout_instance_id": "ranked_comparison--1--layout",
+  "portrait_silhouette_id": "left-caption-stage",
+  "composition_family": "bars-surge",
+  "design_contract_id": "ranked_comparison--bars-surge--1",
+  "reading_order": [
+    "headline",
+    "semantic_art",
+    "evidence"
+  ],
+  "art_component": "ranked_list",
+  "support_components": [
+    "rank_bars",
+    "leader_callout"
+  ],
+  "semantic_slots": [
+    "leader",
+    "followers",
+    "reason"
+  ],
+  "data_shape": "ranked_values",
+  "motion": "rank_rise",
+  "motion_profile": "opposed-wipe",
+  "visual_id": "paper-collage",
+  "proof_mode": "metric-cards",
+  "copy_surface": "technical",
+  "art_surface": "bars",
+  "copy_mode": "editorial",
+  "art_direction": "bars ranked_list with opposed visual masses",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 39.466,
+        "y": 8.54,
+        "w": 55.44,
+        "h": 41.802
+      },
+      "art": {
+        "x": 5.297,
+        "y": 4.811,
+        "w": 30.692,
+        "h": 88.11
+      },
+      "proof": {
+        "x": 39.571,
+        "y": 77.757,
+        "w": 54.846,
+        "h": 15
+      },
+      "avoid_zones": [
+        {
+          "x": 39.466,
+          "y": 8.54,
+          "w": 55.44,
+          "h": 41.802
+        },
+        {
+          "x": 39.571,
+          "y": 77.757,
+          "w": 54.846,
+          "h": 15
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 5.646,
+        "y": 5.42,
+        "w": 33.44,
+        "h": 66.802
+      },
+      "art": {
+        "x": 43.216,
+        "y": 4.853,
+        "w": 50.692,
+        "h": 80.11
+      },
+      "proof": {
+        "x": 5.688,
+        "y": 74.811,
+        "w": 32.846,
+        "h": 12
+      },
+      "avoid_zones": [
+        {
+          "x": 5.646,
+          "y": 5.42,
+          "w": 33.44,
+          "h": 66.802
+        },
+        {
+          "x": 5.688,
+          "y": 74.811,
+          "w": 32.846,
+          "h": 12
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "ranked_comparison:duel:rank-ladder:diagram-left-rail:ranked_list:paper-collage:metric-cards:opposed-wipe:bars-surge:technical:bars:editorial:ranked_comparison--1--layout:left-caption-stage",
+  "copy_density": "editorial",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "supply_network",
+  "composition_id": "supply_network--principle",
+  "lens_id": "principle",
+  "visual_id": "signal-noir",
+  "layout_instance_id": "supply_network--3--layout",
+  "portrait_silhouette_id": "bottom-compact",
+  "structural_fingerprint": "supply_network:principle:supply-principle:metric-monument:supply_network:signal-noir:metric-cards:principle-lock:bars-surge:poster:bars:metric:supply_network--3--layout:bottom-compact",
+  "art_direction": "bars supply_network with governing system rule",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "5ad9614ef7a6ae3d52dc52dcfde3af336c67c6839fb78ecaa035ea732b32be8d",
+    "9:16": "ba765dbe9345d0623fda9e0c02e604017a126cf370dc684fb515c91d075f3663"
+  }
+}

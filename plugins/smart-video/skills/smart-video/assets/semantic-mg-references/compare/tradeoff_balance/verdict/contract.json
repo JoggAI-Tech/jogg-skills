@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "compare",
+  "scene_id": "tradeoff_balance",
+  "composition_id": "tradeoff_balance--verdict",
+  "lens_id": "verdict",
+  "visual_id": "material-editorial",
+  "layout_instance_id": "tradeoff_balance--3--layout",
+  "portrait_silhouette_id": "upper-lockup",
+  "structural_fingerprint": "tradeoff_balance:verdict:balance-rule:diagonal-right:tradeoff_scale:material-editorial:edge-tabs:verdict-lock:force-quadrant:poster:quadrant:statement:tradeoff_balance--3--layout:upper-lockup",
+  "art_direction": "quadrant tradeoff_scale with decisive verdict object",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "5c88deca8ca80273467c3ffd04439229139ef426bee8cd7c2bb73a2cf64e29d1",
+    "9:16": "ea41cb28b3ecd4af1ef16a133c97022f35cf871ae36ef3b3b673ac0730b197d2"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "document_reveal--analysis",
+  "category_id": "evidence",
+  "category_name": "Evidence",
+  "scene_id": "document_reveal",
+  "name": "The Memo That Changed the Roadmap",
+  "presentation_form_id": "analysis",
+  "presentation_form_name": "Analysis",
+  "visual_id": "redaction-paper",
+  "proof_mode": "stamp",
+  "motion_profile": "analysis-connect",
+  "layout": "editorial-right",
+  "layout_instance_id": "document_reveal--2--layout",
+  "portrait_silhouette_id": "right-caption-stage",
+  "composition_name": "document-annotation",
+  "art_direction": "redaction document_reveal with connected evidence fragments",
+  "composition_signature": "document_reveal:analysis:document-annotation:editorial-right:document_reveal:redaction-paper:stamp:analysis-connect:redaction-sheet:editorial:redaction:editorial:document_reveal--2--layout:right-caption-stage",
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "files": {
+    "16:9": "16x9.html",
+    "9:16": "9x16.html",
+    "contract": "contract.json",
+    "composition": "composition.json",
+    "prompt": "prompt.md"
+  }
+}

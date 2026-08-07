@@ -1,0 +1,115 @@
+{
+  "id": "trend_with_turning_point--headline",
+  "scene_id": "trend_with_turning_point",
+  "scene_title": "Adoption Accelerates After Week Six",
+  "category_id": "data",
+  "category_name": "Data",
+  "lens_id": "headline",
+  "lens_name": "Headline",
+  "intent": "Turn the result into an editorial data statement",
+  "composition_name": "trend-headline",
+  "layout_grammar": "full-width-stage",
+  "layout_contract_id": "trend_with_turning_point--expression-3",
+  "layout_instance_id": "trend_with_turning_point--3--layout",
+  "portrait_silhouette_id": "art-monument-top",
+  "composition_family": "wave-horizon",
+  "design_contract_id": "trend_with_turning_point--wave-horizon--3",
+  "reading_order": [
+    "hero_statement",
+    "semantic_art",
+    "conclusion"
+  ],
+  "art_component": "trend_turning_point",
+  "support_components": [
+    "trend_line",
+    "event_marker",
+    "delta_label"
+  ],
+  "semantic_slots": [
+    "baseline",
+    "turning_point",
+    "trend"
+  ],
+  "data_shape": "time_series",
+  "motion": "line_draw_event",
+  "motion_profile": "number-resolve",
+  "visual_id": "luminous-grid",
+  "proof_mode": "edge-tabs",
+  "copy_surface": "floating",
+  "art_surface": "wave-field",
+  "copy_mode": "headline",
+  "art_direction": "wave-field trend_turning_point with oversized numeric conclusion",
+  "ratio_geometry": {
+    "16:9": {
+      "copy": {
+        "x": 5.568,
+        "y": 4.82,
+        "w": 46.0,
+        "h": 28.0
+      },
+      "art": {
+        "x": 4.901,
+        "y": 36.063,
+        "w": 90.0,
+        "h": 57.0
+      },
+      "proof": {
+        "x": 56.143,
+        "y": 7.081,
+        "w": 39.0,
+        "h": 22
+      },
+      "avoid_zones": [
+        {
+          "x": 5.568,
+          "y": 4.82,
+          "w": 46.0,
+          "h": 28.0
+        },
+        {
+          "x": 56.143,
+          "y": 7.081,
+          "w": 39.0,
+          "h": 22
+        }
+      ]
+    },
+    "9:16": {
+      "copy": {
+        "x": 7.508,
+        "y": 68.86,
+        "w": 86.0,
+        "h": 23.0
+      },
+      "art": {
+        "x": 4.928,
+        "y": 5.049,
+        "w": 90.0,
+        "h": 54.0
+      },
+      "proof": {
+        "x": 7.104,
+        "y": 62.063,
+        "w": 86.0,
+        "h": 5
+      },
+      "avoid_zones": [
+        {
+          "x": 7.508,
+          "y": 68.86,
+          "w": 86.0,
+          "h": 23.0
+        },
+        {
+          "x": 7.104,
+          "y": 62.063,
+          "w": 86.0,
+          "h": 5
+        }
+      ]
+    }
+  },
+  "structural_fingerprint": "trend_with_turning_point:headline:trend-headline:full-width-stage:trend_turning_point:luminous-grid:edge-tabs:number-resolve:wave-horizon:floating:wave-field:headline:trend_with_turning_point--3--layout:art-monument-top",
+  "copy_density": "headline",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition"
+}

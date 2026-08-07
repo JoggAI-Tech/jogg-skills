@@ -1,0 +1,27 @@
+{
+  "schema_version": "semantic_mg_reference_template",
+  "duration_seconds": 5,
+  "loop": false,
+  "hold_last_frame": true,
+  "ratios": [
+    "16:9",
+    "9:16"
+  ],
+  "language": "en",
+  "font_family": "Albert Sans",
+  "category_id": "systems",
+  "scene_id": "concept_map",
+  "composition_id": "concept_map--flow",
+  "lens_id": "flow",
+  "visual_id": "electric-cyan",
+  "layout_instance_id": "concept_map--2--layout",
+  "portrait_silhouette_id": "bottom-editorial",
+  "structural_fingerprint": "concept_map:flow:concept-bridge:evidence-left:concept_map:electric-cyan:stamp:flow-trace:evidence-board:paper:evidence:editorial:concept_map--2--layout:bottom-editorial",
+  "art_direction": "evidence concept_map with directional exchange",
+  "reference_policy": "derive visual grammar; never copy a complete reference composition",
+  "render_mode": "deterministic_html_css_inline_svg",
+  "css_sha256": {
+    "16:9": "42e1d460ad1d62e1ab2a8c084174c0bf761428659fbec624d023445b1392c860",
+    "9:16": "a86a92e639c5450530f99ab2e90b768f640ac4a4dba577b6d9619d8b54872017"
+  }
+}
