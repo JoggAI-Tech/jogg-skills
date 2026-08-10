@@ -1,100 +1,169 @@
 # Visual Reference
 
-This is the semantic-to-visual contract for new Smart Video HTML. The semantic
-director decides what the scene means; the bundled reference catalog supplies
-visual grammar. Internal schema identifiers are not user-facing modes.
+This layer validates the complete qualitative visual input and produces system-owned
+grammar and prototype decisions. The customer supplies neither `grammar_id`,
+`prototype_id`, numeric visual targets, nor concrete styling.
 
-## Planning Sequence
+Read [visual-knowledge.md](visual-knowledge.md) for the measured libraries and
+[slide-design.md](slide-design.md) for compilation and Slide design.
 
-For each HTML segment:
+## Authoritative Input
 
-1. Build one story contract from authorized narration and semantic payload.
-2. Choose one scene ID by information shape.
-3. Build the information-object plan and reading order.
-4. Inspect only the three candidates mapped to that scene.
-5. Select one candidate and record a content-specific reason.
-6. Resolve one ratio-specific reference against content capacity.
-7. Compile the complete `authoring_context` before authoring.
+`visual_system_input` is immutable and contains:
 
-Use the plugin-root-relative catalog helper when discovery is needed:
+- the complete confirmed Brief: topic, goal, audience, evidence boundary,
+  qualitative visual tone, B-roll availability and note, language, `16:9`, and
+  confirmed revision;
+- the complete source-bound semantic Slide set;
+- for every Slide: narration, source excerpt, primary claim, content objects,
+  Communication Intent, director Visual Intent, exact source bindings and data
+  where applicable, shot/background, duration, explicit rules, and rule results;
+- current local runtime capabilities, compatibility/risk results, and exact
+  grammar/prototype asset versions and hashes.
 
-```bash
-python3 "<plugin-root>/skills/smart-video/scripts/find_mg_templates.py" search "timeline milestones" --limit 3 --json
-```
+Director Visual Intent must preserve controlled
+`communication_operation_enum`, `primary_relationship`,
+`secondary_relationships`, `visual_encoding_enum`, `render_mode`,
+`primary_focus`, `information_priority`, `presentation_order`,
+`simplicity_rules`, `final_frame_requirement`, and `source_bindings`.
+Relationships bind roles to stable content-object IDs and exact authoritative
+content spans. Concrete style remains outside director output.
+Director Visual Intent owns information priority and presentation order; the
+Visual System compiler owns concrete styling decisions.
 
-Scene selection is semantic. Never select a scene because its color or sample
-copy looks attractive. Reference sample copy and facts are never authorized
-visible content.
+Reject `public_projection`, caller grammar/prototype IDs, caller numeric target
+intervals, semantic summaries used in place of complete objects, unsupported
+ratios, incomplete Slide sets, stale hashes, incompatible explicit rules, missing
+runtime capabilities, and hard risk conflicts. Fallback is forbidden.
 
-## Reference Resolution
+## Semantic Critic
 
-The local resolver returns one of three modes:
+For each Slide:
 
-- `strong_reference`: preserve the complete reference composition, component
-  relationships, hierarchy, SVG geometry, tokens, and motion. The author supplies
-  authorized replacements through `strong_reference_patch_v1`; the runtime owns
-  deterministic materialization.
-- `visual_recompose`: automatically retain the closest reference's visual
-  language, dominant components, and motion character while reflowing content
-  after every candidate in the semantic scene exceeds capacity.
-- `scene_reselected_reference`: replace a semantic mismatch with a stable
-  candidate under the correct scene and disclose the original template, selected
-  template, and reason.
+1. Validate every content object and role against an exact source binding.
+2. Validate each relationship evidence span against the authoritative narration,
+   excerpt, claim, or content-object text.
+3. For `paired_metric`, `target_actual`, and `parts`, require every role to bind a
+   distinct structured source fact. Its source binding carries the exact canonical
+   metric ID, display name, dimension, and unit; those fields must equal the fact,
+   and the display name/unit/value must occur in the bound role text. A declared
+   `subtract` or `sum` equation must reconcile in one shared identity and unit. A
+   `divide_percent` equation instead requires exactly two same-identity operands, a
+   strictly positive denominator, and one distinct source-bound `ratio`/`percent`
+   result. Every ratio fact must carry the exact source-bound field
+   `"uncertainty": "approximate_from_source"`; free-text approximation is not
+   evidence. Its
+   strict `{ "mode": "rounded", "decimal_places": d }` comparison must match the
+   result text's numeric-token precision and places the computed percentage in
+   `[result - 0.5 * 10^-d, result + 0.5 * 10^-d)` with no extra tolerance or conversion.
+4. Compare the controlled operation, relationship kind, direction, ordered roles,
+   and visual encoding against the full approved 18-family topology library.
+   Validate `html_svg` or `echarts` separately as the controlled author mode and
+   lock it into the whole-video artifact's per-Slide binding.
+5. Require exactly one signature.
+6. Criticize that controlled classification against the actual authoritative
+   content. A chronology classification requires one structured event record per
+   role object, with an exact source pointer and span, a shared chronology identity,
+   an explicit finite normalized order value, and a distinct source-bound ordering
+   statement. The validator checks strict ordering against the relationship role
+   sequence. Unrelated date or edition-year mentions cannot establish chronology.
+7. For correction, definition, question/resolution, process, causal, network,
+   evidence, spatial, hierarchy, cycle, transformation, rank, distribution, and
+   trend operations, require one typed relation record plus distinct source-bound
+   participant records. Validate exact participant order, topology fields,
+   cardinality, cycle closure, and authoritative relation statement. A keyword in
+   unrelated text is not relationship proof.
+8. Emit `grammar_id` and grammar provenance as system output.
 
-Automatic fallback does not require user confirmation. It first tries every
-candidate in the selected semantic scene, then uses `visual_recompose` when none
-fits. Automatic `visual_recompose` stays anchored to that reference and does not
-receive a free-generation style prompt. Free generation is a separate path used
-only after the user explicitly selects it; runtime records that consent privately
-as `free_generation_selected:true`. It is never entered because template
-selection or capacity handling failed. Compile visible content from the shot's
-story contract,
-information-object plan, screen slots, reading order, and timing rather than
-sending raw narration as layout copy.
+This critic does not claim deterministic natural-language understanding. It checks
+complete object binding, controlled taxonomy, exact provenance, and supported
+semantic evidence. Ambiguous or weakly supported content is omitted through
+`coverage_gap_no_grammar`; it is never patched or relabeled to pass.
+The critic ID/version tuple is provenance only. It is not cryptographic
+authentication and does not prove that a model understood the text.
 
-## Authoring Context
+## Prototype Selection
 
-After resolution, `authoring_context` is the only visual input. It contains:
+After all Slides have a grammar, the system derives one whole-video semantic design
+profile from the qualitative Brief and measurable structure: object, relationship,
+priority, and order counts; text load; duration; background modes; structural
+operations; and restrained-tone signals.
 
-- effective template ID, ratio, reference mode, hash, and local path;
-- visual contract, `authoring_context.composition`, prompt, and `screen_slots`;
-- story contract, information-object plan, timing, layer order, and background
-  rule;
-- compact `strong_reference_patch_v1` contract for strict references;
-- template-switch audit fields and single-frame QA recommendation.
+The selector compares that profile with all four evidence-qualified measured
+prototype profiles. It selects the unique normalized minimum, returns
+`coverage_gap_no_prototype` when no qualified candidate exists, and returns
+`ambiguous_visual_system_intent` for an equal best score. It has no topic,
+industry, category, benchmark, population, prototype-ID, or fallback tie-break.
+The selected ID and candidate scores are system outputs recorded in provenance.
 
-Full `reference_html` and semantic adaptation records remain private run state.
-Do not publish them through status responses, frontend state, stdout, or stderr.
-`apply-html` loads the trusted local source and materializes the compact patch.
+The four prototypes are macro structural anchors, not four finished styles. The
+compiler also consumes the current aggregate synthesis-trait asset: 24 Visual
+System catalog records were reviewed, 18 directly support reusable catalog
+observations, 30 reference layouts and 216 scene candidates provide measured
+envelopes across palette, typography, material, geometry, and motion, and six
+component-only Visual System records remain an explicit coverage gap. Only
+directly persisted catalog palette and typography fields are treated as
+whole-system evidence; material, geometry, and motion claims keep their true
+layout evidence level. Concrete tokens are newly generated from the complete
+Brief, complete semantic Slide set, strategy, and selected structural envelope;
+source colors, font names, markup, and compositions are not copied.
+The qualitative census retains 16 executable families and records
+`crimson-night-glass` and `jewel-deco` as coverage gaps. It asserts no measured
+redundancy exclusions. Family applicability and mutual exclusions are executable
+through a source-bound family identity emitted by an upstream system semantic
+critic. The production selector validates the exact tone hash and accepts exactly
+one retained family; ambiguous, unsupported, unresolved, or stale results fail
+explicitly. It does not parse tone with literal substrings or substitute a nearest
+cross-family trait combination. The validator proves object binding and controlled
+identity, not deterministic natural-language understanding.
 
-Do not reselect scene, template, palette, typography, composition, or motion after
-the context is compiled. Do not add a generic card grid, page zones, unrelated
-slide layout, or a second visual reference. In strict mode, project-wide style
-metadata cannot override reference tokens or visual language.
+`html_only`, `avatar_html`, and `broll_html` remain supported environments.
+Their backplate adaptation is a normative Slide Design obligation, not empirical
+prototype qualification and not a reason to eliminate every prototype.
 
-## Capacity And Text Fit
+## Provenance
 
-The capacity resolver uses object count, relations, screen-copy length, duration,
-and ratio. It keeps the selected strict reference when it fits, otherwise checks
-the other candidates owned by the same semantic scene. Strict references may
-hide only complete optional semantic units declared by the trusted catalog.
-When no strict candidate fits, routing switches automatically to
-`visual_recompose`; capacity is not diagnostic-only and no user confirmation is
-requested.
+The system computes hashes internally from the actual Brief and semantic Slide
+objects. Generated provenance records:
 
-Local Chromium measures the materialized copy. Wrap before shrinking and change
-only measured targets. Do not truncate, hide overflow, or invoke another model.
+- current grammar, prototype, and synthesis-trait asset hashes;
+- exact Brief and semantic Slide-set hashes;
+- each system-generated grammar ID, signature evidence ID, semantic input hash,
+  relationship-evidence hash, and critic source;
+- the system-selected prototype and selector version;
+- the canonical production design strategy.
 
-## Background
+Provenance is generated inside the compiled Visual System. The production request
+does not accept a caller-authored provenance object or hash as authority. The
+manifest carries the compiled system's `selection_provenance_sha256` and current
+`expression_grammar_version`.
 
-For `broll_html`, keep the evidence footage recognizable and apply the resolved
-opacity only to the full-canvas backdrop. For `avatar_html` and `html_only`, use
-an effectively opaque backdrop. Never apply backdrop opacity to content, the
-generated root, or the whole canvas.
+The internal builder API is not the public render boundary. A public per-Slide
+request carries only the locked Visual System `id`, `version`, and exact artifact
+SHA-256. The CLI and reusable request validator accept only one immutable raw
+artifact byte snapshot, compute its SHA-256 internally, parse duplicate-safe JSON
+from those same bytes, and retain an independent copy of the validated locked
+object. They do not accept a parsed object and caller hash as separate authority.
+The current Slide's source hashes, shot type, render mode, and duration are then
+checked against its compiled binding. Per-Slide requests and the public
+Storyboard never expose family candidates, critic IDs, prototype IDs, or complete
+Visual System inputs.
 
-## ECharts
+## Strategy
 
-ECharts is an implementation mode inside the selected scene. Use it only when
-the chosen reference supports it and a deterministic chart expresses authorized
-information faithfully. Continue with [echarts-authoring.md](echarts-authoring.md).
-ECharts does not create a parallel planner or visual style system.
+Production uses only `smart_video_slide_design@1.0.0` with `production_default`.
+Independent design comparisons are ingested as external audit snapshots after exact
+dependency and source-output hashing; they are not Visual Systems and cannot enter a
+production request, manifest, author artifact, render report, or compiler call.
+
+## Prohibitions
+
+- No template recovery, catalog fallback, strategy switching, or patch-style
+  bypass.
+- No caller prototype, grammar, interval, palette, typography, material, or motion
+  control at this boundary.
+- No copied source HTML, CSS, SVG, private server paths, source visual tokens, or
+  unsupported facts.
+- No single-Slide substitute for the complete confirmed Slide set.
+- No claim that one prototype is universally better or that full-data cluster
+  labels are held-out truth.

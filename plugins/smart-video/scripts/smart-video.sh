@@ -3,23 +3,12 @@ set -euo pipefail
 
 SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
 PLUGIN_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
-SMARTVIDEO_VERSION=0.1.0
+SMARTVIDEO_VERSION=0.1.2
 SMARTVIDEO_HOME=${SMARTVIDEO_HOME:-"$HOME/.codex/smartvideo"}
 SMARTVIDEO_RELEASES_ROOT="$SMARTVIDEO_HOME/node-runtime/releases"
 SMARTVIDEO_INSTALL_ROOT=${SMARTVIDEO_INSTALL_ROOT:-"$SMARTVIDEO_RELEASES_ROOT/$SMARTVIDEO_VERSION"}
 SMARTVIDEO_ACTIVE_FILE="$SMARTVIDEO_HOME/active-runtime.json"
-SMARTVIDEO_PACKAGE_SPEC=${SMARTVIDEO_PACKAGE_SPEC:-"@jogg-ai/smartvideo@$SMARTVIDEO_VERSION"}
-SMARTVIDEO_BUNDLED_PACKAGE_DIR="$PLUGIN_ROOT/npm"
-SMARTVIDEO_BUNDLED_PACKAGES=(
-  smartvideo-cli-0.0.7.tgz
-  jogg-ai-smartvideo-registry-0.1.0.tgz
-  jogg-ai-smartvideo-editor-0.1.0.tgz
-  jogg-ai-smartvideo-renderer-0.1.0.tgz
-  jogg-ai-smartvideo-speech-0.1.0.tgz
-  jogg-ai-smartvideo-avatar-0.1.0.tgz
-  jogg-ai-smartvideo-runtime-0.1.0.tgz
-  jogg-ai-smartvideo-0.1.0.tgz
-)
+SMARTVIDEO_PACKAGE_SPEC=${SMARTVIDEO_PACKAGE_SPEC:-"@joggai/smartvideo@$SMARTVIDEO_VERSION"}
 
 detect_action() {
   local skip=false argument
@@ -62,7 +51,7 @@ runtime_ready() {
   local package
   for package in smartvideo smartvideo-runtime smartvideo-editor smartvideo-registry \
     smartvideo-renderer smartvideo-speech smartvideo-avatar; do
-    [[ -f "$SMARTVIDEO_INSTALL_ROOT/node_modules/@jogg-ai/$package/package.json" ]] || return 1
+    [[ -f "$SMARTVIDEO_INSTALL_ROOT/node_modules/@joggai/$package/package.json" ]] || return 1
   done
 }
 
@@ -76,7 +65,7 @@ emit_runtime_missing() {
   command=$(bootstrap_command)
   command=${command//\\/\\\\}
   command=${command//\"/\\\"}
-  printf '{"status":"dependencies_missing","runtime":"npm","required":"@jogg-ai/smartvideo@%s","missing":["%s"],"bootstrap_command":"%s"}\n' \
+  printf '{"status":"dependencies_missing","runtime":"npm","required":"@joggai/smartvideo@%s","missing":["%s"],"bootstrap_command":"%s"}\n' \
     "$SMARTVIDEO_VERSION" "$reason" "$command"
 }
 
@@ -93,24 +82,6 @@ ensure_macos_node() {
   fi
   hash -r
   node_ready || die "Homebrew completed, but Node.js 22+ is not available in this shell"
-}
-
-package_specs() {
-  if [[ -n "${SMARTVIDEO_PACKAGE_DIR:-}" ]]; then
-    [[ -d "$SMARTVIDEO_PACKAGE_DIR" ]] || die "SMARTVIDEO_PACKAGE_DIR does not exist: $SMARTVIDEO_PACKAGE_DIR"
-    find "$SMARTVIDEO_PACKAGE_DIR" -maxdepth 1 -type f -name '*.tgz' -print0
-    return
-  fi
-  if [[ -d "$SMARTVIDEO_BUNDLED_PACKAGE_DIR" ]]; then
-    local archive
-    for archive in "${SMARTVIDEO_BUNDLED_PACKAGES[@]}"; do
-      [[ -f "$SMARTVIDEO_BUNDLED_PACKAGE_DIR/$archive" ]] \
-        || die "bundled npm package is missing: $archive"
-      printf '%s\0' "$SMARTVIDEO_BUNDLED_PACKAGE_DIR/$archive"
-    done
-    return
-  fi
-  printf '%s\0' "$SMARTVIDEO_PACKAGE_SPEC"
 }
 
 activate_runtime() {
@@ -135,18 +106,15 @@ NODE
 }
 
 install_runtime() {
-  if [[ -z "${SMARTVIDEO_PACKAGE_DIR:-}" ]] && runtime_ready; then
+  if runtime_ready; then
     activate_runtime
     return
   fi
   mkdir -p "$SMARTVIDEO_RELEASES_ROOT"
   local staging backup
   staging=$(mktemp -d "$SMARTVIDEO_RELEASES_ROOT/.install-$SMARTVIDEO_VERSION.XXXXXX")
-  local -a specs=()
-  while IFS= read -r -d '' spec; do specs+=("$spec"); done < <(package_specs)
-  ((${#specs[@]} > 0)) || die "no SmartVideo package tarballs were found"
   log "Installing SmartVideo $SMARTVIDEO_VERSION into a managed runtime..."
-  if ! npm install --prefix "$staging" --ignore-scripts --no-audit --no-fund --no-package-lock "${specs[@]}"; then
+  if ! npm install --prefix "$staging" --ignore-scripts --no-audit --no-fund --no-package-lock "$SMARTVIDEO_PACKAGE_SPEC"; then
     log "installation staging directory retained for diagnosis: $staging"
     return 1
   fi
@@ -192,7 +160,7 @@ case "$ACTION" in
       exit 0
     fi
     if ! runtime_ready; then
-      emit_runtime_missing '@jogg-ai/smartvideo'
+      emit_runtime_missing '@joggai/smartvideo'
       exit 0
     fi
     delegate "$@"

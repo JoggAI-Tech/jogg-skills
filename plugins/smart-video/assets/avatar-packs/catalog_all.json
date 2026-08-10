@@ -1,0 +1,37 @@
+{
+  "schema": "smartvideo_avatar_catalog_v1",
+  "default_avatar_id": "avatar-0603",
+  "model_id": "avatar-0603",
+  "items": [
+    {
+      "avatar_id": "avatar-0603",
+      "name": "SmartVideo Avatar",
+      "aspect_ratio": "portrait",
+      "template_id": "0603",
+      "model_id": "avatar-0603",
+      "payload_root": "0603",
+      "bundle_id": "avatar-0603-templates",
+      "file_count": 100
+    },
+    {
+      "avatar_id": "ce6b414b061c44744f95854cc030ac38",
+      "name": "Office Presenter",
+      "aspect_ratio": "landscape",
+      "template_id": "0603",
+      "model_id": "avatar-0603",
+      "payload_root": "ce6b414b061c44744f95854cc030ac38",
+      "bundle_id": "avatar-ce6b414b061c44744f95854cc030ac38-templates",
+      "file_count": 253
+    },
+    {
+      "avatar_id": "2ca35484ebb0d907a8b08c80cc963531",
+      "name": "Classroom Presenter",
+      "aspect_ratio": "landscape",
+      "template_id": "0603",
+      "model_id": "avatar-0603",
+      "payload_root": "2ca35484ebb0d907a8b08c80cc963531",
+      "bundle_id": "avatar-2ca35484ebb0d907a8b08c80cc963531-templates",
+      "file_count": 253
+    }
+  ]
+}

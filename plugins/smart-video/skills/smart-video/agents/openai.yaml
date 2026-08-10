@@ -1,7 +1,7 @@
 interface:
   display_name: "Smart Video"
   short_description: "Create and render editable Jogg videos locally"
-  default_prompt: "Use $smart-video to create a 10-minute Chinese video with the avatar only in the opening and closing shots."
+  default_prompt: "Use $smart-video to create a 90-second video from my topic or sources and render it locally."
 
 policy:
   allow_implicit_invocation: true

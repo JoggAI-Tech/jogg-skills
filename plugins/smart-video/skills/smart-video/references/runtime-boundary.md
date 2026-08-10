@@ -1,5 +1,26 @@
 # Runtime Boundary
 
+## Verified Current Status
+
+The bundled npm runtime implements the `html-author`, `echarts-author`, and
+runtime-readiness routes. Installed files alone are not execution proof: the
+running loopback service must still pass the direct challenge below before a new
+Slide is submitted.
+
+Before any endpoint submission, run the `runtime-readiness` phase with the exact
+loopback origin returned by `preflight`. The Skill validator creates a fresh
+256-bit nonce and posts it directly to `/api/v1/runtime-readiness/attest`. The
+running service must reject replay and return the same nonce, exact approved
+routes and capabilities, its verified identity inventory, and the SHA-256 of the
+identity file bytes. The Skill compares all fields with its pinned identity.
+
+This is a local execution-readiness challenge, not cryptographic process identity.
+It proves that the responding loopback service can read and verify the required
+runtime files at challenge time. It does not defend against a hostile local
+process with the same user privileges. Caller-authored reports, redirects,
+non-loopback origins, copied hashes, missing routes, and mismatches are rejected
+with `unsupported_render_runtime`.
+
 The plugin exports Smart Video projects into a local FrameVideo project. It
 does not import Podcastor at runtime.
 
@@ -31,6 +52,32 @@ Run `doctor`, then `bootstrap` only when dependencies are missing. `preflight`
 starts the server and verifies `/health` and `/settings`; only after readiness may
 the returned `settings_url` be shown. Never guess a loopback port before the
 server is healthy.
+
+## Required New Slide Author Endpoints
+
+After `pre-adapter` validation and successful runtime readiness, a conforming
+candidate runtime must submit a new Slide to exactly one dedicated loopback endpoint:
+
+```text
+PATCH /api/v1/video-studio/projects/{project_id}/shots/{shot_id}/html-author
+PATCH /api/v1/video-studio/projects/{project_id}/shots/{shot_id}/echarts-author
+```
+
+The HTML body contains `request`, `manifest`, exact `author_html`, and optional
+single-file `adapter_path`. The ECharts body contains `request`, `manifest`, exact
+`author_json`, and optional `adapter_path`. The request identity must match the
+target shot and clip. Use the returned `generation_manifest`; do not reconstruct
+its adapter record. The endpoints reject hash, identity, render-mode, and root
+linkage errors and never call the legacy recipe routes.
+
+The trusted renderer identity is pinned by
+`assets/runtime/trusted-runtime-identity.v1.json`. Post-render evidence is accepted
+only when the readiness challenge matches that identity and the trusted render
+report binds the author, adapter, screenshot, final timeline time, and observed root. The
+observed root must come from the adapter page and include zero browser runtime,
+console, network-load, and HTTP-response failures. ECharts capture also retains
+complete text geometry with zero clipped labels and zero overlapping label pairs.
+A mismatch is `unsupported_render_runtime`, not a reason to switch authoring paths.
 
 ## Allowed Requests
 

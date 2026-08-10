@@ -4,21 +4,20 @@ Release `0.8.9` provides the Smart Video Skill, editor workflow, media
 orchestration, MG references, and a pinned npm-managed runtime for macOS and
 Windows.
 
-The plugin bundles these first-party package tarballs under `npm/`:
+The managed runtime is installed from these pinned public npm packages:
 
-- `@smartvideo/cli@0.0.7`
-- `@jogg-ai/smartvideo@0.1.0`
-- `@jogg-ai/smartvideo-runtime@0.1.0`
-- `@jogg-ai/smartvideo-editor@0.1.0`
-- `@jogg-ai/smartvideo-registry@0.1.0`
-- `@jogg-ai/smartvideo-renderer@0.1.0`
-- `@jogg-ai/smartvideo-speech@0.1.0`
-- `@jogg-ai/smartvideo-avatar@0.1.0`
+- `@joggai/smartvideo-cli@0.0.7`
+- `@joggai/smartvideo@0.1.2`
+- `@joggai/smartvideo-runtime@0.1.0`
+- `@joggai/smartvideo-editor@0.1.0`
+- `@joggai/smartvideo-registry@0.1.0`
+- `@joggai/smartvideo-renderer@0.1.2`
+- `@joggai/smartvideo-speech@0.1.0`
+- `@joggai/smartvideo-avatar@0.1.0`
 
-`bootstrap` installs these exact local tarballs into the user's managed Smart
-Video runtime. npm may still download their normal third-party dependencies
-when they are not already cached. No source checkout or first-party npm registry
-access is required.
+`bootstrap` installs `@joggai/smartvideo@0.1.2` into the user's managed Smart
+Video runtime. npm resolves the remaining pinned packages from that aggregate
+package. The plugin contains no npm tarballs and requires no source checkout.
 
 The Avatar package is a remote Jogg Task/Artifact driver only. It contains no
 local inference implementation, Python runtime, ONNX model, or model package.
