@@ -102,8 +102,14 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             self.assertFalse(any(payload_root.rglob("*.mp4")))
 
     def test_runtime_bom_pins_the_complete_package_set(self) -> None:
+        plugin = json.loads(
+            (PLUGIN_ROOT / ".codex-plugin" / "plugin.json").read_text(encoding="utf-8")
+        )
         bom = json.loads((PLUGIN_ROOT / "runtime-bom.json").read_text(encoding="utf-8"))
         release = json.loads((PLUGIN_ROOT / "release-manifest.json").read_text(encoding="utf-8"))
+        self.assertEqual(plugin["version"].split("+", 1)[0], "0.8.10")
+        self.assertEqual(bom["plugin_version"], "0.8.10")
+        self.assertEqual(release["version"], "0.8.10")
         expected = {
             "@joggai/smartvideo-avatar",
             "@joggai/smartvideo-editor",
