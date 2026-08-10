@@ -2,10 +2,16 @@
 
 ## Verified Current Status
 
-The bundled npm runtime implements the `html-author`, `echarts-author`, and
+The npm-managed runtime implements the `html-author`, `echarts-author`, and
 runtime-readiness routes. Installed files alone are not execution proof: the
 running loopback service must still pass the direct challenge below before a new
 Slide is submitted.
+
+Package versions are independent. The aggregate `@joggai/smartvideo` version
+must match `runtime-bom.json#aggregate`, while each child package is checked
+against its own entry in `runtime-bom.json#packages`. Never require
+`@joggai/smartvideo-runtime` to share the aggregate version, and never require a
+private or plugin-bundled `npm/` directory.
 
 Before any endpoint submission, run the `runtime-readiness` phase with the exact
 loopback origin returned by `preflight`. The Skill validator creates a fresh
@@ -36,10 +42,18 @@ does not import Podcastor at runtime.
   English, can switch to Chinese, and may open an incomplete project for repair.
 - Explicit `framevideo.mode:"checkout"` plus `framevideo.root` enables a source
   editor for development only.
-- `bootstrap` installs the exact bundled first-party npm tarballs into a staged
-  user runtime, verifies them, and activates them atomically. npm may resolve
-  ordinary third-party dependencies. No developer checkout or first-party npm
-  registry access is required.
+- `bootstrap` installs the exact BOM-pinned first-party packages from the npm
+  registry into a staged user runtime, verifies them, and activates them
+  atomically. npm may resolve ordinary third-party dependencies. No developer
+  checkout or plugin-local package bundle is read at runtime.
+- If the host Node.js is older than `runtime-bom.json#minimum_node`, explicit
+  `bootstrap` or `upgrade` downloads the matching official release from
+  `nodejs.org`, verifies `SHASUMS256.txt`, and activates it under the user's
+  Smart Video home. It does not use Homebrew, sudo, or a system installation.
+- `upgrade` applies the package set pinned by the installed plugin's BOM. A new
+  plugin release may advance aggregate and child versions independently; the
+  prior managed release remains available until the new set verifies and
+  activates successfully.
 - Local Media uses the managed macOS speech bridge or Windows Edge TTS plus
   offline ASR. Avatar generation always uses the authorized Jogg Task and
   Artifact APIs. The npm Avatar package is a remote driver only and includes no

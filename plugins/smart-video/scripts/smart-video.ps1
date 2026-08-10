@@ -342,7 +342,7 @@ function Get-SmartVideoAction {
 }
 
 $action = Get-SmartVideoAction
-if ($action -in @("bootstrap", "install-deps")) {
+if ($action -in @("bootstrap", "install-deps", "upgrade")) {
     Ensure-WindowsHostTools
 }
 

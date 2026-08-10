@@ -7,11 +7,13 @@ import argparse
 import json
 import os
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
 
 SKILL_ROOT = Path(__file__).resolve().parents[1]
+PLUGIN_ROOT = SKILL_ROOT.parents[1]
 TEMPLATE_ROOT = SKILL_ROOT / "assets" / "echarts-examples"
 
 
@@ -19,17 +21,48 @@ def _runtime_root() -> Path:
     configured = os.environ.get("SMARTVIDEO_RUNTIME_ROOT", "").strip()
     if configured:
         return Path(configured).expanduser().resolve()
-    active = Path(
-        os.environ.get("SMARTVIDEO_ACTIVE_FILE")
-        or Path.home() / ".codex" / "smartvideo" / "active-runtime.json"
-    ).expanduser()
+
+    if os.name == "nt":
+        command = [
+            os.environ.get("COMSPEC", "cmd.exe"),
+            "/d",
+            "/s",
+            "/c",
+            str(PLUGIN_ROOT / "scripts" / "smart-video.cmd"),
+            "paths",
+            "--json",
+        ]
+    else:
+        command = [
+            "bash",
+            str(PLUGIN_ROOT / "scripts" / "smart-video.sh"),
+            "paths",
+            "--json",
+        ]
     try:
-        install_root = Path(json.loads(active.read_text(encoding="utf-8"))["install_root"])
-    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+        completed = subprocess.run(
+            command,
+            capture_output=True,
+            check=True,
+            text=True,
+            timeout=30,
+        )
+        runtime_root = Path(
+            json.loads(completed.stdout)["SMARTVIDEO_RUNTIME_ROOT"]
+        ).expanduser()
+    except (
+        KeyError,
+        OSError,
+        subprocess.CalledProcessError,
+        subprocess.TimeoutExpired,
+        TypeError,
+        ValueError,
+        json.JSONDecodeError,
+    ) as exc:
         raise SystemExit(
             "SmartVideo runtime is not active. Run the Smart Video bootstrap command first."
         ) from exc
-    return install_root / "node_modules" / "@jogg-ai" / "smartvideo-runtime" / "runtime"
+    return runtime_root.resolve()
 
 
 RUNTIME_ROOT = _runtime_root()

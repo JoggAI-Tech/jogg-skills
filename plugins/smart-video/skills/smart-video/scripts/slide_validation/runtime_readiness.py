@@ -14,7 +14,6 @@ from .shared import fail, parse_json_text, strict_object
 
 
 ATTESTATION_PATH = "/api/v1/runtime-readiness/attest"
-EXPECTED_RUNTIME_VERSION = "0.1.2"
 MAX_RESPONSE_BYTES = 256 * 1024
 REQUIRED_CAPABILITIES = (
     "html_author_route",
@@ -31,6 +30,7 @@ TRUSTED_RUNTIME_IDENTITY_PATH = (
     / "runtime"
     / "trusted-runtime-identity.v1.json"
 )
+RUNTIME_BOM_PATH = Path(__file__).resolve().parents[4] / "runtime-bom.json"
 _NONCE_RE = re.compile(r"^[0-9a-f]{64}$")
 _RESPONSE_FIELDS = {
     "schema_id",
@@ -48,6 +48,17 @@ _RESPONSE_FIELDS = {
 class _NoRedirectHandler(request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         return None
+
+
+def expected_runtime_version() -> str:
+    try:
+        bom = json.loads(RUNTIME_BOM_PATH.read_text(encoding="utf-8"))
+        version = bom["packages"]["@joggai/smartvideo-runtime"]
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError) as exc:
+        fail(f"Smart Video runtime BOM is missing or invalid: {exc}")
+    if not isinstance(version, str) or not version.strip():
+        fail("Smart Video runtime BOM does not pin @joggai/smartvideo-runtime")
+    return version.strip()
 
 
 def _canonical_bytes(value: Any) -> bytes:
@@ -97,8 +108,12 @@ def validate_runtime_response(value: Any, challenge_nonce: str) -> dict[str, Any
         fail("runtime readiness response schema/version is invalid")
     if report["challenge_nonce"] != challenge_nonce:
         fail("runtime readiness response nonce does not match the fresh challenge")
-    if report["runtime_version"] != EXPECTED_RUNTIME_VERSION:
-        fail("runtime readiness response version is not approved")
+    expected_version = expected_runtime_version()
+    if report["runtime_version"] != expected_version:
+        fail(
+            "runtime readiness response version is not approved: "
+            f"expected {expected_version}, got {report['runtime_version']}"
+        )
     if report["capabilities"] != list(REQUIRED_CAPABILITIES):
         fail("runtime readiness capabilities do not match the approved contract")
     if report["routes"] != REQUIRED_ROUTES:

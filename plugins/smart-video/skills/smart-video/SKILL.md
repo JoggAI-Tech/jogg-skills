@@ -33,9 +33,11 @@ resume safety, or per-shot retry isolation merely to reduce visible operations.
 
 Follow this order for a new video:
 
-1. On first use or after an update, invoke `doctor`. If it reports
-   `dependencies_missing`, run `bootstrap`. Normal lifecycle commands never
-   install host software. Do not present the deprecated `install-deps` alias.
+1. On first use, invoke `doctor`. If it reports `dependencies_missing`, run
+   `bootstrap`. After a plugin update, invoke `upgrade` once to atomically apply
+   the aggregate and independently versioned child packages pinned by the new
+   `runtime-bom.json`, then run `doctor`. Normal lifecycle commands never install
+   host software. Do not present the deprecated `install-deps` alias.
 2. Always invoke `preflight` before planning or `run`. It starts the loopback
    service and verifies `/health` and `/settings`. Use only the returned `settings_url`.
    Never construct, guess, or report a loopback URL before readiness.
@@ -67,7 +69,7 @@ Follow this order for a new video:
    passes author validation and approval.
 7. Run the `runtime-readiness` validation phase against the exact
    `preflight_local_base_url`, then invoke `run` with the confirmed planning file
-   and workspace. The bundled runtime must create the project and stop at
+   and workspace. The BOM-pinned npm-managed runtime must create the project and stop at
    `waiting_html` before paid media submission. Evaluate the sole Failure Decision Table in
    [slide-design.md](references/slide-design.md) at every applicable phase. Author
    each valid new Slide through [html-authoring.md](references/html-authoring.md)

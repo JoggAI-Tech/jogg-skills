@@ -6,7 +6,11 @@ import unittest
 from pathlib import Path
 
 
-from smartvideo_test_runtime import NPM_ROOT, PLUGIN_ROOT, RUNTIME_ROOT  # noqa: F401
+from smartvideo_test_runtime import (  # noqa: F401
+    AGGREGATE_PACKAGE_ROOT,
+    PLUGIN_ROOT,
+    RUNTIME_ROOT,
+)
 
 from backend.services import video_studio_bespoke_html, video_studio_planner  # noqa: E402
 
@@ -82,9 +86,9 @@ class SmartVideoSimpleMgGateTests(unittest.TestCase):
         self.assertIs(merged["style_profile"], style_validation)
 
     def test_lifecycle_requires_one_renderable_capture_only(self) -> None:
-        runner = (
-            NPM_ROOT / "packages" / "smartvideo" / "bin" / "smartvideo-runtime.sh"
-        ).read_text(encoding="utf-8")
+        runner = (AGGREGATE_PACKAGE_ROOT / "bin" / "smartvideo-runtime.sh").read_text(
+            encoding="utf-8"
+        )
         capture = runner.split("capture_html_asset() {", 1)[1].split("\n}\n\napprove_html_asset()", 1)[0]
         approve = runner.split("approve_html_asset() {", 1)[1].split("\n}\n\nbuild_effective_planning_file()", 1)[0]
 

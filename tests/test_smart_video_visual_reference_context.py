@@ -7,7 +7,11 @@ import unittest
 from pathlib import Path
 
 
-from smartvideo_test_runtime import NPM_ROOT, PLUGIN_ROOT, RUNTIME_ROOT  # noqa: F401
+from smartvideo_test_runtime import (  # noqa: F401
+    AGGREGATE_PACKAGE_ROOT,
+    PLUGIN_ROOT,
+    RUNTIME_ROOT,
+)
 
 from backend.services.video_content_pipeline.smart_video_adapter import (  # noqa: E402
     SemanticVisualDecision,
@@ -191,9 +195,9 @@ class SmartVideoVisualReferenceAuthoringContextTests(unittest.TestCase):
         self.assertIn(f'"reference_html_sha256": "{reference_hash}"', prompt)
 
     def test_lifecycle_initializes_and_returns_authoring_context(self) -> None:
-        runner = (
-            NPM_ROOT / "packages" / "smartvideo" / "bin" / "smartvideo-runtime.sh"
-        ).read_text(encoding="utf-8")
+        runner = (AGGREGATE_PACKAGE_ROOT / "bin" / "smartvideo-runtime.sh").read_text(
+            encoding="utf-8"
+        )
 
         self.assertIn("build_pending_html_authoring_contexts", runner)
         planning_function = runner.split("planning_html_clips() {", 1)[1].split("\n}", 1)[0]

@@ -8,17 +8,20 @@ template resources. Runtime code is installed from pinned public npm packages.
 
 1. Run the read-only `doctor` command.
 2. Run the returned `bootstrap` command when dependencies are missing.
-3. Open the verified Settings URL and authorize Jogg, or select Local Media for
+3. After updating the plugin, run `upgrade` once and then `doctor`.
+4. Open the verified Settings URL and authorize Jogg, or select Local Media for
    TTS/ASR-only workflows.
 
 ```bash
 bash "<plugin-root>/scripts/smart-video.sh" doctor
 bash "<plugin-root>/scripts/smart-video.sh" bootstrap
+bash "<plugin-root>/scripts/smart-video.sh" upgrade
 ```
 
 ```powershell
 & "<plugin-root>\scripts\smart-video.cmd" doctor
 & "<plugin-root>\scripts\smart-video.cmd" bootstrap
+& "<plugin-root>\scripts\smart-video.cmd" upgrade
 ```
 
 `doctor` never changes the machine. `bootstrap` installs the pinned
@@ -26,6 +29,19 @@ bash "<plugin-root>/scripts/smart-video.sh" bootstrap
 `~/.codex/smartvideo/node-runtime/releases/`, verifies the full package set,
 and atomically updates `active-runtime.json`. An interrupted installation does
 not replace the prior active runtime.
+
+When Node.js is missing or older than `runtime-bom.json#minimum_node`, macOS and
+Linux bootstrap download the matching official binary release directly from
+`https://nodejs.org/dist/`. The installer verifies the archive against Node.js'
+official `SHASUMS256.txt`, then activates it under
+`~/.codex/smartvideo/node/current`. It does not require Homebrew, sudo, or a
+system-wide Node installation. Existing managed Node versions remain available
+until a later cleanup, so an interrupted upgrade cannot remove the active one.
+
+`upgrade` does not blindly install npm `latest`. It reads the updated plugin's
+`runtime-bom.json`, installs that compatible aggregate release, verifies every
+child package against its own pinned version, then atomically activates it.
+Aggregate and child package versions are independent.
 
 The packages do not use npm `postinstall`. Python environments, the Windows
 Vosk model, and the compiled Apple speech bridge are created under the user's
@@ -42,9 +58,10 @@ inside the plugin installation.
 | Avatar generation | Authorized Jogg Task API | Authorized Jogg Task API |
 | Local MP4 rendering | Yes | Yes |
 
-macOS bootstrap uses Homebrew when host tools are missing. Windows bootstrap
-uses `winget` and Git Bash. Both require Node.js 22+, Python 3.10+, Google
-Chrome, `jq`, and FFmpeg with `libx264`, AAC, VP9, and subtitles support.
+macOS and Linux bootstrap use the verified official Node.js distribution.
+Windows bootstrap uses `winget` and Git Bash. The exact Node.js minimum comes
+from `runtime-bom.json`; this release requires Node.js 22+, Python 3.10+,
+Google Chrome, `jq`, and FFmpeg with `libx264`, AAC, VP9, and subtitles support.
 
 The published `@joggai/smartvideo-avatar` package contains only the remote Jogg
 driver and task contracts. It does not contain local Avatar inference code,

@@ -1,6 +1,6 @@
 {
   "schema_id": "smart-video.runtime-capability-requirements.v1",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "status": "direct_loopback_challenge_required",
   "required_capabilities": [
     "html_author_route",
@@ -36,8 +36,9 @@
     "cryptographic_process_identity": false,
     "trust_boundary": "same-user hostile local processes are out of scope"
   },
-  "readiness_rule": "send a fresh nonce directly to the preflight loopback origin and accept only the exact canonical response matching the pinned identity, identity bytes hash, inventory hash, runtime version, routes, and capabilities; never accept caller-authored reports",
-  "current_acceptance_status": "bundled_runtime_must_pass_direct_challenge",
-  "required_npm_change": "none; reject execution when the installed runtime fails the direct challenge",
+  "runtime_version_source": "../../../../runtime-bom.json#packages/@joggai/smartvideo-runtime",
+  "readiness_rule": "send a fresh nonce directly to the preflight loopback origin and accept only the exact canonical response matching the pinned identity, identity bytes hash, inventory hash, BOM-pinned runtime package version, routes, and capabilities; never compare the aggregate package version to an independently versioned child package",
+  "current_acceptance_status": "npm_managed_bom_pinned_runtime_must_pass_direct_challenge",
+  "required_npm_change": "bootstrap installs the exact aggregate and child package versions declared by runtime-bom.json; no private or plugin-bundled npm directory is required",
   "failure_code": "unsupported_render_runtime"
 }
