@@ -102,29 +102,15 @@
   "plugin_avatar_catalog": {
     "root": "assets/avatar-packs",
     "schema": "smartvideo_avatar_catalog_v1",
-    "default_avatar_id": "2ca35484ebb0d907a8b08c80cc963531",
-    "catalog_sha256": "44d2e516c58a09a1aa532a4d268f6590fe5e7065c3d29be1a46385e9b4db3a84",
+    "default_avatar_id": "ce6b414b061c44744f95854cc030ac38",
+    "catalog_sha256": "574796b0c6518b11506df0fd9e2854edb804f558a7428502eba825b2f0a467be",
     "templates": [
-      {
-        "avatar_id": "avatar-0603",
-        "payload_root": "0603",
-        "bundle_id": "avatar-0603-templates",
-        "file_count": 100,
-        "integrity_sha256": "26ba0b2ea664fc65cc9861352a4a92d3f1b6ed5dc79a6542e5ae83b9357efcbb"
-      },
       {
         "avatar_id": "ce6b414b061c44744f95854cc030ac38",
         "payload_root": "ce6b414b061c44744f95854cc030ac38",
         "bundle_id": "avatar-ce6b414b061c44744f95854cc030ac38-templates",
         "file_count": 253,
         "integrity_sha256": "3f500ee99cf019b201fd4adce5fee26135d5bac32b2aa7df8fad3dbe0b2c5c00"
-      },
-      {
-        "avatar_id": "2ca35484ebb0d907a8b08c80cc963531",
-        "payload_root": "2ca35484ebb0d907a8b08c80cc963531",
-        "bundle_id": "avatar-2ca35484ebb0d907a8b08c80cc963531-templates",
-        "file_count": 253,
-        "integrity_sha256": "2017ceef85cd9e22c376d9f9bd9e361f94fd0b6091d1152538da27f1a8166283"
       }
     ]
   },

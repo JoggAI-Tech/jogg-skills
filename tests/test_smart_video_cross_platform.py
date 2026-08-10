@@ -85,10 +85,10 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         catalog_path = PLUGIN_ROOT / "assets" / "avatar-packs" / "catalog.json"
         catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
         self.assertEqual(catalog["schema"], "smartvideo_avatar_catalog_v1")
-        self.assertEqual(catalog["default_avatar_id"], "2ca35484ebb0d907a8b08c80cc963531")
+        self.assertEqual(catalog["default_avatar_id"], "ce6b414b061c44744f95854cc030ac38")
         self.assertEqual(
             {item["avatar_id"] for item in catalog["items"]},
-            {"2ca35484ebb0d907a8b08c80cc963531"},
+            {"ce6b414b061c44744f95854cc030ac38"},
         )
         for item in catalog["items"]:
             payload_root = catalog_path.parent / item["payload_root"]
@@ -158,7 +158,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         avatar_catalog = release["plugin_avatar_catalog"]
         self.assertEqual(avatar_catalog["root"], "assets/avatar-packs")
         self.assertEqual(avatar_catalog["catalog_sha256"], _sha256(PLUGIN_ROOT / avatar_catalog["root"] / "catalog.json"))
-        self.assertEqual(len(avatar_catalog["templates"]), 3)
+        self.assertEqual(len(avatar_catalog["templates"]), 1)
         for item in avatar_catalog["templates"]:
             self.assertEqual(
                 item["integrity_sha256"],
