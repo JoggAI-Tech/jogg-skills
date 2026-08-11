@@ -1,4 +1,4 @@
-# Smart Video 0.8.12 Installation
+# Smart Video 0.8.13 Installation
 
 Smart Video supports macOS and Windows from one plugin. The plugin contains its
 Skill documents, authoring references, and branding. Runtime code is installed
@@ -11,7 +11,7 @@ user-managed Smart Video directory only when requested.
 2. Run the returned `bootstrap` command when dependencies are missing.
 3. After updating the plugin, run `upgrade` once and then `doctor`.
 4. Open the verified Settings URL and authorize Jogg, or select Local Media for
-   TTS/ASR-only workflows.
+   local TTS, ASR, and an explicitly installed Avatar engine.
 
 ```bash
 bash "<plugin-root>/scripts/smart-video.sh" doctor
@@ -63,7 +63,7 @@ inside the plugin installation.
 | Studio and Jogg OAuth | Yes | Yes |
 | Local TTS | Apple speech | Edge TTS |
 | Local Chinese ASR | Apple speech recognition | Vosk Chinese model |
-| Avatar generation | Authorized Jogg Task API | Authorized Jogg Task API |
+| Avatar generation | Jogg API or managed local driver | Jogg API or managed local driver |
 | Local MP4 rendering | Yes | Yes |
 
 macOS and Linux bootstrap use the verified official Node.js distribution;
@@ -72,20 +72,29 @@ Windows bootstrap uses `winget` and Git Bash. The exact Node.js minimum comes
 from `runtime-bom.json`; this release requires Node.js 22+, Python 3.10+,
 Google Chrome, `jq`, and FFmpeg with `libx264`, AAC, VP9, and subtitles support.
 
-The published `@joggai/smartvideo-avatar` package contains only the remote Jogg
-driver and task contracts. It does not contain local Avatar inference code,
-models, or Python dependencies.
+The published `@joggai/smartvideo-avatar@0.1.2` package contains the remote Jogg
+task contracts and the local `avatar-engine` orchestration driver. The separate
+`@joggai/smartvideo-avatar-engine@0.1.0` package contains the portable inference
+source and encrypted model assets; its managed Python environment is created
+outside `node_modules` only during explicit resource installation.
 
 When the editor reports missing local Avatar resources, open
 `https://docs.jogg.ai/avatar-resources` and choose a presenter, or run one of:
 
 ```bash
-npx --yes @joggai/smartvideo@latest resources install classroom-presenter
-npx --yes @joggai/smartvideo@latest resources install office-presenter
+npx --yes @joggai/smartvideo@0.1.6 resources install classroom-presenter
+npx --yes @joggai/smartvideo@0.1.6 resources install office-presenter
 ```
 
-The installer verifies the resource archive and activates it below
+The installer uses the same Avatar Engine npm package on macOS and Windows. It
+installs the engine and shared driver in one staged release, bootstraps the
+managed Python environment, verifies engine readiness, then verifies and
+activates the Presenter archive below
 `~/.codex/smartvideo/resources/avatar-packs/`. Plugin upgrades do not remove it.
+`SMARTVIDEO_AVATAR_ENGINE_ROOT` and
+`SMARTVIDEO_AVATAR_ENGINE_MANAGED_ROOT` are developer overrides; normal users do
+not configure them. A missing or invalid engine reports `driver_unavailable`
+instead of treating the Presenter catalog as executable.
 
 Developers may override the registry package spec with
 `SMARTVIDEO_PACKAGE_SPEC`. Normal users do not configure this variable or any

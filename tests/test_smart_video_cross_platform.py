@@ -89,9 +89,9 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         )
         bom = json.loads((PLUGIN_ROOT / "runtime-bom.json").read_text(encoding="utf-8"))
         release = json.loads((PLUGIN_ROOT / "release-manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(plugin["version"].split("+", 1)[0], "0.8.12")
-        self.assertEqual(bom["plugin_version"], "0.8.12")
-        self.assertEqual(release["version"], "0.8.12")
+        self.assertEqual(plugin["version"].split("+", 1)[0], "0.8.13")
+        self.assertEqual(bom["plugin_version"], "0.8.13")
+        self.assertEqual(release["version"], "0.8.13")
         expected = {
             "@joggai/smartvideo-avatar",
             "@joggai/smartvideo-editor",
@@ -100,24 +100,24 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             "@joggai/smartvideo-runtime",
             "@joggai/smartvideo-speech",
         }
-        self.assertEqual(bom["aggregate"], {"name": "@joggai/smartvideo", "version": "0.1.5"})
+        self.assertEqual(bom["aggregate"], {"name": "@joggai/smartvideo", "version": "0.1.6"})
         self.assertEqual(set(bom["packages"]), expected)
         self.assertEqual(
             bom["packages"],
             {
-                "@joggai/smartvideo-avatar": "0.1.0",
+                "@joggai/smartvideo-avatar": "0.1.2",
                 "@joggai/smartvideo-editor": "0.1.1",
                 "@joggai/smartvideo-registry": "0.1.0",
                 "@joggai/smartvideo-renderer": "0.1.2",
-                "@joggai/smartvideo-runtime": "0.1.2",
+                "@joggai/smartvideo-runtime": "0.1.4",
                 "@joggai/smartvideo-speech": "0.1.0",
             },
         )
-        self.assertEqual(bom["avatar_execution"], "jogg_remote_task_driver")
+        self.assertEqual(bom["avatar_execution"], "jogg_remote_or_managed_local")
         self.assertEqual(
             bom["packaged_assets"],
             {
-                "owner": "@joggai/smartvideo-runtime@0.1.2",
+                "owner": "@joggai/smartvideo-runtime@0.1.4",
                 "font": "assets/fonts/albert-sans/AlbertSans.ttf",
                 "bgm_manifest": "assets/video_studio_bgm/manifest.json",
                 "bgm_track_count": 10,
@@ -129,7 +129,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             {
                 "mode": "npm_registry",
                 "registry": "https://registry.npmjs.org/",
-                "package": "@joggai/smartvideo@0.1.5",
+                "package": "@joggai/smartvideo@0.1.6",
                 "upstream_cli": "@joggai/smartvideo-cli@0.0.7",
             },
         )
@@ -170,9 +170,28 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         self.assertEqual(
             bom["optional_resources"]["avatar_packs"]["install_commands"],
             {
-                "classroom-presenter": "npx --yes @joggai/smartvideo@latest resources install classroom-presenter",
-                "office-presenter": "npx --yes @joggai/smartvideo@latest resources install office-presenter",
+                "classroom-presenter": "npx --yes @joggai/smartvideo@0.1.6 resources install classroom-presenter",
+                "office-presenter": "npx --yes @joggai/smartvideo@0.1.6 resources install office-presenter",
             },
+        )
+        expected_driver = {
+            "driver_id": "avatar-engine",
+            "package": "@joggai/smartvideo-avatar@0.1.2",
+            "managed_root": "~/.codex/smartvideo/resources/avatar-drivers",
+            "package_environment": "SMARTVIDEO_AVATAR_DRIVER_ROOT",
+            "engine_environment": "SMARTVIDEO_AVATAR_ENGINE_ROOT",
+            "engine_managed_root_environment": "SMARTVIDEO_AVATAR_ENGINE_MANAGED_ROOT",
+            "engine_install_mode": "managed_npm",
+            "engine_package": "@joggai/smartvideo-avatar-engine@0.1.0",
+            "inference_bundled": False,
+        }
+        self.assertEqual(
+            bom["optional_resources"]["avatar_packs"]["driver"],
+            expected_driver,
+        )
+        self.assertEqual(
+            release["optional_avatar_resources"]["driver"],
+            expected_driver,
         )
 
         self.assertEqual(
@@ -180,7 +199,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             {
                 "registry": "https://registry.npmjs.org/",
                 "package": "@joggai/smartvideo",
-                "version": "0.1.5",
+                "version": "0.1.6",
             },
         )
         self.assertFalse((PLUGIN_ROOT / "npm").exists())
@@ -289,10 +308,13 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
     def test_uninstalled_doctor_is_read_only_machine_json(self) -> None:
         if platform.system() != "Darwin":
             self.skipTest("macOS shell launcher is exercised on the release host")
+        doctor_environment = {**os.environ}
+        doctor_environment.pop("SMARTVIDEO_INSTALL_ROOT", None)
+        doctor_environment.pop("SMARTVIDEO_PACKAGE_SPEC", None)
         with tempfile.TemporaryDirectory(prefix="smartvideo-doctor-") as home:
             completed = subprocess.run(
                 ["bash", str(PLUGIN_ROOT / "scripts" / "smart-video.sh"), "doctor"],
-                env={**os.environ, "HOME": home},
+                env={**doctor_environment, "HOME": home},
                 capture_output=True,
                 text=True,
                 timeout=30,
@@ -301,7 +323,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["status"], "dependencies_missing")
-        self.assertEqual(report["required"], "@joggai/smartvideo@0.1.5")
+        self.assertEqual(report["required"], "@joggai/smartvideo@0.1.6")
         self.assertIn("bootstrap", report["bootstrap_command"])
         self.assertIn("smart-video.sh", report["bootstrap_command"])
 

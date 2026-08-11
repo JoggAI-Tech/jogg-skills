@@ -1,35 +1,43 @@
 # Smart Video
 
-Release `0.8.12` provides the Smart Video Skill, editor workflow, media
+Release `0.8.13` provides the Smart Video Skill, editor workflow, media
 orchestration, MG references, and a pinned npm-managed runtime for macOS and
 Windows.
 
 The managed runtime is installed from these pinned public npm packages:
 
 - `@joggai/smartvideo-cli@0.0.7`
-- `@joggai/smartvideo@0.1.5`
-- `@joggai/smartvideo-runtime@0.1.2`
+- `@joggai/smartvideo@0.1.6`
+- `@joggai/smartvideo-runtime@0.1.4`
 - `@joggai/smartvideo-editor@0.1.1`
 - `@joggai/smartvideo-registry@0.1.0`
 - `@joggai/smartvideo-renderer@0.1.2`
 - `@joggai/smartvideo-speech@0.1.0`
-- `@joggai/smartvideo-avatar@0.1.0`
+- `@joggai/smartvideo-avatar@0.1.2`
+- `@joggai/smartvideo-avatar-engine@0.1.0` (installed on demand)
 
-`bootstrap` installs `@joggai/smartvideo@0.1.5` into the user's managed Smart
+`bootstrap` installs `@joggai/smartvideo@0.1.6` into the user's managed Smart
 Video runtime. npm resolves the remaining pinned packages from that aggregate
 package. The plugin contains no npm tarballs and requires no source checkout.
 
-The Avatar package is a remote Jogg Task/Artifact driver only. It contains no
-local inference implementation, Python runtime, ONNX model, or model package.
-Local fallback remains available for TTS and ASR; Avatar generation requires
-Jogg authorization. Encrypted Avatar templates are no longer bundled into the
-plugin. The optional presenter packs can be installed, updated, and removed
-independently under `~/.codex/smartvideo/resources/avatar-packs/`:
+The Avatar package contains the remote Jogg Task/Artifact driver and the local
+`avatar-engine` orchestration driver. The on-demand Avatar Engine npm package
+contains its portable inference source and encrypted model assets, and creates
+its managed Python environment outside `node_modules` during explicit resource
+installation. Encrypted Avatar templates are no longer bundled into the plugin.
+The optional presenter packs can be installed, updated, and removed independently under
+`~/.codex/smartvideo/resources/avatar-packs/`:
 
 ```bash
-npx --yes @joggai/smartvideo@latest resources install classroom-presenter
-npx --yes @joggai/smartvideo@latest resources install office-presenter
+npx --yes @joggai/smartvideo@0.1.6 resources install classroom-presenter
+npx --yes @joggai/smartvideo@0.1.6 resources install office-presenter
 ```
+
+Each resource command atomically installs or upgrades the managed Avatar driver
+and `@joggai/smartvideo-avatar-engine@0.1.0`, then bootstraps the engine and
+downloads and verifies the Presenter pack. No engine path is required from the
+user. Local generation becomes ready only after all three parts pass validation;
+otherwise the runtime returns `driver_unavailable` and does not start generation.
 
 Run `doctor`, then the returned `bootstrap` command. `preflight` starts the
 loopback service and returns a Settings URL only after `/health` and `/settings`
