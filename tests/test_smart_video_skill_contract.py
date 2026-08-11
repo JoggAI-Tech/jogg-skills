@@ -50,12 +50,8 @@ class SmartVideoSkillContractTest(unittest.TestCase):
             "html-authoring.md",
             "jogg-api.md",
             "jogg-task-lifecycle.md",
-            "legacy-echarts-authoring.md",
-            "legacy-echarts-options.md",
-            "legacy-html-authoring.md",
             "runtime-boundary.md",
             "slide-design.md",
-            "visual-knowledge.md",
             "visual-reference.md",
         }
         actual = {path.name for path in REFERENCES.glob("*.md")}
@@ -79,62 +75,64 @@ class SmartVideoSkillContractTest(unittest.TestCase):
 
     def test_merged_references_own_complete_phase_contracts(self) -> None:
         html_workflow = _read(REFERENCES / "html-authoring.md")
-        for heading in ("## Inputs And Authority", "## Artifact Stages", "## HTML Contract", "## Validation"):
+        for heading in ("## Checkpoint", "## Asset", "## MASTER Application", "## Safety", "## Submit And Inspect"):
             self.assertIn(heading, html_workflow)
 
         echarts = _read(REFERENCES / "echarts-authoring.md")
-        self.assertIn("## LLM Author Output", echarts)
-        self.assertIn("## Declarative Breadth", echarts)
-        self.assertIn("## Trusted Adapter Output", echarts)
+        for heading in ("## Design Source", "## Spec", "## Contract", "## Attach And Inspect"):
+            self.assertIn(heading, echarts)
 
         slide_design = _read(REFERENCES / "slide-design.md")
-        self.assertIn("## Operation: compile_visual_system", slide_design)
-        self.assertIn("## Operation: design_slide", slide_design)
-        self.assertIn("## Failure Decision Table", slide_design)
+        for heading in ("## Inputs", "## Design Method", "## Visual Quality", "## Slide Motion Intent", "## Handoff"):
+            self.assertIn(heading, slide_design)
 
     def test_skill_entry_stays_bounded_and_orders_preflight_before_planning(self) -> None:
         text = _read(SKILL)
-        lifecycle = text[text.index("## Core Lifecycle"):text.index("Use the host-appropriate launcher")]
+        lifecycle = text[text.index("## Lifecycle"):text.index("## Shot Types")]
 
         self.assertLessEqual(len(text.splitlines()), 400)
-        self.assertLess(lifecycle.index("`preflight`"), lifecycle.index("Generate and show only the compact Brief"))
-        self.assertIn("## Storyboard Confirmation", text)
+        self.assertLess(lifecycle.index("`preflight`"), lifecycle.index("Build the Brief"))
+        self.assertIn("Wait for Brief confirmation", lifecycle)
+        self.assertIn("Show the complete Storyboard and wait for confirmation", lifecycle)
         self.assertIn("## Reference Routing", text)
-        self.assertIn("Read only the reference for the current phase", text)
 
     def test_skill_preserves_lifecycle_and_recovery_invariants(self) -> None:
         text = _read(SKILL)
-        lifecycle = text[text.index("## Core Lifecycle"):text.index("Use the host-appropriate launcher")]
+        lifecycle = text[text.index("## Lifecycle"):text.index("## Shot Types")]
 
         ordered_markers = [
             "`preflight`",
             "`workspace`",
-            "Generate and show only the compact Brief",
+            "Build the Brief",
             "complete Storyboard",
-            "`runtime-readiness`",
+            "`--avatar-mode",
             "invoke `run`",
             "`waiting_html`",
-            "`html-author`",
+            "`apply-html`",
             "`resume`",
-            "`waiting_avatar_confirmation`",
             "`preview`",
             "`render`",
         ]
         positions = [lifecycle.index(marker) for marker in ordered_markers]
         self.assertEqual(positions, sorted(positions))
 
+        recovery = "\n".join(
+            (
+                text,
+                _read(REFERENCES / "jogg-task-lifecycle.md"),
+                _read(REFERENCES / "runtime-boundary.md"),
+                _read(REFERENCES / "html-authoring.md"),
+            )
+        )
         for required in (
             "`submission_unknown`",
             "`blocked_jogg_recovery`",
             "never resubmit",
-            "Jogg OAuth or Local Media",
-            "explicitly",
             "`settings_url`",
             "`authoring_context`",
-            "every required clip is approved",
             "incomplete project",
         ):
-            self.assertIn(required, text)
+            self.assertIn(required, recovery)
 
     def test_public_storyboard_requires_complete_fields_and_independent_confirmation(self) -> None:
         skill = _read(SKILL)
@@ -142,14 +140,11 @@ class SmartVideoSkillContractTest(unittest.TestCase):
         normalized_skill = " ".join(skill.split())
         normalized_orchestration = " ".join(orchestration.split())
 
-        for required in (
-            "user-facing type",
-            "planned duration",
-            "complete narration script",
-            "Subtitles: No / Yes",
-            "Brief confirmation and Storyboard confirmation are separate checkpoints",
-        ):
-            self.assertIn(required, normalized_skill)
+        self.assertIn("user-facing type", normalized_skill.casefold())
+        for required in ("stable ID", "title", "purpose", "narration", "planned duration", "Subtitles: No / Yes"):
+            self.assertIn(required, normalized_orchestration)
+        self.assertIn("Wait for Brief confirmation", normalized_skill)
+        self.assertIn("Show the complete Storyboard and wait for confirmation", normalized_skill)
         for label in (
             "Avatar Only",
             "B-roll Only",
@@ -159,23 +154,20 @@ class SmartVideoSkillContractTest(unittest.TestCase):
             "Slide Only",
         ):
             self.assertIn(label, normalized_skill)
-            self.assertIn(label, normalized_orchestration)
+        for shot_type in ("avatar_only", "broll_only", "avatar_broll", "avatar_html", "broll_html", "html_only"):
+            self.assertIn(f"`{shot_type}`", normalized_orchestration)
         self.assertIn("without another model call", normalized_orchestration)
-        self.assertIn("After any shot edit, show the complete updated Storyboard again", normalized_orchestration)
-        self.assertIn("two projected descriptions are customer-facing views only", normalized_orchestration)
+        self.assertIn("After any shot edit, redisplay the complete Storyboard", normalized_orchestration)
+        self.assertIn("Do not expose raw intents", normalized_orchestration)
         self.assertNotIn("Visual:", normalized_skill)
 
-    def test_new_authoring_does_not_load_legacy_director_references(self) -> None:
+    def test_new_authoring_does_not_restore_legacy_reference_documents(self) -> None:
         skill_text = _read(SKILL)
         html_workflow = _read(REFERENCES / "html-authoring.md")
-        legacy_html = _read(REFERENCES / "legacy-html-authoring.md")
 
-        self.assertIn("imported legacy", skill_text.lower())
-        self.assertIn("Never load", html_workflow)
-        self.assertIn("legacy", html_workflow.lower())
-        self.assertIn("apply-html", legacy_html)
-        self.assertIn("Do not invoke legacy `apply-html`", skill_text)
-        self.assertIn("Only an imported legacy clip", skill_text)
+        self.assertIn("Import historical projects", skill_text)
+        self.assertIn("new Slide", html_workflow)
+        self.assertFalse(any(REFERENCES.glob("legacy-*.md")))
 
     def test_helper_commands_are_plugin_root_relative(self) -> None:
         markdown = "\n".join(_read(path) for path in [SKILL, *sorted(REFERENCES.glob("*.md"))])
@@ -183,66 +175,48 @@ class SmartVideoSkillContractTest(unittest.TestCase):
         self.assertNotIn("python3 scripts/find_echarts_examples.py", markdown)
         self.assertNotRegex(markdown, r"find_v\d+_mg_templates\.py")
         self.assertIn('python3 "<plugin-root>/skills/smart-video/scripts/find_echarts_examples.py"', markdown)
-        self.assertIn('python3 "<skill-root>/scripts/validate_slide_generation.py"', markdown)
+        self.assertIn('python3 "<plugin-root>/skills/smart-video/scripts/build_slide_master.py"', markdown)
         self.assertEqual(
             {"find_echarts_examples.py", "find_mg_templates.py"},
             {path.name for path in (SKILL_ROOT / "scripts").glob("find_*.py")},
         )
 
     def test_active_visual_guidance_is_not_project_specific(self) -> None:
-        text = _read(REFERENCES / "visual-reference.md")
-        knowledge = _read(REFERENCES / "visual-knowledge.md")
+        text = "\n".join(
+            (_read(REFERENCES / "visual-reference.md"), _read(REFERENCES / "slide-design.md"))
+        )
 
         for stale in ("Hermes", "左侧叙事区", "第一批标准母版", "500 个模板"):
             self.assertNotIn(stale, text)
         self.assertIn("Visual System", text)
-        self.assertIn("18 expression grammar families", knowledge)
-        self.assertIn("Automatic whole-video selection", knowledge)
 
     def test_slide_validation_and_runtime_authoring_are_explicit(self) -> None:
-        skill = _read(SKILL)
         runtime = _read(REFERENCES / "runtime-boundary.md")
-        validator = SKILL_ROOT / "scripts" / "validate_slide_generation.py"
-        grammar = SKILL_ROOT / "assets" / "visual-knowledge" / "expression-grammar.json"
+        validator = SKILL_ROOT / "scripts" / "slide_validation" / "cli.py"
+        contracts = SKILL_ROOT / "scripts" / "slide_validation" / "contracts.py"
 
         self.assertTrue(validator.is_file())
-        self.assertTrue(grammar.is_file())
-        self.assertIn("`runtime-readiness`", skill)
-        self.assertIn("`html-author` or `echarts-author`", skill)
-        self.assertIn("runtime-readiness routes", runtime)
-        self.assertIn("html-author", runtime)
-        self.assertIn("echarts-author", runtime)
-
-        import json
-
-        grammar_payload = json.loads(_read(grammar))
-        self.assertEqual(18, len(grammar_payload["items"]))
+        self.assertTrue(contracts.is_file())
+        self.assertIn('"runtime-readiness"', _read(validator))
+        self.assertIn("apply-html", runtime)
+        self.assertIn("echarts_mg_spec", runtime)
 
     def test_content_orchestration_makes_the_accepted_storyboard_authoritative(self) -> None:
         text = _read(REFERENCES / "content-orchestration.md")
 
-        for required in ("authoritative", "`shot_type`", "`scene_role`", "independent `clip_id`"):
+        for required in ("authoritative", "`shot_type`", "stable `clip_id`"):
             self.assertIn(required, text)
-        self.assertIn("must not insert presenter-only or B-roll-only shots", text)
+        self.assertIn("Do not insert media merely to satisfy a diversity ratio", text)
 
     def test_planning_handoff_uses_the_canonical_projector_and_public_contract(self) -> None:
         skill = _read(SKILL)
         orchestration = _read(REFERENCES / "content-orchestration.md")
 
-        self.assertIn("build_smart_video_planning_payload", skill)
+        self.assertIn("content-orchestration.md", skill)
         self.assertIn("build_smart_video_planning_payload", orchestration)
-        for field in (
-            "producer_analysis",
-            "production_requirement_document",
-            "script_director",
-            "creative_plan",
-            "director_document",
-            "scene_groups",
-        ):
+        for field in ("scene_groups", "shot_type", "clip_id", "runtime_visual_style_profile"):
             self.assertIn(field, orchestration)
-        self.assertIn("`script` is one aggregate narration string", orchestration)
-        self.assertIn("every `scene_groups[].shots[]` item", orchestration)
-        self.assertIn("Use `shot_type`, never `type`", orchestration)
+        self.assertIn("with `shot_type`, not", orchestration)
         self.assertIn("`blocked_planning`", orchestration)
 
     def test_markdown_relative_links_exist(self) -> None:
