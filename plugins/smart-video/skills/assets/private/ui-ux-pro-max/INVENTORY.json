@@ -1,0 +1,17 @@
+{
+  "schema_id": "smart-video.private-dependency-inventory.v1",
+  "version": "1.0.0",
+  "source": "ui-ux-pro-max local snapshot",
+  "files": {
+    "scripts/search.py": "ab74fd08a652f78e3e431eb246c8c32c2bfb3eeda72af89f2f74b0c532b519a6",
+    "scripts/core.py": "ab9f398b493e34404448cefc766239ee86119c7a21d8581ba965cabdc698b0a8",
+    "scripts/design_system.py": "bd458da0aa27d283becda5032cbb3e39c10e031482a462b696c9d26ce479e26c",
+    "data/ui-reasoning.csv": "06e4369445388ba9b7a57347510b125b7a2145bbf8546a327ba50292503b204a",
+    "data/products.csv": "e9749e4fd8f7d4c94919c25ebd347a4adaddb671e7b01d33fbc2c87d447e6667",
+    "data/styles.csv": "1bf9c1d8484a0a7a54fb67555902380446865b604c8449e47a449cb3d9c1ef88",
+    "data/colors.csv": "cb26759805217edaaa31b09836aec09eab0fe245c58f5884e9a16ef802c6e26a",
+    "data/landing.csv": "121a2cac7cf21050234b5f80e7b4e182f10123536032e0f9ad862ad3aec9677d",
+    "data/typography.csv": "7abead73de0e43e09544f164cb60cd431674e411f1e063e555a8b44d51273328",
+    "data/charts.csv": "a70ef7460b0eaaea8614f86a0d09a4bc38b467804179762464b5ca45b491baac"
+  }
+}
