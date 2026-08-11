@@ -65,6 +65,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             "framevideo-editor",
             "assets/video_studio_bgm",
             "assets/fonts",
+            "assets/avatar-packs",
             "tests",
             "npm",
             "extraction-manifest.json",
@@ -82,34 +83,15 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         size = sum(path.stat().st_size for path in PLUGIN_ROOT.rglob("*") if path.is_file())
         self.assertLess(size, 800 * 1024 * 1024)
 
-        catalog_path = PLUGIN_ROOT / "assets" / "avatar-packs" / "catalog.json"
-        catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
-        self.assertEqual(catalog["schema"], "smartvideo_avatar_catalog_v1")
-        self.assertEqual(catalog["default_avatar_id"], "ce6b414b061c44744f95854cc030ac38")
-        self.assertEqual(
-            {item["avatar_id"] for item in catalog["items"]},
-            {"ce6b414b061c44744f95854cc030ac38"},
-        )
-        for item in catalog["items"]:
-            payload_root = catalog_path.parent / item["payload_root"]
-            integrity = json.loads((payload_root / "integrity.json").read_text(encoding="utf-8"))
-            self.assertEqual(integrity["schema"], "smartvideo_encrypted_assets_v1")
-            self.assertEqual(integrity["bundle_id"], item["bundle_id"])
-            self.assertEqual(integrity["asset_kind"], "templates")
-            self.assertEqual(len(integrity["files"]), item["file_count"])
-            self.assertEqual(len(list((payload_root / "payload").rglob("*.enc"))), item["file_count"])
-            self.assertFalse(any(payload_root.rglob("*.onnx")))
-            self.assertFalse(any(payload_root.rglob("*.mp4")))
-
     def test_runtime_bom_pins_the_complete_package_set(self) -> None:
         plugin = json.loads(
             (PLUGIN_ROOT / ".codex-plugin" / "plugin.json").read_text(encoding="utf-8")
         )
         bom = json.loads((PLUGIN_ROOT / "runtime-bom.json").read_text(encoding="utf-8"))
         release = json.loads((PLUGIN_ROOT / "release-manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(plugin["version"].split("+", 1)[0], "0.8.10")
-        self.assertEqual(bom["plugin_version"], "0.8.10")
-        self.assertEqual(release["version"], "0.8.10")
+        self.assertEqual(plugin["version"].split("+", 1)[0], "0.8.11")
+        self.assertEqual(bom["plugin_version"], "0.8.11")
+        self.assertEqual(release["version"], "0.8.11")
         expected = {
             "@joggai/smartvideo-avatar",
             "@joggai/smartvideo-editor",
@@ -118,16 +100,16 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             "@joggai/smartvideo-runtime",
             "@joggai/smartvideo-speech",
         }
-        self.assertEqual(bom["aggregate"], {"name": "@joggai/smartvideo", "version": "0.1.3"})
+        self.assertEqual(bom["aggregate"], {"name": "@joggai/smartvideo", "version": "0.1.4"})
         self.assertEqual(set(bom["packages"]), expected)
         self.assertEqual(
             bom["packages"],
             {
                 "@joggai/smartvideo-avatar": "0.1.0",
-                "@joggai/smartvideo-editor": "0.1.0",
+                "@joggai/smartvideo-editor": "0.1.1",
                 "@joggai/smartvideo-registry": "0.1.0",
                 "@joggai/smartvideo-renderer": "0.1.2",
-                "@joggai/smartvideo-runtime": "0.1.1",
+                "@joggai/smartvideo-runtime": "0.1.2",
                 "@joggai/smartvideo-speech": "0.1.0",
             },
         )
@@ -135,7 +117,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         self.assertEqual(
             bom["packaged_assets"],
             {
-                "owner": "@joggai/smartvideo-runtime@0.1.1",
+                "owner": "@joggai/smartvideo-runtime@0.1.2",
                 "font": "assets/fonts/albert-sans/AlbertSans.ttf",
                 "bgm_manifest": "assets/video_studio_bgm/manifest.json",
                 "bgm_track_count": 10,
@@ -147,8 +129,19 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             {
                 "mode": "npm_registry",
                 "registry": "https://registry.npmjs.org/",
-                "package": "@joggai/smartvideo@0.1.3",
+                "package": "@joggai/smartvideo@0.1.4",
                 "upstream_cli": "@joggai/smartvideo-cli@0.0.7",
+            },
+        )
+        self.assertEqual(
+            bom["managed_tools"]["macos_ffmpeg"],
+            {
+                "version": "9.0",
+                "source_page": "https://ffmpeg.org/download.html",
+                "build_provider": "https://evermeet.cx/ffmpeg",
+                "architecture": "x86_64",
+                "ffmpeg_sha256": "b1bd0cbaa0c889a08589dc1d14e4a08eebf425b8726c31a7e270e08552d0f271",
+                "ffprobe_sha256": "66a5102de63ce1c6a203d05a463ac836100eba9403d16968674366de17452da6",
             },
         )
         self.assertEqual(
@@ -162,22 +155,32 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             ],
         )
         self.assertEqual(release["runtime_bom"]["sha256"], _sha256(PLUGIN_ROOT / "runtime-bom.json"))
-        avatar_catalog = release["plugin_avatar_catalog"]
-        self.assertEqual(avatar_catalog["root"], "assets/avatar-packs")
-        self.assertEqual(avatar_catalog["catalog_sha256"], _sha256(PLUGIN_ROOT / avatar_catalog["root"] / "catalog.json"))
-        self.assertEqual(len(avatar_catalog["templates"]), 1)
-        for item in avatar_catalog["templates"]:
-            self.assertEqual(
-                item["integrity_sha256"],
-                _sha256(PLUGIN_ROOT / avatar_catalog["root"] / item["payload_root"] / "integrity.json"),
-            )
+        optional = release["optional_avatar_resources"]
+        self.assertEqual(optional["mode"], "managed_on_demand")
+        self.assertEqual(optional["managed_root"], "~/.codex/smartvideo/resources/avatar-packs")
+        self.assertEqual(optional["download_page_url"], "https://docs.jogg.ai/avatar-resources")
+        self.assertEqual(
+            [item["resource_id"] for item in optional["resources"]],
+            ["classroom-presenter", "office-presenter"],
+        )
+        self.assertEqual(
+            bom["optional_resources"]["avatar_packs"]["resource_ids"],
+            ["classroom-presenter", "office-presenter"],
+        )
+        self.assertEqual(
+            bom["optional_resources"]["avatar_packs"]["install_commands"],
+            {
+                "classroom-presenter": "npx --yes @joggai/smartvideo@latest resources install classroom-presenter",
+                "office-presenter": "npx --yes @joggai/smartvideo@latest resources install office-presenter",
+            },
+        )
 
         self.assertEqual(
             release["npm_runtime"],
             {
                 "registry": "https://registry.npmjs.org/",
                 "package": "@joggai/smartvideo",
-                "version": "0.1.3",
+                "version": "0.1.4",
             },
         )
         self.assertFalse((PLUGIN_ROOT / "npm").exists())
@@ -218,7 +221,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             'runtime_root_ready "$staging"',
             "active-runtime.json",
             "SMARTVIDEO_PLUGIN_ROOT",
-            "SMARTVIDEO_AVATAR_CATALOG_PATH",
+            'SMARTVIDEO_OAUTH_CLIENT_ID="smart-video"',
             "exec \"$binary\"",
         ):
             self.assertIn(required, runner)
@@ -229,6 +232,10 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         for migrated in ("ensure_plugin_assets()", "apply_html_asset()", "wait_for_plugin_task()"):
             self.assertNotIn(migrated, runner)
         self.assertNotIn('SMARTVIDEO_ASSETS_ROOT="$PLUGIN_ROOT/assets"', runner)
+
+        install_doc = (PLUGIN_ROOT / "INSTALL.md").read_text(encoding="utf-8")
+        self.assertIn("https://ffmpeg.org/download.html", install_doc)
+        self.assertIn("FFmpeg is also managed without Homebrew", install_doc)
 
         node_installer = (PLUGIN_ROOT / "scripts" / "install-node-official.sh").read_text(
             encoding="utf-8"
@@ -305,7 +312,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["status"], "dependencies_missing")
-        self.assertEqual(report["required"], "@joggai/smartvideo@0.1.3")
+        self.assertEqual(report["required"], "@joggai/smartvideo@0.1.4")
         self.assertIn("bootstrap", report["bootstrap_command"])
         self.assertIn("smart-video.sh", report["bootstrap_command"])
 

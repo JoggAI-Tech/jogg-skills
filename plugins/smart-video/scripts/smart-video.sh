@@ -215,9 +215,9 @@ delegate() {
   export SMARTVIDEO_HOME SMARTVIDEO_PLUGIN_ROOT="$PLUGIN_ROOT"
   export SMARTVIDEO_PLUGIN_VERSION="$(plugin_version)"
   export SMARTVIDEO_SKILL_ROOT="$PLUGIN_ROOT/skills/smart-video"
-  export SMARTVIDEO_AVATAR_CATALOG_PATH="${SMARTVIDEO_AVATAR_CATALOG_PATH:-$PLUGIN_ROOT/assets/avatar-packs/catalog.json}"
   export SMARTVIDEO_RELEASE_MANIFEST="$PLUGIN_ROOT/release-manifest.json"
   export SMARTVIDEO_CLI_COMMAND="bash \"$SCRIPT_DIR/smart-video.sh\""
+  export SMARTVIDEO_OAUTH_CLIENT_ID="smart-video"
   exec "$binary" "$@"
 }
 
