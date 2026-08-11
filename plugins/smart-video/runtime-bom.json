@@ -1,9 +1,9 @@
 {
   "schema": "smartvideo_plugin_runtime_bom_v1",
-  "plugin_version": "0.8.11",
+  "plugin_version": "0.8.12",
   "aggregate": {
     "name": "@joggai/smartvideo",
-    "version": "0.1.4"
+    "version": "0.1.5"
   },
   "packages": {
     "@joggai/smartvideo-avatar": "0.1.0",
@@ -35,7 +35,7 @@
   "distribution": {
     "mode": "npm_registry",
     "registry": "https://registry.npmjs.org/",
-    "package": "@joggai/smartvideo@0.1.4",
+    "package": "@joggai/smartvideo@0.1.5",
     "upstream_cli": "@joggai/smartvideo-cli@0.0.7"
   },
   "avatar_execution": "jogg_remote_task_driver",
