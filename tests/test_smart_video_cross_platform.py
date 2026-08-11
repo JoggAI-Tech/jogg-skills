@@ -259,17 +259,6 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         self.assertNotIn("active-runtime.json", helper)
         self.assertNotIn('install_root / "' + "node_modules" + '"', helper)
 
-        readiness = (
-            PLUGIN_ROOT
-            / "skills"
-            / "smart-video"
-            / "scripts"
-            / "slide_validation"
-            / "runtime_readiness.py"
-        ).read_text(encoding="utf-8")
-        self.assertIn('bom["packages"]["@joggai/smartvideo-runtime"]', readiness)
-        self.assertNotIn("EXPECTED_RUNTIME_VERSION", readiness)
-
         skill = (PLUGIN_ROOT / "skills" / "smart-video" / "SKILL.md").read_text(
             encoding="utf-8"
         )

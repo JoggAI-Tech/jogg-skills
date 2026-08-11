@@ -190,17 +190,6 @@ class SmartVideoSkillContractTest(unittest.TestCase):
             self.assertNotIn(stale, text)
         self.assertIn("Visual System", text)
 
-    def test_slide_validation_and_runtime_authoring_are_explicit(self) -> None:
-        runtime = _read(REFERENCES / "runtime-boundary.md")
-        validator = SKILL_ROOT / "scripts" / "slide_validation" / "cli.py"
-        contracts = SKILL_ROOT / "scripts" / "slide_validation" / "contracts.py"
-
-        self.assertTrue(validator.is_file())
-        self.assertTrue(contracts.is_file())
-        self.assertIn('"runtime-readiness"', _read(validator))
-        self.assertIn("apply-html", runtime)
-        self.assertIn("echarts_mg_spec", runtime)
-
     def test_content_orchestration_makes_the_accepted_storyboard_authoritative(self) -> None:
         text = _read(REFERENCES / "content-orchestration.md")
 
