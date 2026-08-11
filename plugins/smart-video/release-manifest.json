@@ -1,15 +1,15 @@
 {
   "schema": "smart_video_release_v2",
-  "version": "0.8.13",
+  "version": "0.8.14",
   "install_contract": "npm_managed",
   "runtime_bom": {
     "entry": "runtime-bom.json",
-    "sha256": "ab813bd73637e56eb9ce0b837130a6e9f54052bc9f382e7ebb89d7ada418667c"
+    "sha256": "d9251be5220759c89eeed90526887c9998d845734fbfc0e52aba0ae1048ff802"
   },
   "npm_runtime": {
     "registry": "https://registry.npmjs.org/",
     "package": "@joggai/smartvideo",
-    "version": "0.1.6"
+    "version": "0.1.7"
   },
   "plugin_runtime_files": [
     "scripts/smart-video.sh",
@@ -20,83 +20,83 @@
   ],
   "runtime_assets": {
     "runtime/vendor/echarts.min.js": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "b66b25aeb4df84e33199dc21694014d336d222cbd9deb0e5a7c14bd6aa0d0fd0"
     },
     "runtime/vendor/gsap.min.js": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "92bb9a96476f983d212a2bc4f54c889039c1696dd4461d40a736860938570fbb"
     },
     "runtime/vendor/smart-video-echarts-timeline.js": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "e4ae4666b6f85ed5c1704132b04864f02e77e5b3c0f4324f9437963bedb4450c"
     },
     "runtime/vendor/USA.json": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "549d3148ada9198af971741abd94546de806532d54d94ac0c5ad6f0bf4207196"
     },
     "runtime/vendor/echarts-examples-index.json": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "c54a15e4641b1779aebf352583e7f8052883f8fbff22164b07e25b57ceeef0f3"
     },
     "assets/fonts/albert-sans/AlbertSans.ttf": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "8fe5d4cf5822d7096d4d17ad781c90f97c745ac13a22be619db74966fba45fda"
     },
     "assets/fonts/albert-sans/OFL.txt": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "6ae0081e27fd8a2493772f51e4fe8b53eb85910fd7361cd4993b59a2bbaad38f"
     },
     "assets/video_studio_bgm/manifest.json": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "bc53be8f562afe2cf185269ecece444db18a3876d6d9ed06bdb24385916a705d"
     },
     "assets/video_studio_bgm/README.md": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "e48c987a852441753187359bbdf1b864a6c7e27b92a875de8c3e21de4a24dcfb"
     },
     "assets/video_studio_bgm/tracks/calm-documentary-loop.mp3": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "c950cbf99490cb54813a16106d0da0a7ac7c2028da7ca8adbbfe6c234aefaddc"
     },
     "assets/video_studio_bgm/tracks/data-story-loop.mp3": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "343a3d5543b512c1df131304bc7a9cbe821277ed906666fb5d19548ecc0bf803"
     },
     "assets/video_studio_bgm/tracks/history-context-loop.mp3": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "35695473cdab1af20a916a9196c511ffc31960b28bf6e0adbe44965e9309c7bc"
     },
     "assets/video_studio_bgm/tracks/light-tech-loop.mp3": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "3444237816c929b195a6aefd2d570adf93df74032b6556372f6a458cd49845db"
     },
     "assets/video_studio_bgm/tracks/macro-analysis-loop.mp3": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "6f5e1da450ae82c09308d8da5bccfb2b95be628dfe22fe381611ce99b1edb00a"
     },
     "assets/video_studio_bgm/tracks/neutral-knowledge-loop.mp3": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "0c9cba1c71292de549b2733da541f86433829244cebd0073f39c5b8ff2a4c10b"
     },
     "assets/video_studio_bgm/tracks/quiet-explainer-loop.mp3": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "0598cf939a356140c39c880e9e62db77c8dff36799fdc795c10bad6eef7d08ff"
     },
     "assets/video_studio_bgm/tracks/soft-investigation-loop.mp3": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "21ef662f8d6c68fe604309390e05694549293231a4c6717248dffab6f67fbaa7"
     },
     "assets/video_studio_bgm/tracks/steady-narration-loop.mp3": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "c227d7a0925a92ea52066c3fcac914b261a49c6a0f071e07a539992ed8f4d566"
     },
     "assets/video_studio_bgm/tracks/warm-summary-loop.mp3": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "dc40e7d50a1f0d4e6791177ca814f96a90c5ccded7297e57f2cbc9d36d518adf"
     },
     "THIRD_PARTY_NOTICES.md": {
-      "owner": "@joggai/smartvideo-runtime@0.1.4",
+      "owner": "@joggai/smartvideo-runtime@0.1.5",
       "sha256": "9716541956ee36dce8ee840db6962a8fc079d84eb914cdc7dbb26f1ea8f97441"
     }
   },
@@ -106,13 +106,13 @@
     "download_page_url": "https://docs.jogg.ai/avatar-resources",
     "driver": {
       "driver_id": "avatar-engine",
-      "package": "@joggai/smartvideo-avatar@0.1.2",
+      "package": "@joggai/smartvideo-avatar@0.1.3",
       "managed_root": "~/.codex/smartvideo/resources/avatar-drivers",
       "package_environment": "SMARTVIDEO_AVATAR_DRIVER_ROOT",
       "engine_environment": "SMARTVIDEO_AVATAR_ENGINE_ROOT",
       "engine_managed_root_environment": "SMARTVIDEO_AVATAR_ENGINE_MANAGED_ROOT",
       "engine_install_mode": "managed_npm",
-      "engine_package": "@joggai/smartvideo-avatar-engine@0.1.0",
+      "engine_package": "@joggai/smartvideo-avatar-engine@0.1.1",
       "inference_bundled": false
     },
     "resources": [
@@ -146,7 +146,7 @@
   },
   "session_storage": {
     "projects": "~/.codex/smartvideo",
-    "npm_runtime": "~/.codex/smartvideo/node-runtime/releases/0.1.6",
+    "npm_runtime": "~/.codex/smartvideo/node-runtime/releases/0.1.7",
     "optional_resources": "~/.codex/smartvideo/resources/avatar-packs",
     "plugin_installation": "immutable"
   }

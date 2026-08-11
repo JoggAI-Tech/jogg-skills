@@ -1,4 +1,4 @@
-# Smart Video 0.8.13 Installation
+# Smart Video 0.8.14 Installation
 
 Smart Video supports macOS and Windows from one plugin. The plugin contains its
 Skill documents, authoring references, and branding. Runtime code is installed
@@ -46,6 +46,11 @@ SHA-256-verified static build from the macOS provider linked on
 Because the upstream-recommended macOS build is x86_64, Apple Silicon requires
 Apple's Rosetta when no compatible native FFmpeg is already installed.
 
+Smart Video never runs Homebrew. On macOS it reuses compatible Python 3.10-3.13,
+`jq`, and Google Chrome installations. If Python or Chrome is missing,
+bootstrap returns the official python.org or Google download URL; no package
+manager or administrator-level package-manager setup is required by the plugin.
+
 `upgrade` does not blindly install npm `latest`. It reads the updated plugin's
 `runtime-bom.json`, installs that compatible aggregate release, verifies every
 child package against its own pinned version, then atomically activates it.
@@ -72,18 +77,21 @@ Windows bootstrap uses `winget` and Git Bash. The exact Node.js minimum comes
 from `runtime-bom.json`; this release requires Node.js 22+, Python 3.10+,
 Google Chrome, `jq`, and FFmpeg with `libx264`, AAC, VP9, and subtitles support.
 
-The published `@joggai/smartvideo-avatar@0.1.2` package contains the remote Jogg
+The published `@joggai/smartvideo-avatar@0.1.3` package contains the remote Jogg
 task contracts and the local `avatar-engine` orchestration driver. The separate
-`@joggai/smartvideo-avatar-engine@0.1.0` package contains the portable inference
+`@joggai/smartvideo-avatar-engine@0.1.1` package contains the portable inference
 source and encrypted model assets; its managed Python environment is created
-outside `node_modules` only during explicit resource installation.
+outside `node_modules` only during explicit resource installation. Local Avatar
+bootstrap accepts Python 3.10 through 3.13; set
+`SMARTVIDEO_AVATAR_ENGINE_PYTHON` only when a compatible executable is not the
+default `python3`.
 
 When the editor reports missing local Avatar resources, open
 `https://docs.jogg.ai/avatar-resources` and choose a presenter, or run one of:
 
 ```bash
-npx --yes @joggai/smartvideo@0.1.6 resources install classroom-presenter
-npx --yes @joggai/smartvideo@0.1.6 resources install office-presenter
+npx --yes @joggai/smartvideo@0.1.7 resources install classroom-presenter
+npx --yes @joggai/smartvideo@0.1.7 resources install office-presenter
 ```
 
 The installer uses the same Avatar Engine npm package on macOS and Windows. It
