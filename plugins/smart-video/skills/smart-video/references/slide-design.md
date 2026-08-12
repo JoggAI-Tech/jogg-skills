@@ -13,6 +13,7 @@ Require:
 - exact narration and screen-authorized copy;
 - Communication Intent;
 - Visual Intent;
+- the exact whole-video and current-shot Art Direction embedded in `MASTER.md`;
 - source evidence and structured data when applicable;
 - current npm `authoring_context` and background rule.
 
@@ -21,20 +22,26 @@ relationship. Do not repair meaning in the design layer.
 
 ## Design Method
 
-1. State the single idea the viewer must retain at the stable final frame.
-2. Identify the minimum objects and relationships needed to express it.
-3. Choose a composition native to that relationship: contrast, sequence, flow,
-   hierarchy, cause, transformation, evidence, map, network, or trend.
-4. Establish one dominant visual anchor and one unambiguous reading path.
-5. Apply the MASTER palette, type roles, spacing rhythm, material, and motion
+1. Read the current shot's Art Direction. Treat it as visual authority while
+   preserving the Communication and Visual Intents as semantic authority.
+2. State the single idea the viewer must retain at the stable final frame.
+3. Identify the minimum supplied objects and relationships needed to express it.
+4. Realize the directed composition without reclassifying the relationship or
+   replacing it with a familiar layout.
+5. Establish one dominant visual anchor and one unambiguous reading path.
+6. Apply the MASTER palette, type roles, spacing rhythm, material, and motion
    character.
-6. Remove labels, containers, icons, lines, and decoration that do not clarify the
+7. Remove labels, containers, icons, lines, and decoration that do not clarify the
    information.
-7. Verify the final frame communicates the complete meaning without relying on
+8. Verify the final frame communicates the complete meaning without relying on
    motion history.
 
 Do not reuse one layout merely for consistency. Consistency comes from the
 MASTER; composition comes from the shot's semantics.
+
+Stop when Art Direction contradicts a supplied fact, relationship, render mode,
+priority, presentation order, or semantic timeline. Do not silently reinterpret
+either authority.
 
 ## Visual Quality
 

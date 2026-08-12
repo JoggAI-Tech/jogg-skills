@@ -38,19 +38,24 @@ palette, chart type, or Slide strategy.
    the hidden outline, complete script, six supported shot types, B-roll retrieval
    intent, and source-bound Communication Intent and Visual Intent for every
    Slide-bearing shot. Show the complete Storyboard and wait for confirmation.
-6. After Storyboard confirmation, follow
-   [visual-reference.md](references/visual-reference.md) to generate one locked
-   `MASTER.md` from the complete Brief, script, and all Slide intents. Derive the
-   private `design_domain` from that confirmed content before generation; never
-   expose it or ask the customer to choose it. The bundled
-   private UI UX Pro Max snapshot must pass its inventory checks. Missing or invalid
-   input stops Slide production; no template or default design replaces it.
-7. Write the MASTER's exact `runtime_visual_style_profile` into the whole-video
+6. After Storyboard confirmation, use the plugin's `$direct-slide-art` Skill once
+   with the complete confirmed Brief, script, and ordered Slide-bearing shots.
+   Write its exact output to `<workspace_dir>/plans/slide-art-direction.json`.
+   Do not expose this private artifact, invoke the Skill once per Slide, or replace
+   it with a style-family choice.
+7. Follow [visual-reference.md](references/visual-reference.md) to generate one
+   locked `MASTER.md` from the complete Brief, script, all Slide intents, and the
+   exact art-direction artifact. Derive the private `design_domain` from the
+   confirmed content before generation; never expose it or ask the customer to
+   choose it. The bundled private UI UX Pro Max snapshot must pass its inventory
+   checks. Missing, invalid, or mismatched input stops Slide production; no
+   template or default design replaces it.
+8. Write the MASTER's exact `runtime_visual_style_profile` into the whole-video
    planning document. Every Slide uses the same MASTER and follows
    [slide-design.md](references/slide-design.md). After authoritative projection,
    author each eligible declarative ECharts spec and attach it as
    `shot.html_design.echarts_mg_spec` before `run`.
-8. Before `run` or any paid request, derive the exact Avatar shot IDs from
+9. Before `run` or any paid request, derive the exact Avatar shot IDs from
    `avatar_only`, `avatar_broll`, and `avatar_html`. Select the first exact match
    in the canonical order `none`, `opening`, `opening_closing`, `all`, then pass
    it to `run` as `--avatar-mode "<derived_avatar_mode>"`. If no mode matches, stop with
@@ -58,14 +63,14 @@ palette, chart type, or Slide strategy.
    generate extra Avatars. Then invoke `run` with the completed production plan.
    New ECharts Slides are validated and materialized by the trusted runtime during
    project creation. A plan with ordinary HTML/SVG Slides stops at `waiting_html`.
-9. For each pending ordinary HTML/SVG Slide, use
+10. For each pending ordinary HTML/SVG Slide, use
    [html-authoring.md](references/html-authoring.md) and submit it through
    `apply-html`. Preserve approved clips and repair only the failed clip.
-10. Call `resume`. For Jogg Avatar shots, complete the existing Avatar and Voice
+11. Call `resume`. For Jogg Avatar shots, complete the existing Avatar and Voice
     confirmation in the local editor when requested. An Avatar shot never enters
     the TTS batch; its downloaded MP4 audio is the shot's sole narration audio and
     measured duration.
-11. Use `preview` or the returned editor URL for review, then invoke `render` for
+12. Use `preview` or the returned editor URL for review, then invoke `render` for
     the local MP4.
 
 ## Shot Types
@@ -90,24 +95,23 @@ Use `smart_video_slide_design@1.0.0` with
 `selection_source: production_default`. This stable identity names the Smart
 Video Slide capability; it does not select a template.
 
-All new Slides use the npm-supported adaptive authoring path:
+All ordinary HTML/SVG Slides use the npm-supported direct authoring path:
 
 ```text
 visual_reference.reference_mode: visual_recompose
 visual_reference.fallback_automatic: false
 visual_reference.free_generation_selected: true
-authoring_context.authoring_mode: full_html_recompose_v1
+authoring_context.authoring_mode: direct_slide_html_v1
 authoring_context.fidelity: adaptive
 ```
 
-The required semantic scene and template ID remain private compatibility locators
-for the current npm planner. They provide no palette, typography, composition,
-component, or motion authority. If the runtime returns a strict-reference
-checkpoint for a new Slide, stop and correct the plan; do not submit a template
-patch and do not silently change design strategy.
+The semantic scene describes information structure only. Ordinary Slides must not
+contain a template ID or receive template HTML, composition, prompt, or contract
+data. Their visual authority is Direct Slide Art plus the locked MASTER.
 
 Ordinary Slides use HTML, CSS, and optional inline SVG. ECharts Slides use pure
-declarative JSON; the trusted existing runtime owns all ECharts JavaScript.
+declarative JSON and may select one of the compact scene-owned ECharts layout
+hints. The trusted existing runtime owns all ECharts JavaScript.
 Model-authored JavaScript, remote resources, font downloads, and external assets
 are forbidden.
 
@@ -154,6 +158,7 @@ selection system.
 | Phase | Read |
 | --- | --- |
 | Brief, script, Storyboard, shot strategy, intents | [content-orchestration.md](references/content-orchestration.md) |
+| Whole-video and per-Slide art direction | Plugin Skill `$direct-slide-art` |
 | B-roll retrieval | [broll-selection.md](references/broll-selection.md) |
 | Whole-video MASTER | [visual-reference.md](references/visual-reference.md) |
 | Per-Slide design | [slide-design.md](references/slide-design.md) |

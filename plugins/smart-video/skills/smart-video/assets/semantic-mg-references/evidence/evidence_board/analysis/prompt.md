@@ -1,1 +1,0 @@
-Use the complete HTML reference for 'Tracing the Compute Shortage' as a composition reference. Preserve the Analysis information intent, evidence-thread composition, semantic surfaces, and five-second motion sequence. Replace all visible copy and values with the user's content. Do not reuse the wider asset library, add dashboard chrome, or place decorative shapes above text.

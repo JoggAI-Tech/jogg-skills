@@ -10,6 +10,12 @@ Read the same locked whole-video MASTER as every HTML/SVG Slide. Use its chart
 guidance, semantic palette, hierarchy, density, and stable-final-frame rules.
 Choose chart structure from the data relationship, never from decoration.
 
+For a semantic scene that exposes compact ECharts candidates, choose at most one
+candidate with `find_mg_templates.py candidates <scene_id> --json`. Use only its
+chart layout, ratio geometry, semantic slots, and motion profile. The catalog has
+one or two candidates per supported scene and contains no reference HTML or
+sample business content.
+
 | Relationship | Prefer |
 | --- | --- |
 | continuous trend | line or area |

@@ -89,9 +89,9 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         )
         bom = json.loads((PLUGIN_ROOT / "runtime-bom.json").read_text(encoding="utf-8"))
         release = json.loads((PLUGIN_ROOT / "release-manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(plugin["version"].split("+", 1)[0], "0.8.14")
-        self.assertEqual(bom["plugin_version"], "0.8.14")
-        self.assertEqual(release["version"], "0.8.14")
+        self.assertEqual(plugin["version"].split("+", 1)[0], "0.8.16")
+        self.assertEqual(bom["plugin_version"], "0.8.16")
+        self.assertEqual(release["version"], "0.8.16")
         expected = {
             "@joggai/smartvideo-avatar",
             "@joggai/smartvideo-editor",
@@ -100,7 +100,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             "@joggai/smartvideo-runtime",
             "@joggai/smartvideo-speech",
         }
-        self.assertEqual(bom["aggregate"], {"name": "@joggai/smartvideo", "version": "0.1.7"})
+        self.assertEqual(bom["aggregate"], {"name": "@joggai/smartvideo", "version": "0.1.9"})
         self.assertEqual(set(bom["packages"]), expected)
         self.assertEqual(
             bom["packages"],
@@ -109,7 +109,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
                 "@joggai/smartvideo-editor": "0.1.1",
                 "@joggai/smartvideo-registry": "0.1.0",
                 "@joggai/smartvideo-renderer": "0.1.2",
-                "@joggai/smartvideo-runtime": "0.1.5",
+                "@joggai/smartvideo-runtime": "0.1.7",
                 "@joggai/smartvideo-speech": "0.1.0",
             },
         )
@@ -117,7 +117,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         self.assertEqual(
             bom["packaged_assets"],
             {
-                "owner": "@joggai/smartvideo-runtime@0.1.5",
+                "owner": "@joggai/smartvideo-runtime@0.1.7",
                 "font": "assets/fonts/albert-sans/AlbertSans.ttf",
                 "bgm_manifest": "assets/video_studio_bgm/manifest.json",
                 "bgm_track_count": 10,
@@ -129,7 +129,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             {
                 "mode": "npm_registry",
                 "registry": "https://registry.npmjs.org/",
-                "package": "@joggai/smartvideo@0.1.7",
+                "package": "@joggai/smartvideo@0.1.9",
                 "upstream_cli": "@joggai/smartvideo-cli@0.0.7",
             },
         )
@@ -170,8 +170,8 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         self.assertEqual(
             bom["optional_resources"]["avatar_packs"]["install_commands"],
             {
-                "classroom-presenter": "npx --yes @joggai/smartvideo@0.1.7 resources install classroom-presenter",
-                "office-presenter": "npx --yes @joggai/smartvideo@0.1.7 resources install office-presenter",
+                "classroom-presenter": "npx --yes @joggai/smartvideo@0.1.9 resources install classroom-presenter",
+                "office-presenter": "npx --yes @joggai/smartvideo@0.1.9 resources install office-presenter",
             },
         )
         expected_driver = {
@@ -199,7 +199,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             {
                 "registry": "https://registry.npmjs.org/",
                 "package": "@joggai/smartvideo",
-                "version": "0.1.7",
+                "version": "0.1.9",
             },
         )
         self.assertFalse((PLUGIN_ROOT / "npm").exists())
@@ -220,12 +220,12 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
 
         semantic = PLUGIN_ROOT / "skills" / "smart-video" / "assets" / "semantic-mg-references"
         records = manifest["reference_assets"]["semantic_mg_reference_catalog"]
-        for key, filename in (
-            ("scene_mapping_sha256", "scene-template-map.json"),
-            ("template_index_sha256", "index.json"),
-            ("semantic_adaptation_sha256", "semantic-unit-adaptation.json"),
-        ):
+        for key, filename in (("scene_mapping_sha256", "scene-template-map.json"),):
             self.assertEqual(records[key], _sha256(semantic / filename))
+        self.assertEqual(
+            [path.name for path in semantic.rglob("*") if path.is_file()],
+            ["scene-template-map.json"],
+        )
 
     def test_shell_is_an_atomic_npm_forwarder(self) -> None:
         runner = (PLUGIN_ROOT / "scripts" / "smart-video.sh").read_text(encoding="utf-8")
@@ -323,7 +323,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["status"], "dependencies_missing")
-        self.assertEqual(report["required"], "@joggai/smartvideo@0.1.7")
+        self.assertEqual(report["required"], "@joggai/smartvideo@0.1.9")
         self.assertIn("bootstrap", report["bootstrap_command"])
         self.assertIn("smart-video.sh", report["bootstrap_command"])
 

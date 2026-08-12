@@ -9,13 +9,13 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1] / "assets" / "semantic-mg-references"
 MAPPING_PATH = ROOT / "scene-template-map.json"
-PUBLIC_CATALOG_VERSION = "semantic_mg_reference_catalog"
+PUBLIC_CATALOG_VERSION = "semantic_scene_catalog"
 
 
 def load_mapping() -> dict[str, Any]:
     mapping = json.loads(MAPPING_PATH.read_text(encoding="utf-8"))
-    if mapping.get("version") != "semantic_mg_reference_mapping":
-        raise SystemExit(f"invalid MG reference mapping: {MAPPING_PATH}")
+    if mapping.get("version") != PUBLIC_CATALOG_VERSION:
+        raise SystemExit(f"invalid semantic scene catalog: {MAPPING_PATH}")
     return mapping
 
 
@@ -34,7 +34,7 @@ def emit(value: Any, *, as_json: bool) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Inspect bundled semantic MG references")
+    parser = argparse.ArgumentParser(description="Inspect semantic scenes and compact ECharts hints")
     parser.add_argument("command", choices=("summary", "scenes", "candidates", "get"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--category")
@@ -55,7 +55,12 @@ def main() -> int:
 
     if args.command == "scenes":
         selected = [
-            {"scene_id": item.get("scene_id"), "category_id": item.get("category_id")}
+            {
+                "scene_id": item.get("scene_id"),
+                "category_id": item.get("category_id"),
+                "echarts_supported": bool(item.get("echarts_supported")),
+                "candidate_count": int(item.get("candidate_count") or 0),
+            }
             for item in scenes
             if not args.category or str(item.get("category_id") or "") == args.category
         ]

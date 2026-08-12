@@ -15,9 +15,10 @@ import sys
 from typing import Any
 
 
-SCHEMA_ID = "smart-video.slide-master-input.v1"
-MASTER_SCHEMA_ID = "smart-video.slide-design-master.v1"
-MASTER_VERSION = "1.0.0"
+SCHEMA_ID = "smart-video.slide-master-input.v2"
+MASTER_SCHEMA_ID = "smart-video.slide-design-master.v2"
+MASTER_VERSION = "2.0.0"
+ART_DIRECTION_SCHEMA_ID = "smart-video.slide-art-direction.v1"
 INVENTORY_SCHEMA_ID = "smart-video.private-dependency-inventory.v1"
 EXPECTED_PRIVATE_FILES = {
     "scripts/search.py",
@@ -318,6 +319,49 @@ def validate_bindings(value: Any, path: str, shot_id: str, *, require_narration:
     canonical_bytes(bindings)
 
 
+def validate_art_direction(
+    value: Any,
+    video_id: str,
+    ordered_shot_ids: list[str],
+) -> None:
+    path = "input.art_direction"
+    art_direction = require_object(value, path)
+    expected_fields = {"schema_id", "version", "video_id", "whole_video", "slides"}
+    if set(art_direction) != expected_fields:
+        missing = sorted(expected_fields - set(art_direction))
+        unknown = sorted(set(art_direction) - expected_fields)
+        if missing:
+            fail(f"{path} is missing required field {missing[0]}")
+        fail(f"{path} contains unknown field {unknown[0]}")
+    if (
+        art_direction["schema_id"] != ART_DIRECTION_SCHEMA_ID
+        or art_direction["version"] != 1
+    ):
+        fail(f"{path} schema/version must be {ART_DIRECTION_SCHEMA_ID} version 1")
+    if require_string(art_direction["video_id"], f"{path}.video_id") != video_id:
+        fail(f"{path}.video_id must match input.video_id")
+    require_string(art_direction["whole_video"], f"{path}.whole_video")
+    slides = art_direction["slides"]
+    if not isinstance(slides, list) or not slides:
+        fail(f"{path}.slides must be a non-empty array")
+    if len(slides) != len(ordered_shot_ids):
+        fail(f"{path}.slides must contain exactly one entry per input Slide")
+    for index, expected_shot_id in enumerate(ordered_shot_ids):
+        slide_path = f"{path}.slides[{index}]"
+        slide = require_object(slides[index], slide_path)
+        if set(slide) != {"shot_id", "design_direction"}:
+            missing = sorted({"shot_id", "design_direction"} - set(slide))
+            unknown = sorted(set(slide) - {"shot_id", "design_direction"})
+            if missing:
+                fail(f"{slide_path} is missing required field {missing[0]}")
+            fail(f"{slide_path} contains unknown field {unknown[0]}")
+        shot_id = require_string(slide["shot_id"], f"{slide_path}.shot_id")
+        if shot_id != expected_shot_id:
+            fail(f"{slide_path}.shot_id must match input Slide order")
+        require_string(slide["design_direction"], f"{slide_path}.design_direction")
+    canonical_bytes(art_direction)
+
+
 def validate_private_dependency(private_root: Path) -> dict[str, Any]:
     inventory_path = private_root / "INVENTORY.json"
     inventory = require_object(read_json(inventory_path, "private dependency inventory"), "inventory")
@@ -357,7 +401,8 @@ def validate_private_dependency(private_root: Path) -> dict[str, Any]:
 def validate_input(value: Any) -> dict[str, Any]:
     payload = require_object(value, "input")
     expected_fields = {
-        "schema_id", "version", "video_id", "project_name", "brief", "script", "slides"
+        "schema_id", "version", "video_id", "project_name", "brief", "script",
+        "art_direction", "slides",
     }
     if set(payload) != expected_fields:
         missing = sorted(expected_fields - set(payload))
@@ -365,9 +410,9 @@ def validate_input(value: Any) -> dict[str, Any]:
         if missing:
             fail(f"input is missing required field {missing[0]}")
         fail(f"input contains unknown field {unknown[0]}")
-    if payload["schema_id"] != SCHEMA_ID or payload["version"] != 1:
-        fail(f"input schema/version must be {SCHEMA_ID} version 1")
-    require_string(payload["video_id"], "input.video_id")
+    if payload["schema_id"] != SCHEMA_ID or payload["version"] != 2:
+        fail(f"input schema/version must be {SCHEMA_ID} version 2")
+    video_id = require_string(payload["video_id"], "input.video_id")
     require_string(payload["project_name"], "input.project_name")
     require_string(payload["script"], "input.script")
     brief = require_object(payload["brief"], "input.brief")
@@ -391,6 +436,7 @@ def validate_input(value: Any) -> dict[str, Any]:
     if not isinstance(slides, list) or not slides:
         fail("input.slides must be a non-empty array")
     shot_ids: set[str] = set()
+    ordered_shot_ids: list[str] = []
     for index, raw_slide in enumerate(slides):
         path = f"input.slides[{index}]"
         slide = require_object(raw_slide, path)
@@ -402,6 +448,7 @@ def validate_input(value: Any) -> dict[str, Any]:
         if shot_id in shot_ids:
             fail(f"duplicate Slide shot_id {shot_id}")
         shot_ids.add(shot_id)
+        ordered_shot_ids.append(shot_id)
         if slide["shot_type"] not in SLIDE_SHOT_TYPES:
             fail(f"{path}.shot_type must be avatar_html, broll_html, or html_only")
         duration = slide["duration_seconds"]
@@ -454,6 +501,7 @@ def validate_input(value: Any) -> dict[str, Any]:
             fail(f"{path} Communication and Visual bindings must exactly match")
         canonical_bytes(visual)
         canonical_bytes(slide)
+    validate_art_direction(payload["art_direction"], video_id, ordered_shot_ids)
     return payload
 
 
@@ -463,6 +511,7 @@ def build_query(payload: dict[str, Any]) -> str:
         f"project: {payload['project_name']}",
         f"complete brief JSON: {canonical_bytes(payload['brief']).decode('utf-8')}",
         f"complete narration script: {payload['script']}",
+        f"complete art direction JSON: {canonical_bytes(payload['art_direction']).decode('utf-8')}",
         "quality: information visualization editorial clarity readable high contrast",
     ]
     for index, slide in enumerate(payload["slides"], 1):
@@ -481,6 +530,7 @@ def build_design_search_query(payload: dict[str, Any]) -> str:
         brief["starting_knowledge"],
         brief["design_domain"],
         brief["visual_tone"],
+        payload["art_direction"]["whole_video"],
         "fixed-canvas video presentation slide information design",
     ]
     for slide in payload["slides"]:
@@ -494,6 +544,8 @@ def build_design_search_query(payload: dict[str, Any]) -> str:
                 visual["relationship"],
             ]
         )
+    for slide in payload["art_direction"]["slides"]:
+        parts.append(slide["design_direction"])
     return " ".join(" ".join(parts).split())
 
 
@@ -614,41 +666,14 @@ def select_typography(rows: list[dict[str, Any]], audience: str) -> dict[str, An
     return compatible[0]
 
 
-def usable_effect_cues(value: str, *, motion: bool) -> list[str]:
-    interaction_terms = {
-        "active state", "hover", "tap", "press", "cursor", "scroll", "navbar",
-        "loading", "responsive", "breakpoint", "page transition", "click",
-        "transition-none",
-    }
-    motion_terms = {
-        "animate", "animation", "fade", "kinetic", "motion", "reveal", "slide",
-        "stagger", "transition", "wipe",
-    }
-    cues: list[str] = []
-    for raw_cue in re.split(r"[,;]", value):
-        cue = raw_cue.strip()
-        lowered = cue.casefold()
-        if not cue or any(term in lowered for term in interaction_terms):
-            continue
-        is_motion = any(term in lowered for term in motion_terms) or bool(
-            re.search(r"\b\d+(?:-\d+)?ms\b", lowered)
-        )
-        if is_motion == motion:
-            cues.append(cue)
-    return cues
-
-
 def format_slide_visual_system(
     product: dict[str, Any],
     reasoning: dict[str, str],
-    style: dict[str, Any],
     colors: dict[str, Any],
     typography: dict[str, Any],
+    art_direction: str,
 ) -> str:
     product_type = require_string(product.get("Product Type"), "product search result.Product Type")
-    style_name = require_string(style.get("Style Category"), "style search result.Style Category")
-    style_keywords = require_string(style.get("Keywords"), "style search result.Keywords")
-    style_effects = require_string(style.get("Effects & Animation"), "style search result.Effects & Animation")
     heading = require_string(typography.get("Heading Font"), "typography search result.Heading Font")
     body = require_string(typography.get("Body Font"), "typography search result.Body Font")
     mood = require_string(typography.get("Mood/Style Keywords"), "typography search result.Mood/Style Keywords")
@@ -667,8 +692,6 @@ def format_slide_visual_system(
         color = require_string(colors.get(field), f"color search result.{field}").upper()
         _hex_to_rgb(color, f"{field} color")
         palette_lines.append(f"| {role} | `{color}` |")
-    material_cues = usable_effect_cues(style_effects, motion=False)
-    motion_cues = usable_effect_cues(style_effects, motion=True)
     anti_patterns = require_string(reasoning.get("Anti_Patterns"), "reasoning rule.Anti_Patterns")
     return "\n".join(
         [
@@ -676,10 +699,9 @@ def format_slide_visual_system(
             "",
             "### Visual Language",
             f"- Audience context: {product_type}",
-            f"- Style: {style_name}",
-            f"- Character: {style_keywords}",
+            f"- Art direction (authoritative): {' '.join(art_direction.split())}",
             f"- Source cautions: {anti_patterns}",
-            "- Apply this character to a fixed video canvas; composition still follows each Slide's semantic relationship.",
+            "- Realize this direction on a fixed video canvas. UI UX Pro Max implementation data may not replace, dilute, or reinterpret it.",
             "",
             "### Palette",
             *palette_lines,
@@ -691,11 +713,11 @@ def format_slide_visual_system(
             "- Use these as hierarchy and personality guidance through runtime-local font families only.",
             "",
             "### Shape And Material",
-            f"- Source cues: {'; '.join(material_cues) if material_cues else 'No additional material cue survives fixed-canvas adaptation.'}",
+            "- Art Direction owns material and geometry.",
             "- Keep one coherent geometry and depth language across the video; do not turn information into interface components.",
             "",
             "### Motion Character",
-            f"- Source cues: {'; '.join(motion_cues) if motion_cues else 'No additional style motion cue survives fixed-canvas adaptation.'}",
+            "- Art Direction owns motion character; the semantic timeline owns exact reveal order and timing.",
             "- Use finite motion only to establish reading order, explain a relationship, and settle into a stable final frame.",
         ]
     )
@@ -709,7 +731,8 @@ def run_private_search(
     style_query: str,
     typography_query: str,
     audience: str,
-) -> str:
+    art_direction: str,
+) -> tuple[str, str]:
     product = run_domain_search(private_root, product_query, "product", max_results=1)[0]
     product_type = require_string(product.get("Product Type"), "product search result.Product Type")
     rule = reasoning_rule(private_root, product_type)
@@ -723,6 +746,7 @@ def run_private_search(
         max_results=16,
     )
     style = select_style(style_rows, style_priority, audience)
+    style_name = require_string(style.get("Style Category"), "style search result.Style Category")
     colors = run_domain_search(
         private_root,
         f"{query} {product_type} {color_mood}",
@@ -736,11 +760,17 @@ def run_private_search(
         max_results=8,
     )
     typography = select_typography(typography_rows, audience)
-    master = format_slide_visual_system(product, rule, style, colors, typography)
+    master = format_slide_visual_system(
+        product,
+        rule,
+        colors,
+        typography,
+        art_direction,
+    )
     missing_sections = sorted(section for section in REQUIRED_MASTER_SECTIONS if section not in master)
     if missing_sections:
         fail(f"UI UX Pro Max Slide MASTER output is incomplete: missing {missing_sections[0]}")
-    return master
+    return master, style_name
 
 
 def _hex_to_rgb(value: str, path: str) -> tuple[int, int, int]:
@@ -775,7 +805,7 @@ def _contrast_ratio(first: str, second: str) -> float:
     return (lighter + 0.05) / (darker + 0.05)
 
 
-def runtime_visual_style_profile(base_master: str) -> dict[str, Any]:
+def runtime_visual_style_profile(base_master: str, style_name: str) -> dict[str, Any]:
     role_values: dict[str, str] = {}
     for role, value in re.findall(
         r"^\|\s*(Primary|Highlight|Background|Foreground|Danger)\s*\|\s*`(#[0-9A-Fa-f]{6})`\s*\|",
@@ -790,19 +820,6 @@ def runtime_visual_style_profile(base_master: str) -> dict[str, Any]:
     ink = role_values["Foreground"]
     if _contrast_ratio(surface, ink) < 4.5:
         fail("UI UX Pro Max MASTER foreground/background contrast is below 4.5:1")
-    style_section = re.search(
-        r"^### Visual Language\s*$\n(?P<body>.*?)(?=^### |\Z)",
-        base_master,
-        flags=re.MULTILINE | re.DOTALL,
-    )
-    if not style_section:
-        fail("UI UX Pro Max MASTER output does not expose a runtime visual style profile")
-    style_name_match = re.search(
-        r"^- Style:\s*(?P<name>.+?)\s*$",
-        style_section.group("body"),
-        flags=re.MULTILINE,
-    )
-    style_name = style_name_match.group("name") if style_name_match else ""
     profile_id = RUNTIME_PROFILE_STYLE_MAP.get(style_name)
     if not profile_id:
         fail(f"UI UX Pro Max runtime visual style profile is unmapped: {style_name or 'missing style name'}")
@@ -875,21 +892,38 @@ def format_chart_guidance(results: list[dict[str, Any]]) -> str:
     return "\n".join(lines)
 
 
+def format_art_direction(value: dict[str, Any]) -> str:
+    lines = [
+        "### Whole Video",
+        "",
+        f"- {' '.join(value['whole_video'].split())}",
+        "",
+        "### Per-Slide Directions",
+        "",
+    ]
+    for slide in value["slides"]:
+        direction = " ".join(slide["design_direction"].split())
+        lines.append(f"- `{slide['shot_id']}`: {direction}")
+    return "\n".join(lines)
+
+
 def compose_master(
     payload: dict[str, Any],
     inventory: dict[str, Any],
     base_master: str,
+    ui_ux_style_name: str,
     chart_results: list[dict[str, Any]],
 ) -> str:
     input_hash = sha256_bytes(canonical_bytes(payload))
     master_id = f"sv-master-{input_hash[:16]}"
-    runtime_profile = runtime_visual_style_profile(base_master)
+    runtime_profile = runtime_visual_style_profile(base_master, ui_ux_style_name)
     metadata = {
         "schema_id": MASTER_SCHEMA_ID,
         "version": MASTER_VERSION,
         "id": master_id,
         "video_id": payload["video_id"],
         "input_sha256": input_hash,
+        "art_direction_sha256": sha256_bytes(canonical_bytes(payload["art_direction"])),
         "private_dependency_version": inventory["version"],
         "safe_area_px": {"top": 64, "right": 96, "bottom": 64, "left": 96},
         "runtime_visual_style_profile": runtime_profile,
@@ -903,6 +937,10 @@ def compose_master(
             "# Smart Video Slide Design MASTER",
             "",
             "This is the single visual source of truth for every Slide in this video.",
+            "",
+            "## Slide Art Direction",
+            "",
+            format_art_direction(payload["art_direction"]),
             "",
             "## UI UX Pro Max Adaptation",
             "",
@@ -961,7 +999,7 @@ def build(input_path: Path, output_dir: Path, private_root: Path) -> Path:
                 fail(f"cannot invalidate existing MASTER output: {exc}")
     inventory = validate_private_dependency(private_root)
     payload = validate_input(read_json(input_path, "MASTER input"))
-    base_master = run_private_search(
+    base_master, ui_ux_style_name = run_private_search(
         private_root,
         build_design_search_query(payload),
         payload["project_name"],
@@ -971,13 +1009,27 @@ def build(input_path: Path, output_dir: Path, private_root: Path) -> Path:
                 payload["brief"]["design_domain"],
                 payload["brief"]["audience"],
                 payload["brief"]["visual_tone"],
+                payload["art_direction"]["whole_video"],
             ]
         ),
-        f"{payload['brief']['audience']} {payload['brief']['visual_tone']}",
+        " ".join(
+            [
+                payload["brief"]["audience"],
+                payload["brief"]["visual_tone"],
+                payload["art_direction"]["whole_video"],
+            ]
+        ),
         payload["brief"]["audience"],
+        payload["art_direction"]["whole_video"],
     )
     chart_results = run_chart_search(private_root, payload)
-    master = compose_master(payload, inventory, base_master, chart_results)
+    master = compose_master(
+        payload,
+        inventory,
+        base_master,
+        ui_ux_style_name,
+        chart_results,
+    )
     output_dir.mkdir(parents=True, exist_ok=True)
     try:
         temporary_path.write_text(master, encoding="utf-8")

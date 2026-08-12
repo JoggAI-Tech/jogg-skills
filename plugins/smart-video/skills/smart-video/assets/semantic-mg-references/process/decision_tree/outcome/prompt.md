@@ -1,1 +1,0 @@
-Use the complete HTML reference for 'When Should AI Act?' as a composition reference. Preserve the Outcome information intent, decision-rule composition, semantic surfaces, and five-second motion sequence. Replace all visible copy and values with the user's content. Do not reuse the wider asset library, add dashboard chrome, or place decorative shapes above text.

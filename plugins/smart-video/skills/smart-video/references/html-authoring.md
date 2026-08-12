@@ -7,16 +7,16 @@ Use this path for a Slide whose preserved render mode is `html_svg`.
 Read the pending clip's complete `authoring_context`. A new Slide must have:
 
 ```text
-authoring_mode: full_html_recompose_v1
+authoring_mode: direct_slide_html_v1
 fidelity: adaptive
 reference_mode: visual_recompose
 fallback_automatic: false
 free_generation_selected: true
 ```
 
-If the checkpoint is strict, stop and correct planning. Do not author a
-`strong_reference_patch_v1` and do not use the reference HTML as visual input.
-The semantic scene and template remain runtime locators only.
+The checkpoint must not contain `template_id`, `reference_html`,
+`reference_html_path`, `reference_html_sha256`, `contract`, `composition`, or
+`prompt`. Stop and correct planning if any template-derived field is present.
 
 ## Asset
 
@@ -38,6 +38,9 @@ Use one `main.ai-mg-layer` root, one sibling `.mg-backdrop`, and one sibling
 ## MASTER Application
 
 - Read the locked MASTER before writing the asset.
+- Execute the current shot's exact Art Direction embedded in the MASTER. Do not
+  replace it with a named style, template, generic card layout, or new semantic
+  interpretation.
 - Use its visual hierarchy, material, spacing, and motion character.
 - Use only `var(--mg-surface)`, `var(--mg-surface-recessed)`, `var(--mg-ink)`,
   `var(--mg-muted)`, `var(--mg-primary)`, `var(--mg-highlight)`,

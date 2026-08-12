@@ -1,1 +1,0 @@
-Use the complete HTML reference for 'Build Where the Constraint Lives' as a composition reference. Preserve the Thesis information intent, type-poster composition, semantic surfaces, and five-second motion sequence. Replace all visible copy and values with the user's content. Do not reuse the wider asset library, add dashboard chrome, or place decorative shapes above text.

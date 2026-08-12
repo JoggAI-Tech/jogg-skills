@@ -35,11 +35,11 @@ The npm runtime owns:
 
 ## Slide Compatibility
 
-The current runtime requires semantic scene and template locators to create an
-HTML checkpoint. For new MASTER-driven Slides, planning must set
-`visual_recompose`, `fallback_automatic:false`, and
-`free_generation_selected:true`, producing `full_html_recompose_v1`. The template
-is not a visual source in this mode.
+The runtime requires a semantic scene to describe information structure. An
+ordinary MASTER-driven Slide sets `visual_recompose`,
+`fallback_automatic:false`, and `free_generation_selected:true`, producing
+`direct_slide_html_v1`. It has no visual-template locator or template-derived
+authoring context. ECharts may retain one compact scene-owned layout hint.
 
 `apply-html` accepts a full custom Slide object for an ordinary HTML/SVG
 checkpoint. A new ECharts Slide has no such checkpoint: the Skill must attach its

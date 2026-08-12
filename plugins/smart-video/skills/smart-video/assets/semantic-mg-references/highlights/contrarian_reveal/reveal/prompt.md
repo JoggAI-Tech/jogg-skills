@@ -1,1 +1,0 @@
-Use the complete HTML reference for 'Bigger Models Are Not the Moat' as a composition reference. Preserve the Reveal information intent, evidence-switch composition, semantic surfaces, and five-second motion sequence. Replace all visible copy and values with the user's content. Do not reuse the wider asset library, add dashboard chrome, or place decorative shapes above text.

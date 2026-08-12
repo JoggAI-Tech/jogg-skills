@@ -208,8 +208,7 @@ public production object uses `scene_groups[].shots[]` with `shot_type`, not
 `type`, and retains the confirmed shot order, narration, and duration.
 
 Every Slide-bearing shot must contain the current semantic director fields and a
-stable `clip_id`. For current npm compatibility, its private visual reference is
-always:
+stable `clip_id`. An ordinary HTML/SVG Slide uses this private visual reference:
 
 ```json
 {
@@ -219,10 +218,10 @@ always:
 }
 ```
 
-The semantic `scene_id` and a valid scene-owned `template_id` remain required by
-the current projector. Select them only from information shape and runtime
-support. They are compatibility locators and must not influence palette,
-typography, composition, components, or motion.
+Select the semantic `scene_id` from information shape and runtime support. Do not
+add a `template_id` to an ordinary HTML/SVG Slide. For ECharts only, select one of
+the scene-owned compact candidates; it can guide chart layout and motion profile,
+but never palette, typography, business content, or complete composition.
 
 Write the exact `runtime_visual_style_profile` object from the locked MASTER
 metadata to the whole-video planning document as `visual_style_profile`. This is
@@ -256,14 +255,14 @@ its HTML during project creation.
 After projection, a new Slide must yield:
 
 ```text
-authoring_context.authoring_mode = full_html_recompose_v1
+authoring_context.authoring_mode = direct_slide_html_v1
 authoring_context.fidelity = adaptive
 authoring_context.reference_mode = visual_recompose
 ```
 
-If it yields a strict reference checkpoint, the plan is inconsistent with this
-production path. Correct the plan before authoring. Do not submit
-`strong_reference_patch_v1` and do not use a template as fallback.
+If an ordinary Slide checkpoint contains a template ID, reference HTML, or a
+strict reference contract, the plan is inconsistent with this production path.
+Correct the plan before authoring.
 
 Save the completed projection under the workspace `plans` directory and pass it
 to `run`. Only ordinary HTML/SVG Slides enter `waiting_html`; new ECharts Slides

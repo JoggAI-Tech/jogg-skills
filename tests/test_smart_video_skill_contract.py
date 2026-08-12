@@ -6,7 +6,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SKILL_ROOT = ROOT / "plugins" / "smart-video" / "skills" / "smart-video"
+PLUGIN_SKILLS = ROOT / "plugins" / "smart-video" / "skills"
+SKILL_ROOT = PLUGIN_SKILLS / "smart-video"
 SKILL = SKILL_ROOT / "SKILL.md"
 REFERENCES = SKILL_ROOT / "references"
 
@@ -16,6 +17,23 @@ def _read(path: Path) -> str:
 
 
 class SmartVideoSkillContractTest(unittest.TestCase):
+    def test_plugin_exposes_art_direction_as_a_bounded_second_skill(self) -> None:
+        self.assertEqual(
+            {"direct-slide-art", "smart-video"},
+            {path.name for path in PLUGIN_SKILLS.iterdir() if path.is_dir()},
+        )
+        art_skill = PLUGIN_SKILLS / "direct-slide-art"
+        skill_text = _read(art_skill / "SKILL.md")
+        visual_language = _read(art_skill / "references" / "visual-language.md")
+        smart_video = _read(SKILL)
+
+        self.assertIn("name: direct-slide-art", skill_text)
+        self.assertIn("smart-video.slide-art-direction.v1", skill_text)
+        self.assertIn("Do not introduce a new fact", skill_text)
+        self.assertIn("design vocabulary, not a catalog", visual_language)
+        self.assertEqual(smart_video.count("use the plugin's `$direct-slide-art` Skill once"), 1)
+        self.assertIn("plans/slide-art-direction.json", smart_video)
+
     def test_removed_storyboard_balance_mechanisms_are_absent_from_plugin_source(self) -> None:
         forbidden = (
             "_validate_" + "lightweight_mg_adjacency",
