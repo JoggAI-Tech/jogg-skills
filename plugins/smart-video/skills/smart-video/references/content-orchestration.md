@@ -204,6 +204,22 @@ confirmation. A confirmation applies only to the last complete checkpoint shown.
 After any shot edit, redisplay the complete Storyboard and request confirmation
 again.
 
+## Production Summary
+
+After Storyboard confirmation, derive the exact production requirements from its
+shot types without another model call. Display the selected Jogg or Local Media
+path, whether Pexels is required, and the Slide, Avatar, and non-Avatar TTS shot
+counts. Do not require Pexels when every required B-roll asset already exists or
+the confirmed Storyboard contains no B-roll.
+
+For Jogg production, provide the runtime-returned Jogg Voice resource-page link
+and require the user to copy and provide an explicit Voice ID. When at least one
+shot contains Avatar, also provide the returned Jogg Avatar resource-page link
+and require an explicit Avatar ID. These are Jogg resource pages, not the local
+Smart Video editor. Do not submit paid work or begin Slide authoring until the
+user confirms this summary and every required ID. Local Media uses its configured
+local profile and does not request Jogg IDs.
+
 ## Production Handoff
 
 Project the confirmed plan only through the runtime's authoritative

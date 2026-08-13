@@ -12,12 +12,22 @@
 4. The runtime refreshes expiring access before capability requests and never
    exposes tokens to Skills, scripts, frontend state, or run JSON.
 
+Jogg online TTS and Avatar requests consume JoggAI API Credits. OAuth connection
+proves authorization, not a sufficient credit balance. When no supported quota
+response is available, report that credit confirmation is still required; do not
+invent a balance. Preserve and surface a rejected submission's upstream credit
+error without switching providers.
+
+Before any paid submission, require an explicit Voice ID copied by the user. If
+the confirmed Storyboard contains an Avatar shot, also require an explicit Avatar
+ID. Missing IDs enter `waiting_media_profile`; never select the first catalog
+item, use an implicit service-default voice, or submit paid work.
+
 ## Shot Audio
 
 These steps apply only to shots without Avatar output.
 
-1. Resolve a selected voice from the catalog, or omit `voice_id` for the service
-   default when the Jogg TTS endpoint permits it.
+1. Use the explicit Voice ID confirmed in the production summary.
 2. Write a `submitting` checkpoint, then submit TTS with a stable idempotency key.
 3. Persist the returned `task_id` and poll the Task until terminal.
 4. Download the transient audio and optional subtitle URL immediately.
@@ -32,8 +42,9 @@ These steps apply only to shots without Avatar output.
    embedded audio stream from that downloaded MP4 as the final narration and as
    the measured shot duration. Composite the MP4 visual stream muted; no
    separate Shot Audio file exists for the same shot.
-4. A missing selected voice is `waiting_avatar_confirmation`; never fall back to
-   a separate TTS request or Avatar audio mode.
+4. A missing explicit Voice ID or explicit Avatar ID is
+   `waiting_media_profile`; never fall back to a separate TTS request or Avatar
+   audio mode.
 
 ## ASR
 
@@ -55,11 +66,12 @@ with the same idempotency identity according to the server error. A missing
 
 ## Local Media
 
-Local Media is a pre-submission alternative selected explicitly in Settings.
+Local Media is a pre-submission alternative selected explicitly by the user.
 macOS uses the managed native speech bridge; Windows uses Edge TTS and managed
-offline ASR. These local speech paths do not provide Avatar rendering. Avatar
-generation always requires the authorized Jogg Task and Artifact APIs. Outputs
-remain under the unique project workspace.
+offline ASR. When the confirmed Storyboard contains Avatar shots, the runtime
+also requires its managed local Avatar driver and configured local Avatar
+resources. Local outputs remain under the unique project workspace and do not
+consume JoggAI API Credits.
 
 Never switch a run to Local Media after any Jogg Task, Operation, Artifact, or
 historical video checkpoint exists. Such a run remains a Jogg reconciliation

@@ -32,6 +32,13 @@ shots must not share the same primary query.
 
 ## Retrieval And Selection
 
+Automatic retrieval requires a configured Pexels API Key. Check it after the
+Storyboard establishes an actual B-roll need and before paid media submission.
+When required footage is not already present, validate the saved key before any
+paid Jogg submission. If the key is missing, invalid, or cannot be verified,
+stop at the resumable checkpoint and provide the Pexels settings link. Do not
+invent footage, remove the B-roll shot, or continue with an unrelated provider.
+
 Index multiple shots with up to four concurrent Pexels searches. Then process
 shots in Storyboard order:
 
@@ -55,8 +62,11 @@ resumable checkpoint when retrieval fails.
 ## Audio
 
 B-roll is muted by default. A conversational request may enable reduced source
-audio for selected shots without another search or download. This release does
-not add a fixed audio switch to the editor. Narration remains the primary audio.
+audio for selected shots without another search or download. After the user
+names the affected shots, invoke `broll-audio` for each one; use `--enable` with
+a volume no greater than `0.35`, or `--disable` to restore silent B-roll. This
+release does not add a fixed audio switch to the editor. Narration remains the
+primary audio.
 
 ## User Replacement
 

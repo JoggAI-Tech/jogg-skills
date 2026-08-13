@@ -65,11 +65,13 @@ Smart Video uses:
 | --- | --- | --- |
 | `voice.catalog.list` | none | visible voices |
 | `avatar.catalog.list` | none | visible avatars |
-| `audio.tts.synthesize` | `text`, optional `voice_id` | Task with audio `url`, optional `subtitle_url` |
+| `audio.tts.synthesize` | `text`, API-optional `voice_id` | Task with audio `url`, optional `subtitle_url` |
 | `audio.asr.transcribe` | `audio_artifact_id` | Task with transcript `url` |
 | `avatar.speech.generate` | `avatar_id` and exactly one input mode | Task with video `url` |
 
-Omit `voice_id` to use the Space-visible TTS default. Avatar text mode requires
+The underlying TTS API permits omitting `voice_id` to use the Space-visible
+default. Smart Video must not use that API default: its production workflow
+requires the explicit Voice ID confirmed by the user. Avatar text mode requires
 `text` and `voice_id`; audio mode requires `audio_artifact_id` and excludes text.
 Optional fields are `avatar_source`, `aspect_ratio`, `screen_style`, `caption`,
 and `video_name`.
