@@ -1,4 +1,4 @@
-# Smart Video 0.8.16 Installation
+# Smart Video 0.8.17 Installation
 
 Smart Video supports macOS and Windows from one plugin. The plugin contains its
 Skill documents, authoring references, and branding. Runtime code is installed
@@ -90,8 +90,8 @@ When the editor reports missing local Avatar resources, open
 `https://docs.jogg.ai/avatar-resources` and choose a presenter, or run one of:
 
 ```bash
-npx --yes @joggai/smartvideo@0.1.9 resources install classroom-presenter
-npx --yes @joggai/smartvideo@0.1.9 resources install office-presenter
+npx --yes @joggai/smartvideo@0.1.10 resources install classroom-presenter
+npx --yes @joggai/smartvideo@0.1.10 resources install office-presenter
 ```
 
 The installer uses the same Avatar Engine npm package on macOS and Windows. It

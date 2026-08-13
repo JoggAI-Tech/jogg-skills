@@ -1,20 +1,20 @@
 {
   "schema": "smartvideo_plugin_runtime_bom_v1",
-  "plugin_version": "0.8.16",
+  "plugin_version": "0.8.17",
   "aggregate": {
     "name": "@joggai/smartvideo",
-    "version": "0.1.9"
+    "version": "0.1.10"
   },
   "packages": {
     "@joggai/smartvideo-avatar": "0.1.3",
     "@joggai/smartvideo-editor": "0.1.1",
     "@joggai/smartvideo-registry": "0.1.0",
     "@joggai/smartvideo-renderer": "0.1.2",
-    "@joggai/smartvideo-runtime": "0.1.7",
+    "@joggai/smartvideo-runtime": "0.1.8",
     "@joggai/smartvideo-speech": "0.1.0"
   },
   "packaged_assets": {
-    "owner": "@joggai/smartvideo-runtime@0.1.7",
+    "owner": "@joggai/smartvideo-runtime@0.1.8",
     "font": "assets/fonts/albert-sans/AlbertSans.ttf",
     "bgm_manifest": "assets/video_studio_bgm/manifest.json",
     "bgm_track_count": 10
@@ -35,7 +35,7 @@
   "distribution": {
     "mode": "npm_registry",
     "registry": "https://registry.npmjs.org/",
-    "package": "@joggai/smartvideo@0.1.9",
+    "package": "@joggai/smartvideo@0.1.10",
     "upstream_cli": "@joggai/smartvideo-cli@0.0.7"
   },
   "avatar_execution": "jogg_remote_or_managed_local",
@@ -58,8 +58,8 @@
         "inference_bundled": false
       },
       "install_commands": {
-        "classroom-presenter": "npx --yes @joggai/smartvideo@0.1.9 resources install classroom-presenter",
-        "office-presenter": "npx --yes @joggai/smartvideo@0.1.9 resources install office-presenter"
+        "classroom-presenter": "npx --yes @joggai/smartvideo@0.1.10 resources install classroom-presenter",
+        "office-presenter": "npx --yes @joggai/smartvideo@0.1.10 resources install office-presenter"
       },
       "managed_root": "~/.codex/smartvideo/resources/avatar-packs"
     }

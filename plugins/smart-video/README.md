@@ -1,14 +1,14 @@
 # Smart Video
 
-Release `0.8.16` provides the Smart Video Skill, editor workflow, media
+Release `0.8.17` provides the Smart Video Skill, editor workflow, media
 orchestration, MG references, and a pinned npm-managed runtime for macOS and
 Windows.
 
 The managed runtime is installed from these pinned public npm packages:
 
 - `@joggai/smartvideo-cli@0.0.7`
-- `@joggai/smartvideo@0.1.9`
-- `@joggai/smartvideo-runtime@0.1.7`
+- `@joggai/smartvideo@0.1.10`
+- `@joggai/smartvideo-runtime@0.1.8`
 - `@joggai/smartvideo-editor@0.1.1`
 - `@joggai/smartvideo-registry@0.1.0`
 - `@joggai/smartvideo-renderer@0.1.2`
@@ -16,7 +16,7 @@ The managed runtime is installed from these pinned public npm packages:
 - `@joggai/smartvideo-avatar@0.1.3`
 - `@joggai/smartvideo-avatar-engine@0.1.1` (installed on demand)
 
-`bootstrap` installs `@joggai/smartvideo@0.1.9` into the user's managed Smart
+`bootstrap` installs `@joggai/smartvideo@0.1.10` into the user's managed Smart
 Video runtime. npm resolves the remaining pinned packages from that aggregate
 package. The plugin contains no npm tarballs and requires no source checkout.
 
@@ -29,8 +29,8 @@ The optional presenter packs can be installed, updated, and removed independentl
 `~/.codex/smartvideo/resources/avatar-packs/`:
 
 ```bash
-npx --yes @joggai/smartvideo@0.1.9 resources install classroom-presenter
-npx --yes @joggai/smartvideo@0.1.9 resources install office-presenter
+npx --yes @joggai/smartvideo@0.1.10 resources install classroom-presenter
+npx --yes @joggai/smartvideo@0.1.10 resources install office-presenter
 ```
 
 Each resource command atomically installs or upgrades the managed Avatar driver

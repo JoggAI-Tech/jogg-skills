@@ -155,7 +155,7 @@ class SmartVideoCompactEchartsReferenceTests(unittest.TestCase):
         self.assertEqual([path.name for path in files], ["scene-template-map.json"])
 
         catalog = json.loads(files[0].read_text(encoding="utf-8"))
-        self.assertEqual(catalog["version"], "semantic_scene_catalog")
+        self.assertEqual(catalog["version"], "semantic_mg_reference_mapping")
         self.assertEqual(catalog["scene_count"], 72)
         self.assertEqual(catalog["template_count"], 54)
         for scene in catalog["mappings"]:

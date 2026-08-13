@@ -44,6 +44,23 @@ class SmartVideoSlideArtDirectionTest(unittest.TestCase):
             ],
         }
 
+    @staticmethod
+    def _base_master() -> str:
+        return """## Slide Visual System
+
+### Visual Language
+- Style: Editorial Grid / Magazine
+
+### Palette
+| Role | Hex |
+| --- | --- |
+| Primary | `#2457D6` |
+| Highlight | `#F0C419` |
+| Background | `#FAFAF8` |
+| Foreground | `#171717` |
+| Danger | `#B42318` |
+"""
+
     def test_builder_uses_versioned_art_direction_contract(self) -> None:
         self.assertEqual(self.builder.SCHEMA_ID, "smart-video.slide-master-input.v2")
         self.assertEqual(self.builder.MASTER_SCHEMA_ID, "smart-video.slide-design-master.v2")
@@ -75,24 +92,10 @@ class SmartVideoSlideArtDirectionTest(unittest.TestCase):
     def test_art_direction_is_embedded_in_master_with_its_hash(self) -> None:
         art_direction = self._art_direction()
         payload = {"video_id": "video-01", "art_direction": art_direction}
-        base_master = """## Slide Visual System
-
-### Visual Language
-- Style: Editorial Grid / Magazine
-
-### Palette
-| Role | Hex |
-| --- | --- |
-| Primary | `#2457D6` |
-| Highlight | `#F0C419` |
-| Background | `#FAFAF8` |
-| Foreground | `#171717` |
-| Danger | `#B42318` |
-"""
         master = self.builder.compose_master(
             payload,
             {"version": "test"},
-            base_master,
+            self._base_master(),
             "Editorial Grid / Magazine",
             [],
         )
@@ -103,6 +106,37 @@ class SmartVideoSlideArtDirectionTest(unittest.TestCase):
         self.assertIn(f'"art_direction_sha256":"{expected_hash}"', master)
         self.assertIn("## Slide Art Direction", master)
         self.assertIn("`shot-03`: Resolve the supplied process", master)
+
+    def test_portrait_master_uses_the_confirmed_canvas_and_safe_area(self) -> None:
+        payload = {
+            "video_id": "video-01",
+            "brief": {"aspect_ratio": "9:16"},
+            "art_direction": self._art_direction(),
+        }
+        master = self.builder.compose_master(
+            payload,
+            {"version": "test"},
+            self._base_master(),
+            "Editorial Grid / Magazine",
+            [],
+        )
+
+        self.assertIn('"aspect_ratio":"9:16"', master)
+        self.assertIn('"canvas_px":{"height":1920,"width":1080}', master)
+        self.assertIn('"safe_area_px":{"bottom":96,"left":54,"right":54,"top":96}', master)
+        self.assertIn("fixed 9:16 video canvas at 1080x1920", master)
+
+    def test_rgba_palette_roles_are_composited_against_background(self) -> None:
+        self.assertEqual(
+            self.builder.normalize_palette_color(
+                "rgba(255, 0, 0, 0.5)",
+                "Accent",
+                background="#000000",
+            ),
+            "#800000",
+        )
+        with self.assertRaisesRegex(self.builder.BuildError, "requires an opaque background"):
+            self.builder.normalize_palette_color("rgba(0, 0, 0, 0.5)", "Background")
 
 
 if __name__ == "__main__":

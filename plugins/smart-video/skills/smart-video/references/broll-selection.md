@@ -41,13 +41,14 @@ shots in Storyboard order:
    verified subject-safe crop for the target canvas; do not stretch it.
 3. Reject excluded concepts and known irrelevant categories using provider-owned
    titles, descriptions, tags, and keywords.
-4. Reject provider assets already selected by another shot.
+4. Prefer a different provider asset for each shot. Reuse one only when adjacent
+   confirmed shots intentionally require the same observable footage.
 5. Reject clips that cannot cover measured shot duration without looping.
 6. Download only from approved provider domains.
 7. Serially download the first candidate that succeeds for each shot.
 
 Keep only preview metadata for other qualified candidates; do not download them.
-Do not silently reuse a source,
+Record intentional reuse in the selection result. Do not silently reuse a source,
 loop a short clip, or invent a local fallback. Return `blocked_broll` with its
 resumable checkpoint when retrieval fails.
 

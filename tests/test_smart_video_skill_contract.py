@@ -215,6 +215,15 @@ class SmartVideoSkillContractTest(unittest.TestCase):
             self.assertIn(required, text)
         self.assertIn("Do not insert media merely to satisfy a diversity ratio", text)
 
+    def test_new_runs_use_planned_targeting_and_confirmed_canvas(self) -> None:
+        skill = _read(SKILL)
+        orchestration = _read(REFERENCES / "content-orchestration.md")
+
+        self.assertIn("--avatar-mode planned", skill)
+        self.assertIn("planning_authority: confirmed_storyboard", orchestration)
+        self.assertIn("`16:9`, `9:16`", orchestration)
+        self.assertIn("target_aspect_ratio", orchestration)
+
     def test_planning_handoff_uses_the_canonical_projector_and_public_contract(self) -> None:
         skill = _read(SKILL)
         orchestration = _read(REFERENCES / "content-orchestration.md")

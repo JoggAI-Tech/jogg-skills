@@ -9,7 +9,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1] / "assets" / "semantic-mg-references"
 MAPPING_PATH = ROOT / "scene-template-map.json"
-PUBLIC_CATALOG_VERSION = "semantic_scene_catalog"
+PUBLIC_CATALOG_VERSION = "semantic_mg_reference_mapping"
 
 
 def load_mapping() -> dict[str, Any]:

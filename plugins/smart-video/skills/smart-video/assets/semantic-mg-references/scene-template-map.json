@@ -1,5 +1,5 @@
 {
-  "version": "semantic_scene_catalog",
+  "version": "semantic_mg_reference_mapping",
   "mode": "direct_slide_with_echarts_hints",
   "contract": {
     "semantic_planning_responsibility": "information structure, scene_id, and timing intent",
