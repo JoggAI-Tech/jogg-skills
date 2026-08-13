@@ -101,7 +101,8 @@ For another supported pattern, use `official-example` with pure JSON option data
 - Keep `transition_at_s` inside the active window and before
   `stable_hold_start_ratio * duration_seconds`.
 - Use `$mg-*` color tokens; never use literal colors or themes.
-- Keep labels inside the `96px` horizontal and `64px` vertical safe area.
+- Keep labels inside the MASTER safe area: `96px` horizontal / `64px` vertical
+  for `16:9`, or `54px` horizontal / `96px` vertical for `9:16`.
 - Use a transparent chart surface; the shared `.mg-backdrop` handles composition.
 - Use one to eight series and at most 1,000 array items; aggregate before authoring.
 - Keep the option below 64 KB.

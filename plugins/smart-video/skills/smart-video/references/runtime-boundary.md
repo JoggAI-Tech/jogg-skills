@@ -49,19 +49,21 @@ runtime injects the trusted local ECharts adapter during project creation.
 run. Do not invent new author endpoints or require capabilities that are absent
 from the installed npm.
 
-## Avatar Targeting
+## Canvas And Composition
 
-The current npm command surface exposes only `none`, `opening`,
-`opening_closing`, and `all`. These select no shots, the first shot, the first and
-last shots, or every shot; they do not derive targets from `shot_type`.
+For new production, pass `--avatar-mode planned`. The runtime derives Avatar,
+B-roll, and Slide targets independently from each confirmed `shot_type`; it must
+not infer or restrict their positions from a whole-video mode. Preserve the
+confirmed shot IDs, order, count, types, and durations. `production_format` only
+advertises whether the legacy renderer needs Slide capability: `broll_html` when
+any Slide exists, otherwise `broll`.
 
-Before `run`, compare the mode's exact target set with the shots typed
-`avatar_only`, `avatar_broll`, or `avatar_html`. Use the first exact match in the
-canonical order `none`, `opening`, `opening_closing`, `all`, and pass that mode
-explicitly through `--avatar-mode`. A mismatch is
-`unsupported_avatar_targeting` and must stop before any paid request. Do not use a
-broader mode, mutate run state, remove generated Avatar assets later, or claim the
-result validates the planned shot types.
+The runtime must consume the confirmed `aspect_ratio` for canvas dimensions,
+Slide capture, B-roll orientation/crop, Avatar generation, captions, preview, and
+rendering. It must also consume optional `avatar_placement` on `avatar_html` and
+`avatar_broll`; absence means default lower-right. Legal ratios and positions are
+executed directly rather than blocked or substituted. Slide avoidance is design
+guidance and must not become a hard runtime rejection gate.
 
 ## Network
 

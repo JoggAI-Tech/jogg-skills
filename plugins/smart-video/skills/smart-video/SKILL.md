@@ -32,8 +32,9 @@ palette, chart type, or Slide strategy.
 2. Run `preflight` and use only its returned `settings_url` and runtime facts.
 3. Create a new `workspace`. Reuse `--work-dir` only when explicitly requested.
 4. Build the Brief from the topic, source boundary, audience, language, tone,
-   target duration, and B-roll availability. Use the requested duration; when no
-   duration is given, default to `180` seconds. Wait for Brief confirmation.
+   target duration, aspect ratio, and B-roll availability. Accept `16:9` or
+   `9:16`. Use the requested duration; when no duration is given, default to
+   `180` seconds. Wait for Brief confirmation.
 5. Follow [content-orchestration.md](references/content-orchestration.md) to create
    the hidden outline, complete script, six supported shot types, B-roll retrieval
    intent, and source-bound Communication Intent and Visual Intent for every
@@ -54,13 +55,13 @@ palette, chart type, or Slide strategy.
    planning document. Every Slide uses the same MASTER and follows
    [slide-design.md](references/slide-design.md). After authoritative projection,
    author each eligible declarative ECharts spec and attach it as
-   `shot.html_design.echarts_mg_spec` before `run`.
-9. Before `run` or any paid request, derive the exact Avatar shot IDs from
-   `avatar_only`, `avatar_broll`, and `avatar_html`. Select the first exact match
-   in the canonical order `none`, `opening`, `opening_closing`, `all`, then pass
-   it to `run` as `--avatar-mode "<derived_avatar_mode>"`. If no mode matches, stop with
-   `unsupported_avatar_targeting`; do not reorder shots, change shot types, or
-   generate extra Avatars. Then invoke `run` with the completed production plan.
+   `shot.html_design.echarts_mg_spec` before `run`. PiP Avatars default to the
+   runtime's lower-right position. Store `avatar_placement` only when the user
+   requests another position; deleting that field restores the default.
+9. Before `run` or any paid request, preserve the confirmed shot IDs, order,
+   types, and durations, then pass `--avatar-mode planned`. The runtime derives
+   Avatar, B-roll, and Slide targets independently from every shot's `shot_type`.
+   Then invoke `run` with the completed production plan.
    New ECharts Slides are validated and materialized by the trusted runtime during
    project creation. A plan with ordinary HTML/SVG Slides stops at `waiting_html`.
 10. For each pending ordinary HTML/SVG Slide, use
@@ -88,6 +89,16 @@ Use exactly these internal types:
 
 Shot type controls runtime composition. Slide render mode is independently
 `html_svg` or `echarts`. Do not invent combined types such as `avatar_echarts`.
+
+The six supported shot types are freely composable. Any type may appear at any
+position, in any order, any number of times, next to the same type, or not at all.
+Do not impose opening/closing placement, adjacency, sequence, ratio, coverage,
+diversity, minimum-count, or maximum-count rules. Choose each shot independently
+from its communication need and preserve the confirmed Storyboard exactly.
+
+`production_format` is only a coarse legacy runtime capability flag. Use
+`broll_html` when any shot contains a Slide and `broll` otherwise. It must never
+select, rewrite, reorder, or remove a shot type; `shot_type` remains authoritative.
 
 ## Slide Production
 
@@ -125,7 +136,7 @@ bash "<plugin-root>/scripts/smart-video.sh" workspace
 bash "<plugin-root>/scripts/smart-video.sh" run \
   --topic "How artificial intelligence changes manufacturing" \
   --duration-seconds 180 \
-  --avatar-mode "<derived_avatar_mode>" \
+  --avatar-mode planned \
   --planning-file "<workspace_dir>/plans/production-plan.json" \
   --work-dir "<workspace_dir>"
 bash "<plugin-root>/scripts/smart-video.sh" status --run-id "sv-..."
@@ -139,7 +150,7 @@ bash "<plugin-root>/scripts/smart-video.sh" refresh-broll --run-id "sv-..."
 bash "<plugin-root>/scripts/smart-video.sh" render --run-id "sv-..."
 ```
 
-Derive Avatar mode from the confirmed shot types, not from approximate user
+Derive media targets from confirmed shot types, not from approximate user
 wording. Explicit Avatar and Voice IDs win. Never invent an unavailable profile.
 
 ## Recovery

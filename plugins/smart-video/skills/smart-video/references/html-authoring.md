@@ -48,8 +48,12 @@ Use one `main.ai-mg-layer` root, one sibling `.mg-backdrop`, and one sibling
 - Use only `var(--mg-font-display)`, `var(--mg-font-body)`, or
   `var(--mg-font-mono)` for font families.
 - Do not redefine `--mg-*` variables or hardcode colors.
-- Keep essential content at least `64px` from top and bottom and `96px` from left
-  and right.
+- Use the locked MASTER safe area: for `16:9`, keep essential content at least
+  `64px` from top/bottom and `96px` from left/right; for `9:16`, keep it at least
+  `96px` from top/bottom and `54px` from left/right.
+- For `avatar_html`, treat the final Avatar region as authoring guidance and keep
+  essential information clear of it. Do not make this a hard post-authoring
+  rejection gate.
 
 ## Safety
 

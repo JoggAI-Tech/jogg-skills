@@ -59,7 +59,9 @@ either authority.
 
 ## Safe Area
 
-Every 16:9 Slide keeps essential content inside:
+Every Slide uses the safe area from its locked MASTER.
+
+For `16:9` at `1920x1080`:
 
 ```text
 top: 64px
@@ -70,10 +72,21 @@ left: 96px
 
 Use these as content insets, not as a visible frame.
 
-For `avatar_html`, the runtime places the Avatar above the Slide at its fixed
-lower-right position. Keep the primary claim, critical values, and essential
-relationship outside that region. Do not draw an Avatar placeholder, move the
-Avatar, or add a second geometry contract. B-roll creates no additional safe area.
+For `9:16` at `1080x1920`:
+
+```text
+top: 96px
+right: 54px
+bottom: 96px
+left: 54px
+```
+
+Use the `avatar_html` shot's final Avatar placement. A missing
+`avatar_placement` means the runtime's default lower-right region; a present field
+is the user's requested override. Keep the primary claim, critical values, and
+essential relationship outside that region during authoring, but do not turn this
+guidance into a hard post-authoring rejection gate. Do not draw an Avatar
+placeholder. B-roll creates no additional safe area.
 
 ## Composition Profiles
 

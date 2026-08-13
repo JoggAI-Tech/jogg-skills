@@ -28,12 +28,16 @@ The public Brief contains:
 - evidence boundary and explicit unknowns;
 - visual tone expressed as audience-facing qualities;
 - target duration;
+- aspect ratio, displayed as `16:9` or `9:16`;
 - B-roll availability.
 
 Persist these as `goal`, `audience`, `starting_knowledge`, `language`,
 `evidence_boundary`, `explicit_unknowns`, `visual_tone`,
-`target_duration_seconds`, and `broll_availability`. Add `aspect_ratio` to the
-private MASTER input. Preserve any additional confirmed source fields unchanged.
+`target_duration_seconds`, `aspect_ratio`, and `broll_availability`. Accept only
+`16:9` or `9:16`; default to `16:9` when the user does not specify one. Display
+the selected value in the public Brief and let the user revise it before Brief
+confirmation. Preserve the confirmed value unchanged in the private MASTER input
+and production plan.
 
 After the Storyboard is confirmed, derive one concise private `design_domain`
 from the confirmed Brief, complete script, and Slide set. It names the actual
@@ -72,35 +76,35 @@ Do not insert media merely to satisfy a diversity ratio. Preserve a user-locked
 type. The requested duration is a planning target; measured output media controls
 the final timeline without stretching speech or adding silent filler.
 
-Derive the required Avatar target set from the following contract. Compare modes
-in `canonical_mode_order` and select the first exact set match. This narrowest-mode
-rule resolves equivalent sets in one- and two-shot videos.
-
-<!-- avatar-targeting-contract:start -->
-```json
-{
-  "source_shot_types": ["avatar_only", "avatar_broll", "avatar_html"],
-  "canonical_mode_order": ["none", "opening", "opening_closing", "all"],
-  "mode_targets": {
-    "none": [],
-    "opening": ["first"],
-    "opening_closing": ["first", "last"],
-    "all": ["all"]
-  },
-  "failure_code": "unsupported_avatar_targeting"
-}
-```
-<!-- avatar-targeting-contract:end -->
-
-If no mode is an exact match, stop before production. Never approximate by
-adding, removing, reordering, or relabeling shots.
+Treat the six types as independent per-shot decisions. Any type may appear at
+any position, in any order, any number of times, adjacent to itself, or be absent.
+Do not enforce opening or closing placement, sequence patterns, type ratios,
+coverage quotas, diversity targets, or minimum/maximum counts. A confirmed
+Storyboard is authoritative: never add, remove, split, merge, reorder, renumber,
+relabel, or rescale its shots during production projection.
 
 ## B-roll Retrieval
 
 For `broll_only`, `avatar_broll`, and `broll_html`, reuse the existing strategy in
 [broll-selection.md](broll-selection.md). Produce two to four ordered English
 queries with visible subject, action, and setting, plus `must_include`, `exclude`,
-and `search_language: en`. B-roll remains supporting material.
+`search_language: en`, and `target_aspect_ratio` equal to the whole video. B-roll
+remains supporting material.
+
+## Avatar Placement
+
+Apply PiP placement to `avatar_html` and `avatar_broll`. When `avatar_placement`
+is absent, use the runtime's default lower-right region. When `avatar_placement`
+is present, preserve the user-requested supported region or normalized bounding
+box exactly. To restore the default, delete `avatar_placement`.
+
+For `avatar_html`, direct the Slide to keep its primary claim, critical values,
+essential relationship, subtitles, and selected-aspect-ratio safe area clear of
+the final Avatar region. This is composition guidance, not a post-authoring hard
+rejection gate. Rebuild only that Slide when its placement changes; preserve its
+narration, shot type, and timing. For `avatar_broll`, change only the compositing
+position; it does not regenerate B-roll. `avatar_only` remains full-frame and has
+no PiP placement.
 
 ## Slide Intents
 
@@ -206,6 +210,21 @@ Project the confirmed plan only through the runtime's authoritative
 `build_smart_video_planning_payload(...)` path. Do not hand-build aliases. The
 public production object uses `scene_groups[].shots[]` with `shot_type`, not
 `type`, and retains the confirmed shot order, narration, and duration.
+
+Preserve the selected `aspect_ratio` and every user-provided `avatar_placement` in
+the production plan. These are execution inputs, not visual suggestions. Legal
+`16:9`, `9:16`, and supported Avatar positions proceed through the matching npm
+execution path; never substitute another ratio or position.
+
+Mark this projection with `planning_authority: confirmed_storyboard`. Derive
+Avatar targets from `avatar_only`, `avatar_broll`, and `avatar_html`; B-roll
+targets from `broll_only`, `avatar_broll`, and `broll_html`; and Slide targets
+from `avatar_html`, `broll_html`, and `html_only`. These sets are independent.
+Run new production with `--avatar-mode planned`.
+
+Set the coarse `production_format` to `broll_html` when at least one confirmed
+shot contains a Slide; otherwise set it to `broll`. This compatibility field
+does not describe the whole video's composition and cannot override `shot_type`.
 
 Every Slide-bearing shot must contain the current semantic director fields and a
 stable `clip_id`. An ordinary HTML/SVG Slide uses this private visual reference:

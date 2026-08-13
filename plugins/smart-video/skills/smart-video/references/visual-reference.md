@@ -20,7 +20,7 @@ fields are required; preserve any additional confirmed fields unchanged:
     "audience": "Confirmed audience",
     "starting_knowledge": "What the audience already knows",
     "language": "Confirmed language",
-    "aspect_ratio": "16:9",
+    "aspect_ratio": "16:9 or 9:16",
     "evidence_boundary": "Confirmed source boundary",
     "explicit_unknowns": ["An unsupported conclusion that must not be implied"],
     "design_domain": "language learning education",
@@ -49,6 +49,11 @@ Copy `<workspace_dir>/plans/slide-art-direction.json` into `art_direction`
 unchanged. Its `video_id` must match the MASTER input. Its ordered `slides[]`
 must contain exactly one entry for every Slide-bearing shot and must match the
 MASTER input's Slide order and `shot_id` values.
+
+Use the confirmed aspect ratio unchanged. The builder emits `1920x1080` with a
+`96px` horizontal / `64px` vertical safe area for `16:9`, or `1080x1920` with a
+`54px` horizontal / `96px` vertical safe area for `9:16`. Do not derive one ratio
+from the other by scaling or cropping the completed Slide.
 
 Each `slides[]` item contains at least the following fields. Preserve additional
 source objects, evidence, structured data, and bindings unchanged:

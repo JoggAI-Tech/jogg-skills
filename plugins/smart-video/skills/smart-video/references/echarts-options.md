@@ -54,7 +54,8 @@ several series share one table:
 ## Layout
 
 - Use `grid.containLabel:true`.
-- Keep the grid inside the `96px` horizontal and `64px` vertical safe area.
+- Keep the grid inside the MASTER safe area: `96px` horizontal / `64px` vertical
+  for `16:9`, or `54px` horizontal / `96px` vertical for `9:16`.
 - Reduce ticks or widen the grid before rotating labels.
 - Use a legend only for multiple named series.
 - Label only points that matter to the conclusion.

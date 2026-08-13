@@ -52,6 +52,18 @@ REQUIRED_MASTER_SECTIONS = {
 SLIDE_SHOT_TYPES = {"avatar_html", "broll_html", "html_only"}
 RENDER_MODES = {"html_svg", "echarts"}
 SEMANTIC_TIMELINE_PHASES = {"establish", "relate", "focus", "resolve"}
+CANVAS_PROFILES = {
+    "16:9": {
+        "width": 1920,
+        "height": 1080,
+        "safe_area_px": {"top": 64, "right": 96, "bottom": 64, "left": 96},
+    },
+    "9:16": {
+        "width": 1080,
+        "height": 1920,
+        "safe_area_px": {"top": 96, "right": 54, "bottom": 96, "left": 54},
+    },
+}
 RUNTIME_PROFILE_STYLE_MAP = {
     # Archive, print, and historically textured visual languages.
     "Retro-Futurism": "archival_documentary",
@@ -429,8 +441,8 @@ def validate_input(value: Any) -> dict[str, Any]:
         require_string(brief[field], f"input.brief.{field}")
     require_string_list(brief["explicit_unknowns"], "input.brief.explicit_unknowns", allow_empty=True)
     require_positive_number(brief["target_duration_seconds"], "input.brief.target_duration_seconds")
-    if brief["aspect_ratio"] != "16:9":
-        fail("input.brief.aspect_ratio must be 16:9")
+    if brief["aspect_ratio"] not in CANVAS_PROFILES:
+        fail("input.brief.aspect_ratio must be 16:9 or 9:16")
     canonical_bytes(brief)
     slides = payload["slides"]
     if not isinstance(slides, list) or not slides:
@@ -687,10 +699,17 @@ def format_slide_visual_system(
         ("Border", "Border"),
         ("Danger", "Destructive"),
     )
+    background = normalize_palette_color(
+        require_string(colors.get("Background"), "color search result.Background"),
+        "Background",
+    )
     palette_lines = ["| Role | Hex |", "| --- | --- |"]
     for role, field in palette_roles:
-        color = require_string(colors.get(field), f"color search result.{field}").upper()
-        _hex_to_rgb(color, f"{field} color")
+        color = normalize_palette_color(
+            require_string(colors.get(field), f"color search result.{field}"),
+            field,
+            background=background,
+        )
         palette_lines.append(f"| {role} | `{color}` |")
     anti_patterns = require_string(reasoning.get("Anti_Patterns"), "reasoning rule.Anti_Patterns")
     return "\n".join(
@@ -778,6 +797,36 @@ def _hex_to_rgb(value: str, path: str) -> tuple[int, int, int]:
     if not re.fullmatch(r"#[0-9A-F]{6}", normalized):
         fail(f"UI UX Pro Max {path} must be a six-digit hex color")
     return tuple(int(normalized[index:index + 2], 16) for index in (1, 3, 5))
+
+
+def normalize_palette_color(
+    value: str,
+    path: str,
+    *,
+    background: str | None = None,
+) -> str:
+    normalized = value.strip().upper()
+    if re.fullmatch(r"#[0-9A-F]{6}", normalized):
+        return normalized
+    rgba = re.fullmatch(
+        r"RGBA\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*"
+        r"(0(?:\.\d+)?|1(?:\.0+)?)\s*\)",
+        normalized,
+    )
+    if not rgba:
+        fail(f"UI UX Pro Max {path} must be a supported CSS color")
+    if background is None:
+        fail(f"UI UX Pro Max {path} RGBA color requires an opaque background")
+    background_rgb = _hex_to_rgb(background, "background color")
+    foreground_rgb = tuple(int(rgba.group(index)) for index in (1, 2, 3))
+    if any(channel > 255 for channel in foreground_rgb):
+        fail(f"UI UX Pro Max {path} must be a supported CSS color")
+    alpha = float(rgba.group(4))
+    composed = tuple(
+        round(foreground * alpha + backdrop * (1 - alpha))
+        for foreground, backdrop in zip(foreground_rgb, background_rgb)
+    )
+    return "#" + "".join(f"{channel:02X}" for channel in composed)
 
 
 def _blend(start: str, end: str, end_weight: float) -> str:
@@ -917,6 +966,10 @@ def compose_master(
     input_hash = sha256_bytes(canonical_bytes(payload))
     master_id = f"sv-master-{input_hash[:16]}"
     runtime_profile = runtime_visual_style_profile(base_master, ui_ux_style_name)
+    brief = payload.get("brief")
+    aspect_ratio = brief["aspect_ratio"] if isinstance(brief, dict) else "16:9"
+    canvas_profile = CANVAS_PROFILES[aspect_ratio]
+    safe_area = canvas_profile["safe_area_px"]
     metadata = {
         "schema_id": MASTER_SCHEMA_ID,
         "version": MASTER_VERSION,
@@ -925,7 +978,12 @@ def compose_master(
         "input_sha256": input_hash,
         "art_direction_sha256": sha256_bytes(canonical_bytes(payload["art_direction"])),
         "private_dependency_version": inventory["version"],
-        "safe_area_px": {"top": 64, "right": 96, "bottom": 64, "left": 96},
+        "aspect_ratio": aspect_ratio,
+        "canvas_px": {
+            "width": canvas_profile["width"],
+            "height": canvas_profile["height"],
+        },
+        "safe_area_px": safe_area,
         "runtime_visual_style_profile": runtime_profile,
     }
     return "\n".join(
@@ -948,7 +1006,7 @@ def compose_master(
             "",
             "## Slide Production Constraints",
             "",
-            "- Design for a fixed 16:9 video canvas, not a website or application.",
+            f"- Design for a fixed {aspect_ratio} video canvas at {canvas_profile['width']}x{canvas_profile['height']}, not a website or application.",
             "- Use one primary visual focus and a clear reading order for each shot.",
             "- Use only source-authorized visible copy, facts, values, units, and relationships.",
             "- Author ordinary Slides with HTML, CSS, and inline SVG only.",
@@ -960,12 +1018,12 @@ def compose_master(
             "",
             "## Safe Area",
             "",
-            "- Top: 64px",
-            "- Right: 96px",
-            "- Bottom: 64px",
-            "- Left: 96px",
+            f"- Top: {safe_area['top']}px",
+            f"- Right: {safe_area['right']}px",
+            f"- Bottom: {safe_area['bottom']}px",
+            f"- Left: {safe_area['left']}px",
             "",
-            "For avatar_html, keep the primary claim, critical values, and essential relationship outside the runtime-owned lower-right Avatar region. Do not draw an Avatar placeholder or change Avatar geometry.",
+            "For avatar_html, use the final Avatar region. Missing avatar_placement means the runtime's default lower-right placement; a conversational user override replaces it. Keep essential information outside that region during authoring, but do not use this guidance as a hard post-authoring rejection gate. Do not draw an Avatar placeholder.",
             "",
             "## Composition Profiles",
             "",
