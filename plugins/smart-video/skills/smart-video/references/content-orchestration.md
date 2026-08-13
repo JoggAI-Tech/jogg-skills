@@ -1,43 +1,62 @@
 # Content Orchestration
 
-This is the content-planning contract for new Smart Video runs. Internal
-schema identifiers are implementation details; do not expose them as product
-versions or ask users to choose one.
+This reference owns the path from source material to a confirmed Smart Video
+Storyboard and private production plan. It does not choose colors, typography,
+layout, or animation values.
 
 ## Pipeline
 
 ```text
-topic and references
-  -> compact public Brief
-  -> user confirmation
-  -> hidden outline + semantic shot skeleton
-  -> section-batched narration and visual strategy
-  -> user confirmation with subtitle choice
-  -> HTML-ready semantic requests for information-layer segments
-  -> Smart Video production payload
+topic and sources
+  -> compact Brief
+  -> Brief confirmation
+  -> hidden outline and complete script
+  -> shot strategy and timed segments
+  -> B-roll retrieval intent plus Slide intents
+  -> complete public Storyboard
+  -> Storyboard confirmation
+  -> whole-video MASTER input and production plan
 ```
 
-The npm-managed content-planning pipeline is authoritative. Its host adapter is the
-only boundary into the existing Smart Video project payload.
+## Brief
 
-## Brief And Hidden Outline
+The public Brief contains:
 
-Normalize topic, references, audience, tone, language, and target duration.
-Generate only the compact public Brief before confirmation.
+- goal;
+- audience and starting knowledge;
+- language;
+- evidence boundary and explicit unknowns;
+- visual tone expressed as audience-facing qualities;
+- target duration;
+- aspect ratio, displayed as `16:9` or `9:16`;
+- B-roll availability.
 
-```text
-confirmed Brief revision N -> hidden outline revision N -> storyboard binds both
-```
+Persist these as `goal`, `audience`, `starting_knowledge`, `language`,
+`evidence_boundary`, `explicit_unknowns`, `visual_tone`,
+`target_duration_seconds`, `aspect_ratio`, and `broll_availability`. Accept only
+`16:9` or `9:16`; default to `16:9` when the user does not specify one. Display
+the selected value in the public Brief and let the user revise it before Brief
+confirmation. Preserve the confirmed value unchanged in the private MASTER input
+and production plan.
 
-A Brief edit before confirmation does not generate an outline. After confirmation,
-a changed Brief invalidates its previous outline and Storyboard. Reject stale
-expected revisions before a model call. Expose only the public Brief view; never
-expose the outline, revisions, raw prompts, or private orchestration.
+After the Storyboard is confirmed, derive one concise private `design_domain`
+from the confirmed Brief, complete script, and Slide set. It names the actual
+audience domain used for UI UX Pro Max product classification, such as `language
+learning education`, `financial analysis`, or `healthcare training`; it is not a
+style, palette, layout, or customer choice. Keep it hidden and write it only to
+the private MASTER input's Brief object. If the confirmed content does not support
+one unambiguous domain, stop with `design_domain_undefined`; do not guess or use a
+generic product category.
 
-## Script And Shot Orchestration
+Do not expose implementation fields. A Brief revision invalidates its previous
+hidden outline, script, Storyboard, and MASTER input. Never continue from stale
+confirmed content.
 
-Plan the complete semantic shot skeleton before finalizing section narration.
-Shots use exactly one strategy:
+## Script And Shot Plan
+
+Create the complete outline before finalizing narration. Every shot has a stable
+ID, title, purpose, narration, planned duration, one `shot_type`, and timed visual
+segments. Use exactly:
 
 - `avatar_only`
 - `broll_only`
@@ -46,174 +65,226 @@ Shots use exactly one strategy:
 - `broll_html`
 - `html_only`
 
-Every shot has a purpose, planned duration, final narration, selected strategy,
-alternatives, selection reason, and timed visual segments. Boundaries follow a
-complete information action rather than an arbitrary timer. Shots may exceed 15
-seconds and are protected only by a hidden 60-second safety limit. TTS-measured
-actual duration later replaces planned duration on the final timeline.
+Choose a type from the communication need:
 
-Once accepted, the orchestration is authoritative. Runtime normalization and
-voice-duration hydration preserve every shot's `shot_type`, `scene_role`, order,
-and independent `clip_id`. Adjacent `html_only`, `broll_html`, and `avatar_html`
-shots are valid. The runtime must not insert presenter-only or B-roll-only shots
-to satisfy a diversity ratio; diversity remains a planning preference, and an
-explicit user edit overrides that preference.
+- Avatar establishes human presence, trust, emphasis, or direct instruction.
+- B-roll supplies concrete real-world context or evidence.
+- A Slide explains information structure that footage or a presenter cannot show clearly.
+- Combined types are valid only when both media layers contribute distinct meaning.
 
-`avatar_html` requires avatar and Slide segments. `broll_html` requires B-roll
-and Slide segments. `html_only` has no avatar or B-roll dependency and uses the
-layer order `html, captions`. Present these three types to users as `Avatar +
-Slide`, `B-roll + Slide`, and `Slide Only`. Choose `html_only` for self-contained comparisons,
-timelines, processes, data relationships, systems, maps, evidence, or structured
-highlights when footage and presenter presence add no meaning. Do not use it for
-connective narration. Only HTML segments enter the semantic-to-visual handoff.
+Do not insert media merely to satisfy a diversity ratio. Preserve a user-locked
+type. The requested duration is a planning target; measured output media controls
+the final timeline without stretching speech or adding silent filler.
 
-## Public Storyboard Contract
+Treat the six types as independent per-shot decisions. Any type may appear at
+any position, in any order, any number of times, adjacent to itself, or be absent.
+Do not enforce opening or closing placement, sequence patterns, type ratios,
+coverage quotas, diversity targets, or minimum/maximum counts. A confirmed
+Storyboard is authoritative: never add, remove, split, merge, reorder, renumber,
+relabel, or rescale its shots during production projection.
 
-Project the public Storyboard from the existing shot plan without another model
-call. Before displaying it, verify that the complete plan satisfies every explicit
-media requirement in the confirmed Brief; for example, a Brief that requires
-Slides cannot produce an all-Avatar or all-B-roll Storyboard. Each displayed shot
-must include:
+## B-roll Retrieval
 
-1. Shot number and a readable title from its existing purpose.
-2. The user-facing type mapped from the exact production `shot_type`.
-3. The current planned duration, never a fixed 5-second or 15-second display value.
-4. The complete narration script, never a summary or excerpt.
+For `broll_only`, `avatar_broll`, and `broll_html`, reuse the existing strategy in
+[broll-selection.md](broll-selection.md). Produce two to four ordered English
+queries with visible subject, action, and setting, plus `must_include`, `exclude`,
+`search_language: en`, and `target_aspect_ratio` equal to the whole video. B-roll
+remains supporting material.
 
-Keep visual intent, visual segments, B-roll search intent, and Slide semantics in
-the private planning bundle. They remain available to the Skill's authoring and
-production phases but are not fields in the public Storyboard.
+## Avatar Placement
 
-Use exactly these mappings:
+Apply PiP placement to `avatar_html` and `avatar_broll`. When `avatar_placement`
+is absent, use the runtime's default lower-right region. When `avatar_placement`
+is present, preserve the user-requested supported region or normalized bounding
+box exactly. To restore the default, delete `avatar_placement`.
 
-| Internal type | User-facing type |
-| --- | --- |
-| `avatar_only` | `Avatar Only` |
-| `broll_only` | `B-roll Only` |
-| `avatar_broll` | `Avatar + B-roll` |
-| `avatar_html` | `Avatar + Slide` |
-| `broll_html` | `B-roll + Slide` |
-| `html_only` | `Slide Only` |
+For `avatar_html`, direct the Slide to keep its primary claim, critical values,
+essential relationship, subtitles, and selected-aspect-ratio safe area clear of
+the final Avatar region. This is composition guidance, not a post-authoring hard
+rejection gate. Rebuild only that Slide when its placement changes; preserve its
+narration, shot type, and timing. For `avatar_broll`, change only the compositing
+position; it does not regenerate B-roll. `avatar_only` remains full-frame and has
+no PiP placement.
 
-Show `Subtitles: No / Yes` after all shots and default it to `No`. Brief and
-Storyboard confirmations are independent. A confirmation applies only to the
-last complete public checkpoint shown to the user. An incomplete Storyboard
-cannot be confirmed, and production cannot start before complete Storyboard
-confirmation.
+## Slide Intents
 
-After confirmation, project the same shot types, order, scripts, and planned
-durations into production. Do not silently rewrite them for diversity, break up
-consecutive Slide shots by inserting Avatar or B-roll, or let runtime defaults
-replace confirmed types. If a confirmed shot cannot be produced, identify that
-shot and ask for a decision instead of silently degrading it.
+For `avatar_html`, `broll_html`, and `html_only`, the same director call that
+chooses the shot type emits two source-bound objects. Do not add a separate model
+call.
 
-## B-roll Intent
+### Communication Intent
 
-Every B-roll segment provides two to four ordered English stock-footage queries.
-The first is most specific; later queries relax context without changing the
-subject. Each describes a visible subject, action, setting, and known place or
-period. Do not use narration sentences, abstract claims, or camera jargon.
+Require:
 
-The payload also includes:
+- `viewer_before`;
+- `viewer_after`;
+- `communication_operation`, such as explain, compare, prove, demonstrate,
+  correct, warn, summarize, or instruct;
+- exact source-authorized facts, entities, steps, evidence, and structured data;
+- relationships among those objects;
+- expected viewer response;
+- exact narration, evidence, data, shot, segment, and time bindings.
 
-- `must_include`: visible concepts that shape retrieval;
-- `exclude`: wrong subjects, formats, geography, or periods;
-- `search_language: en` for provider compatibility.
+Use `communication_operation` for the operation. Keep `required_facts` and
+`relationships` as non-empty arrays, and keep `expected_viewer_response` explicit.
+The `bindings` object must contain the exact shot narration, `shot_id`, non-empty
+`segment_ids`, and an increasing `time_range_seconds` with `start` and `end`.
+Include evidence and data identifiers or source objects when they apply; do not
+invent empty identifiers for unavailable evidence.
 
-Avoid duplicate adjacent primary queries during planning, but treat this as a
-local diagnostic rather than a whole-Storyboard failure. Retrieval and replacement
-behavior is defined in [broll-selection.md](broll-selection.md).
+### Visual Intent
 
-## Single-Shot Edits
+Require:
 
-Accept natural-language edits to one shot's type, duration, script, or visual
-intent. Replan only the changed shot and lock a user-selected type. Preserve every
-other shot's ID, type, script, order, and planned duration. A visual-only edit
-preserves narration exactly. Changing a non-Slide type to `Avatar + Slide`,
-`B-roll + Slide`, or `Slide Only` creates an HTML-ready narration proposal for
-that shot only and requires user confirmation before replacement. A B-roll edit
-regenerates ordered search intent for that shot only.
+- `render_mode`: `html_svg` or `echarts`;
+- one `primary_focus`;
+- visual encoding of the source-bound relationship;
+- `information_priority`;
+- `presentation_order`;
+- a narration-anchored `semantic_timeline`;
+- simplicity rules stating what to remove or subordinate;
+- a complete final-frame requirement;
+- the same source and timing bindings as Communication Intent.
 
-After any shot edit, show the complete updated Storyboard again, including the
-subtitle choice, and wait for a new Storyboard confirmation before production.
+The Visual Intent `bindings` object must contain the same `shot_id`,
+`segment_ids`, `time_range_seconds`, and every additional source or evidence
+binding. Except for Communication Intent's narration-only field, the two binding
+objects must be byte-equivalent after canonicalization. Preserve all additional
+source-bound fields from both intents. The MASTER builder consumes each complete
+object rather than projecting a reduced summary.
 
-## HTML-Ready Gate
+Build `semantic_timeline` from the exact shot narration. Use
+`basis: narration_relative`, one or more ordered `cues`, and
+`stable_hold_start_ratio`. Every cue contains a unique `cue_id`, an exact
+continuous `narration_anchor`, the semantic `visual_target`, one phase from
+`establish`, `relate`, `focus`, or `resolve`, and a `start_ratio` from 0 to 1.
+Place cues in spoken order and set each ratio from its anchor position in the
+narration. Do not compress later ideas into the opening seconds. Start the stable
+final hold from 0.75 to 0.9 after the final cue.
 
-Every HTML segment must satisfy:
+Visual Intent describes meaning and hierarchy, not appearance. It must not choose
+a template, palette, font, coordinates, components, CSS, SVG paths, ECharts
+options, easing, or transition duration. The semantic timeline identifies when
+spoken ideas become eligible to appear; the authoring layer chooses the finite
+visual transition.
 
-- the information task is highlights, compare, timeline, process, data,
-  systems, maps, or evidence;
-- the narration binding is an exact meaningful substring of narration;
-- one primary claim is present;
-- required entities, relations, evidence, or structured data are present;
-- the HTML window is at least 2.5 seconds and remains inside its shot;
-- semantic input contains no palette, layout, motion, font, typography, or
-  template instruction.
+If the script cannot support a clear intent, return `needs_script_revision` or
+remove the Slide. Never invent content to keep the shot type.
 
-Do not invent facts to make a shot eligible. Use a non-HTML strategy or return
-`needs_script_revision` when the source cannot support a concrete information
-object.
+## ECharts Gate
 
-## Handoff
+Use `echarts` only when exact structured data is itself the evidence and a chart
+materially improves understanding of a trend, comparison, ranking, distribution,
+correlation, hierarchy, geography, network, or flow. Preserve labels, values,
+units, denominators, order, uncertainty, nodes, links, coordinates, and nulls.
 
-After confirmation, emit one `HtmlGenerationRequest` per HTML segment with
-stable shot/segment IDs, segment-relative timing, source-bound semantic content,
-shot type, and background rule. Content planning must not choose a palette,
-composition, visual profile, or animation. Continue with
-[visual-reference.md](visual-reference.md).
+An isolated number, decorative statistic, unbound relationship, incomplete data,
+or a chart that adds no clarity is not eligible. Choose `html_svg` only when it is
+independently the correct expression, never as a fallback after an ECharts failure.
 
-Project the confirmed bundle with
-`build_smart_video_planning_payload(planning, orchestration, visual_decisions, ...)`.
-This is the only authoritative projector. Never manually translate the Storyboard
-or guess key names. Keep the hidden outline, revisions, raw prompts, and private
-orchestration beside the plan rather than in frontend or project payloads.
+## Public Storyboard
 
-The projected public planning file uses these exact underscore keys:
+Display every shot with:
 
 ```text
-topic
-production_format
-target_duration_seconds
-selected_production_option
-producer_analysis
-production_requirement_document
-script_director
-script
-creative_plan
-director_document
-scene_groups
+### Shot 03 - How Stress Changes Meaning
+Type: Avatar + Slide
+Duration: 10s
+Script: Content words usually carry the stress that reveals the sentence meaning.
+Slide Design: Emphasized content words in one sentence; Relationship: content words versus function words; Order: sentence, contrast, rule.
 ```
 
-`script` is one aggregate narration string. It is never an object containing
-`shots`. `scene_groups` is a non-empty array; every `scene_groups[].shots[]` item
-is a complete shot object, never a shot ID. Each shot contains:
+For B-roll shots, add a similarly concise `B-roll` and `Purpose` line. Derive these
+lines from the existing structured plan without another model call. Do not expose
+raw intents, source IDs, queries, scene IDs, template IDs, MASTER details, render
+mode, chart type, or JSON.
+
+After all shots, display `Subtitles: No / Yes`, defaulting to `No`, and wait for
+confirmation. A confirmation applies only to the last complete checkpoint shown.
+After any shot edit, redisplay the complete Storyboard and request confirmation
+again.
+
+## Production Handoff
+
+Project the confirmed plan only through the runtime's authoritative
+`build_smart_video_planning_payload(...)` path. Do not hand-build aliases. The
+public production object uses `scene_groups[].shots[]` with `shot_type`, not
+`type`, and retains the confirmed shot order, narration, and duration.
+
+Preserve the selected `aspect_ratio` and every user-provided `avatar_placement` in
+the production plan. These are execution inputs, not visual suggestions. Legal
+`16:9`, `9:16`, and supported Avatar positions proceed through the matching npm
+execution path; never substitute another ratio or position.
+
+Mark this projection with `planning_authority: confirmed_storyboard`. Derive
+Avatar targets from `avatar_only`, `avatar_broll`, and `avatar_html`; B-roll
+targets from `broll_only`, `avatar_broll`, and `broll_html`; and Slide targets
+from `avatar_html`, `broll_html`, and `html_only`. These sets are independent.
+Run new production with `--avatar-mode planned`.
+
+Set the coarse `production_format` to `broll_html` when at least one confirmed
+shot contains a Slide; otherwise set it to `broll`. This compatibility field
+does not describe the whole video's composition and cannot override `shot_type`.
+
+Every Slide-bearing shot must contain the current semantic director fields and a
+stable `clip_id`. For current npm compatibility, its private visual reference is
+always:
+
+```json
+{
+  "reference_mode": "visual_recompose",
+  "fallback_automatic": false,
+  "free_generation_selected": true
+}
+```
+
+The semantic `scene_id` and a valid scene-owned `template_id` remain required by
+the current projector. Select them only from information shape and runtime
+support. They are compatibility locators and must not influence palette,
+typography, composition, components, or motion.
+
+Write the exact `runtime_visual_style_profile` object from the locked MASTER
+metadata to the whole-video planning document as `visual_style_profile`. This is
+the bridge from the MASTER palette to the existing npm `--mg-*` variables. Do not
+rewrite, approximate, or replace its values.
+
+Before projection, compile every Visual Intent `semantic_timeline.cues[]` item to
+the existing `mg_director.timeline[]` field for the same shot. Set `start_s` to
+`start_ratio * duration_seconds`, copy `visual_target` to `target`, copy only
+source-authorized screen text to `text`, and map phases deterministically:
 
 ```text
-id
-title
-narration
-duration_seconds
-shot_type
-scene_role
-visual_role
-broll_prompt
-asset_search_plan
-information_layer
-mg_director
-html_design
+establish -> reveal
+relate -> connect
+focus -> emphasize
+resolve -> resolve
 ```
 
-Use `shot_type`, never `type`. Do not substitute `producer`, `requirement`, or
-`director` for their canonical top-level documents. A Slide-capable shot also
-contains an enabled `information_layer`, the current `semantic_mg_director`
-contract with stable `clip_id`, semantic `scene_id`, `story_contract`,
-`information_object_plan`, `visual_reference`, `screen_slots`, timing and
-background rule, plus a matching `html_design.clip_id`. These remain private
-production inputs and are not added to the user-visible Storyboard.
+Keep cue order and three-decimal precision. The resulting
+`mg_director.timeline` must contain exactly one item per semantic cue. Stop if the
+projector drops, reorders, or changes these items; do not let the HTML author
+invent a replacement timeline.
 
-Save the projected object to `<workspace_dir>/plans/production-plan.json`, then
-pass that path to `run`. The runtime validates it before creating a project or
-submitting paid media. Treat `blocked_planning` as a resumable correction state:
-fix the exact reported JSON path and resume with the corrected planning file.
-Imported historical directors remain readable and are never migrated
-automatically.
+After authoritative projection, author every eligible ECharts spec from the
+locked MASTER and the preserved source-bound Visual Intent. Attach the declarative
+JSON object to its projected shot as `shot.html_design.echarts_mg_spec` before
+`run`. Do not replace the projector, alter the semantic director fields, or add
+model-authored JavaScript. The trusted runtime validates the spec and materializes
+its HTML during project creation.
+
+After projection, a new Slide must yield:
+
+```text
+authoring_context.authoring_mode = full_html_recompose_v1
+authoring_context.fidelity = adaptive
+authoring_context.reference_mode = visual_recompose
+```
+
+If it yields a strict reference checkpoint, the plan is inconsistent with this
+production path. Correct the plan before authoring. Do not submit
+`strong_reference_patch_v1` and do not use a template as fallback.
+
+Save the completed projection under the workspace `plans` directory and pass it
+to `run`. Only ordinary HTML/SVG Slides enter `waiting_html`; new ECharts Slides
+must already contain their spec. Fix an exact `blocked_planning` path in the same
+workspace; do not alter unrelated confirmed shots.

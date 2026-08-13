@@ -1,100 +1,208 @@
-# Visual Reference
+# Whole-Video Design MASTER
 
-This is the semantic-to-visual contract for new Smart Video HTML. The semantic
-director decides what the scene means; the bundled reference catalog supplies
-visual grammar. Internal schema identifiers are not user-facing modes.
+Generate one design MASTER after the Storyboard is confirmed and before any Slide
+is authored. The MASTER gives every Slide a shared visual language while leaving
+each shot free to express its own semantic relationship.
 
-## Planning Sequence
+## Input
 
-For each HTML segment:
+Write one private JSON input with this exact top-level shape. The shown Brief
+fields are required; preserve any additional confirmed fields unchanged:
 
-1. Build one story contract from authorized narration and semantic payload.
-2. Choose one scene ID by information shape.
-3. Build the information-object plan and reading order.
-4. Inspect only the three candidates mapped to that scene.
-5. Select one candidate and record a content-specific reason.
-6. Resolve one ratio-specific reference against content capacity.
-7. Compile the complete `authoring_context` before authoring.
-
-Use the plugin-root-relative catalog helper when discovery is needed:
-
-```bash
-python3 "<plugin-root>/skills/smart-video/scripts/find_mg_templates.py" search "timeline milestones" --limit 3 --json
+```json
+{
+  "schema_id": "smart-video.slide-master-input.v2",
+  "version": 2,
+  "video_id": "stable-video-id",
+  "project_name": "Readable project name",
+  "brief": {
+    "goal": "Confirmed outcome",
+    "audience": "Confirmed audience",
+    "starting_knowledge": "What the audience already knows",
+    "language": "Confirmed language",
+    "aspect_ratio": "16:9 or 9:16",
+    "evidence_boundary": "Confirmed source boundary",
+    "explicit_unknowns": ["An unsupported conclusion that must not be implied"],
+    "design_domain": "language learning education",
+    "visual_tone": "Confirmed audience-facing tone",
+    "target_duration_seconds": 60,
+    "broll_availability": "Confirmed availability and source boundary"
+  },
+  "script": "Complete confirmed narration",
+  "art_direction": {
+    "schema_id": "smart-video.slide-art-direction.v1",
+    "version": 1,
+    "video_id": "stable-video-id",
+    "whole_video": "Exact whole-video direction returned by $direct-slide-art",
+    "slides": [
+      {
+        "shot_id": "shot-04",
+        "design_direction": "Exact per-Slide direction returned by $direct-slide-art"
+      }
+    ]
+  },
+  "slides": []
+}
 ```
 
-Scene selection is semantic. Never select a scene because its color or sample
-copy looks attractive. Reference sample copy and facts are never authorized
-visible content.
+Copy `<workspace_dir>/plans/slide-art-direction.json` into `art_direction`
+unchanged. Its `video_id` must match the MASTER input. Its ordered `slides[]`
+must contain exactly one entry for every Slide-bearing shot and must match the
+MASTER input's Slide order and `shot_id` values.
 
-## Reference Resolution
+Use the confirmed aspect ratio unchanged. The builder emits `1920x1080` with a
+`96px` horizontal / `64px` vertical safe area for `16:9`, or `1080x1920` with a
+`54px` horizontal / `96px` vertical safe area for `9:16`. Do not derive one ratio
+from the other by scaling or cropping the completed Slide.
 
-The local resolver returns one of three modes:
+Each `slides[]` item contains at least the following fields. Preserve additional
+source objects, evidence, structured data, and bindings unchanged:
 
-- `strong_reference`: preserve the complete reference composition, component
-  relationships, hierarchy, SVG geometry, tokens, and motion. The author supplies
-  authorized replacements through `strong_reference_patch_v1`; the runtime owns
-  deterministic materialization.
-- `visual_recompose`: automatically retain the closest reference's visual
-  language, dominant components, and motion character while reflowing content
-  after every candidate in the semantic scene exceeds capacity.
-- `scene_reselected_reference`: replace a semantic mismatch with a stable
-  candidate under the correct scene and disclose the original template, selected
-  template, and reason.
+```json
+{
+  "shot_id": "shot-04",
+  "shot_type": "avatar_html",
+  "duration_seconds": 10,
+  "communication_intent": {
+    "viewer_before": "The viewer cannot distinguish the two concepts",
+    "viewer_after": "The viewer can distinguish the two concepts",
+    "communication_operation": "explain",
+    "required_facts": ["Exact source-authorized fact"],
+    "relationships": ["Concept A differs from concept B in the sourced way"],
+    "expected_viewer_response": "Apply the distinction to the next example",
+    "bindings": {
+      "narration": "Exact narration for this shot",
+      "shot_id": "shot-04",
+      "segment_ids": ["shot-04-segment-01"],
+      "time_range_seconds": {"start": 30, "end": 40}
+    }
+  },
+  "visual_intent": {
+    "render_mode": "html_svg",
+    "primary_focus": "One dominant relationship",
+    "information_priority": ["first", "second", "third"],
+    "presentation_order": ["establish", "relate", "conclude"],
+    "semantic_timeline": {
+      "basis": "narration_relative",
+      "cues": [
+        {
+          "cue_id": "shot-04-cue-01",
+          "narration_anchor": "Concept A",
+          "visual_target": "first concept",
+          "phase": "establish",
+          "start_ratio": 0.18
+        },
+        {
+          "cue_id": "shot-04-cue-02",
+          "narration_anchor": "Concept B",
+          "visual_target": "second concept and contrast",
+          "phase": "relate",
+          "start_ratio": 0.56
+        }
+      ],
+      "stable_hold_start_ratio": 0.82
+    },
+    "relationship": "comparison",
+    "simplicity": "Remove any element that does not explain the comparison",
+    "final_frame": "The complete comparison and conclusion remain visible",
+    "bindings": {
+      "shot_id": "shot-04",
+      "segment_ids": ["shot-04-segment-01"],
+      "time_range_seconds": {"start": 30, "end": 40}
+    }
+  }
+}
+```
 
-Automatic fallback does not require user confirmation. It first tries every
-candidate in the selected semantic scene, then uses `visual_recompose` when none
-fits. Automatic `visual_recompose` stays anchored to that reference and does not
-receive a free-generation style prompt. Free generation is a separate path used
-only after the user explicitly selects it; runtime records that consent privately
-as `free_generation_selected:true`. It is never entered because template
-selection or capacity handling failed. Compile visible content from the shot's
-story contract,
-information-object plan, screen slots, reading order, and timing rather than
-sending raw narration as layout copy.
+Every `narration_anchor` must be exact continuous text from the bound narration.
+Cues and `start_ratio` values follow that text's spoken order. The
+`stable_hold_start_ratio` begins only after the last cue and reserves the final
+readable frame. These fields are semantic timing authority, not visual styling.
 
-## Authoring Context
+Use the complete Brief, complete script, exact art direction, and every complete
+Slide intent. The builder binds all of them into the immutable input hash and
+preserves unknown source-bound Slide fields. Product classification uses only the
+explicit private `design_domain`; it never asks the search engine to guess a
+product category from the narration. Style refinement consumes the art director's
+whole-video and per-Slide directions together with the confirmed visual tone and
+Slide relationships. Do not build one MASTER per shot.
 
-After resolution, `authoring_context` is the only visual input. It contains:
+## Generation
 
-- effective template ID, ratio, reference mode, hash, and local path;
-- visual contract, `authoring_context.composition`, prompt, and `screen_slots`;
-- story contract, information-object plan, timing, layer order, and background
-  rule;
-- compact `strong_reference_patch_v1` contract for strict references;
-- template-switch audit fields and single-frame QA recommendation.
+Run:
 
-Full `reference_html` and semantic adaptation records remain private run state.
-Do not publish them through status responses, frontend state, stdout, or stderr.
-`apply-html` loads the trusted local source and materializes the compact patch.
+```bash
+python3 "<plugin-root>/skills/smart-video/scripts/build_slide_master.py" \
+  --input "<workspace_dir>/plans/slide-master-input.json" \
+  --output-dir "<workspace_dir>/design"
+```
 
-Do not reselect scene, template, palette, typography, composition, or motion after
-the context is compiled. Do not add a generic card grid, page zones, unrelated
-slide layout, or a second visual reference. In strict mode, project-wide style
-metadata cannot override reference tokens or visual language.
+The builder verifies the bundled private UI UX Pro Max inventory and data before
+generation. It performs no network request and does not load the public UI UX Pro
+Max Skill. It applies the UI UX Pro Max product reasoning, style, color,
+typography, and chart domains, then writes exactly one
+`<workspace_dir>/design/MASTER.md`. Its website `landing` result has no Slide
+design authority and is never emitted into the MASTER.
 
-## Capacity And Text Fit
+The builder may stop for malformed input, a missing or changed private dependency,
+an empty or zero-match core search, an unmapped runtime style, incomplete UI UX Pro
+Max output, absent chart guidance, or an inaccessible output path. It invalidates
+an existing output before regeneration, so a failed rebuild cannot leave an old
+MASTER available. It writes a temporary sibling and atomically replaces the final
+path only after the complete file is written; a failed write removes the partial
+temporary file. Report the exact issue. Do not reuse another video's MASTER and
+do not continue with a template, previous Visual System, or default palette.
 
-The capacity resolver uses object count, relations, screen-copy length, duration,
-and ratio. It keeps the selected strict reference when it fits, otherwise checks
-the other candidates owned by the same semantic scene. Strict references may
-hide only complete optional semantic units declared by the trusted catalog.
-When no strict candidate fits, routing switches automatically to
-`visual_recompose`; capacity is not diagnostic-only and no user confirmation is
-requested.
+## Authority
 
-Local Chromium measures the materialized copy. Wrap before shrinking and change
-only measured targets. Do not truncate, hide overflow, or invoke another model.
+The MASTER owns whole-video:
 
-## Background
+- palette and runtime semantic color mapping;
+- typographic roles and hierarchy;
+- spacing rhythm and density;
+- shape and material character;
+- line and depth character;
+- motion personality;
+- chart styling guidance;
+- fixed safe area and composition profiles.
 
-For `broll_html`, keep the evidence footage recognizable and apply the resolved
-opacity only to the full-canvas backdrop. For `avatar_html` and `html_only`, use
-an effectively opaque backdrop. Never apply backdrop opacity to content, the
-generated root, or the whole canvas.
+Communication Intent and Visual Intent own each shot's information, relationship,
+priority, reading order, simplification, and final meaning. Art Direction owns the
+original visual treatment without changing that meaning. The Slide designer
+combines all three authorities. It does not select a template or copy a source
+layout.
 
-## ECharts
+The MASTER contains only the fixed-canvas adaptation. Website structure, CTA,
+forms, navigation, breakpoints, remote fonts, hover, focus, and interaction output
+must not appear and cannot influence a Slide.
 
-ECharts is an implementation mode inside the selected scene. Use it only when
-the chosen reference supports it and a deterministic chart expresses authorized
-information faithfully. Continue with [echarts-authoring.md](echarts-authoring.md).
-ECharts does not create a parallel planner or visual style system.
+## Runtime Palette Bridge
+
+The metadata header contains an exact `runtime_visual_style_profile` derived from
+the UI UX Pro Max palette, an explicit complete mapping of bundled style names to
+the three current npm material profiles, and the current npm color contract. An
+unknown style name stops generation; there is no default profile. Write this object to
+the whole-video production plan as `visual_style_profile` without modification.
+
+The profile converts MASTER colors to:
+
+```text
+--mg-surface
+--mg-surface-recessed
+--mg-ink
+--mg-muted
+--mg-primary
+--mg-highlight
+--mg-danger
+--mg-outline
+```
+
+Slides use only these variables for colors. The current npm runtime supplies local
+font variables. UI UX Pro Max font names remain hierarchy guidance only when the
+font is not locally available; never download a font or author `@import`.
+
+## Locking
+
+Keep the generated bytes unchanged for the current video. Every Slide reads the
+same file. A single-shot visual edit does not rebuild it. Rebuild only when the
+confirmed Brief, complete script, Slide set, or art direction changes.

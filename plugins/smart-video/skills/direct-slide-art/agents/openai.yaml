@@ -1,0 +1,6 @@
+interface:
+  display_name: "Smart Video Slide Art Director"
+  short_description: "Creates whole-video and per-slide art direction"
+  default_prompt: "Use $direct-slide-art to turn a confirmed Smart Video storyboard into concise art direction."
+policy:
+  allow_implicit_invocation: false

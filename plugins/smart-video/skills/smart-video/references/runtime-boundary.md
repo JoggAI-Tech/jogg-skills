@@ -1,59 +1,90 @@
 # Runtime Boundary
 
-The plugin exports Smart Video projects into a local FrameVideo project. It
-does not import Podcastor at runtime.
+The installed npm packages are the execution layer. This Skill does not replace,
+patch, or bypass them.
+
+## Ownership
+
+The Skill owns:
+
+- Brief, script, shot strategy, and public Storyboard;
+- B-roll retrieval intent;
+- Communication Intent and Visual Intent;
+- the whole-video UI UX Pro Max MASTER;
+- direct HTML/CSS/inline SVG or declarative ECharts authoring.
+
+The npm runtime owns:
+
+- local service startup and settings;
+- planning projection and checkpoint state;
+- Jogg, local speech, Avatar, and B-roll execution;
+- `apply-html` validation plus pre-run ECharts validation and materialization;
+- Avatar/B-roll/Slide layer order and opacity application;
+- timeline assembly, editor state, preview, and final render.
 
 ## Local Components
 
-- FastAPI listens only on a free `127.0.0.1` port.
-- The launcher and `/api/v1/video-studio` share that origin.
-- The plugin cache is immutable. Configuration, managed dependencies, and run
-  state live under the current user's Smart Video home.
-- Every new video receives a unique workspace below the configured data root.
-  Reuse requires an explicit `--work-dir`.
-- The npm-managed Studio editor binds an ephemeral loopback port. It defaults to
-  English, can switch to Chinese, and may open an incomplete project for repair.
-- Explicit `framevideo.mode:"checkout"` plus `framevideo.root` enables a source
-  editor for development only.
-- `bootstrap` installs the exact bundled first-party npm tarballs into a staged
-  user runtime, verifies them, and activates them atomically. npm may resolve
-  ordinary third-party dependencies. No developer checkout or first-party npm
-  registry access is required.
-- Local Media uses the managed macOS speech bridge or Windows Edge TTS plus
-  offline ASR. Avatar generation always uses the authorized Jogg Task and
-  Artifact APIs. The npm Avatar package is a remote driver only and includes no
-  inference code or model. Preserved template resources remain independently
-  replaceable and are not materialized by the runtime.
+- The service and editor bind loopback ports.
+- Configuration, managed dependencies, and run state live outside the immutable
+  plugin cache.
+- Every new video uses a unique workspace unless the user explicitly requests an
+  existing one.
+- `bootstrap` installs the bundled first-party packages and their ordinary
+  dependencies into the managed user runtime.
+- The Skill's private UI UX Pro Max MASTER builder is local and uses no network.
 
-## Startup
+## Slide Compatibility
 
-Run `doctor`, then `bootstrap` only when dependencies are missing. `preflight`
-starts the server and verifies `/health` and `/settings`; only after readiness may
-the returned `settings_url` be shown. Never guess a loopback port before the
-server is healthy.
+The current runtime requires semantic scene and template locators to create an
+HTML checkpoint. For new MASTER-driven Slides, planning must set
+`visual_recompose`, `fallback_automatic:false`, and
+`free_generation_selected:true`, producing `full_html_recompose_v1`. The template
+is not a visual source in this mode.
 
-## Allowed Requests
+`apply-html` accepts a full custom Slide object for an ordinary HTML/SVG
+checkpoint. A new ECharts Slide has no such checkpoint: the Skill must attach its
+declarative spec as `shot.html_design.echarts_mg_spec` before `run`, and the
+runtime injects the trusted local ECharts adapter during project creation.
+`apply-echarts` is only for an existing registered checkpoint in a historical
+run. Do not invent new author endpoints or require capabilities that are absent
+from the installed npm.
 
-- Jogg OAuth2/OIDC and `/plugin/v1` through `JoggPluginClient`.
-- Pexels search/download only with configured BYOK and requested material.
-- FrameVideo Studio and renderer on loopback/local filesystem.
-- Package/browser installation during explicit `bootstrap`.
+## Avatar Targeting
 
-## Forbidden Requests
+New production uses `--avatar-mode planned`. The runtime derives the exact Avatar
+shot set from `avatar_only`, `avatar_broll`, and `avatar_html`, regardless of
+position or adjacency. It independently derives B-roll and Slide targets from
+their corresponding `shot_type` values. Historical import may continue to use
+legacy modes, but those modes must not constrain a new Storyboard.
 
-- Jogg Web Controllers, `/v2`, `X-Api-Key`, or provider-direct requests.
-- Podcastor remote API or source-repository imports.
-- Another render worker, cloud object store, external LLM, or remote renderer.
-- Runtime JavaScript or font CDNs.
+The confirmed Storyboard is the planning authority. Runtime normalization must
+preserve its shot IDs, order, count, types, and durations. `production_format`
+only advertises whether the legacy renderer needs Slide capability: `broll_html`
+when any Slide exists, otherwise `broll`.
 
-## Checkpoints
+The runtime must consume the confirmed `aspect_ratio` for canvas dimensions,
+Slide capture, B-roll orientation/crop, Avatar generation, captions, preview, and
+rendering. It must also consume optional `avatar_placement` on `avatar_html` and
+`avatar_broll`; absence means default lower-right. Legal ratios and positions are
+executed directly rather than blocked or substituted. Slide avoidance is design
+guidance and must not become a hard runtime rejection gate.
 
-Run state may store project/shot/Task IDs, compatibility Operation or Artifact
-IDs, local paths, FrameVideo fingerprint, stage, work ID, and local result URLs.
-It must not store bearer/refresh tokens, API keys, provider URLs, Task URLs,
-signed upload targets, or process command lines.
+## Network
 
-Existing Task IDs, downloaded audio, retained avatar video, approved HTML, and
-local work ID are authoritative. Missing downstream local artifacts may be
-rebuilt, but paid Jogg work is never resubmitted automatically. Editor access is
-independent of media completeness; final MP4 export remains strict.
+Allowed network activity is limited to the runtime's configured Jogg OAuth and
+`/plugin/v1` APIs plus configured B-roll providers. FrameVideo Studio and render
+operations stay on loopback or local files.
+
+Do not call provider-direct APIs, Jogg Web controllers, `/v2`, external LLMs,
+remote renderers, font CDNs, or runtime JavaScript sources.
+
+## Recovery
+
+Run state may store project, shot, Task, Artifact, compatibility operation, local
+media, and work IDs. It must not expose tokens, provider URLs, signed URLs, or
+process command lines.
+
+Existing Task IDs, idempotency keys, downloaded media, approved Slides, and local
+work IDs are authoritative. Resume known work and never resubmit paid media
+automatically. The editor may open an incomplete project; final rendering remains
+strict.

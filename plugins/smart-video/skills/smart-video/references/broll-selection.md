@@ -17,13 +17,18 @@ Every B-roll shot receives:
   ],
   "must_include": ["Japan", "real people"],
   "exclude": ["animation", "illustration", "unrelated geography"],
-  "search_language": "en"
+  "search_language": "en",
+  "target_aspect_ratio": "16:9"
 }
 ```
 
+Set `target_aspect_ratio` from the confirmed whole-video ratio. Use `16:9` for
+landscape and `9:16` for portrait; never assume landscape independently of the
+project.
+
 Queries are ordered. The first qualified candidate becomes the default, so the
-first query is specific and later queries are controlled fallbacks. Adjacent
-shots must not share the same primary query.
+first query is specific and later queries are controlled alternatives. Adjacent
+shots may share a primary query when they require the same observable footage.
 
 ## Retrieval And Selection
 
@@ -31,17 +36,19 @@ Index multiple shots with up to four concurrent Pexels searches. Then process
 shots in Storyboard order:
 
 1. Search only the configured Pexels video provider in this release.
-2. Normalize provider metadata and choose the nearest landscape/720p variant.
+2. Normalize provider metadata and prefer a native orientation matching the
+   target ratio. When no native match exists, accept only a candidate with a
+   verified subject-safe crop for the target canvas; do not stretch it.
 3. Reject excluded concepts and known irrelevant categories using provider-owned
    titles, descriptions, tags, and keywords.
-4. Reject provider assets already selected by another shot.
-5. Reject clips that cannot cover measured shot duration without looping.
-6. Download only from approved provider domains.
-7. Serially download the first candidate that succeeds for each shot.
+4. Reject clips that cannot cover measured shot duration without looping.
+5. Download only from approved provider domains.
+6. Serially download the first candidate that succeeds for each shot.
 
 Keep only preview metadata for other qualified candidates; do not download them.
-Do not silently reuse a source,
-loop a short clip, or invent a local fallback. Return `blocked_broll` with its
+The same provider asset may support multiple shots when it satisfies each shot's
+explicit retrieval intent. Do not loop a short clip or invent a local fallback.
+Return `blocked_broll` with its
 resumable checkpoint when retrieval fails.
 
 ## Audio

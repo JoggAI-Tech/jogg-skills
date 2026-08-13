@@ -1,0 +1,6127 @@
+{
+  "version": "semantic_scene_catalog",
+  "mode": "direct_slide_with_echarts_hints",
+  "contract": {
+    "semantic_planning_responsibility": "information structure, scene_id, and timing intent",
+    "ordinary_slide_visual_authority": "Direct Slide Art and locked MASTER",
+    "echarts_reference_responsibility": "compact chart layout and motion hints only",
+    "binding_key": "scene_id",
+    "ordinary_slides_require_template": false,
+    "echarts_candidates_per_scene": "one_or_two"
+  },
+  "scene_count": 72,
+  "template_count": 54,
+  "mappings": [
+    {
+      "scene_id": "before_after_transform",
+      "category_id": "compare",
+      "category_name": "Compare",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "benchmark_gap",
+      "category_id": "compare",
+      "category_name": "Compare",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "feature_matrix",
+      "category_id": "compare",
+      "category_name": "Compare",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "myth_vs_fact",
+      "category_id": "compare",
+      "category_name": "Compare",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "pros_and_limits",
+      "category_id": "compare",
+      "category_name": "Compare",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "quadrant_positioning",
+      "category_id": "compare",
+      "category_name": "Compare",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "ranked_comparison",
+      "category_id": "compare",
+      "category_name": "Compare",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "scenario_comparison",
+      "category_id": "compare",
+      "category_name": "Compare",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "split_verdict",
+      "category_id": "compare",
+      "category_name": "Compare",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "tradeoff_balance",
+      "category_id": "compare",
+      "category_name": "Compare",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "cohort_heatmap",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "cohort_heatmap--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "atlas-blue",
+          "layout": "full-width-stage",
+          "composition_name": "cohort-grid",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "cohort_heatmap--chart",
+            "scene_id": "cohort_heatmap",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "cohorts",
+              "periods",
+              "pattern"
+            ],
+            "data_shape": "matrix_values",
+            "motion": "heat_scan",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 4.983,
+                  "y": 5.54,
+                  "w": 46,
+                  "h": 28
+                },
+                "art": {
+                  "x": 5.198,
+                  "y": 35.811,
+                  "w": 90,
+                  "h": 57
+                },
+                "proof": {
+                  "x": 55.714,
+                  "y": 6.757,
+                  "w": 39,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 4.983,
+                    "y": 5.54,
+                    "w": 46,
+                    "h": 28
+                  },
+                  {
+                    "x": 55.714,
+                    "y": 6.757,
+                    "w": 39,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.103,
+                  "y": 69.42,
+                  "w": 86,
+                  "h": 23
+                },
+                "art": {
+                  "x": 5.144,
+                  "y": 4.853,
+                  "w": 90,
+                  "h": 54
+                },
+                "proof": {
+                  "x": 6.792,
+                  "y": 61.811,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.103,
+                    "y": 69.42,
+                    "w": 86,
+                    "h": 23
+                  },
+                  {
+                    "x": 6.792,
+                    "y": 61.811,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "heat_cells",
+              "cohort_labels",
+              "pattern_highlight"
+            ]
+          }
+        },
+        {
+          "template_id": "cohort_heatmap--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "kinetic-ivory",
+          "layout": "editorial-left",
+          "composition_name": "cohort-lens",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "cohort_heatmap--annotation",
+            "scene_id": "cohort_heatmap",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "cohorts",
+              "periods",
+              "pattern"
+            ],
+            "data_shape": "matrix_values",
+            "motion": "heat_scan",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.206,
+                  "y": 8.54,
+                  "w": 35,
+                  "h": 66
+                },
+                "art": {
+                  "x": 43.099,
+                  "y": 4.811,
+                  "w": 52,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 4.857,
+                  "y": 79.757,
+                  "w": 35,
+                  "h": 13
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.206,
+                    "y": 8.54,
+                    "w": 35,
+                    "h": 66
+                  },
+                  {
+                    "x": 4.857,
+                    "y": 79.757,
+                    "w": 35,
+                    "h": 13
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.266,
+                  "y": 68.42,
+                  "w": 86,
+                  "h": 25
+                },
+                "art": {
+                  "x": 6.072,
+                  "y": 4.853,
+                  "w": 88,
+                  "h": 56
+                },
+                "proof": {
+                  "x": 6.896,
+                  "y": 60.811,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.266,
+                    "y": 68.42,
+                    "w": 86,
+                    "h": 25
+                  },
+                  {
+                    "x": 6.896,
+                    "y": 60.811,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "heat_cells",
+              "cohort_labels",
+              "pattern_highlight"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "correlation_bubble",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "correlation_bubble--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "luminous-grid",
+          "layout": "full-width-stage",
+          "composition_name": "correlation-field",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "correlation_bubble--chart",
+            "scene_id": "correlation_bubble",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "x_measure",
+              "y_measure",
+              "relationship"
+            ],
+            "data_shape": "xy_bubbles",
+            "motion": "bubbles_plot",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.185,
+                  "y": 5.36,
+                  "w": 46,
+                  "h": 28
+                },
+                "art": {
+                  "x": 5.099,
+                  "y": 35.874,
+                  "w": 90,
+                  "h": 57
+                },
+                "proof": {
+                  "x": 55.857,
+                  "y": 6.838,
+                  "w": 39,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.185,
+                    "y": 5.36,
+                    "w": 46,
+                    "h": 28
+                  },
+                  {
+                    "x": 55.857,
+                    "y": 6.838,
+                    "w": 39,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.245,
+                  "y": 5.28,
+                  "w": 86,
+                  "h": 21
+                },
+                "art": {
+                  "x": 5.072,
+                  "y": 28.902,
+                  "w": 90,
+                  "h": 62
+                },
+                "proof": {
+                  "x": 6.896,
+                  "y": 92.874,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.245,
+                    "y": 5.28,
+                    "w": 86,
+                    "h": 21
+                  },
+                  {
+                    "x": 6.896,
+                    "y": 92.874,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "bubble_plot",
+              "trend_line",
+              "focus_bubble"
+            ]
+          }
+        },
+        {
+          "template_id": "correlation_bubble--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "atlas-blue",
+          "layout": "data-right",
+          "composition_name": "cluster-annotation",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "correlation_bubble--annotation",
+            "scene_id": "correlation_bubble",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "x_measure",
+              "y_measure",
+              "relationship"
+            ],
+            "data_shape": "xy_bubbles",
+            "motion": "bubbles_plot",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 64.408,
+                  "y": 8.36,
+                  "w": 31,
+                  "h": 68
+                },
+                "art": {
+                  "x": 5,
+                  "y": 4.874,
+                  "w": 56,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 64,
+                  "y": 81.838,
+                  "w": 31,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 64.408,
+                    "y": 8.36,
+                    "w": 31,
+                    "h": 68
+                  },
+                  {
+                    "x": 64,
+                    "y": 81.838,
+                    "w": 31,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.408,
+                  "y": 69.28,
+                  "w": 86,
+                  "h": 23
+                },
+                "art": {
+                  "x": 5,
+                  "y": 4.902,
+                  "w": 90,
+                  "h": 54
+                },
+                "proof": {
+                  "x": 7,
+                  "y": 61.874,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.408,
+                    "y": 69.28,
+                    "w": 86,
+                    "h": 23
+                  },
+                  {
+                    "x": 7,
+                    "y": 61.874,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "bubble_plot",
+              "trend_line",
+              "focus_bubble"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "distribution_and_outlier",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "distribution_and_outlier--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "signal-noir",
+          "layout": "data-left",
+          "composition_name": "distribution-field",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "distribution_and_outlier--chart",
+            "scene_id": "distribution_and_outlier",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "cluster",
+              "median",
+              "outlier"
+            ],
+            "data_shape": "distribution",
+            "motion": "scatter_settle",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 6.056,
+                  "y": 8.18,
+                  "w": 31,
+                  "h": 68
+                },
+                "art": {
+                  "x": 38.703,
+                  "y": 4.937,
+                  "w": 56,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 5.429,
+                  "y": 81.919,
+                  "w": 31,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.056,
+                    "y": 8.18,
+                    "w": 31,
+                    "h": 68
+                  },
+                  {
+                    "x": 5.429,
+                    "y": 81.919,
+                    "w": 31,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.876,
+                  "y": 5.14,
+                  "w": 86,
+                  "h": 23
+                },
+                "art": {
+                  "x": 4.784,
+                  "y": 35.951,
+                  "w": 90,
+                  "h": 57
+                },
+                "proof": {
+                  "x": 7.312,
+                  "y": 29.937,
+                  "w": 86,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.876,
+                    "y": 5.14,
+                    "w": 86,
+                    "h": 23
+                  },
+                  {
+                    "x": 7.312,
+                    "y": 29.937,
+                    "w": 86,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "distribution_dots",
+              "median_line",
+              "outlier_callout"
+            ]
+          }
+        },
+        {
+          "template_id": "distribution_and_outlier--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "kinetic-ivory",
+          "layout": "poster-offset-right",
+          "composition_name": "outlier-lens",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "distribution_and_outlier--annotation",
+            "scene_id": "distribution_and_outlier",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "cluster",
+              "median",
+              "outlier"
+            ],
+            "data_shape": "distribution",
+            "motion": "scatter_settle",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 56.739,
+                  "y": 7.36,
+                  "w": 38,
+                  "h": 43
+                },
+                "art": {
+                  "x": 5.297,
+                  "y": 4.874,
+                  "w": 49,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 56.571,
+                  "y": 77.838,
+                  "w": 38,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 56.739,
+                    "y": 7.36,
+                    "w": 38,
+                    "h": 43
+                  },
+                  {
+                    "x": 56.571,
+                    "y": 77.838,
+                    "w": 38,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 6.919,
+                  "y": 61.28,
+                  "w": 86,
+                  "h": 32
+                },
+                "art": {
+                  "x": 6.216,
+                  "y": 4.902,
+                  "w": 88,
+                  "h": 49
+                },
+                "proof": {
+                  "x": 6.688,
+                  "y": 55.874,
+                  "w": 86,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.919,
+                    "y": 61.28,
+                    "w": 86,
+                    "h": 32
+                  },
+                  {
+                    "x": 6.688,
+                    "y": 55.874,
+                    "w": 86,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "statement",
+            "support_components": [
+              "distribution_dots",
+              "median_line",
+              "outlier_callout"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "forecast_band",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "forecast_band--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "luminous-grid",
+          "layout": "full-width-stage",
+          "composition_name": "forecast-field",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "forecast_band--chart",
+            "scene_id": "forecast_band",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "history",
+              "range",
+              "outlook"
+            ],
+            "data_shape": "forecast_series",
+            "motion": "band_expand",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 4.92,
+                  "y": 5,
+                  "w": 46,
+                  "h": 28
+                },
+                "art": {
+                  "x": 5.198,
+                  "y": 36,
+                  "w": 90,
+                  "h": 57
+                },
+                "proof": {
+                  "x": 55.714,
+                  "y": 7,
+                  "w": 39,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 4.92,
+                    "y": 5,
+                    "w": 46,
+                    "h": 28
+                  },
+                  {
+                    "x": 55.714,
+                    "y": 7,
+                    "w": 39,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.04,
+                  "y": 5,
+                  "w": 68,
+                  "h": 24
+                },
+                "art": {
+                  "x": 5.144,
+                  "y": 32,
+                  "w": 90,
+                  "h": 61
+                },
+                "proof": {
+                  "x": 77.792,
+                  "y": 5,
+                  "w": 15,
+                  "h": 24
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.04,
+                    "y": 5,
+                    "w": 68,
+                    "h": 24
+                  },
+                  {
+                    "x": 77.792,
+                    "y": 5,
+                    "w": 15,
+                    "h": 24
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "history_line",
+              "confidence_band",
+              "scenario_lines"
+            ]
+          }
+        },
+        {
+          "template_id": "forecast_band--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "electric-cyan",
+          "layout": "data-right",
+          "composition_name": "forecast-range",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "forecast_band--annotation",
+            "scene_id": "forecast_band",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "history",
+              "range",
+              "outlook"
+            ],
+            "data_shape": "forecast_series",
+            "motion": "band_expand",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 64.143,
+                  "y": 8,
+                  "w": 31,
+                  "h": 68
+                },
+                "art": {
+                  "x": 5.099,
+                  "y": 5,
+                  "w": 56,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 63.857,
+                  "y": 82,
+                  "w": 31,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 64.143,
+                    "y": 8,
+                    "w": 31,
+                    "h": 68
+                  },
+                  {
+                    "x": 63.857,
+                    "y": 82,
+                    "w": 31,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 12.203,
+                  "y": 5,
+                  "w": 76,
+                  "h": 23
+                },
+                "art": {
+                  "x": 8.072,
+                  "y": 31,
+                  "w": 84,
+                  "h": 44
+                },
+                "proof": {
+                  "x": 11.896,
+                  "y": 78,
+                  "w": 76,
+                  "h": 17
+                },
+                "avoid_zones": [
+                  {
+                    "x": 12.203,
+                    "y": 5,
+                    "w": 76,
+                    "h": 23
+                  },
+                  {
+                    "x": 11.896,
+                    "y": 78,
+                    "w": 76,
+                    "h": 17
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "history_line",
+              "confidence_band",
+              "scenario_lines"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "multi_kpi_summary",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "multi_kpi_summary--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "chalkboard-lab",
+          "layout": "data-left",
+          "composition_name": "metric-constellation",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "multi_kpi_summary--chart",
+            "scene_id": "multi_kpi_summary",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "growth",
+              "retention",
+              "efficiency"
+            ],
+            "data_shape": "multi_metric",
+            "motion": "metric_cascade",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.993,
+                  "y": 7.64,
+                  "w": 31,
+                  "h": 68
+                },
+                "art": {
+                  "x": 38.703,
+                  "y": 5.126,
+                  "w": 56,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 5.429,
+                  "y": 82.162,
+                  "w": 31,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.993,
+                    "y": 7.64,
+                    "w": 31,
+                    "h": 68
+                  },
+                  {
+                    "x": 5.429,
+                    "y": 82.162,
+                    "w": 31,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.813,
+                  "y": 4.72,
+                  "w": 86,
+                  "h": 32
+                },
+                "art": {
+                  "x": 5.784,
+                  "y": 40.098,
+                  "w": 88,
+                  "h": 49
+                },
+                "proof": {
+                  "x": 7.312,
+                  "y": 92.126,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.813,
+                    "y": 4.72,
+                    "w": 86,
+                    "h": 32
+                  },
+                  {
+                    "x": 7.312,
+                    "y": 92.126,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "metric_tiles",
+              "health_signal",
+              "summary_line"
+            ]
+          }
+        },
+        {
+          "template_id": "multi_kpi_summary--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "atlas-blue",
+          "layout": "full-width-stage",
+          "composition_name": "metric-priority",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "multi_kpi_summary--annotation",
+            "scene_id": "multi_kpi_summary",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "growth",
+              "retention",
+              "efficiency"
+            ],
+            "data_shape": "multi_metric",
+            "motion": "metric_cascade",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 4.676,
+                  "y": 4.82,
+                  "w": 46,
+                  "h": 28
+                },
+                "art": {
+                  "x": 5.297,
+                  "y": 36.063,
+                  "w": 90,
+                  "h": 57
+                },
+                "proof": {
+                  "x": 55.571,
+                  "y": 7.081,
+                  "w": 39,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 4.676,
+                    "y": 4.82,
+                    "w": 46,
+                    "h": 28
+                  },
+                  {
+                    "x": 55.571,
+                    "y": 7.081,
+                    "w": 39,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 6.856,
+                  "y": 4.86,
+                  "w": 86,
+                  "h": 23
+                },
+                "art": {
+                  "x": 5.216,
+                  "y": 36.049,
+                  "w": 90,
+                  "h": 57
+                },
+                "proof": {
+                  "x": 6.688,
+                  "y": 30.063,
+                  "w": 86,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.856,
+                    "y": 4.86,
+                    "w": 86,
+                    "h": 23
+                  },
+                  {
+                    "x": 6.688,
+                    "y": 30.063,
+                    "w": 86,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "metric_tiles",
+              "health_signal",
+              "summary_line"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "part_to_whole",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "part_to_whole--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "electric-cyan",
+          "layout": "poster-center",
+          "composition_name": "donut-stage",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "part_to_whole--chart",
+            "scene_id": "part_to_whole",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "largest",
+              "remainder",
+              "whole"
+            ],
+            "data_shape": "parts",
+            "motion": "segments_fill",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 17.718,
+                  "y": 5.18,
+                  "w": 64,
+                  "h": 24
+                },
+                "art": {
+                  "x": 14.297,
+                  "y": 30.937,
+                  "w": 72,
+                  "h": 55
+                },
+                "proof": {
+                  "x": 27.571,
+                  "y": 88.919,
+                  "w": 44,
+                  "h": 7
+                },
+                "avoid_zones": [
+                  {
+                    "x": 17.718,
+                    "y": 5.18,
+                    "w": 64,
+                    "h": 24
+                  },
+                  {
+                    "x": 27.571,
+                    "y": 88.919,
+                    "w": 44,
+                    "h": 7
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 6.898,
+                  "y": 5.14,
+                  "w": 86,
+                  "h": 32
+                },
+                "art": {
+                  "x": 6.216,
+                  "y": 39.951,
+                  "w": 88,
+                  "h": 49
+                },
+                "proof": {
+                  "x": 6.688,
+                  "y": 91.937,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.898,
+                    "y": 5.14,
+                    "w": 86,
+                    "h": 32
+                  },
+                  {
+                    "x": 6.688,
+                    "y": 91.937,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "statement",
+            "support_components": [
+              "donut_segments",
+              "legend",
+              "dominant_share"
+            ]
+          }
+        },
+        {
+          "template_id": "part_to_whole--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "sticker-classroom",
+          "layout": "data-left",
+          "composition_name": "segment-detail",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "part_to_whole--annotation",
+            "scene_id": "part_to_whole",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "largest",
+              "remainder",
+              "whole"
+            ],
+            "data_shape": "parts",
+            "motion": "segments_fill",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 4.941,
+                  "y": 8.18,
+                  "w": 31,
+                  "h": 68
+                },
+                "art": {
+                  "x": 39.198,
+                  "y": 4.937,
+                  "w": 56,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 4.714,
+                  "y": 81.919,
+                  "w": 31,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 4.941,
+                    "y": 8.18,
+                    "w": 31,
+                    "h": 68
+                  },
+                  {
+                    "x": 4.714,
+                    "y": 81.919,
+                    "w": 31,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.061,
+                  "y": 69.14,
+                  "w": 86,
+                  "h": 23
+                },
+                "art": {
+                  "x": 5.144,
+                  "y": 4.951,
+                  "w": 90,
+                  "h": 54
+                },
+                "proof": {
+                  "x": 6.792,
+                  "y": 61.937,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.061,
+                    "y": 69.14,
+                    "w": 86,
+                    "h": 23
+                  },
+                  {
+                    "x": 6.792,
+                    "y": 61.937,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "donut_segments",
+              "legend",
+              "dominant_share"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "ranked_bar",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "ranked_bar--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "atlas-blue",
+          "layout": "diagram-left-rail",
+          "composition_name": "ranked-bars",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "ranked_bar--chart",
+            "scene_id": "ranked_bar",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "leader",
+              "middle",
+              "tail"
+            ],
+            "data_shape": "ranked_values",
+            "motion": "bars_rank",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 40.589,
+                  "y": 8,
+                  "w": 55,
+                  "h": 42
+                },
+                "art": {
+                  "x": 4.901,
+                  "y": 5,
+                  "w": 31,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 40.143,
+                  "y": 78,
+                  "w": 55,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 40.589,
+                    "y": 8,
+                    "w": 55,
+                    "h": 42
+                  },
+                  {
+                    "x": 40.143,
+                    "y": 78,
+                    "w": 55,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 6.529,
+                  "y": 5,
+                  "w": 33,
+                  "h": 67
+                },
+                "art": {
+                  "x": 42.928,
+                  "y": 5,
+                  "w": 51,
+                  "h": 80
+                },
+                "proof": {
+                  "x": 6.104,
+                  "y": 75,
+                  "w": 33,
+                  "h": 12
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.529,
+                    "y": 5,
+                    "w": 33,
+                    "h": 67
+                  },
+                  {
+                    "x": 6.104,
+                    "y": 75,
+                    "w": 33,
+                    "h": 12
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "horizontal_bars",
+              "rank_numbers",
+              "leader_note"
+            ]
+          }
+        },
+        {
+          "template_id": "ranked_bar--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "signal-noir",
+          "layout": "data-topline",
+          "composition_name": "leader-callout",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "ranked_bar--annotation",
+            "scene_id": "ranked_bar",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "leader",
+              "middle",
+              "tail"
+            ],
+            "data_shape": "ranked_values",
+            "motion": "bars_rank",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.812,
+                  "y": 5,
+                  "w": 48,
+                  "h": 24
+                },
+                "art": {
+                  "x": 4.802,
+                  "y": 32,
+                  "w": 90,
+                  "h": 61
+                },
+                "proof": {
+                  "x": 57.286,
+                  "y": 7,
+                  "w": 38,
+                  "h": 18
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.812,
+                    "y": 5,
+                    "w": 48,
+                    "h": 24
+                  },
+                  {
+                    "x": 57.286,
+                    "y": 7,
+                    "w": 38,
+                    "h": 18
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.692,
+                  "y": 72,
+                  "w": 86,
+                  "h": 21
+                },
+                "art": {
+                  "x": 4.856,
+                  "y": 5,
+                  "w": 90,
+                  "h": 61
+                },
+                "proof": {
+                  "x": 7.208,
+                  "y": 67,
+                  "w": 86,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.692,
+                    "y": 72,
+                    "w": 86,
+                    "h": 21
+                  },
+                  {
+                    "x": 7.208,
+                    "y": 67,
+                    "w": 86,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "horizontal_bars",
+              "rank_numbers",
+              "leader_note"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "single_kpi",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "single_kpi--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "electric-cyan",
+          "layout": "metric-monument",
+          "composition_name": "kpi-monument",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "single_kpi--chart",
+            "scene_id": "single_kpi",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "value",
+              "benchmark",
+              "meaning"
+            ],
+            "data_shape": "single_value",
+            "motion": "number_count",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.324,
+                  "y": 8.64,
+                  "w": 38,
+                  "h": 61
+                },
+                "art": {
+                  "x": 46,
+                  "y": 4.126,
+                  "w": 49,
+                  "h": 90
+                },
+                "proof": {
+                  "x": 5,
+                  "y": 79.162,
+                  "w": 38,
+                  "h": 14
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.324,
+                    "y": 8.64,
+                    "w": 38,
+                    "h": 61
+                  },
+                  {
+                    "x": 5,
+                    "y": 79.162,
+                    "w": 38,
+                    "h": 14
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.324,
+                  "y": 4.72,
+                  "w": 86,
+                  "h": 21
+                },
+                "art": {
+                  "x": 5,
+                  "y": 29.098,
+                  "w": 90,
+                  "h": 62
+                },
+                "proof": {
+                  "x": 7,
+                  "y": 93,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.324,
+                    "y": 4.72,
+                    "w": 86,
+                    "h": 21
+                  },
+                  {
+                    "x": 7,
+                    "y": 93,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "unit_label",
+              "benchmark_line",
+              "context_note"
+            ]
+          }
+        },
+        {
+          "template_id": "single_kpi--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "kinetic-ivory",
+          "layout": "data-topline",
+          "composition_name": "kpi-context",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "single_kpi--annotation",
+            "scene_id": "single_kpi",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "value",
+              "benchmark",
+              "meaning"
+            ],
+            "data_shape": "single_value",
+            "motion": "number_count",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.547,
+                  "y": 4.64,
+                  "w": 48,
+                  "h": 24
+                },
+                "art": {
+                  "x": 4.901,
+                  "y": 32.126,
+                  "w": 90,
+                  "h": 61
+                },
+                "proof": {
+                  "x": 57.143,
+                  "y": 7.162,
+                  "w": 38,
+                  "h": 18
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.547,
+                    "y": 4.64,
+                    "w": 48,
+                    "h": 24
+                  },
+                  {
+                    "x": 57.143,
+                    "y": 7.162,
+                    "w": 38,
+                    "h": 18
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.487,
+                  "y": 68.72,
+                  "w": 86,
+                  "h": 23
+                },
+                "art": {
+                  "x": 4.928,
+                  "y": 5.098,
+                  "w": 90,
+                  "h": 54
+                },
+                "proof": {
+                  "x": 7.104,
+                  "y": 62.126,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.487,
+                    "y": 68.72,
+                    "w": 86,
+                    "h": 23
+                  },
+                  {
+                    "x": 7.104,
+                    "y": 62.126,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "unit_label",
+              "benchmark_line",
+              "context_note"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "stacked_composition",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "stacked_composition--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "chalkboard-lab",
+          "layout": "data-right",
+          "composition_name": "stacked-stage",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "stacked_composition--chart",
+            "scene_id": "stacked_composition",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "starting_mix",
+              "change",
+              "ending_mix"
+            ],
+            "data_shape": "stacked_series",
+            "motion": "stack_shift",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 64.387,
+                  "y": 8.18,
+                  "w": 31,
+                  "h": 68
+                },
+                "art": {
+                  "x": 5,
+                  "y": 4.937,
+                  "w": 56,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 64,
+                  "y": 81.919,
+                  "w": 31,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 64.387,
+                    "y": 8.18,
+                    "w": 31,
+                    "h": 68
+                  },
+                  {
+                    "x": 64,
+                    "y": 81.919,
+                    "w": 31,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.387,
+                  "y": 5.14,
+                  "w": 86,
+                  "h": 32
+                },
+                "art": {
+                  "x": 6,
+                  "y": 39.951,
+                  "w": 88,
+                  "h": 49
+                },
+                "proof": {
+                  "x": 7,
+                  "y": 91.937,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.387,
+                    "y": 5.14,
+                    "w": 86,
+                    "h": 32
+                  },
+                  {
+                    "x": 7,
+                    "y": 91.937,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "stacked_bars",
+              "category_legend",
+              "change_arrow"
+            ]
+          }
+        },
+        {
+          "template_id": "stacked_composition--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "cobalt-coral",
+          "layout": "full-width-stage",
+          "composition_name": "mix-shift",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "stacked_composition--annotation",
+            "scene_id": "stacked_composition",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "starting_mix",
+              "change",
+              "ending_mix"
+            ],
+            "data_shape": "stacked_series",
+            "motion": "stack_shift",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.61,
+                  "y": 5.18,
+                  "w": 46,
+                  "h": 28
+                },
+                "art": {
+                  "x": 4.901,
+                  "y": 35.937,
+                  "w": 90,
+                  "h": 57
+                },
+                "proof": {
+                  "x": 56.143,
+                  "y": 6.919,
+                  "w": 39,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.61,
+                    "y": 5.18,
+                    "w": 46,
+                    "h": 28
+                  },
+                  {
+                    "x": 56.143,
+                    "y": 6.919,
+                    "w": 39,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.55,
+                  "y": 5.14,
+                  "w": 86,
+                  "h": 23
+                },
+                "art": {
+                  "x": 4.928,
+                  "y": 35.951,
+                  "w": 90,
+                  "h": 57
+                },
+                "proof": {
+                  "x": 7.104,
+                  "y": 29.937,
+                  "w": 86,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.55,
+                    "y": 5.14,
+                    "w": 86,
+                    "h": 23
+                  },
+                  {
+                    "x": 7.104,
+                    "y": 29.937,
+                    "w": 86,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "stacked_bars",
+              "category_legend",
+              "change_arrow"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "target_vs_actual",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "target_vs_actual--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "cobalt-coral",
+          "layout": "split-decision",
+          "composition_name": "target-gauge",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "target_vs_actual--chart",
+            "scene_id": "target_vs_actual",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "target",
+              "actual",
+              "variance"
+            ],
+            "data_shape": "target_actual",
+            "motion": "bar_to_target",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.791,
+                  "y": 5.82,
+                  "w": 35,
+                  "h": 48
+                },
+                "art": {
+                  "x": 42.802,
+                  "y": 5.063,
+                  "w": 52,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 5.286,
+                  "y": 73.081,
+                  "w": 35,
+                  "h": 20
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.791,
+                    "y": 5.82,
+                    "w": 35,
+                    "h": 48
+                  },
+                  {
+                    "x": 5.286,
+                    "y": 73.081,
+                    "w": 35,
+                    "h": 20
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.671,
+                  "y": 4.86,
+                  "w": 86,
+                  "h": 25
+                },
+                "art": {
+                  "x": 5.856,
+                  "y": 33.049,
+                  "w": 88,
+                  "h": 56
+                },
+                "proof": {
+                  "x": 7.208,
+                  "y": 92.063,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.671,
+                    "y": 4.86,
+                    "w": 86,
+                    "h": 25
+                  },
+                  {
+                    "x": 7.208,
+                    "y": 92.063,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "duel",
+            "support_components": [
+              "target_marker",
+              "actual_bar",
+              "variance_badge"
+            ]
+          }
+        },
+        {
+          "template_id": "target_vs_actual--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "signal-noir",
+          "layout": "data-left",
+          "composition_name": "gap-annotation",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "target_vs_actual--annotation",
+            "scene_id": "target_vs_actual",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "target",
+              "actual",
+              "variance"
+            ],
+            "data_shape": "target_actual",
+            "motion": "bar_to_target",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 6.014,
+                  "y": 7.82,
+                  "w": 31,
+                  "h": 68
+                },
+                "art": {
+                  "x": 38.703,
+                  "y": 5.063,
+                  "w": 56,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 5.429,
+                  "y": 82.081,
+                  "w": 31,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.014,
+                    "y": 7.82,
+                    "w": 31,
+                    "h": 68
+                  },
+                  {
+                    "x": 5.429,
+                    "y": 82.081,
+                    "w": 31,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.834,
+                  "y": 68.86,
+                  "w": 86,
+                  "h": 23
+                },
+                "art": {
+                  "x": 4.784,
+                  "y": 5.049,
+                  "w": 90,
+                  "h": 54
+                },
+                "proof": {
+                  "x": 7.312,
+                  "y": 62.063,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.834,
+                    "y": 68.86,
+                    "w": 86,
+                    "h": 23
+                  },
+                  {
+                    "x": 7.312,
+                    "y": 62.063,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "target_marker",
+              "actual_bar",
+              "variance_badge"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "trend_with_turning_point",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "trend_with_turning_point--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "electric-cyan",
+          "layout": "data-right",
+          "composition_name": "trend-stage",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "trend_with_turning_point--chart",
+            "scene_id": "trend_with_turning_point",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "baseline",
+              "turning_point",
+              "trend"
+            ],
+            "data_shape": "time_series",
+            "motion": "line_draw_event",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 64.122,
+                  "y": 7.82,
+                  "w": 31,
+                  "h": 68
+                },
+                "art": {
+                  "x": 5.099,
+                  "y": 5.063,
+                  "w": 56,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 63.857,
+                  "y": 82.081,
+                  "w": 31,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 64.122,
+                    "y": 7.82,
+                    "w": 31,
+                    "h": 68
+                  },
+                  {
+                    "x": 63.857,
+                    "y": 82.081,
+                    "w": 31,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.182,
+                  "y": 4.86,
+                  "w": 86,
+                  "h": 23
+                },
+                "art": {
+                  "x": 5.072,
+                  "y": 36.049,
+                  "w": 90,
+                  "h": 57
+                },
+                "proof": {
+                  "x": 6.896,
+                  "y": 30.063,
+                  "w": 86,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.182,
+                    "y": 4.86,
+                    "w": 86,
+                    "h": 23
+                  },
+                  {
+                    "x": 6.896,
+                    "y": 30.063,
+                    "w": 86,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "trend_line",
+              "event_marker",
+              "delta_label"
+            ]
+          }
+        },
+        {
+          "template_id": "trend_with_turning_point--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "paper-collage",
+          "layout": "timeline-caption",
+          "composition_name": "turning-point-note",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "trend_with_turning_point--annotation",
+            "scene_id": "trend_with_turning_point",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "baseline",
+              "turning_point",
+              "trend"
+            ],
+            "data_shape": "time_series",
+            "motion": "line_draw_event",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.345,
+                  "y": 69.82,
+                  "w": 48,
+                  "h": 24
+                },
+                "art": {
+                  "x": 5,
+                  "y": 5.063,
+                  "w": 90,
+                  "h": 60
+                },
+                "proof": {
+                  "x": 58,
+                  "y": 73.081,
+                  "w": 37,
+                  "h": 18
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.345,
+                    "y": 69.82,
+                    "w": 48,
+                    "h": 24
+                  },
+                  {
+                    "x": 58,
+                    "y": 73.081,
+                    "w": 37,
+                    "h": 18
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.345,
+                  "y": 71.86,
+                  "w": 86,
+                  "h": 21
+                },
+                "art": {
+                  "x": 5,
+                  "y": 5.049,
+                  "w": 90,
+                  "h": 61
+                },
+                "proof": {
+                  "x": 7,
+                  "y": 67.063,
+                  "w": 86,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.345,
+                    "y": 71.86,
+                    "w": 86,
+                    "h": 21
+                  },
+                  {
+                    "x": 7,
+                    "y": 67.063,
+                    "w": 86,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "trend_line",
+              "event_marker",
+              "delta_label"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "waterfall_contribution",
+      "category_id": "data",
+      "category_name": "Data",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "waterfall_contribution--chart",
+          "presentation_form_id": "chart",
+          "presentation_form_name": "Chart",
+          "visual_id": "electric-cyan",
+          "layout": "diagram-right-rail",
+          "composition_name": "waterfall-stage",
+          "motion_profile": "chart-build",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "waterfall_contribution--chart",
+            "scene_id": "waterfall_contribution",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "starting_value",
+              "drivers",
+              "ending_value"
+            ],
+            "data_shape": "waterfall_values",
+            "motion": "waterfall_build",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.854,
+                  "y": 8.36,
+                  "w": 55,
+                  "h": 42
+                },
+                "art": {
+                  "x": 63.802,
+                  "y": 4.874,
+                  "w": 31,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 5.286,
+                  "y": 77.838,
+                  "w": 55,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.854,
+                    "y": 8.36,
+                    "w": 55,
+                    "h": 42
+                  },
+                  {
+                    "x": 5.286,
+                    "y": 77.838,
+                    "w": 55,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 6.734,
+                  "y": 5.28,
+                  "w": 42,
+                  "h": 80
+                },
+                "art": {
+                  "x": 50.856,
+                  "y": 4.902,
+                  "w": 43,
+                  "h": 80
+                },
+                "proof": {
+                  "x": 6.208,
+                  "y": 87.874,
+                  "w": 88,
+                  "h": 9
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.734,
+                    "y": 5.28,
+                    "w": 42,
+                    "h": 80
+                  },
+                  {
+                    "x": 6.208,
+                    "y": 87.874,
+                    "w": 88,
+                    "h": 9
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "bridge_bars",
+              "gain_loss_tags",
+              "total_bar"
+            ]
+          }
+        },
+        {
+          "template_id": "waterfall_contribution--annotation",
+          "presentation_form_id": "annotation",
+          "presentation_form_name": "Annotation",
+          "visual_id": "chalkboard-lab",
+          "layout": "data-topline",
+          "composition_name": "driver-focus",
+          "motion_profile": "annotation-focus",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "waterfall_contribution--annotation",
+            "scene_id": "waterfall_contribution",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "starting_value",
+              "drivers",
+              "ending_value"
+            ],
+            "data_shape": "waterfall_values",
+            "motion": "waterfall_build",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 6.077,
+                  "y": 5.36,
+                  "w": 48,
+                  "h": 24
+                },
+                "art": {
+                  "x": 4.703,
+                  "y": 31.874,
+                  "w": 90,
+                  "h": 61
+                },
+                "proof": {
+                  "x": 57.429,
+                  "y": 6.838,
+                  "w": 38,
+                  "h": 18
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.077,
+                    "y": 5.36,
+                    "w": 48,
+                    "h": 24
+                  },
+                  {
+                    "x": 57.429,
+                    "y": 6.838,
+                    "w": 38,
+                    "h": 18
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 12.897,
+                  "y": 5.28,
+                  "w": 76,
+                  "h": 23
+                },
+                "art": {
+                  "x": 7.784,
+                  "y": 30.902,
+                  "w": 84,
+                  "h": 44
+                },
+                "proof": {
+                  "x": 12.312,
+                  "y": 77.874,
+                  "w": 76,
+                  "h": 17
+                },
+                "avoid_zones": [
+                  {
+                    "x": 12.897,
+                    "y": 5.28,
+                    "w": 76,
+                    "h": 23
+                  },
+                  {
+                    "x": 12.312,
+                    "y": 77.874,
+                    "w": 76,
+                    "h": 17
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "bridge_bars",
+              "gain_loss_tags",
+              "total_bar"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "annotated_object",
+      "category_id": "evidence",
+      "category_name": "Evidence",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "case_study",
+      "category_id": "evidence",
+      "category_name": "Evidence",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "document_reveal",
+      "category_id": "evidence",
+      "category_name": "Evidence",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "evidence_board",
+      "category_id": "evidence",
+      "category_name": "Evidence",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "experiment_result",
+      "category_id": "evidence",
+      "category_name": "Evidence",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "multi_case_synthesis",
+      "category_id": "evidence",
+      "category_name": "Evidence",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "profile_quote",
+      "category_id": "evidence",
+      "category_name": "Evidence",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "source_claim_binding",
+      "category_id": "evidence",
+      "category_name": "Evidence",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "chapter_question",
+      "category_id": "highlights",
+      "category_name": "Highlights",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "contrarian_reveal",
+      "category_id": "highlights",
+      "category_name": "Highlights",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "definition_focus",
+      "category_id": "highlights",
+      "category_name": "Highlights",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "key_takeaway",
+      "category_id": "highlights",
+      "category_name": "Highlights",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "metric_revelation",
+      "category_id": "highlights",
+      "category_name": "Highlights",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "quote_lockup",
+      "category_id": "highlights",
+      "category_name": "Highlights",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "statement_monument",
+      "category_id": "highlights",
+      "category_name": "Highlights",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "story_turn",
+      "category_id": "highlights",
+      "category_name": "Highlights",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "geo_bubble",
+      "category_id": "maps",
+      "category_name": "Maps",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "geo_bubble--route",
+          "presentation_form_id": "route",
+          "presentation_form_name": "Route",
+          "visual_id": "electric-cyan",
+          "layout": "data-left",
+          "composition_name": "geo-bubbles",
+          "motion_profile": "route-travel",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "geo_bubble--route",
+            "scene_id": "geo_bubble",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "locations",
+              "magnitude",
+              "cluster"
+            ],
+            "data_shape": "geo_points",
+            "motion": "bubbles_emerge",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.778,
+                  "y": 8.36,
+                  "w": 30.78,
+                  "h": 68.099
+                },
+                "art": {
+                  "x": 38.901,
+                  "y": 4.874,
+                  "w": 56.154,
+                  "h": 87.945
+                },
+                "proof": {
+                  "x": 5.143,
+                  "y": 81.838,
+                  "w": 31.077,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.778,
+                    "y": 8.36,
+                    "w": 30.78,
+                    "h": 68.099
+                  },
+                  {
+                    "x": 5.143,
+                    "y": 81.838,
+                    "w": 31.077,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.718,
+                  "y": 5.28,
+                  "w": 85.78,
+                  "h": 23.099
+                },
+                "art": {
+                  "x": 4.928,
+                  "y": 35.902,
+                  "w": 90.154,
+                  "h": 56.945
+                },
+                "proof": {
+                  "x": 7.104,
+                  "y": 29.874,
+                  "w": 86.077,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.718,
+                    "y": 5.28,
+                    "w": 85.78,
+                    "h": 23.099
+                  },
+                  {
+                    "x": 7.104,
+                    "y": 29.874,
+                    "w": 86.077,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "map_field",
+              "location_bubbles",
+              "scale_legend"
+            ]
+          }
+        },
+        {
+          "template_id": "geo_bubble--pattern",
+          "presentation_form_id": "pattern",
+          "presentation_form_name": "Pattern",
+          "visual_id": "material-editorial",
+          "layout": "poster-offset-right",
+          "composition_name": "hotspot-lens",
+          "motion_profile": "region-emerge",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "geo_bubble--pattern",
+            "scene_id": "geo_bubble",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "locations",
+              "magnitude",
+              "cluster"
+            ],
+            "data_shape": "geo_points",
+            "motion": "bubbles_emerge",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 58.001,
+                  "y": 7.36,
+                  "w": 37.78,
+                  "h": 43.099
+                },
+                "art": {
+                  "x": 4.802,
+                  "y": 4.874,
+                  "w": 49.154,
+                  "h": 87.945
+                },
+                "proof": {
+                  "x": 57.286,
+                  "y": 77.838,
+                  "w": 38.077,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 58.001,
+                    "y": 7.36,
+                    "w": 37.78,
+                    "h": 43.099
+                  },
+                  {
+                    "x": 57.286,
+                    "y": 77.838,
+                    "w": 38.077,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.881,
+                  "y": 61.28,
+                  "w": 85.78,
+                  "h": 32.099
+                },
+                "art": {
+                  "x": 5.856,
+                  "y": 4.902,
+                  "w": 88.154,
+                  "h": 48.945
+                },
+                "proof": {
+                  "x": 7.208,
+                  "y": 55.874,
+                  "w": 86.077,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.881,
+                    "y": 61.28,
+                    "w": 85.78,
+                    "h": 32.099
+                  },
+                  {
+                    "x": 7.208,
+                    "y": 55.874,
+                    "w": 86.077,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "statement",
+            "support_components": [
+              "map_field",
+              "location_bubbles",
+              "scale_legend"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "map_rank_morph",
+      "category_id": "maps",
+      "category_name": "Maps",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "map_rank_morph--route",
+          "presentation_form_id": "route",
+          "presentation_form_name": "Route",
+          "visual_id": "paper-collage",
+          "layout": "full-width-stage",
+          "composition_name": "map-rank",
+          "motion_profile": "route-travel",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "map_rank_morph--route",
+            "scene_id": "map_rank_morph",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "geography",
+              "ranking",
+              "shift"
+            ],
+            "data_shape": "geo_rank",
+            "motion": "map_to_rank",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 4.907,
+                  "y": 5.54,
+                  "w": 45.78,
+                  "h": 28.099
+                },
+                "art": {
+                  "x": 5.297,
+                  "y": 35.811,
+                  "w": 90.154,
+                  "h": 56.945
+                },
+                "proof": {
+                  "x": 55.571,
+                  "y": 6.757,
+                  "w": 39.077,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 4.907,
+                    "y": 5.54,
+                    "w": 45.78,
+                    "h": 28.099
+                  },
+                  {
+                    "x": 55.571,
+                    "y": 6.757,
+                    "w": 39.077,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.087,
+                  "y": 5.42,
+                  "w": 85.78,
+                  "h": 21.099
+                },
+                "art": {
+                  "x": 5.216,
+                  "y": 28.853,
+                  "w": 90.154,
+                  "h": 61.945
+                },
+                "proof": {
+                  "x": 6.688,
+                  "y": 92.811,
+                  "w": 86.077,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.087,
+                    "y": 5.42,
+                    "w": 85.78,
+                    "h": 21.099
+                  },
+                  {
+                    "x": 6.688,
+                    "y": 92.811,
+                    "w": 86.077,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "map_positions",
+              "rank_bars",
+              "morph_links"
+            ]
+          }
+        },
+        {
+          "template_id": "map_rank_morph--pattern",
+          "presentation_form_id": "pattern",
+          "presentation_form_name": "Pattern",
+          "visual_id": "luminous-grid",
+          "layout": "diagram-right-rail",
+          "composition_name": "region-rank-focus",
+          "motion_profile": "region-emerge",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "map_rank_morph--pattern",
+            "scene_id": "map_rank_morph",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "geography",
+              "ranking",
+              "shift"
+            ],
+            "data_shape": "geo_rank",
+            "motion": "map_to_rank",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.13,
+                  "y": 8.54,
+                  "w": 54.78,
+                  "h": 42.099
+                },
+                "art": {
+                  "x": 64.198,
+                  "y": 4.811,
+                  "w": 31.154,
+                  "h": 87.945
+                },
+                "proof": {
+                  "x": 4.714,
+                  "y": 77.757,
+                  "w": 55.077,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.13,
+                    "y": 8.54,
+                    "w": 54.78,
+                    "h": 42.099
+                  },
+                  {
+                    "x": 4.714,
+                    "y": 77.757,
+                    "w": 55.077,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 52.25,
+                  "y": 5.42,
+                  "w": 41.78,
+                  "h": 80.099
+                },
+                "art": {
+                  "x": 6.144,
+                  "y": 4.853,
+                  "w": 43.154,
+                  "h": 79.945
+                },
+                "proof": {
+                  "x": 5.792,
+                  "y": 87.811,
+                  "w": 88.077,
+                  "h": 9
+                },
+                "avoid_zones": [
+                  {
+                    "x": 52.25,
+                    "y": 5.42,
+                    "w": 41.78,
+                    "h": 80.099
+                  },
+                  {
+                    "x": 5.792,
+                    "y": 87.811,
+                    "w": 88.077,
+                    "h": 9
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "map_positions",
+              "rank_bars",
+              "morph_links"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "migration_flow",
+      "category_id": "maps",
+      "category_name": "Maps",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "migration_flow--route",
+          "presentation_form_id": "route",
+          "presentation_form_name": "Route",
+          "visual_id": "electric-cyan",
+          "layout": "diagram-center",
+          "composition_name": "migration-stream",
+          "motion_profile": "route-travel",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "migration_flow--route",
+            "scene_id": "migration_flow",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "origins",
+              "movement",
+              "destinations"
+            ],
+            "data_shape": "geo_flows",
+            "motion": "flows_travel",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.98,
+                  "y": 6.18,
+                  "w": 37.78,
+                  "h": 40.099
+                },
+                "art": {
+                  "x": 25.802,
+                  "y": 15.937,
+                  "w": 69.154,
+                  "h": 69.945
+                },
+                "proof": {
+                  "x": 5.286,
+                  "y": 77.919,
+                  "w": 34.077,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.98,
+                    "y": 6.18,
+                    "w": 37.78,
+                    "h": 40.099
+                  },
+                  {
+                    "x": 5.286,
+                    "y": 77.919,
+                    "w": 34.077,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.86,
+                  "y": 5.14,
+                  "w": 85.78,
+                  "h": 25.099
+                },
+                "art": {
+                  "x": 5.856,
+                  "y": 32.951,
+                  "w": 88.154,
+                  "h": 55.945
+                },
+                "proof": {
+                  "x": 7.208,
+                  "y": 91.937,
+                  "w": 86.077,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.86,
+                    "y": 5.14,
+                    "w": 85.78,
+                    "h": 25.099
+                  },
+                  {
+                    "x": 7.208,
+                    "y": 91.937,
+                    "w": 86.077,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "source_regions",
+              "flow_arcs",
+              "destination_clusters"
+            ]
+          }
+        },
+        {
+          "template_id": "migration_flow--pattern",
+          "presentation_form_id": "pattern",
+          "presentation_form_name": "Pattern",
+          "visual_id": "kinetic-ivory",
+          "layout": "data-right",
+          "composition_name": "flow-concentration",
+          "motion_profile": "region-emerge",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "migration_flow--pattern",
+            "scene_id": "migration_flow",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "origins",
+              "movement",
+              "destinations"
+            ],
+            "data_shape": "geo_flows",
+            "motion": "flows_travel",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 65.203,
+                  "y": 8.18,
+                  "w": 30.78,
+                  "h": 68.099
+                },
+                "art": {
+                  "x": 4.703,
+                  "y": 4.937,
+                  "w": 56.154,
+                  "h": 87.945
+                },
+                "proof": {
+                  "x": 64.429,
+                  "y": 81.919,
+                  "w": 31.077,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 65.203,
+                    "y": 8.18,
+                    "w": 30.78,
+                    "h": 68.099
+                  },
+                  {
+                    "x": 64.429,
+                    "y": 81.919,
+                    "w": 31.077,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 8.023,
+                  "y": 69.14,
+                  "w": 85.78,
+                  "h": 23.099
+                },
+                "art": {
+                  "x": 4.784,
+                  "y": 4.951,
+                  "w": 90.154,
+                  "h": 53.945
+                },
+                "proof": {
+                  "x": 7.312,
+                  "y": 61.937,
+                  "w": 86.077,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 8.023,
+                    "y": 69.14,
+                    "w": 85.78,
+                    "h": 23.099
+                  },
+                  {
+                    "x": 7.312,
+                    "y": 61.937,
+                    "w": 86.077,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "source_regions",
+              "flow_arcs",
+              "destination_clusters"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "multi_stop_route",
+      "category_id": "maps",
+      "category_name": "Maps",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "multi_stop_route--route",
+          "presentation_form_id": "route",
+          "presentation_form_name": "Route",
+          "visual_id": "luminous-grid",
+          "layout": "timeline-band",
+          "composition_name": "multi-stop-map",
+          "motion_profile": "route-travel",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "multi_stop_route--route",
+            "scene_id": "multi_stop_route",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "start",
+              "stops",
+              "arrival"
+            ],
+            "data_shape": "geo_stops",
+            "motion": "stops_sequence",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.311,
+                  "y": 5.18,
+                  "w": 57.78,
+                  "h": 32.099
+                },
+                "art": {
+                  "x": 5.099,
+                  "y": 40.937,
+                  "w": 90.154,
+                  "h": 51.945
+                },
+                "proof": {
+                  "x": 65.857,
+                  "y": 6.919,
+                  "w": 29.077,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.311,
+                    "y": 5.18,
+                    "w": 57.78,
+                    "h": 32.099
+                  },
+                  {
+                    "x": 65.857,
+                    "y": 6.919,
+                    "w": 29.077,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.371,
+                  "y": 69.14,
+                  "w": 85.78,
+                  "h": 23.099
+                },
+                "art": {
+                  "x": 5.072,
+                  "y": 4.951,
+                  "w": 90.154,
+                  "h": 53.945
+                },
+                "proof": {
+                  "x": 6.896,
+                  "y": 61.937,
+                  "w": 86.077,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.371,
+                    "y": 69.14,
+                    "w": 85.78,
+                    "h": 23.099
+                  },
+                  {
+                    "x": 6.896,
+                    "y": 61.937,
+                    "w": 86.077,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "route_path",
+              "stop_markers",
+              "distance_labels"
+            ]
+          }
+        },
+        {
+          "template_id": "multi_stop_route--pattern",
+          "presentation_form_id": "pattern",
+          "presentation_form_name": "Pattern",
+          "visual_id": "atlas-blue",
+          "layout": "diagram-left-rail",
+          "composition_name": "stop-detail",
+          "motion_profile": "region-emerge",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "multi_stop_route--pattern",
+            "scene_id": "multi_stop_route",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "start",
+              "stops",
+              "arrival"
+            ],
+            "data_shape": "geo_stops",
+            "motion": "stops_sequence",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 40.534,
+                  "y": 8.18,
+                  "w": 54.78,
+                  "h": 42.099
+                },
+                "art": {
+                  "x": 5,
+                  "y": 4.937,
+                  "w": 31.154,
+                  "h": 87.945
+                },
+                "proof": {
+                  "x": 40,
+                  "y": 77.919,
+                  "w": 55.077,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 40.534,
+                    "y": 8.18,
+                    "w": 54.78,
+                    "h": 42.099
+                  },
+                  {
+                    "x": 40,
+                    "y": 77.919,
+                    "w": 55.077,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.534,
+                  "y": 68.14,
+                  "w": 85.78,
+                  "h": 25.099
+                },
+                "art": {
+                  "x": 6,
+                  "y": 4.951,
+                  "w": 88.154,
+                  "h": 55.945
+                },
+                "proof": {
+                  "x": 7,
+                  "y": 60.937,
+                  "w": 86.077,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.534,
+                    "y": 68.14,
+                    "w": 85.78,
+                    "h": 25.099
+                  },
+                  {
+                    "x": 7,
+                    "y": 60.937,
+                    "w": 86.077,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "route_path",
+              "stop_markers",
+              "distance_labels"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "origin_destination",
+      "category_id": "maps",
+      "category_name": "Maps",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "origin_destination--route",
+          "presentation_form_id": "route",
+          "presentation_form_name": "Route",
+          "visual_id": "atlas-blue",
+          "layout": "full-width-stage",
+          "composition_name": "route-arc",
+          "motion_profile": "route-travel",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "origin_destination--route",
+            "scene_id": "origin_destination",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "origin",
+              "route",
+              "destination"
+            ],
+            "data_shape": "geo_route",
+            "motion": "route_draw",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 6.182,
+                  "y": 5,
+                  "w": 45.78,
+                  "h": 28.099
+                },
+                "art": {
+                  "x": 4.703,
+                  "y": 36,
+                  "w": 90.154,
+                  "h": 56.945
+                },
+                "proof": {
+                  "x": 56.429,
+                  "y": 7,
+                  "w": 39.077,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.182,
+                    "y": 5,
+                    "w": 45.78,
+                    "h": 28.099
+                  },
+                  {
+                    "x": 56.429,
+                    "y": 7,
+                    "w": 39.077,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 8.002,
+                  "y": 5,
+                  "w": 67.78,
+                  "h": 24.099
+                },
+                "art": {
+                  "x": 4.784,
+                  "y": 32,
+                  "w": 90.154,
+                  "h": 60.945
+                },
+                "proof": {
+                  "x": 78.312,
+                  "y": 5,
+                  "w": 15.077,
+                  "h": 24
+                },
+                "avoid_zones": [
+                  {
+                    "x": 8.002,
+                    "y": 5,
+                    "w": 67.78,
+                    "h": 24.099
+                  },
+                  {
+                    "x": 78.312,
+                    "y": 5,
+                    "w": 15.077,
+                    "h": 24
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "origin_pin",
+              "route_line",
+              "destination_pin"
+            ]
+          }
+        },
+        {
+          "template_id": "origin_destination--pattern",
+          "presentation_form_id": "pattern",
+          "presentation_form_name": "Pattern",
+          "visual_id": "paper-collage",
+          "layout": "timeline-caption",
+          "composition_name": "route-milestone",
+          "motion_profile": "region-emerge",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "origin_destination--pattern",
+            "scene_id": "origin_destination",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "origin",
+              "route",
+              "destination"
+            ],
+            "data_shape": "geo_route",
+            "motion": "route_draw",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 4.865,
+                  "y": 70.18,
+                  "w": 47.78,
+                  "h": 24.099
+                },
+                "art": {
+                  "x": 5.297,
+                  "y": 4.937,
+                  "w": 90.154,
+                  "h": 59.945
+                },
+                "proof": {
+                  "x": 57.571,
+                  "y": 72.919,
+                  "w": 37.077,
+                  "h": 18
+                },
+                "avoid_zones": [
+                  {
+                    "x": 4.865,
+                    "y": 70.18,
+                    "w": 47.78,
+                    "h": 24.099
+                  },
+                  {
+                    "x": 57.571,
+                    "y": 72.919,
+                    "w": 37.077,
+                    "h": 18
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.045,
+                  "y": 5.14,
+                  "w": 85.78,
+                  "h": 23.099
+                },
+                "art": {
+                  "x": 5.216,
+                  "y": 35.951,
+                  "w": 90.154,
+                  "h": 56.945
+                },
+                "proof": {
+                  "x": 6.688,
+                  "y": 29.937,
+                  "w": 86.077,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.045,
+                    "y": 5.14,
+                    "w": 85.78,
+                    "h": 23.099
+                  },
+                  {
+                    "x": 6.688,
+                    "y": 29.937,
+                    "w": 86.077,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "origin_pin",
+              "route_line",
+              "destination_pin"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "regional_choropleth",
+      "category_id": "maps",
+      "category_name": "Maps",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "regional_choropleth--route",
+          "presentation_form_id": "route",
+          "presentation_form_name": "Route",
+          "visual_id": "atlas-blue",
+          "layout": "full-width-stage",
+          "composition_name": "region-field",
+          "motion_profile": "route-travel",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "regional_choropleth--route",
+            "scene_id": "regional_choropleth",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "regions",
+              "intensity",
+              "explanation"
+            ],
+            "data_shape": "regional_values",
+            "motion": "regions_fill",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.109,
+                  "y": 5.36,
+                  "w": 45.78,
+                  "h": 28.099
+                },
+                "art": {
+                  "x": 5.198,
+                  "y": 35.874,
+                  "w": 90.154,
+                  "h": 56.945
+                },
+                "proof": {
+                  "x": 55.714,
+                  "y": 6.838,
+                  "w": 39.077,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.109,
+                    "y": 5.36,
+                    "w": 45.78,
+                    "h": 28.099
+                  },
+                  {
+                    "x": 55.714,
+                    "y": 6.838,
+                    "w": 39.077,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.229,
+                  "y": 5.28,
+                  "w": 67.78,
+                  "h": 24.099
+                },
+                "art": {
+                  "x": 5.144,
+                  "y": 31.902,
+                  "w": 90.154,
+                  "h": 60.945
+                },
+                "proof": {
+                  "x": 77.792,
+                  "y": 4.874,
+                  "w": 15.077,
+                  "h": 24
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.229,
+                    "y": 5.28,
+                    "w": 67.78,
+                    "h": 24.099
+                  },
+                  {
+                    "x": 77.792,
+                    "y": 4.874,
+                    "w": 15.077,
+                    "h": 24
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "region_shapes",
+              "value_scale",
+              "focus_region"
+            ]
+          }
+        },
+        {
+          "template_id": "regional_choropleth--pattern",
+          "presentation_form_id": "pattern",
+          "presentation_form_name": "Pattern",
+          "visual_id": "paper-collage",
+          "layout": "editorial-left",
+          "composition_name": "region-contrast",
+          "motion_profile": "region-emerge",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "regional_choropleth--pattern",
+            "scene_id": "regional_choropleth",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "regions",
+              "intensity",
+              "explanation"
+            ],
+            "data_shape": "regional_values",
+            "motion": "regions_fill",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.332,
+                  "y": 8.36,
+                  "w": 34.78,
+                  "h": 66.099
+                },
+                "art": {
+                  "x": 43.099,
+                  "y": 4.874,
+                  "w": 52.154,
+                  "h": 87.945
+                },
+                "proof": {
+                  "x": 4.857,
+                  "y": 79.838,
+                  "w": 35.077,
+                  "h": 13
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.332,
+                    "y": 8.36,
+                    "w": 34.78,
+                    "h": 66.099
+                  },
+                  {
+                    "x": 4.857,
+                    "y": 79.838,
+                    "w": 35.077,
+                    "h": 13
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 61.392,
+                  "y": 5.28,
+                  "w": 32.78,
+                  "h": 67.099
+                },
+                "art": {
+                  "x": 6.072,
+                  "y": 4.902,
+                  "w": 51.154,
+                  "h": 79.945
+                },
+                "proof": {
+                  "x": 60.896,
+                  "y": 74.874,
+                  "w": 33.077,
+                  "h": 12
+                },
+                "avoid_zones": [
+                  {
+                    "x": 61.392,
+                    "y": 5.28,
+                    "w": 32.78,
+                    "h": 67.099
+                  },
+                  {
+                    "x": 60.896,
+                    "y": 74.874,
+                    "w": 33.077,
+                    "h": 12
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "region_shapes",
+              "value_scale",
+              "focus_region"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "causal_chain",
+      "category_id": "process",
+      "category_name": "Process",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "causal_chain--mechanism",
+          "presentation_form_id": "mechanism",
+          "presentation_form_name": "Mechanism",
+          "visual_id": "signal-noir",
+          "layout": "diagram-left-rail",
+          "composition_name": "cause-chain",
+          "motion_profile": "mechanism-run",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "causal_chain--mechanism",
+            "scene_id": "causal_chain",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "cause",
+              "mechanism",
+              "effect"
+            ],
+            "data_shape": "causal_links",
+            "motion": "cause_propagate",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 40.463,
+                  "y": 8.18,
+                  "w": 55.22,
+                  "h": 41.901
+                },
+                "art": {
+                  "x": 4.901,
+                  "y": 4.937,
+                  "w": 30.846,
+                  "h": 88.055
+                },
+                "proof": {
+                  "x": 40.143,
+                  "y": 77.919,
+                  "w": 54.923,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 40.463,
+                    "y": 8.18,
+                    "w": 55.22,
+                    "h": 41.901
+                  },
+                  {
+                    "x": 40.143,
+                    "y": 77.919,
+                    "w": 54.923,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.403,
+                  "y": 5.14,
+                  "w": 86.22,
+                  "h": 24.901
+                },
+                "art": {
+                  "x": 5.928,
+                  "y": 32.951,
+                  "w": 87.846,
+                  "h": 56.055
+                },
+                "proof": {
+                  "x": 7.104,
+                  "y": 91.937,
+                  "w": 85.923,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.403,
+                    "y": 5.14,
+                    "w": 86.22,
+                    "h": 24.901
+                  },
+                  {
+                    "x": 7.104,
+                    "y": 91.937,
+                    "w": 85.923,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "cause_nodes",
+              "effect_links",
+              "outcome"
+            ]
+          }
+        },
+        {
+          "template_id": "causal_chain--walkthrough",
+          "presentation_form_id": "walkthrough",
+          "presentation_form_name": "Walkthrough",
+          "visual_id": "kinetic-ivory",
+          "layout": "data-topline",
+          "composition_name": "causal-cutaway",
+          "motion_profile": "guided-sequence",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "causal_chain--walkthrough",
+            "scene_id": "causal_chain",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "cause",
+              "mechanism",
+              "effect"
+            ],
+            "data_shape": "causal_links",
+            "motion": "cause_propagate",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.686,
+                  "y": 5.18,
+                  "w": 48.22,
+                  "h": 23.901
+                },
+                "art": {
+                  "x": 4.802,
+                  "y": 31.937,
+                  "w": 89.846,
+                  "h": 61.055
+                },
+                "proof": {
+                  "x": 57.286,
+                  "y": 6.919,
+                  "w": 37.923,
+                  "h": 18
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.686,
+                    "y": 5.18,
+                    "w": 48.22,
+                    "h": 23.901
+                  },
+                  {
+                    "x": 57.286,
+                    "y": 6.919,
+                    "w": 37.923,
+                    "h": 18
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.566,
+                  "y": 69.14,
+                  "w": 86.22,
+                  "h": 22.901
+                },
+                "art": {
+                  "x": 4.856,
+                  "y": 4.951,
+                  "w": 89.846,
+                  "h": 54.055
+                },
+                "proof": {
+                  "x": 7.208,
+                  "y": 61.937,
+                  "w": 85.923,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.566,
+                    "y": 69.14,
+                    "w": 86.22,
+                    "h": 22.901
+                  },
+                  {
+                    "x": 7.208,
+                    "y": 61.937,
+                    "w": 85.923,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "cause_nodes",
+              "effect_links",
+              "outcome"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "conversion_funnel",
+      "category_id": "process",
+      "category_name": "Process",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "conversion_funnel--mechanism",
+          "presentation_form_id": "mechanism",
+          "presentation_form_name": "Mechanism",
+          "visual_id": "luminous-grid",
+          "layout": "data-left",
+          "composition_name": "funnel-stage",
+          "motion_profile": "mechanism-run",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "conversion_funnel--mechanism",
+            "scene_id": "conversion_funnel",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "awareness",
+              "activation",
+              "value"
+            ],
+            "data_shape": "funnel_values",
+            "motion": "funnel_fill",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.261,
+                  "y": 8.36,
+                  "w": 31.22,
+                  "h": 67.901
+                },
+                "art": {
+                  "x": 39,
+                  "y": 4.874,
+                  "w": 55.846,
+                  "h": 88.055
+                },
+                "proof": {
+                  "x": 5,
+                  "y": 81.838,
+                  "w": 30.923,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.261,
+                    "y": 8.36,
+                    "w": 31.22,
+                    "h": 67.901
+                  },
+                  {
+                    "x": 5,
+                    "y": 81.838,
+                    "w": 30.923,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.261,
+                  "y": 5.28,
+                  "w": 86.22,
+                  "h": 22.901
+                },
+                "art": {
+                  "x": 5,
+                  "y": 35.902,
+                  "w": 89.846,
+                  "h": 57.055
+                },
+                "proof": {
+                  "x": 7,
+                  "y": 29.874,
+                  "w": 85.923,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.261,
+                    "y": 5.28,
+                    "w": 86.22,
+                    "h": 22.901
+                  },
+                  {
+                    "x": 7,
+                    "y": 29.874,
+                    "w": 85.923,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "funnel_stages",
+              "dropoff_labels",
+              "conversion_badge"
+            ]
+          }
+        },
+        {
+          "template_id": "conversion_funnel--walkthrough",
+          "presentation_form_id": "walkthrough",
+          "presentation_form_name": "Walkthrough",
+          "visual_id": "atlas-blue",
+          "layout": "diagram-right-rail",
+          "composition_name": "leak-annotation",
+          "motion_profile": "guided-sequence",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "conversion_funnel--walkthrough",
+            "scene_id": "conversion_funnel",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "awareness",
+              "activation",
+              "value"
+            ],
+            "data_shape": "funnel_values",
+            "motion": "funnel_fill",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.484,
+                  "y": 8.36,
+                  "w": 55.22,
+                  "h": 41.901
+                },
+                "art": {
+                  "x": 63.901,
+                  "y": 4.874,
+                  "w": 30.846,
+                  "h": 88.055
+                },
+                "proof": {
+                  "x": 5.143,
+                  "y": 77.838,
+                  "w": 54.923,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.484,
+                    "y": 8.36,
+                    "w": 55.22,
+                    "h": 41.901
+                  },
+                  {
+                    "x": 5.143,
+                    "y": 77.838,
+                    "w": 54.923,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.424,
+                  "y": 68.28,
+                  "w": 86.22,
+                  "h": 24.901
+                },
+                "art": {
+                  "x": 5.928,
+                  "y": 4.902,
+                  "w": 87.846,
+                  "h": 56.055
+                },
+                "proof": {
+                  "x": 7.104,
+                  "y": 60.874,
+                  "w": 85.923,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.424,
+                    "y": 68.28,
+                    "w": 86.22,
+                    "h": 24.901
+                  },
+                  {
+                    "x": 7.104,
+                    "y": 60.874,
+                    "w": 85.923,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "funnel_stages",
+              "dropoff_labels",
+              "conversion_badge"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "decision_tree",
+      "category_id": "process",
+      "category_name": "Process",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "feedback_loop",
+      "category_id": "process",
+      "category_name": "Process",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "feedback_loop--mechanism",
+          "presentation_form_id": "mechanism",
+          "presentation_form_name": "Mechanism",
+          "visual_id": "electric-cyan",
+          "layout": "poster-center",
+          "composition_name": "feedback-orbit",
+          "motion_profile": "mechanism-run",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "feedback_loop--mechanism",
+            "scene_id": "feedback_loop",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "observe",
+              "evaluate",
+              "improve"
+            ],
+            "data_shape": "feedback_cycle",
+            "motion": "loop_trace",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 18.93,
+                  "y": 5.36,
+                  "w": 64.22,
+                  "h": 23.901
+                },
+                "art": {
+                  "x": 13.703,
+                  "y": 30.874,
+                  "w": 71.846,
+                  "h": 55.055
+                },
+                "proof": {
+                  "x": 28.429,
+                  "y": 88.838,
+                  "w": 43.923,
+                  "h": 7
+                },
+                "avoid_zones": [
+                  {
+                    "x": 18.93,
+                    "y": 5.36,
+                    "w": 64.22,
+                    "h": 23.901
+                  },
+                  {
+                    "x": 28.429,
+                    "y": 88.838,
+                    "w": 43.923,
+                    "h": 7
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.75,
+                  "y": 5.28,
+                  "w": 86.22,
+                  "h": 31.901
+                },
+                "art": {
+                  "x": 5.784,
+                  "y": 39.902,
+                  "w": 87.846,
+                  "h": 49.055
+                },
+                "proof": {
+                  "x": 7.312,
+                  "y": 91.874,
+                  "w": 85.923,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.75,
+                    "y": 5.28,
+                    "w": 86.22,
+                    "h": 31.901
+                  },
+                  {
+                    "x": 7.312,
+                    "y": 91.874,
+                    "w": 85.923,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "statement",
+            "support_components": [
+              "loop_nodes",
+              "feedback_return",
+              "quality_gain"
+            ]
+          }
+        },
+        {
+          "template_id": "feedback_loop--walkthrough",
+          "presentation_form_id": "walkthrough",
+          "presentation_form_name": "Walkthrough",
+          "visual_id": "kinetic-ivory",
+          "layout": "editorial-right",
+          "composition_name": "loop-intervention",
+          "motion_profile": "guided-sequence",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "feedback_loop--walkthrough",
+            "scene_id": "feedback_loop",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "observe",
+              "evaluate",
+              "improve"
+            ],
+            "data_shape": "feedback_cycle",
+            "motion": "loop_trace",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 59.613,
+                  "y": 8.54,
+                  "w": 35.22,
+                  "h": 65.901
+                },
+                "art": {
+                  "x": 5.297,
+                  "y": 4.811,
+                  "w": 51.846,
+                  "h": 88.055
+                },
+                "proof": {
+                  "x": 59.571,
+                  "y": 79.757,
+                  "w": 34.923,
+                  "h": 13
+                },
+                "avoid_zones": [
+                  {
+                    "x": 59.613,
+                    "y": 8.54,
+                    "w": 35.22,
+                    "h": 65.901
+                  },
+                  {
+                    "x": 59.571,
+                    "y": 79.757,
+                    "w": 34.923,
+                    "h": 13
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 51.793,
+                  "y": 5.42,
+                  "w": 42.22,
+                  "h": 79.901
+                },
+                "art": {
+                  "x": 6.216,
+                  "y": 4.853,
+                  "w": 42.846,
+                  "h": 80.055
+                },
+                "proof": {
+                  "x": 5.688,
+                  "y": 87.811,
+                  "w": 87.923,
+                  "h": 9
+                },
+                "avoid_zones": [
+                  {
+                    "x": 51.793,
+                    "y": 5.42,
+                    "w": 42.22,
+                    "h": 79.901
+                  },
+                  {
+                    "x": 5.688,
+                    "y": 87.811,
+                    "w": 87.923,
+                    "h": 9
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "loop_nodes",
+              "feedback_return",
+              "quality_gain"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "input_process_output",
+      "category_id": "process",
+      "category_name": "Process",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "lifecycle_ring",
+      "category_id": "process",
+      "category_name": "Process",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "linear_steps",
+      "category_id": "process",
+      "category_name": "Process",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "maturity_ladder",
+      "category_id": "process",
+      "category_name": "Process",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "user_journey",
+      "category_id": "process",
+      "category_name": "Process",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "value_chain",
+      "category_id": "process",
+      "category_name": "Process",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "architecture_stack",
+      "category_id": "systems",
+      "category_name": "Systems",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "capital_flow_network",
+      "category_id": "systems",
+      "category_name": "Systems",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "capital_flow_network--architecture",
+          "presentation_form_id": "architecture",
+          "presentation_form_name": "Architecture",
+          "visual_id": "electric-cyan",
+          "layout": "diagram-center",
+          "composition_name": "capital-river",
+          "motion_profile": "structure-assemble",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "capital_flow_network--architecture",
+            "scene_id": "capital_flow_network",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "sources",
+              "flows",
+              "destinations"
+            ],
+            "data_shape": "weighted_flow",
+            "motion": "capital_route",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.248,
+                  "y": 5.64,
+                  "w": 37.78,
+                  "h": 40.099
+                },
+                "art": {
+                  "x": 26.099,
+                  "y": 16.126,
+                  "w": 69.154,
+                  "h": 69.945
+                },
+                "proof": {
+                  "x": 4.857,
+                  "y": 78.162,
+                  "w": 34.077,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.248,
+                    "y": 5.64,
+                    "w": 37.78,
+                    "h": 40.099
+                  },
+                  {
+                    "x": 4.857,
+                    "y": 78.162,
+                    "w": 34.077,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 6.308,
+                  "y": 4.72,
+                  "w": 41.78,
+                  "h": 80.099
+                },
+                "art": {
+                  "x": 51.072,
+                  "y": 5.098,
+                  "w": 43.154,
+                  "h": 79.945
+                },
+                "proof": {
+                  "x": 5.896,
+                  "y": 88.126,
+                  "w": 88.077,
+                  "h": 9
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.308,
+                    "y": 4.72,
+                    "w": 41.78,
+                    "h": 80.099
+                  },
+                  {
+                    "x": 5.896,
+                    "y": 88.126,
+                    "w": 88.077,
+                    "h": 9
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "sector_nodes",
+              "flow_arrows",
+              "capital_totals"
+            ]
+          }
+        },
+        {
+          "template_id": "capital_flow_network--flow",
+          "presentation_form_id": "flow",
+          "presentation_form_name": "Flow",
+          "visual_id": "material-editorial",
+          "layout": "data-right",
+          "composition_name": "flow-bottleneck",
+          "motion_profile": "flow-trace",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "capital_flow_network--flow",
+            "scene_id": "capital_flow_network",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "sources",
+              "flows",
+              "destinations"
+            ],
+            "data_shape": "weighted_flow",
+            "motion": "capital_route",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 64.471,
+                  "y": 7.64,
+                  "w": 30.78,
+                  "h": 68.099
+                },
+                "art": {
+                  "x": 5,
+                  "y": 5.126,
+                  "w": 56.154,
+                  "h": 87.945
+                },
+                "proof": {
+                  "x": 64,
+                  "y": 82.162,
+                  "w": 31.077,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 64.471,
+                    "y": 7.64,
+                    "w": 30.78,
+                    "h": 68.099
+                  },
+                  {
+                    "x": 64,
+                    "y": 82.162,
+                    "w": 31.077,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 12.471,
+                  "y": 4.72,
+                  "w": 75.78,
+                  "h": 23.099
+                },
+                "art": {
+                  "x": 8,
+                  "y": 31.098,
+                  "w": 84.154,
+                  "h": 43.945
+                },
+                "proof": {
+                  "x": 12,
+                  "y": 78.126,
+                  "w": 76.077,
+                  "h": 17
+                },
+                "avoid_zones": [
+                  {
+                    "x": 12.471,
+                    "y": 4.72,
+                    "w": 75.78,
+                    "h": 23.099
+                  },
+                  {
+                    "x": 12,
+                    "y": 78.126,
+                    "w": 76.077,
+                    "h": 17
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "sector_nodes",
+              "flow_arrows",
+              "capital_totals"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "concept_map",
+      "category_id": "systems",
+      "category_name": "Systems",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "concept_map--architecture",
+          "presentation_form_id": "architecture",
+          "presentation_form_name": "Architecture",
+          "visual_id": "sticker-classroom",
+          "layout": "diagram-center",
+          "composition_name": "concept-network",
+          "motion_profile": "structure-assemble",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "concept_map--architecture",
+            "scene_id": "concept_map",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "core_concept",
+              "relationships",
+              "meaning"
+            ],
+            "data_shape": "semantic_graph",
+            "motion": "concept_connect",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 4.844,
+                  "y": 6,
+                  "w": 37.78,
+                  "h": 40.099
+                },
+                "art": {
+                  "x": 26.297,
+                  "y": 16,
+                  "w": 69.154,
+                  "h": 69.945
+                },
+                "proof": {
+                  "x": 4.571,
+                  "y": 78,
+                  "w": 34.077,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 4.844,
+                    "y": 6,
+                    "w": 37.78,
+                    "h": 40.099
+                  },
+                  {
+                    "x": 4.571,
+                    "y": 78,
+                    "w": 34.077,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 6.024,
+                  "y": 5,
+                  "w": 32.78,
+                  "h": 67.099
+                },
+                "art": {
+                  "x": 43.216,
+                  "y": 5,
+                  "w": 51.154,
+                  "h": 79.945
+                },
+                "proof": {
+                  "x": 5.688,
+                  "y": 75,
+                  "w": 33.077,
+                  "h": 12
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.024,
+                    "y": 5,
+                    "w": 32.78,
+                    "h": 67.099
+                  },
+                  {
+                    "x": 5.688,
+                    "y": 75,
+                    "w": 33.077,
+                    "h": 12
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "concept_nodes",
+              "relation_labels",
+              "focus_cluster"
+            ]
+          }
+        },
+        {
+          "template_id": "concept_map--flow",
+          "presentation_form_id": "flow",
+          "presentation_form_name": "Flow",
+          "visual_id": "electric-cyan",
+          "layout": "evidence-left",
+          "composition_name": "concept-bridge",
+          "motion_profile": "flow-trace",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "concept_map--flow",
+            "scene_id": "concept_map",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "core_concept",
+              "relationships",
+              "meaning"
+            ],
+            "data_shape": "semantic_graph",
+            "motion": "concept_connect",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.067,
+                  "y": 8,
+                  "w": 31.78,
+                  "h": 70.099
+                },
+                "art": {
+                  "x": 40.198,
+                  "y": 5,
+                  "w": 55.154,
+                  "h": 87.945
+                },
+                "proof": {
+                  "x": 4.714,
+                  "y": 84,
+                  "w": 32.077,
+                  "h": 9
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.067,
+                    "y": 8,
+                    "w": 31.78,
+                    "h": 70.099
+                  },
+                  {
+                    "x": 4.714,
+                    "y": 84,
+                    "w": 32.077,
+                    "h": 9
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.187,
+                  "y": 68,
+                  "w": 85.78,
+                  "h": 25.099
+                },
+                "art": {
+                  "x": 6.144,
+                  "y": 5,
+                  "w": 88.154,
+                  "h": 55.945
+                },
+                "proof": {
+                  "x": 6.792,
+                  "y": 61,
+                  "w": 86.077,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.187,
+                    "y": 68,
+                    "w": 85.78,
+                    "h": 25.099
+                  },
+                  {
+                    "x": 6.792,
+                    "y": 61,
+                    "w": 86.077,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "concept_nodes",
+              "relation_labels",
+              "focus_cluster"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "ecosystem_network",
+      "category_id": "systems",
+      "category_name": "Systems",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "ecosystem_network--architecture",
+          "presentation_form_id": "architecture",
+          "presentation_form_name": "Architecture",
+          "visual_id": "luminous-grid",
+          "layout": "full-width-stage",
+          "composition_name": "ecosystem-field",
+          "motion_profile": "structure-assemble",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "ecosystem_network--architecture",
+            "scene_id": "ecosystem_network",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "actors",
+              "exchange",
+              "leverage"
+            ],
+            "data_shape": "network_graph",
+            "motion": "network_pulse",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 6.119,
+                  "y": 4.46,
+                  "w": 45.78,
+                  "h": 28.099
+                },
+                "art": {
+                  "x": 4.703,
+                  "y": 36.189,
+                  "w": 90.154,
+                  "h": 56.945
+                },
+                "proof": {
+                  "x": 56.429,
+                  "y": 7.243,
+                  "w": 39.077,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.119,
+                    "y": 4.46,
+                    "w": 45.78,
+                    "h": 28.099
+                  },
+                  {
+                    "x": 56.429,
+                    "y": 7.243,
+                    "w": 39.077,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.939,
+                  "y": 4.58,
+                  "w": 85.78,
+                  "h": 21.099
+                },
+                "art": {
+                  "x": 4.784,
+                  "y": 29.147,
+                  "w": 90.154,
+                  "h": 61.945
+                },
+                "proof": {
+                  "x": 7.312,
+                  "y": 93,
+                  "w": 86.077,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.939,
+                    "y": 4.58,
+                    "w": 85.78,
+                    "h": 21.099
+                  },
+                  {
+                    "x": 7.312,
+                    "y": 93,
+                    "w": 86.077,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "actor_clusters",
+              "exchange_links",
+              "leverage_tags"
+            ]
+          }
+        },
+        {
+          "template_id": "ecosystem_network--flow",
+          "presentation_form_id": "flow",
+          "presentation_form_name": "Flow",
+          "visual_id": "signal-noir",
+          "layout": "diagram-left-rail",
+          "composition_name": "actor-exchange",
+          "motion_profile": "flow-trace",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "ecosystem_network--flow",
+            "scene_id": "ecosystem_network",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "actors",
+              "exchange",
+              "leverage"
+            ],
+            "data_shape": "network_graph",
+            "motion": "network_pulse",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 39.802,
+                  "y": 7.64,
+                  "w": 54.78,
+                  "h": 42.099
+                },
+                "art": {
+                  "x": 5.297,
+                  "y": 5.126,
+                  "w": 31.154,
+                  "h": 87.945
+                },
+                "proof": {
+                  "x": 39.571,
+                  "y": 78.162,
+                  "w": 55.077,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 39.802,
+                    "y": 7.64,
+                    "w": 54.78,
+                    "h": 42.099
+                  },
+                  {
+                    "x": 39.571,
+                    "y": 78.162,
+                    "w": 55.077,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 51.982,
+                  "y": 4.72,
+                  "w": 41.78,
+                  "h": 80.099
+                },
+                "art": {
+                  "x": 6.216,
+                  "y": 5.098,
+                  "w": 43.154,
+                  "h": 79.945
+                },
+                "proof": {
+                  "x": 5.688,
+                  "y": 88.126,
+                  "w": 88.077,
+                  "h": 9
+                },
+                "avoid_zones": [
+                  {
+                    "x": 51.982,
+                    "y": 4.72,
+                    "w": 41.78,
+                    "h": 80.099
+                  },
+                  {
+                    "x": 5.688,
+                    "y": 88.126,
+                    "w": 88.077,
+                    "h": 9
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "actor_clusters",
+              "exchange_links",
+              "leverage_tags"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "hub_and_spoke",
+      "category_id": "systems",
+      "category_name": "Systems",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "hub_and_spoke--architecture",
+          "presentation_form_id": "architecture",
+          "presentation_form_name": "Architecture",
+          "visual_id": "electric-cyan",
+          "layout": "diagram-center",
+          "composition_name": "hub-network",
+          "motion_profile": "structure-assemble",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "hub_and_spoke--architecture",
+            "scene_id": "hub_and_spoke",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "hub",
+              "services",
+              "coordination"
+            ],
+            "data_shape": "network_star",
+            "motion": "spokes_connect",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.652,
+                  "y": 6.54,
+                  "w": 38,
+                  "h": 40
+                },
+                "art": {
+                  "x": 25.901,
+                  "y": 15.811,
+                  "w": 69,
+                  "h": 70
+                },
+                "proof": {
+                  "x": 5.143,
+                  "y": 77.757,
+                  "w": 34,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.652,
+                    "y": 6.54,
+                    "w": 38,
+                    "h": 40
+                  },
+                  {
+                    "x": 5.143,
+                    "y": 77.757,
+                    "w": 34,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.592,
+                  "y": 5.42,
+                  "w": 86,
+                  "h": 25
+                },
+                "art": {
+                  "x": 5.928,
+                  "y": 32.853,
+                  "w": 88,
+                  "h": 56
+                },
+                "proof": {
+                  "x": 7.104,
+                  "y": 91.811,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.592,
+                    "y": 5.42,
+                    "w": 86,
+                    "h": 25
+                  },
+                  {
+                    "x": 7.104,
+                    "y": 91.811,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "central_hub",
+              "spoke_nodes",
+              "connection_lines"
+            ]
+          }
+        },
+        {
+          "template_id": "hub_and_spoke--flow",
+          "presentation_form_id": "flow",
+          "presentation_form_name": "Flow",
+          "visual_id": "chalkboard-lab",
+          "layout": "data-left",
+          "composition_name": "spoke-detail",
+          "motion_profile": "flow-trace",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "hub_and_spoke--flow",
+            "scene_id": "hub_and_spoke",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "hub",
+              "services",
+              "coordination"
+            ],
+            "data_shape": "network_star",
+            "motion": "spokes_connect",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.875,
+                  "y": 8.54,
+                  "w": 31,
+                  "h": 68
+                },
+                "art": {
+                  "x": 38.802,
+                  "y": 4.811,
+                  "w": 56,
+                  "h": 88
+                },
+                "proof": {
+                  "x": 5.286,
+                  "y": 81.757,
+                  "w": 31,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.875,
+                    "y": 8.54,
+                    "w": 31,
+                    "h": 68
+                  },
+                  {
+                    "x": 5.286,
+                    "y": 81.757,
+                    "w": 31,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.755,
+                  "y": 69.42,
+                  "w": 86,
+                  "h": 23
+                },
+                "art": {
+                  "x": 4.856,
+                  "y": 4.853,
+                  "w": 90,
+                  "h": 54
+                },
+                "proof": {
+                  "x": 7.208,
+                  "y": 61.811,
+                  "w": 86,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.755,
+                    "y": 69.42,
+                    "w": 86,
+                    "h": 23
+                  },
+                  {
+                    "x": 7.208,
+                    "y": 61.811,
+                    "w": 86,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "central_hub",
+              "spoke_nodes",
+              "connection_lines"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "module_dependency",
+      "category_id": "systems",
+      "category_name": "Systems",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "module_dependency--architecture",
+          "presentation_form_id": "architecture",
+          "presentation_form_name": "Architecture",
+          "visual_id": "chalkboard-lab",
+          "layout": "diagram-right-rail",
+          "composition_name": "dependency-map",
+          "motion_profile": "structure-assemble",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "module_dependency--architecture",
+            "scene_id": "module_dependency",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "module",
+              "dependencies",
+              "result"
+            ],
+            "data_shape": "directed_graph",
+            "motion": "dependency_trace",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.45,
+                  "y": 7.46,
+                  "w": 54.78,
+                  "h": 42.099
+                },
+                "art": {
+                  "x": 64,
+                  "y": 5.189,
+                  "w": 31.154,
+                  "h": 87.945
+                },
+                "proof": {
+                  "x": 5,
+                  "y": 78.243,
+                  "w": 55.077,
+                  "h": 15
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.45,
+                    "y": 7.46,
+                    "w": 54.78,
+                    "h": 42.099
+                  },
+                  {
+                    "x": 5,
+                    "y": 78.243,
+                    "w": 55.077,
+                    "h": 15
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 6.45,
+                  "y": 4.58,
+                  "w": 32.78,
+                  "h": 67.099
+                },
+                "art": {
+                  "x": 43,
+                  "y": 5.147,
+                  "w": 51.154,
+                  "h": 79.945
+                },
+                "proof": {
+                  "x": 6,
+                  "y": 75.189,
+                  "w": 33.077,
+                  "h": 12
+                },
+                "avoid_zones": [
+                  {
+                    "x": 6.45,
+                    "y": 4.58,
+                    "w": 32.78,
+                    "h": 67.099
+                  },
+                  {
+                    "x": 6,
+                    "y": 75.189,
+                    "w": 33.077,
+                    "h": 12
+                  }
+                ]
+              }
+            },
+            "copy_density": "editorial",
+            "support_components": [
+              "dependency_nodes",
+              "required_links",
+              "failure_marker"
+            ]
+          }
+        },
+        {
+          "template_id": "module_dependency--flow",
+          "presentation_form_id": "flow",
+          "presentation_form_name": "Flow",
+          "visual_id": "electric-cyan",
+          "layout": "timeline-band",
+          "composition_name": "dependency-path",
+          "motion_profile": "flow-trace",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "module_dependency--flow",
+            "scene_id": "module_dependency",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "module",
+              "dependencies",
+              "result"
+            ],
+            "data_shape": "directed_graph",
+            "motion": "dependency_trace",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.673,
+                  "y": 4.46,
+                  "w": 57.78,
+                  "h": 32.099
+                },
+                "art": {
+                  "x": 4.901,
+                  "y": 41.189,
+                  "w": 90.154,
+                  "h": 51.945
+                },
+                "proof": {
+                  "x": 66.143,
+                  "y": 7.243,
+                  "w": 29.077,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.673,
+                    "y": 4.46,
+                    "w": 57.78,
+                    "h": 32.099
+                  },
+                  {
+                    "x": 66.143,
+                    "y": 7.243,
+                    "w": 29.077,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.613,
+                  "y": 71.58,
+                  "w": 85.78,
+                  "h": 21.099
+                },
+                "art": {
+                  "x": 4.928,
+                  "y": 5.147,
+                  "w": 90.154,
+                  "h": 60.945
+                },
+                "proof": {
+                  "x": 7.104,
+                  "y": 67.189,
+                  "w": 86.077,
+                  "h": 4
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.613,
+                    "y": 71.58,
+                    "w": 85.78,
+                    "h": 21.099
+                  },
+                  {
+                    "x": 7.104,
+                    "y": 67.189,
+                    "w": 86.077,
+                    "h": 4
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "dependency_nodes",
+              "required_links",
+              "failure_marker"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "nested_taxonomy",
+      "category_id": "systems",
+      "category_name": "Systems",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "organization_tree",
+      "category_id": "systems",
+      "category_name": "Systems",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "supply_network",
+      "category_id": "systems",
+      "category_name": "Systems",
+      "echarts_supported": true,
+      "candidate_count": 2,
+      "candidates": [
+        {
+          "template_id": "supply_network--architecture",
+          "presentation_form_id": "architecture",
+          "presentation_form_name": "Architecture",
+          "visual_id": "atlas-blue",
+          "layout": "full-width-stage",
+          "composition_name": "supply-web",
+          "motion_profile": "structure-assemble",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "supply_network--architecture",
+            "scene_id": "supply_network",
+            "reading_order": [
+              "headline",
+              "semantic_art",
+              "evidence"
+            ],
+            "semantic_slots": [
+              "inputs",
+              "constraints",
+              "delivery"
+            ],
+            "data_shape": "supply_graph",
+            "motion": "supply_route",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.513,
+                  "y": 5,
+                  "w": 45.78,
+                  "h": 28.099
+                },
+                "art": {
+                  "x": 5,
+                  "y": 36,
+                  "w": 90.154,
+                  "h": 56.945
+                },
+                "proof": {
+                  "x": 56,
+                  "y": 7,
+                  "w": 39.077,
+                  "h": 22
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.513,
+                    "y": 5,
+                    "w": 45.78,
+                    "h": 28.099
+                  },
+                  {
+                    "x": 56,
+                    "y": 7,
+                    "w": 39.077,
+                    "h": 22
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.513,
+                  "y": 5,
+                  "w": 85.78,
+                  "h": 21.099
+                },
+                "art": {
+                  "x": 5,
+                  "y": 29,
+                  "w": 90.154,
+                  "h": 61.945
+                },
+                "proof": {
+                  "x": 7,
+                  "y": 93,
+                  "w": 86.077,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.513,
+                    "y": 5,
+                    "w": 85.78,
+                    "h": 21.099
+                  },
+                  {
+                    "x": 7,
+                    "y": 93,
+                    "w": 86.077,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "headline",
+            "support_components": [
+              "supply_nodes",
+              "capacity_links",
+              "constraint_marker"
+            ]
+          }
+        },
+        {
+          "template_id": "supply_network--flow",
+          "presentation_form_id": "flow",
+          "presentation_form_name": "Flow",
+          "visual_id": "luminous-grid",
+          "layout": "data-left",
+          "composition_name": "supply-bottleneck",
+          "motion_profile": "flow-trace",
+          "duration_seconds": 5,
+          "composition": {
+            "id": "supply_network--flow",
+            "scene_id": "supply_network",
+            "reading_order": [
+              "context",
+              "semantic_art",
+              "annotation"
+            ],
+            "semantic_slots": [
+              "inputs",
+              "constraints",
+              "delivery"
+            ],
+            "data_shape": "supply_graph",
+            "motion": "supply_route",
+            "ratio_geometry": {
+              "16:9": {
+                "copy": {
+                  "x": 5.736,
+                  "y": 8,
+                  "w": 30.78,
+                  "h": 68.099
+                },
+                "art": {
+                  "x": 38.901,
+                  "y": 5,
+                  "w": 56.154,
+                  "h": 87.945
+                },
+                "proof": {
+                  "x": 5.143,
+                  "y": 82,
+                  "w": 31.077,
+                  "h": 11
+                },
+                "avoid_zones": [
+                  {
+                    "x": 5.736,
+                    "y": 8,
+                    "w": 30.78,
+                    "h": 68.099
+                  },
+                  {
+                    "x": 5.143,
+                    "y": 82,
+                    "w": 31.077,
+                    "h": 11
+                  }
+                ]
+              },
+              "9:16": {
+                "copy": {
+                  "x": 7.676,
+                  "y": 69,
+                  "w": 85.78,
+                  "h": 23.099
+                },
+                "art": {
+                  "x": 4.928,
+                  "y": 5,
+                  "w": 90.154,
+                  "h": 53.945
+                },
+                "proof": {
+                  "x": 7.104,
+                  "y": 62,
+                  "w": 86.077,
+                  "h": 5
+                },
+                "avoid_zones": [
+                  {
+                    "x": 7.676,
+                    "y": 69,
+                    "w": 85.78,
+                    "h": 23.099
+                  },
+                  {
+                    "x": 7.104,
+                    "y": 62,
+                    "w": 86.077,
+                    "h": 5
+                  }
+                ]
+              }
+            },
+            "copy_density": "metric",
+            "support_components": [
+              "supply_nodes",
+              "capacity_links",
+              "constraint_marker"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "scene_id": "technology_layers",
+      "category_id": "systems",
+      "category_name": "Systems",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "countdown_schedule",
+      "category_id": "timeline",
+      "category_name": "Timeline",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "cycle_timeline",
+      "category_id": "timeline",
+      "category_name": "Timeline",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "era_evolution",
+      "category_id": "timeline",
+      "category_name": "Timeline",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "milestone_rail",
+      "category_id": "timeline",
+      "category_name": "Timeline",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "parallel_tracks",
+      "category_id": "timeline",
+      "category_name": "Timeline",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "past_present_future",
+      "category_id": "timeline",
+      "category_name": "Timeline",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "product_roadmap",
+      "category_id": "timeline",
+      "category_name": "Timeline",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    },
+    {
+      "scene_id": "turning_point_timeline",
+      "category_id": "timeline",
+      "category_name": "Timeline",
+      "echarts_supported": false,
+      "candidate_count": 0,
+      "candidates": []
+    }
+  ]
+}

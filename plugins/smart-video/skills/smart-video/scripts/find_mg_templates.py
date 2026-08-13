@@ -9,12 +9,12 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1] / "assets" / "semantic-mg-references"
 MAPPING_PATH = ROOT / "scene-template-map.json"
-PUBLIC_CATALOG_VERSION = "semantic_mg_reference_catalog"
+CATALOG_VERSION = "semantic_scene_catalog"
 
 
 def load_mapping() -> dict[str, Any]:
     mapping = json.loads(MAPPING_PATH.read_text(encoding="utf-8"))
-    if mapping.get("version") != "semantic_mg_reference_mapping":
+    if mapping.get("version") != CATALOG_VERSION:
         raise SystemExit(f"invalid MG reference mapping: {MAPPING_PATH}")
     return mapping
 
@@ -34,7 +34,7 @@ def emit(value: Any, *, as_json: bool) -> None:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Inspect bundled semantic MG references")
+    parser = argparse.ArgumentParser(description="Inspect bundled semantic scene hints")
     parser.add_argument("command", choices=("summary", "scenes", "candidates", "get"))
     parser.add_argument("value", nargs="?")
     parser.add_argument("--category")
@@ -45,7 +45,7 @@ def main() -> int:
 
     if args.command == "summary":
         emit({
-            "version": PUBLIC_CATALOG_VERSION,
+            "version": mapping.get("version"),
             "mode": mapping.get("mode"),
             "scene_count": mapping.get("scene_count"),
             "template_count": mapping.get("template_count"),

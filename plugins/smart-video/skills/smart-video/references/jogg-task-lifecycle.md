@@ -14,8 +14,10 @@
 
 ## Shot Audio
 
+These steps apply only to shots without Avatar output.
+
 1. Resolve a selected voice from the catalog, or omit `voice_id` for the service
-   default.
+   default when the Jogg TTS endpoint permits it.
 2. Write a `submitting` checkpoint, then submit TTS with a stable idempotency key.
 3. Persist the returned `task_id` and poll the Task until terminal.
 4. Download the transient audio and optional subtitle URL immediately.
@@ -23,12 +25,15 @@
 
 ## Avatar Shots
 
-1. Complete Shot Audio first so local narration owns timeline timing.
-2. For shots selected by `avatar_mode`, submit avatar text mode with `avatar_id`,
-   `text`, and `voice_id` under a separate stable idempotency key.
-3. Poll and download video locally. Artifact input mode is valid only for a
-   caller-owned uploaded `audio_artifact_id`.
-4. Non-avatar shots stop after Shot Audio and never create an avatar Task.
+1. Do not submit the shot to TTS and do not upload a narration audio Artifact.
+2. Submit Avatar text mode exactly once with `avatar_id`, the shot narration as
+   `text`, and the selected `voice_id`, under a stable idempotency key.
+3. Poll and download the Avatar video locally. Use the
+   embedded audio stream from that downloaded MP4 as the final narration and as
+   the measured shot duration. Composite the MP4 visual stream muted; no
+   separate Shot Audio file exists for the same shot.
+4. A missing selected voice is `waiting_avatar_confirmation`; never fall back to
+   a separate TTS request or Avatar audio mode.
 
 ## ASR
 
@@ -52,8 +57,9 @@ with the same idempotency identity according to the server error. A missing
 
 Local Media is a pre-submission alternative selected explicitly in Settings.
 macOS uses the managed native speech bridge; Windows uses Edge TTS and managed
-offline ASR. Both use the npm-managed on-device avatar renderer. Outputs remain under
-the unique project workspace.
+offline ASR. These local speech paths do not provide Avatar rendering. Avatar
+generation always requires the authorized Jogg Task and Artifact APIs. Outputs
+remain under the unique project workspace.
 
 Never switch a run to Local Media after any Jogg Task, Operation, Artifact, or
 historical video checkpoint exists. Such a run remains a Jogg reconciliation

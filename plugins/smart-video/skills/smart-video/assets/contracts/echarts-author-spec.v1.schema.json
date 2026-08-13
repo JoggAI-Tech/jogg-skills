@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jogg.ai/schemas/smart-video/echarts-mg-spec.v1.schema.json",
+  "title": "Smart Video ECharts MG author spec",
+  "description": "Skill-authored declarative input accepted by the npm 0.1.3 ECharts runtime.",
+  "type": "object",
+  "required": [
+    "asset_type",
+    "recipe_id",
+    "title",
+    "support",
+    "transition_at_s",
+    "layout",
+    "data"
+  ],
+  "properties": {
+    "asset_type": {
+      "const": "echarts_mg"
+    },
+    "recipe_id": {
+      "enum": [
+        "universal-line-bar",
+        "map-bar-morph",
+        "graph-propagation",
+        "radar-reveal",
+        "causal-flow",
+        "waterfall-decline",
+        "stacked-leverage",
+        "official-example"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 48
+    },
+    "support": {
+      "type": "string",
+      "maxLength": 88
+    },
+    "transition_at_s": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "duration_seconds": {
+      "type": "number",
+      "minimum": 0.2,
+      "maximum": 900
+    },
+    "layout": {
+      "enum": [
+        "standard",
+        "avatar-left",
+        "avatar-right"
+      ]
+    },
+    "data": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "visual_reference": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": false
+}

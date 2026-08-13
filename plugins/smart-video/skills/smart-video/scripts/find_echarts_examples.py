@@ -6,13 +6,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import shutil
 import sys
 from pathlib import Path
-
-
-SKILL_ROOT = Path(__file__).resolve().parents[1]
-TEMPLATE_ROOT = SKILL_ROOT / "assets" / "echarts-examples"
 
 
 def _runtime_root() -> Path:
@@ -92,27 +87,6 @@ def _show(args: argparse.Namespace) -> int:
     return 0
 
 
-def _template(args: argparse.Namespace) -> int:
-    summary = video_studio_echarts_catalog.catalog_summary()
-    category = next((item for item in summary["categories"] if item["id"].lower() == args.category.lower()), None)
-    if not category:
-        print(f"unknown ECharts category: {args.category}", file=sys.stderr)
-        return 1
-    record = video_studio_echarts_catalog.get_example(category["representative_id"])
-    relative = next(iter(record["local_templates"]), "")
-    source = TEMPLATE_ROOT / relative
-    if not relative or not source.is_file():
-        print(f"local representative is unavailable for {args.category}", file=sys.stderr)
-        return 1
-    if args.output:
-        args.output.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source, args.output)
-        print(args.output)
-    else:
-        sys.stdout.write(source.read_text(encoding="utf-8"))
-    return 0
-
-
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     commands = parser.add_subparsers(dest="command", required=True)
@@ -129,10 +103,6 @@ def build_parser() -> argparse.ArgumentParser:
     show.add_argument("example_id")
     show.add_argument("--json", action="store_true")
     show.set_defaults(handler=_show)
-    template = commands.add_parser("template")
-    template.add_argument("category")
-    template.add_argument("--output", type=Path)
-    template.set_defaults(handler=_template)
     return parser
 
 
