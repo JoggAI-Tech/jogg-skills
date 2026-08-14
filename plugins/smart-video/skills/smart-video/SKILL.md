@@ -17,8 +17,7 @@ For a new video, show only:
 1. Service preparation before content planning. Explain that Jogg online TTS and
    Avatars consume JoggAI API Credits. Offer the returned Jogg authentication
    link when the user has credits; otherwise ask them to reply `none` to use
-   Local Media. Explain that automatic B-roll requires a Pexels API Key and
-   provide the returned Pexels settings link.
+   Local Media.
 2. A compact Brief and its confirmation request.
 3. The complete Storyboard, subtitle choice, and its confirmation request.
 4. A production summary derived from the confirmed Storyboard, its required
@@ -42,8 +41,7 @@ palette, chart type, or Slide strategy.
    `jogg_voice_url`.
    Before creating the Brief, show the service-preparation checkpoint. If Jogg
    is not connected, let the user authenticate or reply `none`; after that
-   explicit reply, invoke `use-local` to select Local Media. Offer Pexels setup
-   in the same checkpoint. Do not claim that JoggAI API
+   explicit reply, invoke `use-local` to select Local Media. Do not claim that JoggAI API
    Credits are sufficient when the runtime cannot verify their balance.
 3. Create a new `workspace`. Reuse `--work-dir` only when explicitly requested.
 4. Build the Brief from the topic, source boundary, audience, language, tone,
@@ -61,7 +59,9 @@ palette, chart type, or Slide strategy.
    ID for every production and an Avatar ID when any Avatar shot exists. Give the
    returned Jogg Voice and Avatar resource-page links so the user can copy the
    required IDs; the local Smart Video editor is not the ID source. Never
-   auto-select a catalog item.
+   auto-select a catalog item. When confirmed B-roll shots still require an
+   automatic download, validate Pexels and provide `pexels_settings_url` only if
+   setup is required.
    Wait for confirmation of the summary and IDs before Slide authoring, media
    generation, or any paid request. A Storyboard with no B-roll does not require
    Pexels.
@@ -193,9 +193,10 @@ paid request automatically. A lost submission response remains
 Missing or invalid Pexels credentials stop only production that still needs an
 automatic B-roll download and return the Pexels settings link. Missing Jogg OAuth
 stops before submission and asks the user to authenticate or explicitly choose
-Local Media. Insufficient JoggAI API Credits stop with the upstream error. After
-any Jogg submission checkpoint exists, never switch that run to Local Media;
-reconcile and resume the existing Jogg work.
+Local Media. Insufficient JoggAI API Credits stop with the upstream error; after
+the user corrects a known pre-acceptance rejection, resume the same run. After
+any accepted or uncertain Jogg submission checkpoint exists, never switch that
+run to Local Media; reconcile and resume the existing Jogg work.
 
 B-roll uses the existing retrieval and replacement behavior in
 [broll-selection.md](references/broll-selection.md). Do not add a second B-roll

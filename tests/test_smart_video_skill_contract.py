@@ -114,6 +114,16 @@ class SmartVideoSkillContractTest(unittest.TestCase):
         self.assertIn("Show the complete Storyboard and wait for confirmation", lifecycle)
         self.assertIn("## Reference Routing", text)
 
+    def test_pexels_setup_follows_confirmed_broll_demand(self) -> None:
+        text = _read(SKILL)
+        before_storyboard = text[:text.index("After Storyboard confirmation")]
+        production = text[text.index("After Storyboard confirmation"):text.index("After production confirmation")]
+
+        self.assertNotIn("Pexels settings link", before_storyboard)
+        self.assertNotIn("Offer Pexels setup", before_storyboard)
+        self.assertIn("Pexels", production)
+        self.assertIn("no B-roll", production)
+
     def test_skill_preserves_lifecycle_and_recovery_invariants(self) -> None:
         text = _read(SKILL)
         lifecycle = text[text.index("## Lifecycle"):text.index("## Shot Types")]
@@ -145,6 +155,7 @@ class SmartVideoSkillContractTest(unittest.TestCase):
         for required in (
             "`submission_unknown`",
             "`blocked_jogg_recovery`",
+            "`rejected` checkpoint",
             "never resubmit",
             "`settings_url`",
             "`authoring_context`",

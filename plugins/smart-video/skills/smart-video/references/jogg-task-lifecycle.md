@@ -62,7 +62,10 @@ duplicate work.
 
 If a request is known to have failed before acceptance, it may be resubmitted
 with the same idempotency identity according to the server error. A missing
-`task_id` alone does not prove failure.
+`task_id` alone does not prove failure. A `rejected` checkpoint with no remote
+Task, Operation, or Artifact remains resumable after the user corrects credits
+or the required media IDs. Once any remote identifier exists, preserve the
+original media profile and reconcile that remote work instead.
 
 ## Local Media
 
