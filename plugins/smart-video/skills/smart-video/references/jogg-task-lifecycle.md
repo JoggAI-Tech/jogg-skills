@@ -13,10 +13,19 @@
    exposes tokens to Skills, scripts, frontend state, or run JSON.
 
 Jogg online TTS and Avatar requests consume JoggAI API Credits. OAuth connection
-proves authorization, not a sufficient credit balance. When no supported quota
-response is available, report that credit confirmation is still required; do not
-invent a balance. Preserve and surface a rejected submission's upstream credit
-error without switching providers.
+proves authorization, not a sufficient credit balance. Preflight reads
+`/plugin/v1/quota/summary` through the loopback runtime and exposes only:
+
+- `available`: continue with Jogg production.
+- `unlimited`: continue with Jogg production.
+- `insufficient`: before submission, ask the user to choose Local Media or open
+  `https://www.jogg.ai/api-pricing/` to buy API Credits.
+- `unknown`: report that the balance could not be verified; never interpret it
+  as either sufficient or empty.
+
+The quota request is advisory and must not expose an OAuth token. Preserve and
+surface a rejected submission's upstream credit error without switching
+providers.
 
 Before any paid submission, require an explicit Voice ID copied by the user. If
 the confirmed Storyboard contains an Avatar shot, also require an explicit Avatar

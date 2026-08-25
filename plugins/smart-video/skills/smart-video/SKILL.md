@@ -16,8 +16,8 @@ For a new video, show only:
 
 1. Service preparation before content planning. Explain that Jogg online TTS and
    Avatars consume JoggAI API Credits. Offer the returned Jogg authentication
-   link when the user has credits; otherwise ask them to reply `none` to use
-   Local Media.
+   link when disconnected. When the measured balance is insufficient, offer
+   Local Media or the returned API Pricing link.
 2. A compact Brief and its confirmation request.
 3. The complete Storyboard, subtitle choice, and its confirmation request.
 4. A production summary derived from the confirmed Storyboard, its required
@@ -42,7 +42,12 @@ palette, chart type, or Slide strategy.
    Before creating the Brief, show the service-preparation checkpoint. If Jogg
    is not connected, let the user authenticate or reply `none`; after that
    explicit reply, invoke `use-local` to select Local Media. Do not claim that JoggAI API
-   Credits are sufficient when the runtime cannot verify their balance.
+   Credits are sufficient when the runtime cannot verify their balance. Treat
+   `available` and `unlimited` as ready. For `insufficient`, ask the user to
+   choose Local Media or open `jogg_api_quota.pricing_url`; do not start paid
+   production until they choose. Report `unknown` as unverified, not as zero.
+   When the user is only completing setup, provide the starter prompt shown by
+   Settings. Create a new Codex task only when the user explicitly asks for one.
 3. Create a new `workspace`. Reuse `--work-dir` only when explicitly requested.
 4. Build the Brief from the topic, source boundary, audience, language, tone,
    target duration, aspect ratio, and B-roll availability. Accept `16:9` or
@@ -193,10 +198,12 @@ paid request automatically. A lost submission response remains
 Missing or invalid Pexels credentials stop only production that still needs an
 automatic B-roll download and return the Pexels settings link. Missing Jogg OAuth
 stops before submission and asks the user to authenticate or explicitly choose
-Local Media. Insufficient JoggAI API Credits stop with the upstream error; after
-the user corrects a known pre-acceptance rejection, resume the same run. After
-any accepted or uncertain Jogg submission checkpoint exists, never switch that
-run to Local Media; reconcile and resume the existing Jogg work.
+Local Media. A measured zero balance before submission offers Local Media or
+`https://www.jogg.ai/api-pricing/`. Insufficient JoggAI API Credits returned by a
+submission stop with the upstream error; after the user corrects a known
+pre-acceptance rejection, resume the same run. After any accepted or uncertain
+Jogg submission checkpoint exists, never switch that run to Local Media;
+reconcile and resume the existing Jogg work.
 
 B-roll uses the existing retrieval and replacement behavior in
 [broll-selection.md](references/broll-selection.md). Do not add a second B-roll
