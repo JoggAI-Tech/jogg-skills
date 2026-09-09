@@ -26,11 +26,11 @@ contains its portable inference source and encrypted model assets, and creates
 its managed Python environment outside `node_modules` during explicit resource
 installation. Encrypted Avatar templates are no longer bundled into the plugin.
 The optional presenter packs can be installed, updated, and removed independently under
-`~/.codex/smartvideo/resources/avatar-packs/`:
+`<selected-root>/resources/avatar-packs/`:
 
 ```bash
-npx --yes @joggai/smartvideo@0.1.13 resources install classroom-presenter
-npx --yes @joggai/smartvideo@0.1.13 resources install office-presenter
+bash "<plugin-root>/scripts/smart-video.sh" resources install classroom-presenter
+bash "<plugin-root>/scripts/smart-video.sh" resources install office-presenter
 ```
 
 Each resource command atomically installs or upgrades the managed Avatar driver
@@ -55,18 +55,21 @@ package manager.
 
 macOS FFmpeg setup follows the same managed-runtime principle. Smart Video
 downloads a pinned, checksum-verified static build from the macOS provider
-linked by `ffmpeg.org`, keeps it under `~/.codex/smartvideo`, and never invokes
+linked by `ffmpeg.org`, keeps it under the selected data root, and never invokes
 Homebrew for FFmpeg.
 
 ```bash
-bash scripts/smart-video.sh doctor
-bash scripts/smart-video.sh bootstrap
-bash scripts/smart-video.sh upgrade
-bash scripts/smart-video.sh preflight
+bash "<plugin-root>/scripts/smart-video.sh" doctor
+bash "<plugin-root>/scripts/smart-video.sh" bootstrap
+bash "<plugin-root>/scripts/smart-video.sh" upgrade
+bash "<plugin-root>/scripts/smart-video.sh" preflight
 ```
 
 Generated projects, OAuth credentials, task checkpoints, and managed runtime
-state live under `~/.codex/smartvideo/`, outside the immutable plugin cache.
+state live outside the immutable plugin cache. The launcher automatically uses
+the system user directory or a writable workspace's `.smartvideo` directory;
+`SMARTVIDEO_HOME` can override that selection. For directory selection and sandbox access, see
+[Data Directory And Sandbox Access](INSTALL.md#data-directory-and-sandbox-access).
 Incomplete projects may open in the English-by-default editor, while MP4 export
 continues to require complete render assets.
 

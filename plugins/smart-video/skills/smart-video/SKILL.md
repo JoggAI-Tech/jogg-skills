@@ -33,6 +33,22 @@ palette, chart type, or Slide strategy.
 
 ## Lifecycle
 
+Run commands from the intended writable workspace. The plugin automatically
+uses Windows `USERPROFILE` or macOS/Linux `HOME` for the default data directory;
+when that location is unavailable, it selects `<current-directory>/.smartvideo`.
+An existing `.smartvideo` in the current directory or an ancestor is reused first.
+Keep the same working directory until bootstrap creates the selected root.
+Do not require the user to set an environment variable for this automatic flow.
+An explicit `SMARTVIDEO_HOME` takes priority and must be preserved on every
+command; use it to reach the same data root from an unrelated working directory.
+Configuration lives at `<selected-root>/config.json`; `CODEX_HOME` does not
+control this path. Do not switch an existing project to a newly selected root
+or reuse a service from another root; retain its original root for resume.
+On `smartvideo_storage_unavailable`, report the failing path as a filesystem
+access problem and follow the data-directory guidance in
+[INSTALL.md](../../INSTALL.md). Do not treat it as an account, Jogg MCP, API
+Credits, or AppSumo plan failure. Changing roots does not migrate existing runs.
+
 1. Run `doctor`; run `bootstrap` only when dependencies are missing. When a plugin
    update reports a managed runtime version mismatch, invoke `upgrade` once. The
    runtime BOM pins the independently versioned child packages.

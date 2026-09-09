@@ -75,6 +75,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         expected_scripts = {
             "install-node-official.sh",
             "smart-video.sh",
+            "storage-paths.sh",
             "smart-video.cmd",
             "smart-video.ps1",
             "video-studio.sh",
@@ -148,6 +149,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             release["plugin_runtime_files"],
             [
                 "scripts/smart-video.sh",
+                "scripts/storage-paths.sh",
                 "scripts/install-node-official.sh",
                 "scripts/smart-video.cmd",
                 "scripts/smart-video.ps1",
