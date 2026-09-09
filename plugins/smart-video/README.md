@@ -1,6 +1,6 @@
 # Smart Video
 
-Release `0.8.20` provides the Smart Video Skill, editor workflow, media
+Release `0.8.21` provides the Smart Video Skill, editor workflow, media
 orchestration, MG references, and a pinned npm-managed runtime for macOS and
 Windows.
 

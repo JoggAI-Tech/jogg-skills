@@ -90,9 +90,9 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         )
         bom = json.loads((PLUGIN_ROOT / "runtime-bom.json").read_text(encoding="utf-8"))
         release = json.loads((PLUGIN_ROOT / "release-manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(plugin["version"].split("+", 1)[0], "0.8.20")
-        self.assertEqual(bom["plugin_version"], "0.8.20")
-        self.assertEqual(release["version"], "0.8.20")
+        self.assertEqual(plugin["version"].split("+", 1)[0], "0.8.21")
+        self.assertEqual(bom["plugin_version"], "0.8.21")
+        self.assertEqual(release["version"], "0.8.21")
         expected = {
             "@joggai/smartvideo-avatar",
             "@joggai/smartvideo-editor",

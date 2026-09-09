@@ -1,4 +1,4 @@
-# Smart Video 0.8.20 Installation
+# Smart Video 0.8.21 Installation
 
 Smart Video supports macOS and Windows from one plugin. The plugin contains its
 Skill documents, authoring references, and branding. Runtime code is installed

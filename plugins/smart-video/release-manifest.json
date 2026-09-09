@@ -1,10 +1,10 @@
 {
   "schema": "smart_video_release_v2",
-  "version": "0.8.20",
+  "version": "0.8.21",
   "install_contract": "npm_managed",
   "runtime_bom": {
     "entry": "runtime-bom.json",
-    "sha256": "22ff4e16bba0d3c61baa87c07a4edc5d2fd24c0e93ce64e87c05fd1c132ed888"
+    "sha256": "7c27dd4d43e656b7c8e355fe326bf4efdfa74192c126a617ef491107c9893101"
   },
   "npm_runtime": {
     "registry": "https://registry.npmjs.org/",

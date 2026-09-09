@@ -1,6 +1,6 @@
 {
   "schema": "smartvideo_plugin_runtime_bom_v1",
-  "plugin_version": "0.8.20",
+  "plugin_version": "0.8.21",
   "aggregate": {
     "name": "@joggai/smartvideo",
     "version": "0.1.13"
