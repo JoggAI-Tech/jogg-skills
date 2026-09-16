@@ -1,15 +1,15 @@
 {
   "schema": "smart_video_release_v2",
-  "version": "0.8.21",
+  "version": "0.8.22",
   "install_contract": "npm_managed",
   "runtime_bom": {
     "entry": "runtime-bom.json",
-    "sha256": "7c27dd4d43e656b7c8e355fe326bf4efdfa74192c126a617ef491107c9893101"
+    "sha256": "85df6815a1ffc03d9f4116fccbfe1c3f66467415edbf95e1db40bdd8251b9deb"
   },
   "npm_runtime": {
     "registry": "https://registry.npmjs.org/",
     "package": "@joggai/smartvideo",
-    "version": "0.1.13"
+    "version": "0.1.14"
   },
   "plugin_runtime_files": [
     "scripts/smart-video.sh",
@@ -145,7 +145,7 @@
   },
   "session_storage": {
     "projects": "~/.codex/smartvideo",
-    "npm_runtime": "~/.codex/smartvideo/node-runtime/releases/0.1.13",
+    "npm_runtime": "~/.codex/smartvideo/node-runtime/releases/0.1.14",
     "optional_resources": "~/.codex/smartvideo/resources/avatar-packs",
     "plugin_installation": "immutable"
   }

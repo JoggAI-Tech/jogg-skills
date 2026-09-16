@@ -90,9 +90,9 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         )
         bom = json.loads((PLUGIN_ROOT / "runtime-bom.json").read_text(encoding="utf-8"))
         release = json.loads((PLUGIN_ROOT / "release-manifest.json").read_text(encoding="utf-8"))
-        self.assertEqual(plugin["version"].split("+", 1)[0], "0.8.21")
-        self.assertEqual(bom["plugin_version"], "0.8.21")
-        self.assertEqual(release["version"], "0.8.21")
+        self.assertEqual(plugin["version"].split("+", 1)[0], "0.8.22")
+        self.assertEqual(bom["plugin_version"], "0.8.22")
+        self.assertEqual(release["version"], "0.8.22")
         expected = {
             "@joggai/smartvideo-avatar",
             "@joggai/smartvideo-editor",
@@ -101,7 +101,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             "@joggai/smartvideo-runtime",
             "@joggai/smartvideo-speech",
         }
-        self.assertEqual(bom["aggregate"], {"name": "@joggai/smartvideo", "version": "0.1.13"})
+        self.assertEqual(bom["aggregate"], {"name": "@joggai/smartvideo", "version": "0.1.14"})
         self.assertEqual(set(bom["packages"]), expected)
         self.assertEqual(
             bom["packages"],
@@ -130,7 +130,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             {
                 "mode": "npm_registry",
                 "registry": "https://registry.npmjs.org/",
-                "package": "@joggai/smartvideo@0.1.13",
+                "package": "@joggai/smartvideo@0.1.14",
                 "upstream_cli": "@joggai/smartvideo-cli@0.0.7",
             },
         )
@@ -172,8 +172,8 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         self.assertEqual(
             bom["optional_resources"]["avatar_packs"]["install_commands"],
             {
-                "classroom-presenter": "npx --yes @joggai/smartvideo@0.1.13 resources install classroom-presenter",
-                "office-presenter": "npx --yes @joggai/smartvideo@0.1.13 resources install office-presenter",
+                "classroom-presenter": "npx --yes @joggai/smartvideo@0.1.14 resources install classroom-presenter",
+                "office-presenter": "npx --yes @joggai/smartvideo@0.1.14 resources install office-presenter",
             },
         )
         expected_driver = {
@@ -201,7 +201,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             {
                 "registry": "https://registry.npmjs.org/",
                 "package": "@joggai/smartvideo",
-                "version": "0.1.13",
+                "version": "0.1.14",
             },
         )
         self.assertFalse((PLUGIN_ROOT / "npm").exists())
@@ -325,7 +325,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         self.assertEqual(completed.returncode, 0, completed.stderr)
         report = json.loads(completed.stdout)
         self.assertEqual(report["status"], "dependencies_missing")
-        self.assertEqual(report["required"], "@joggai/smartvideo@0.1.13")
+        self.assertEqual(report["required"], "@joggai/smartvideo@0.1.14")
         self.assertIn("bootstrap", report["bootstrap_command"])
         self.assertIn("smart-video.sh", report["bootstrap_command"])
 

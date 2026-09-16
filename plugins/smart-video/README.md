@@ -1,13 +1,13 @@
 # Smart Video
 
-Release `0.8.21` provides the Smart Video Skill, editor workflow, media
+Release `0.8.22` provides the Smart Video Skill, editor workflow, media
 orchestration, MG references, and a pinned npm-managed runtime for macOS and
 Windows.
 
 The managed runtime is installed from these pinned public npm packages:
 
 - `@joggai/smartvideo-cli@0.0.7`
-- `@joggai/smartvideo@0.1.13`
+- `@joggai/smartvideo@0.1.14`
 - `@joggai/smartvideo-runtime@0.1.11`
 - `@joggai/smartvideo-editor@0.1.1`
 - `@joggai/smartvideo-registry@0.1.0`
@@ -16,7 +16,7 @@ The managed runtime is installed from these pinned public npm packages:
 - `@joggai/smartvideo-avatar@0.1.3`
 - `@joggai/smartvideo-avatar-engine@0.1.1` (installed on demand)
 
-`bootstrap` installs `@joggai/smartvideo@0.1.13` into the user's managed Smart
+`bootstrap` installs `@joggai/smartvideo@0.1.14` into the user's managed Smart
 Video runtime. npm resolves the remaining pinned packages from that aggregate
 package. The plugin contains no npm tarballs and requires no source checkout.
 

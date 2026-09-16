@@ -62,8 +62,10 @@ function Get-GitCygpathPath {
 }
 
 function Find-GitBash {
-    $programFilesX86 = Get-Item -Path "Env:ProgramFiles(x86)" -ErrorAction SilentlyContinue |
-        Select-Object -ExpandProperty Value -ErrorAction SilentlyContinue
+    $programFilesX86 = [Environment]::GetEnvironmentVariable(
+        "ProgramFiles(x86)",
+        [EnvironmentVariableTarget]::Process
+    )
     $candidates = @()
     foreach ($root in @($env:ProgramFiles, $env:ProgramW6432, $programFilesX86)) {
         if ($root) { $candidates += Join-Path $root "Git\bin\bash.exe" }
@@ -81,8 +83,10 @@ function Find-GitBash {
 
 function Test-ChromeInstalled {
     if (Get-CommandPath "chrome.exe") { return $true }
-    $programFilesX86 = Get-Item -Path "Env:ProgramFiles(x86)" -ErrorAction SilentlyContinue |
-        Select-Object -ExpandProperty Value -ErrorAction SilentlyContinue
+    $programFilesX86 = [Environment]::GetEnvironmentVariable(
+        "ProgramFiles(x86)",
+        [EnvironmentVariableTarget]::Process
+    )
     foreach ($root in @($env:ProgramFiles, $env:ProgramW6432, $programFilesX86, $env:LOCALAPPDATA)) {
         if ($root -and (Test-Path -LiteralPath (Join-Path $root "Google\Chrome\Application\chrome.exe"))) {
             return $true
