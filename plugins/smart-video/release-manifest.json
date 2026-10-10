@@ -129,10 +129,10 @@
       {
         "resource_id": "office-presenter",
         "avatar_id": "ce6b414b061c44744f95854cc030ac38",
-        "version": "1.0.0",
-        "archive_url": "https://github.com/JoggAI-Tech/jogg-skills/releases/download/smart-video-avatar-office-presenter-v1.0.0/smart-video-avatar-office-presenter-1.0.0.tar.gz",
-        "archive_sha256": "71f8db719131c066444d7b25558334ae12d407cb999205980b3896bc0f105770",
-        "archive_bytes": 228839537
+        "version": "1.0.1",
+        "archive_url": "https://github.com/JoggAI-Tech/jogg-skills/releases/download/smart-video-avatar-office-presenter-v1.0.1/smart-video-avatar-office-presenter-1.0.1.tar.gz",
+        "archive_sha256": "3a3e7e7ed2a4f13957d5911791a0066885f6908cd5afe9c96e1ad0773f0a0368",
+        "archive_bytes": 228773599
       }
     ]
   },
