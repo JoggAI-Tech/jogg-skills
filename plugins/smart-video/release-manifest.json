@@ -4,7 +4,7 @@
   "install_contract": "npm_managed",
   "runtime_bom": {
     "entry": "runtime-bom.json",
-    "sha256": "f216a398cf6f5e6830fab71272d6c68e85411443b873409669f2d8de238bbad0"
+    "sha256": "6ce696786c8ccad13c0499b270a67ed2b28f0d44d89c6cb72d7b6c9d52922e2d"
   },
   "npm_runtime": {
     "registry": "https://registry.npmjs.org/",
