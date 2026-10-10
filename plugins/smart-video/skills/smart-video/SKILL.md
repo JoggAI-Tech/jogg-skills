@@ -49,6 +49,17 @@ dependencies. Planning needs no service startup; workspace needs only Node;
 rendering needs render checks; local speech needs only the selected speech
 capability. Do not prepare every capability before beginning a task.
 
+Local Media is a user-selected production mode, not a dependency-installation
+mode. Before checking or preparing local TTS, ASR, or Avatar dependencies, confirm
+that the user has selected Local Media, explicitly requested that local capability,
+or is resuming a project with an existing local choice. If the production mode is
+undecided, ask about Jogg versus Local Media in chat first. Missing dependencies
+must not silently switch a Jogg request to local production. Once the user selects
+Local Media, directly guide agent-assisted preparation for the local capabilities
+needed by this request; do not ask them to select an installation method again.
+Basic workspace, service, and render tools remain checked only when needed in
+either production mode.
+
 On macOS and Windows, local TTS uses Edge TTS (online Microsoft speech, not
 offline synthesis); local ASR uses faster-whisper with a prepared local model.
 For transcription, use the model destination and model ID returned by
@@ -60,8 +71,9 @@ request, or Edge TTS for an ASR request. Explain Edge TTS's online processing
 before sending speech text, and honor requests for offline-only operation.
 
 When a check reports missing or incompatible dependencies, explain briefly in
-this conversation what this request needs and proceed with agent-assisted
-preparation as the default. Do not ask the user to choose an installation mode
+this conversation what this request needs. For local capabilities, proceed with
+agent-assisted preparation after the user's local-mode choice described above.
+Do not ask the user to choose an installation mode
 or wait at a four-option checkpoint. Inspect existing installations first,
 reuse compatible tools, and prepare only missing items from official sources
 in user directories or isolated Python environments. The task request authorizes
@@ -106,8 +118,10 @@ Credits, or AppSumo plan failure. Changing roots does not migrate existing runs.
    Before a capability is used, check its dependencies with `doctor --for <capability>`:
    service/auth/cloud-generation, legacy-cli, render, html-capture, media-probe,
    local-tts/local-asr/local-avatar. Missing items pause only that capability.
-   Default to agent-assisted preparation in chat without presenting a mode
-   selection. First inspect existing installations, then prepare only the
+   Check local capabilities only after the user's local-mode choice or explicit
+   local request; selecting Local Media leads directly to agent-assisted
+   preparation in chat without another installation-method selection.
+   First inspect existing installations, then prepare only the
    missing items needed for the requested capability in a user directory or isolated Python
    environment using the returned requirements and official sources. Do not
    install a package manager just to install a tool, or upgrade unrelated software.
@@ -131,7 +145,11 @@ Credits, or AppSumo plan failure. Changing roots does not migrate existing runs.
    is not connected, ask in chat whether to authenticate or choose Local Media.
    Open an authentication page only after the user chooses authentication.
    The user may reply `none`; after that
-   explicit reply, invoke `use-local` to select Local Media. Do not claim that JoggAI API
+   explicit reply, invoke `use-local` to select Local Media. Then guide the user
+   directly into agent-assisted preparation for the local capabilities needed by
+   their request, checking and installing missing items on demand in chat.
+   Do not open Settings or ask them to select an installation method.
+   Do not claim that JoggAI API
    Credits are sufficient when the runtime cannot verify their balance. Treat
    `available` and `unlimited` as ready. For `insufficient`, ask the user to
    choose Local Media or open `jogg_api_quota.pricing_url`; do not start paid

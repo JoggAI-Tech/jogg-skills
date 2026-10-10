@@ -37,8 +37,10 @@ language, for example:
 - Help me write the script and storyboard first.
 - Open my existing video project, edit its subtitles, and export an MP4.
 
-Briefly explain that the Agent prepares missing tools when the task needs them,
-and confirms the script/storyboard before production. Online generation can
+Briefly explain that after the user selects Local Media, the Agent directly
+guides preparation of missing local dependencies in chat, only as the task needs
+them, without another installation-method selection. The Agent confirms the
+script/storyboard before production. Online generation can
 require authentication and API Credits; discuss that when the task needs it.
 Then wait for the user's request. Do not start a sample production automatically.
 
