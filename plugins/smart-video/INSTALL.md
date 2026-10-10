@@ -40,7 +40,7 @@ bash "<plugin-root>/scripts/smart-video.sh" doctor --for render --strict --json
 ```powershell
 & "<plugin-root>\scripts\smart-video.cmd" doctor --for service --strict --json
 & "<plugin-root>\scripts\smart-video.cmd" bootstrap
-& "<plugin-root>\scripts\smart-video.cmd" env configure --tool service_python --path "C:\Users\example\SmartVideo\venv\Scripts\python.exe"
+& "<plugin-root>\scripts\smart-video.cmd" env configure --tool service_python --path "C:\SmartVideoBeta\venv\Scripts\python.exe"
 & "<plugin-root>\scripts\smart-video.cmd" doctor --for render --strict --json
 ```
 

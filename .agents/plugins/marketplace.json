@@ -1,11 +1,11 @@
 {
-  "name": "jogg-skills",
+  "name": "jogg-skills-beta",
   "interface": {
-    "displayName": "Jogg Skills"
+    "displayName": "Jogg Skills Beta"
   },
   "plugins": [
     {
-      "name": "smart-video",
+      "name": "smart-video-beta",
       "source": {
         "source": "local",
         "path": "./plugins/smart-video"

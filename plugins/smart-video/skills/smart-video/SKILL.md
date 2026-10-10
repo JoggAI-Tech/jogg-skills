@@ -1,9 +1,14 @@
 ---
-name: smart-video
+name: smart-video-beta
 description: Use when the user asks to install, set up, or start using the Smart Video plugin, or to plan, create, continue, inspect, edit, preview, or render a Smart Video with Jogg voices, talking avatars, B-roll, semantic Slides, ECharts, subtitles, BGM, or a local MP4.
 ---
 
-# Smart Video
+# Smart Video Beta
+
+This is the beta channel. Use this plugin's launcher for every operation; do not
+use a global CLI or the stable plugin. Its default data root is
+~/.codex/smartvideo-beta, separate from stable projects and configuration.
+Do not point it at production data or change stable plugin installations.
 
 Create an editable video through the npm-managed local Smart Video Studio. Use
 `smart-video.sh` on macOS and `smart-video.cmd` on Windows. The Skill owns content
@@ -203,7 +208,7 @@ Credits, or AppSumo plan failure. Changing roots does not migrate existing runs.
    Wait for confirmation of the summary and IDs before Slide authoring, media
    generation, or any paid request. A Storyboard with no B-roll does not require
    Pexels.
-7. After production confirmation, use the plugin's `$direct-slide-art` Skill once
+7. After production confirmation, use the plugin's `$direct-slide-art-beta` Skill once
    with the complete confirmed Brief, script, and ordered Slide-bearing shots.
    Write its exact output to `<workspace_dir>/plans/slide-art-direction.json`.
    Do not expose this private artifact, invoke the Skill once per Slide, or replace
@@ -349,7 +354,7 @@ selection system.
 | Phase | Read |
 | --- | --- |
 | Brief, script, Storyboard, shot strategy, intents | [content-orchestration.md](references/content-orchestration.md) |
-| Whole-video and per-Slide art direction | Plugin Skill `$direct-slide-art` |
+| Whole-video and per-Slide art direction | Plugin Skill `$direct-slide-art-beta` |
 | B-roll retrieval | [broll-selection.md](references/broll-selection.md) |
 | Whole-video MASTER | [visual-reference.md](references/visual-reference.md) |
 | Per-Slide design | [slide-design.md](references/slide-design.md) |
