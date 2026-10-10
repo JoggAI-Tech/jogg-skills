@@ -47,7 +47,10 @@
         "classroom-presenter",
         "office-presenter"
       ],
-      "version": "1.0.0",
+      "versions": {
+        "classroom-presenter": "1.0.0",
+        "office-presenter": "1.0.1"
+      },
       "driver": {
         "driver_id": "avatar-engine",
         "package": "@joggai/smartvideo-avatar@0.1.3",
