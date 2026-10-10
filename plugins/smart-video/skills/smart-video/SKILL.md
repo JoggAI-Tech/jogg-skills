@@ -16,7 +16,9 @@ For a new video, show only:
 
 1. Service preparation before content planning. Explain that Jogg online TTS and
    Avatars consume JoggAI API Credits. Offer the returned Jogg authentication
-   link when disconnected. When the measured balance is insufficient, offer
+   link when disconnected only if the user wants Jogg or has not chosen a mode.
+   A user who already requested local production proceeds with local preparation.
+   When the measured balance is insufficient for a Jogg request, offer
    Local Media or the returned API Pricing link.
 2. A compact Brief and its confirmation request.
 3. The complete Storyboard, subtitle choice, and its confirmation request.
@@ -59,6 +61,25 @@ Local Media, directly guide agent-assisted preparation for the local capabilitie
 needed by this request; do not ask them to select an installation method again.
 Basic workspace, service, and render tools remain checked only when needed in
 either production mode.
+
+Treat wording such as "make this locally", "local talking avatar", or
+"帮我本地做一个数字人讲解黄金 60s" as an explicit Local Media choice. Do not
+ask that user to reply "local" again. For a new local request, invoke `use-local`
+after service preparation and before local production checks. An unconnected
+Jogg account is not a blocker for this path. Service readiness alone does not
+mean that local speech or avatar generation is ready: check `local-tts` for
+narration, and also `local-avatar` when the user requests a talking avatar.
+Missing local dependencies are preparation work, not a reason to stop and offer
+Jogg instead. Explain what is missing, prepare it, validate, and continue.
+
+For local talking avatars, reuse a ready compatible presenter first. Otherwise
+use `resources list --json` and `resources status <resource-id> --json` to inspect
+the catalog. Honor a requested presenter; without one, use the catalog's
+`office-presenter` default. Run `resources install <resource-id> --json` through
+this plugin's launcher to prepare the pinned engine and verified resource pack,
+then recheck `doctor --for local-avatar --strict --json`. Do not treat missing
+resources as an unsupported platform. On an actual installation failure, report
+the failed dependency and the concrete error, preserving successful preparation.
 
 On macOS and Windows, local TTS uses Edge TTS (online Microsoft speech, not
 offline synthesis); local ASR uses faster-whisper with a prepared local model.
@@ -142,7 +163,10 @@ Credits, or AppSumo plan failure. Changing roots does not migrate existing runs.
    `jogg_settings_url`, `pexels_settings_url`, `jogg_avatar_url`, and
    `jogg_voice_url`.
    Before creating the Brief, show the service-preparation checkpoint. If Jogg
-   is not connected, ask in chat whether to authenticate or choose Local Media.
+   is not connected and the mode is undecided, ask in chat whether to authenticate
+   or choose Local Media. If the user already requested Local Media, invoke
+   `use-local` directly and prepare its required dependencies; do not offer Jogg
+   authentication or another production-mode checkpoint.
    Open an authentication page only after the user chooses authentication.
    The user may reply `none`; after that
    explicit reply, invoke `use-local` to select Local Media. Then guide the user
@@ -306,8 +330,10 @@ paid request automatically. A lost submission response remains
 
 Missing or invalid Pexels credentials stop only production that still needs an
 automatic B-roll download and return the Pexels settings link. Missing Jogg OAuth
-stops before submission and asks the user to authenticate or explicitly choose
-Local Media. A measured zero balance before submission offers Local Media or
+stops Jogg submission and asks the user to authenticate or explicitly choose
+Local Media only for a Jogg request or an undecided mode. For an explicit local
+request, prepare the required local dependencies without waiting for Jogg login.
+A measured zero balance before Jogg submission offers Local Media or
 `https://www.jogg.ai/api-pricing/`. Insufficient JoggAI API Credits returned by a
 submission stop with the upstream error; after the user corrects a known
 pre-acceptance rejection, resume the same run. After any accepted or uncertain
