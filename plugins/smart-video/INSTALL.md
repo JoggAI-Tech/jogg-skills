@@ -1,136 +1,112 @@
-# Smart Video 0.8.22 Installation
+# Smart Video Installation
 
-Smart Video supports macOS and Windows from one plugin. The plugin contains its
-Skill documents, authoring references, and branding. Runtime code is installed
-from pinned public npm packages; optional Avatar resources are downloaded to the
-user-managed Smart Video directory only when requested.
+The plugin installs only its pinned product npm packages. System software,
+Python packages, browsers, speech bridges, and models are prepared only for the
+capability the user chooses. There is no automatic winget, Homebrew, apt, pip,
+browser download, or model download in ordinary startup and rendering commands.
 
-## User Flow
+## Preparation Flow
 
-1. Run the read-only `doctor` command.
-2. Run the returned `bootstrap` command when dependencies are missing.
-3. After updating the plugin, run `upgrade` once and then `doctor`.
-4. Open the verified Settings URL and authorize Jogg, or select Local Media for
-   local TTS, ASR, and an explicitly installed Avatar engine.
+After plugin installation, follow the bundled
+[installation handoff and usage guidance](skills/smart-video/references/post-install.md).
+The installing Agent opens the requested new chat through host tools. Onboarding
+does not require product bootstrap or system dependency preparation.
 
-```bash
-bash "<plugin-root>/scripts/smart-video.sh" doctor
-bash "<plugin-root>/scripts/smart-video.sh" bootstrap
-bash "<plugin-root>/scripts/smart-video.sh" upgrade
-```
-
-```powershell
-& "<plugin-root>\scripts\smart-video.cmd" doctor
-& "<plugin-root>\scripts\smart-video.cmd" bootstrap
-& "<plugin-root>\scripts\smart-video.cmd" upgrade
-```
-
-`doctor` never changes the machine. `bootstrap` installs the pinned
-`@joggai/smartvideo` package under
-`<selected-root>/node-runtime/releases/`, verifies the full package set,
-and atomically updates `active-runtime.json`. An interrupted installation does
-not replace the prior active runtime.
-
-When Node.js is missing or older than `runtime-bom.json#minimum_node`, macOS and
-Linux bootstrap download the matching official binary release directly from
-`https://nodejs.org/dist/`. The installer verifies the archive against Node.js'
-official `SHASUMS256.txt`, then activates it under
-`<selected-root>/node/current`. It does not require Homebrew, sudo, or a
-system-wide Node installation. Existing managed Node versions remain available
-until a later cleanup, so an interrupted upgrade cannot remove the active one.
-
-On macOS, FFmpeg is also managed without Homebrew. Bootstrap installs a pinned,
-SHA-256-verified static build from the macOS provider linked on
-`https://ffmpeg.org/download.html`, then activates `ffmpeg` and `ffprobe` under
-`<selected-root>/bin`. Existing compatible FFmpeg binaries are reused.
-Because the upstream-recommended macOS build is x86_64, Apple Silicon requires
-Apple's Rosetta when no compatible native FFmpeg is already installed.
-
-Smart Video never runs Homebrew. On macOS it reuses compatible Python 3.10-3.13,
-`jq`, and Google Chrome installations. If Python or Chrome is missing,
-bootstrap returns the official python.org or Google download URL; no package
-manager or administrator-level package-manager setup is required by the plugin.
-
-`upgrade` does not blindly install npm `latest`. It reads the updated plugin's
-`runtime-bom.json`, installs that compatible aggregate release, verifies every
-child package against its own pinned version, then atomically activates it.
-Aggregate and child package versions are independent.
-
-The packages do not use npm `postinstall`. Python environments, the Windows
-Vosk model, and the compiled Apple speech bridge are created under the user's
-Smart Video home only during explicit bootstrap. Project data is never stored
-inside the plugin installation.
-
-## Data Directory And Sandbox Access
-
-The plugin automatically detects the operating system and selects storage in
-this order:
-
-1. A nonempty `SMARTVIDEO_HOME` override. An inaccessible explicit path reports
-   an error rather than selecting another directory.
-2. The nearest existing `.smartvideo` directory in the current working directory
-   or its ancestors. This keeps an initialized workspace on the same data root
-   when commands run from project subdirectories or Home permissions change.
-3. The system user directory, when accessible: `%USERPROFILE%\.codex\smartvideo`
-   on Windows, or `$HOME/.codex/smartvideo` on macOS/Linux. Windows uses `HOME`
-   only when `USERPROFILE` is unavailable; native and Git Bash paths are converted
-   automatically.
-4. `<current-working-directory>/.smartvideo` when the system user directory is
-   unavailable. The launcher checks access and reports the selected path. It
-   never chooses a directory inside the plugin installation for automatic storage.
-
-Run commands from the intended writable Codex workspace. The launcher does not
-assume that a particular Documents folder is authorized, inspect Codex's private
-settings, or change sandbox permissions. `CODEX_HOME` does not select Smart Video
-storage. No environment variable is needed for the normal automatic flow:
-
-```powershell
-& "<plugin-root>\scripts\smart-video.cmd" doctor
-& "<plugin-root>\scripts\smart-video.cmd" bootstrap
-& "<plugin-root>\scripts\smart-video.cmd" preflight
-```
-
-Or in Git Bash:
+1. Run `doctor --for service --strict --json`.
+2. If Node is missing for the current request, the Agent first searches existing
+   installations, then prepares Node from https://nodejs.org/en/download. Set
+   `SMARTVIDEO_NODE_BINARY` to the validated absolute path for the initial
+   launcher invocation. Windows also reads persistent User/Machine PATH and
+   existing Node installation locations, so restarting Codex is unnecessary.
+3. If the product runtime is missing, `bootstrap` installs and verifies the
+   pinned npm BOM in a staging directory before activating it.
+4. Explain missing dependencies in chat and default to Agent preparation without
+   an installation-mode selection. Search for compatible existing software and
+   prepare only items needed by the current request from official sources,
+   preferably in user directories and virtualenvs. Honor explicit opt-outs;
+   ask for actual administrator access, paid resources, or destructive replacement.
+5. Register each validated executable with `env configure`, rerun the original
+   capability check, and continue the existing task/checkpoint.
+6. Run `preflight` only when the task needs service facts. Returned Settings URLs
+   do not authorize opening a page; ask about authentication in chat first.
 
 ```bash
-bash "<plugin-root>/scripts/smart-video.sh" doctor
+bash "<plugin-root>/scripts/smart-video.sh" doctor --for service --strict --json
 bash "<plugin-root>/scripts/smart-video.sh" bootstrap
-bash "<plugin-root>/scripts/smart-video.sh" preflight
+bash "<plugin-root>/scripts/smart-video.sh" env configure --tool service_python --path "/absolute/venv/bin/python"
+bash "<plugin-root>/scripts/smart-video.sh" doctor --for render --strict --json
 ```
-
-Before the first write command, use the same working directory for `doctor` and
-`bootstrap`: a read-only `doctor` does not create a workspace directory to persist
-its selection. After initialization, the existing `.smartvideo` directory makes
-selection stable from that workspace and its subdirectories. Commands from an
-unrelated directory need an explicit `SMARTVIDEO_HOME` pointing to the same root.
-Add the workspace's `.smartvideo/` directory to its local ignore rules when using
-version control; it contains local runtime and project data.
-
-For a specific location, optionally set an absolute path, for example:
 
 ```powershell
-$env:SMARTVIDEO_HOME = Join-Path $env:USERPROFILE "Documents\Codex\.smartvideo"
+& "<plugin-root>\scripts\smart-video.cmd" doctor --for service --strict --json
+& "<plugin-root>\scripts\smart-video.cmd" bootstrap
+& "<plugin-root>\scripts\smart-video.cmd" env configure --tool service_python --path "C:\Users\example\SmartVideo\venv\Scripts\python.exe"
+& "<plugin-root>\scripts\smart-video.cmd" doctor --for render --strict --json
 ```
 
-When using an override, keep the same value for every subsequent command, including
-`settings`, `workspace`, `run`, `resume`, `render`, and `upgrade`. A shell-local
-assignment does not configure other terminals or later Codex command processes;
-set it in each invocation or in the environment inherited by the Codex session.
-Selecting a different root creates a separate installation and data tree. It does not move old
-projects or reconnect an already running service to the new directory. Stop the
-old service before switching roots; retain the original directory for existing
-runs. Existing absolute `paths.data_dir` and `paths.tool_dir` values in a copied
-config must be reviewed because they continue to select their original paths.
+The Node CLI handles doctor, env, workspace, settings, and preflight directly.
+These commands do not require Bash, jq, curl, FFmpeg, or a browser unless the
+requested capability needs them. Production orchestration still uses Bash/jq/curl;
+on Windows only that legacy capability requires Git for Windows Bash.
 
-The plugin routes the shell runtime through `--config <SMARTVIDEO_HOME>/config.json`
-and uses the same root for npm packages and managed resources. An explicit
-leading `--config <file>` overrides the config and its derived run/data paths;
-it does not relocate npm packages or resources. Use `SMARTVIDEO_HOME` to select
-the complete root. These examples use the plugin launcher, not a direct npm CLI
-invocation, which may have a different default config in older runtime versions.
+`bootstrap` prepares product directories/packages and diagnoses the service.
+`install-deps` is a diagnosis-only compatibility command.
+`upgrade` installs the new pinned product BOM and diagnoses the service.
+They never install or upgrade system software.
+
+## Capability Checks
+
+| Capability | Environment checked |
+| --- | --- |
+| product-install | Node and its npm-cli.js |
+| service / auth / cloud-generation | Node, Python 3.10+, base service requirements |
+| legacy-cli | Node, Bash, jq, curl |
+| workspace | No external tools beyond the running Node |
+| media-probe | ffprobe |
+| html-capture | Node and a headless browser that can launch |
+| render | Service environment, browser, FFmpeg encoders/filters, ffprobe |
+| local-tts / local-asr / local-avatar | Selected local dependencies and supported platform |
+
+`doctor` reports facts without installing anything. `--strict` returns
+0 for ready, 2 for missing/incompatible dependencies, 3 for an unsupported
+platform, and 4 for invalid configuration. Explicit invalid paths report a
+path error instead of silently falling back. Successful browser detection
+requires rendering a small headless page, not merely finding a file.
+
+The Settings environment panel offers official links, an Agent preparation
+request, path registration, and rechecking. Agent assistance copies a request
+for the existing Codex conversation; the page does not run a system installer.
+
+## Executable Paths
+
+Use `env show` to inspect selected paths without exposing API keys.
+`env configure --tool <id> --path <absolute-path>` validates the executable before
+saving `config.json#tools`. Supported IDs are node, npm_cli, bash, jq, curl,
+python, service_python, ffmpeg, ffprobe, and browser.
+
+Windows npm uses the selected Node to execute npm-cli.js, avoiding npm.cmd
+launch problems. Preserve virtualenv Python symlinks. Tools may live in paths
+with spaces; processes use argument arrays. Paths must be valid in the actual
+execution environment: native Windows, Git Bash, WSL, and Linux are distinct.
+
+The service, media commands, sidecar, and renderer use the registered paths.
+A child's PATH also includes tool directories when a downstream library needs
+command lookup. An entire installation-time PATH snapshot is never saved.
+Path changes affect new operations; finish active production before restarting
+a service whose own interpreter changed. Moving/uninstalling a registered tool
+produces a repair prompt on its next check.
+
+## Data Directory
+
+An explicit `--config <file>` selects that config's parent as the complete root.
+Otherwise selection is: explicit SMARTVIDEO_HOME, nearest existing workspace
+`.smartvideo`, accessible user `.codex/smartvideo`, then workspace `.smartvideo`.
+An inaccessible explicit root is an error. Automatic storage never uses the
+plugin installation. Use the same root and working directory throughout setup;
+doctor does not create a workspace directory to persist its selection.
 
 ```text
-<SMARTVIDEO_HOME>/
+<selected-root>/
   config.json
   active-runtime.json
   service.json
@@ -142,75 +118,49 @@ invocation, which may have a different default config in older runtime versions.
   resources/
 ```
 
-Directories and files appear as their corresponding commands run. Merely
-creating them manually does not grant subsequent read/write permission.
-`smartvideo_storage_unavailable` identifies the directory whose access check
-failed. Check OS permissions and the current Codex session's allowed filesystem
-paths. The pinned npm runtime also creates the adjacent temporary
-`<SMARTVIDEO_HOME>.migration.lock`, so authorizing only the root's contents may
-be insufficient. Selecting a root inside an already authorized workspace covers
-both locations. Custom config, data, or tool directories need their own access.
-The launcher uses only permission checks for `doctor`; commands that write also
-perform a temporary file probe. A write probe may discover a sandbox restriction
-that was invisible to `doctor` and trigger automatic fallback. Explicit overrides
-and existing workspace roots report an error if inaccessible. If neither the
-default location nor the current workspace is writable, the launcher reports
-`smartvideo_storage_unavailable`. The actual runtime operation may still detect
-additional ACL or sandbox restrictions.
+The same root owns product packages, config, resources, and task state. Changing
+roots does not migrate existing runs. Keep old roots for resume operations.
+Authorize both the root and its adjacent migration lock in sandboxed sessions.
+A storage permission error is a local filesystem failure, not a Jogg account
+or API Credits problem. Add workspace `.smartvideo/` to local ignore rules.
 
-A filesystem permission failure does not establish an OAuth, Jogg MCP, API
-Credits, or AppSumo plan entitlement problem. Running in another terminal only
-helps when that terminal has access to the same selected directory; it does not
-grant access to later sandboxed commands.
+Node and Python merge config changes under the same `config.json.write.lock`
+and atomically replace the file, retaining tool registrations and other settings.
 
-## Platform Support
+## Optional Preparation And Platform Limits
 
-| Capability | macOS | Windows |
-| --- | --- | --- |
-| Studio and Jogg OAuth | Yes | Yes |
-| Local TTS | Apple speech | Edge TTS |
-| Local Chinese ASR | Apple speech recognition | Vosk Chinese model |
-| Avatar generation | Jogg API or managed local driver | Jogg API or managed local driver |
-| Local MP4 rendering | Yes | Yes |
+Official software sources: [Node.js](https://nodejs.org/en/download),
+[Python](https://www.python.org/downloads/),
+[Git for Windows](https://git-scm.com/downloads),
+[jq](https://jqlang.org/download/), [curl](https://curl.se/download.html),
+[Chrome](https://www.google.com/chrome/), and
+[FFmpeg / ffprobe](https://ffmpeg.org/download.html).
 
-macOS and Linux bootstrap use the verified official Node.js distribution;
-macOS uses the FFmpeg build recommended by FFmpeg's official download page.
-Windows bootstrap uses `winget` and Git Bash. The exact Node.js minimum comes
-from `runtime-bom.json`; this release requires Node.js 22+, Python 3.10+,
-Google Chrome, `jq`, and FFmpeg with `libx264`, AAC, VP9, and subtitles support.
+Base Python requirements are shipped at `runtime/backend/requirements.txt`.
+macOS and Windows Edge TTS and faster-whisper requirements are separate files
+`requirements-local-tts.txt` and `requirements-local-asr.txt`.
+Edge TTS requires network access and sends speech text to Microsoft's service.
+Whisper ASR runs offline with CPU int8 and requires an explicitly prepared model
+from `Systran/faster-whisper-small`, placed at
+`<data-directory>/local_asr_models/faster-whisper-small`. The Agent prepares the
+model only when transcription is requested; inference never downloads it.
+Run `doctor --for local-tts` or `doctor --for local-asr` independently. Neither
+capability requires the Apple speech bridge, Xcode, or Apple speech permissions.
 
-The published `@joggai/smartvideo-avatar@0.1.3` package contains the remote Jogg
-task contracts and the local `avatar-engine` orchestration driver. The separate
-`@joggai/smartvideo-avatar-engine@0.1.1` package contains the portable inference
-source and encrypted model assets; its managed Python environment is created
-outside `node_modules` only during explicit resource installation. Local Avatar
-bootstrap accepts Python 3.10 through 3.13; set
-`SMARTVIDEO_AVATAR_ENGINE_PYTHON` only when a compatible executable is not the
-default `python3`.
+Optional Avatar resources remain explicitly selected through `resources install`.
+See https://docs.jogg.ai/avatar-resources for classroom-presenter and
+office-presenter. Preparing these resources is a separate choice from login
+and product bootstrap.
 
-When the editor reports missing local Avatar resources, open
-`https://docs.jogg.ai/avatar-resources` and choose a presenter, or run one of:
+Linux dependency diagnosis and core environment flows are available; bundled
+local media still reports unsupported on Linux. This change does not add Linux
+OAuth credential storage or trusted screenshot support. Native Windows and
+Linux production must pass their platform tests before claiming complete support.
 
-```bash
-bash "<plugin-root>/scripts/smart-video.sh" resources install classroom-presenter
-bash "<plugin-root>/scripts/smart-video.sh" resources install office-presenter
-```
+## Coordinated Release
 
-```powershell
-& "<plugin-root>\scripts\smart-video.cmd" resources install classroom-presenter
-& "<plugin-root>\scripts\smart-video.cmd" resources install office-presenter
-```
-
-The installer uses the same Avatar Engine npm package on macOS and Windows. It
-installs the engine and shared driver in one staged release, bootstraps the
-managed Python environment, verifies engine readiness, then verifies and
-activates the Presenter archive below
-`<selected-root>/resources/avatar-packs/`. Plugin upgrades do not remove it.
-`SMARTVIDEO_AVATAR_ENGINE_ROOT` and
-`SMARTVIDEO_AVATAR_ENGINE_MANAGED_ROOT` are developer overrides; normal users do
-not configure them. A missing or invalid engine reports `driver_unavailable`
-instead of treating the Presenter catalog as executable.
-
-Developers may override the registry package spec with
-`SMARTVIDEO_PACKAGE_SPEC`. Normal users do not configure this variable or any
-source checkout path.
+This branch adds `smartvideo_environment_v1`. The current published BOM predates
+this contract. Publish compatible renderer/CLI and npm runtime releases, then
+update the real BOM and release manifest before shipping the plugin. The launcher
+returns `runtime_update_required` when pointed at an old package, preventing
+fallback to its automatic installers. Do not replace pins with npm latest.

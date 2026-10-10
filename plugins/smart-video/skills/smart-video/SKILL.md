@@ -1,6 +1,6 @@
 ---
 name: smart-video
-description: Use when the user asks to plan, create, continue, inspect, edit, preview, or render a Smart Video with Jogg voices, talking avatars, B-roll, semantic Slides, ECharts, subtitles, BGM, or a local MP4.
+description: Use when the user asks to install, set up, or start using the Smart Video plugin, or to plan, create, continue, inspect, edit, preview, or render a Smart Video with Jogg voices, talking avatars, B-roll, semantic Slides, ECharts, subtitles, BGM, or a local MP4.
 ---
 
 # Smart Video
@@ -33,6 +33,52 @@ palette, chart type, or Slide strategy.
 
 ## Lifecycle
 
+### Installation And First Use
+
+For plugin installation, update, or first-use guidance, read
+[post-install.md](references/post-install.md). After a successful installation,
+the installing Agent hands off to a new chat through the host's conversation
+tools when the user has requested that handoff. Carry these instructions in the
+new chat's initial prompt so it loads the installed Skill and offers usage
+examples. Installation alone must not start services or prepare video dependencies.
+
+### Chat-First Preparation
+
+Infer the required capability from the user's current request before checking
+dependencies. Planning needs no service startup; workspace needs only Node;
+rendering needs render checks; local speech needs only the selected speech
+capability. Do not prepare every capability before beginning a task.
+
+On macOS and Windows, local TTS uses Edge TTS (online Microsoft speech, not
+offline synthesis); local ASR uses faster-whisper with a prepared local model.
+For transcription, use the model destination and model ID returned by
+`doctor --for local-asr`, reuse an existing compatible CTranslate2 model when
+available, and explicitly prepare `Systran/faster-whisper-small` only if missing.
+Validate the capability after preparation. Never request Apple speech permissions
+or build the Apple bridge for these defaults. Do not install Whisper for a TTS
+request, or Edge TTS for an ASR request. Explain Edge TTS's online processing
+before sending speech text, and honor requests for offline-only operation.
+
+When a check reports missing or incompatible dependencies, explain briefly in
+this conversation what this request needs and proceed with agent-assisted
+preparation as the default. Do not ask the user to choose an installation mode
+or wait at a four-option checkpoint. Inspect existing installations first,
+reuse compatible tools, and prepare only missing items from official sources
+in user directories or isolated Python environments. The task request authorizes
+routine dependency preparation needed for that task; honor explicit opt-outs.
+Ask only when an actual permission boundary, administrator access, paid resource,
+or destructive replacement requires the user's action. After preparation,
+validate and register paths, recheck, and resume the request.
+Never open Settings, an environment page, an installation website, or a browser
+automatically because a dependency is missing. Do not make the user choose a
+preparation mode on a page or copy an Agent request out of Settings.
+
+Settings is optional and opened only when the user explicitly asks to view or
+edit settings. Returned settings URLs are diagnostic metadata, not instructions
+to navigate. For missing authentication or keys, ask in chat first; open the
+specific authentication/configuration page only after the user chooses that
+action. Ask about Jogg versus Local Media in chat, not on a settings page.
+
 Run commands from the intended writable workspace. The plugin automatically
 uses Windows `USERPROFILE` or macOS/Linux `HOME` for the default data directory;
 when that location is unavailable, it selects `<current-directory>/.smartvideo`.
@@ -49,21 +95,50 @@ access problem and follow the data-directory guidance in
 [INSTALL.md](../../INSTALL.md). Do not treat it as an account, Jogg MCP, API
 Credits, or AppSumo plan failure. Changing roots does not migrate existing runs.
 
-1. Run `doctor`; run `bootstrap` only when dependencies are missing. When a plugin
-   update reports a managed runtime version mismatch, invoke `upgrade` once. The
-   runtime BOM pins the independently versioned child packages.
-2. Run `preflight` and use only its returned service facts, `settings_url`,
+1. Run `doctor --for <required-capability> --strict --json` for the current
+   request. Check service only when this request needs it.
+   `doctor` and `env show` are read-only.
+   `bootstrap` installs only the pinned product npm packages; it does not install
+   system software, Python packages, browsers, or models. `install-deps` only
+   diagnoses. For a product version mismatch, invoke `upgrade` once; never repeat
+   bootstrap to repair a missing system tool. For `runtime_update_required`, stop
+   and update the plugin/runtime contract; do not delegate to the old installer.
+   Before a capability is used, check its dependencies with `doctor --for <capability>`:
+   service/auth/cloud-generation, legacy-cli, render, html-capture, media-probe,
+   local-tts/local-asr/local-avatar. Missing items pause only that capability.
+   Default to agent-assisted preparation in chat without presenting a mode
+   selection. First inspect existing installations, then prepare only the
+   missing items needed for the requested capability in a user directory or isolated Python
+   environment using the returned requirements and official sources. Do not
+   install a package manager just to install a tool, or upgrade unrelated software.
+   Discover the actual installed executable paths immediately; on Windows read
+   persistent User/Machine PATH and installation locations as well as the current
+   process PATH. Validate and register each executable with
+   `env configure --tool <id> --path <absolute-path>`, keeping the same `--config`
+   and SMARTVIDEO_HOME. Register npm-cli.js with its selected Node, and retain
+   virtualenv Python paths without resolving their symlinks. Run the original
+   capability check again from the original execution environment and resume its
+   existing run/checkpoint. Do not require restarting Codex. If an existing busy
+   service still uses old paths, finish its work before restarting that service.
+   On failed preparation preserve successful items and report the failing item;
+   never enter a full-reinstallation loop. For unsupported platforms explain the
+   capability limit and offer another backend instead of installation guidance.
+2. When the request needs service or production, run `preflight` after its
+   dependencies are ready and use only its returned service facts, `settings_url`,
    `jogg_settings_url`, `pexels_settings_url`, `jogg_avatar_url`, and
    `jogg_voice_url`.
    Before creating the Brief, show the service-preparation checkpoint. If Jogg
-   is not connected, let the user authenticate or reply `none`; after that
+   is not connected, ask in chat whether to authenticate or choose Local Media.
+   Open an authentication page only after the user chooses authentication.
+   The user may reply `none`; after that
    explicit reply, invoke `use-local` to select Local Media. Do not claim that JoggAI API
    Credits are sufficient when the runtime cannot verify their balance. Treat
    `available` and `unlimited` as ready. For `insufficient`, ask the user to
    choose Local Media or open `jogg_api_quota.pricing_url`; do not start paid
    production until they choose. Report `unknown` as unverified, not as zero.
-   When the user is only completing setup, provide the starter prompt shown by
-   Settings. Create a new Codex task only when the user explicitly asks for one.
+   When the user is only completing setup, follow
+   [post-install.md](references/post-install.md) for usage guidance and the
+   requested new-chat handoff.
 3. Create a new `workspace`. Reuse `--work-dir` only when explicitly requested.
 4. Build the Brief from the topic, source boundary, audience, language, tone,
    target duration, aspect ratio, and B-roll availability. Accept `16:9` or

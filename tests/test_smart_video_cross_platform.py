@@ -73,6 +73,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             self.assertFalse((PLUGIN_ROOT / removed).exists(), removed)
 
         expected_scripts = {
+            "launcher.mjs",
             "install-node-official.sh",
             "smart-video.sh",
             "storage-paths.sh",
@@ -148,6 +149,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         self.assertEqual(
             release["plugin_runtime_files"],
             [
+                "scripts/launcher.mjs",
                 "scripts/smart-video.sh",
                 "scripts/storage-paths.sh",
                 "scripts/install-node-official.sh",
@@ -231,22 +233,22 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
 
     def test_shell_is_an_atomic_npm_forwarder(self) -> None:
         runner = (PLUGIN_ROOT / "scripts" / "smart-video.sh").read_text(encoding="utf-8")
+        launcher = (PLUGIN_ROOT / "scripts" / "launcher.mjs").read_text(encoding="utf-8")
         self.assertLess(len(runner.splitlines()), 270)
         for required in (
-            "@joggai/smartvideo",
             "SMARTVIDEO_PACKAGE_SPEC",
-            "load_runtime_contract",
-            "install-node-official.sh",
-            'bom.aggregate?.name !== process.env.SMARTVIDEO_EXPECTED_NAME',
-            "npm install",
-            'runtime_root_ready "$staging"',
+            "runtime-bom.json",
+            "--ignore-scripts",
+            "ready(staging)",
+            "renameSync(staging, installRoot)",
             "active-runtime.json",
             "SMARTVIDEO_PLUGIN_ROOT",
-            'SMARTVIDEO_OAUTH_CLIENT_ID="smart-video"',
-            "exec \"$binary\"",
+            'SMARTVIDEO_OAUTH_CLIENT_ID: "smart-video"',
         ):
-            self.assertIn(required, runner)
-        self.assertIn('if runtime_ready; then', runner)
+            self.assertIn(required, launcher)
+        self.assertIn('exec "$node_binary" "$SCRIPT_DIR/launcher.mjs"', runner)
+        self.assertIn("runtime_update_required", launcher)
+        self.assertNotIn("install-node-official.sh", runner)
         self.assertNotIn("SMARTVIDEO_BUNDLED_PACKAGE", runner)
         self.assertNotIn("brew install", runner)
         self.assertNotIn("brew upgrade", runner)
@@ -256,7 +258,8 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
 
         install_doc = (PLUGIN_ROOT / "INSTALL.md").read_text(encoding="utf-8")
         self.assertIn("https://ffmpeg.org/download.html", install_doc)
-        self.assertIn("FFmpeg is also managed without Homebrew", install_doc)
+        self.assertIn("env configure", install_doc)
+        self.assertIn("There is no automatic winget", install_doc)
 
         node_installer = (PLUGIN_ROOT / "scripts" / "install-node-official.sh").read_text(
             encoding="utf-8"
@@ -284,28 +287,23 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             encoding="utf-8"
         )
         self.assertIn("invoke `upgrade` once", skill)
-        self.assertIn("independently versioned child packages", skill)
+        self.assertIn("pinned product npm packages", skill)
 
-    def test_windows_entrypoint_retains_host_bootstrap(self) -> None:
+    def test_windows_entrypoint_refreshes_paths_without_host_bootstrap(self) -> None:
         cmd = (PLUGIN_ROOT / "scripts" / "smart-video.cmd").read_text(encoding="utf-8")
         powershell = (PLUGIN_ROOT / "scripts" / "smart-video.ps1").read_text(encoding="utf-8")
         self.assertIn("-ExecutionPolicy Bypass", cmd)
         self.assertIn("smart-video.ps1", cmd)
-        self.assertIn('if ($action -in @("bootstrap", "install-deps", "upgrade"))', powershell)
-        self.assertIn("smart-video.cmd", powershell)
-        self.assertIn("smart-video.sh", powershell)
         for required in (
-            "Ensure-WindowsHostTools",
-            "Get-WindowsHostReport",
-            "Convert-ToGitBashPath",
-            "Git.Git",
-            "Python.Python.3.12",
-            "OpenJS.NodeJS.LTS",
-            "Gyan.FFmpeg",
-            "jqlang.jq",
-            "Google.Chrome",
+            "launcher.mjs",
+            "SMARTVIDEO_NODE_BINARY",
+            'GetEnvironmentVariable("Path", "User")',
+            'GetEnvironmentVariable("Path", "Machine")',
+            "existing_path",
         ):
             self.assertIn(required, powershell)
+        self.assertNotIn("winget", powershell)
+        self.assertNotIn("Ensure-WindowsHostTools", powershell)
 
     def test_uninstalled_doctor_is_read_only_machine_json(self) -> None:
         if platform.system() != "Darwin":
@@ -316,7 +314,7 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
         with tempfile.TemporaryDirectory(prefix="smartvideo-doctor-") as home:
             completed = subprocess.run(
                 ["bash", str(PLUGIN_ROOT / "scripts" / "smart-video.sh"), "doctor"],
-                env={**doctor_environment, "HOME": home},
+                env={**doctor_environment, "HOME": home, "SMARTVIDEO_HOME": home},
                 capture_output=True,
                 text=True,
                 timeout=30,
@@ -324,10 +322,10 @@ class SmartVideoCrossPlatformContractTests(unittest.TestCase):
             )
         self.assertEqual(completed.returncode, 0, completed.stderr)
         report = json.loads(completed.stdout)
-        self.assertEqual(report["status"], "dependencies_missing")
-        self.assertEqual(report["required"], "@joggai/smartvideo@0.1.14")
-        self.assertIn("bootstrap", report["bootstrap_command"])
-        self.assertIn("smart-video.sh", report["bootstrap_command"])
+        self.assertEqual(report["status"], "blocked")
+        self.assertEqual(report["error_code"], "product_runtime_missing")
+        self.assertEqual(report["required"], {"name": "@joggai/smartvideo", "version": "0.1.14"})
+        self.assertEqual(report["install_guidance"]["command"], "bootstrap")
 
     def test_release_has_no_developer_machine_paths_or_generated_data(self) -> None:
         forbidden = (b"cds-dn-137", b"/Documents/golang/", b"/Documents/jogg-skills/")

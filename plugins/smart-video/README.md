@@ -39,24 +39,25 @@ downloads and verifies the Presenter pack. No engine path is required from the
 user. Local generation becomes ready only after all three parts pass validation;
 otherwise the runtime returns `driver_unavailable` and does not start generation.
 
-Run `doctor`, then the returned `bootstrap` command. `preflight` starts the
+After installation, the installing Agent follows the bundled
+[new-chat handoff and usage guidance](skills/smart-video/references/post-install.md).
+For a real task, check only its required capability with `doctor --for <capability>`.
+Explain missing tools in chat and proceed with Agent preparation, reusing existing
+installations first. Do not present installation-mode choices or open Settings
+automatically.
+`bootstrap` installs only the pinned product packages. `preflight` starts the
 loopback service and returns a Settings URL only after `/health` and `/settings`
 are ready.
 
 After a plugin update, `upgrade` installs and verifies the new BOM-pinned package
 set before activation. Child packages do not need to share the aggregate package
 version, and the plugin never requires a private or bundled `npm/` directory.
-If the BOM raises the Node.js minimum, macOS and Linux download and checksum the
-matching official release from `nodejs.org` into the user-managed Smart Video
-home. Smart Video never invokes Homebrew. It reuses a compatible system Python
-and Chrome installation; when either is missing, bootstrap points to the
-official python.org or Google Chrome download instead of installing through a
-package manager.
-
-macOS FFmpeg setup follows the same managed-runtime principle. Smart Video
-downloads a pinned, checksum-verified static build from the macOS provider
-linked by `ffmpeg.org`, keeps it under the selected data root, and never invokes
-Homebrew for FFmpeg.
+Missing Node, Python, FFmpeg, Chrome, and local models return official preparation
+guidance. Register validated paths with `env configure` and recheck the original
+capability. Windows can use installed executables immediately with stale PATH.
+See [INSTALL.md](INSTALL.md) for preparation, platform limits, and coordinated release
+requirements. The published BOM must be updated after the compatible packages
+are released; older runtimes return `runtime_update_required`.
 
 ```bash
 bash "<plugin-root>/scripts/smart-video.sh" doctor

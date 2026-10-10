@@ -32,6 +32,8 @@
     }
   },
   "install_mode": "explicit_atomic_npm_bootstrap",
+  "environment_contract": "smartvideo_environment_v1",
+  "system_dependency_preparation": "user_selected_agent_or_manual",
   "distribution": {
     "mode": "npm_registry",
     "registry": "https://registry.npmjs.org/",

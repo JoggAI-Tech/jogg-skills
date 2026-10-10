@@ -50,7 +50,11 @@ load_default_env() {
 require_bin() {
   local bin_name=$1
   command -v "$bin_name" >/dev/null 2>&1 || {
-    jq -cn --arg error "missing required binary: $bin_name" '{error:$error}' >&2
+    case "$bin_name" in
+      jq) printf '%s\n' '{"status":"blocked","missing":["jq"],"install_guidance":{"official_url":"https://jqlang.org/download/","user_choices":["agent","manual","existing_path","skip"]}}' >&2 ;;
+      curl) printf '%s\n' '{"status":"blocked","missing":["curl"],"install_guidance":{"official_url":"https://curl.se/download.html","user_choices":["agent","manual","existing_path","skip"]}}' >&2 ;;
+      *) printf 'missing required command: %s\n' "$bin_name" >&2 ;;
+    esac
     exit 1
   }
 }

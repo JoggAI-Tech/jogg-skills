@@ -4,7 +4,7 @@
   "install_contract": "npm_managed",
   "runtime_bom": {
     "entry": "runtime-bom.json",
-    "sha256": "85df6815a1ffc03d9f4116fccbfe1c3f66467415edbf95e1db40bdd8251b9deb"
+    "sha256": "f216a398cf6f5e6830fab71272d6c68e85411443b873409669f2d8de238bbad0"
   },
   "npm_runtime": {
     "registry": "https://registry.npmjs.org/",
@@ -12,6 +12,7 @@
     "version": "0.1.14"
   },
   "plugin_runtime_files": [
+    "scripts/launcher.mjs",
     "scripts/smart-video.sh",
     "scripts/storage-paths.sh",
     "scripts/install-node-official.sh",
