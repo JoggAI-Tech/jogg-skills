@@ -1,6 +1,6 @@
 {
-  "name": "smart-video",
-  "version": "0.8.22+codex.20260916060107",
+  "name": "smart-video-beta",
+  "version": "0.8.23-beta.20261010.2",
   "description": "Create, edit, preview, and render long-form videos locally with Jogg assets.",
   "author": {
     "name": "JoggAI",
@@ -19,7 +19,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Smart Video",
+    "displayName": "Smart Video Beta",
     "shortDescription": "Build and render Jogg-powered videos locally.",
     "longDescription": "Runs the Smart Video editor and renderer locally, using Jogg for per-shot speech and selected avatar scenes plus optional Pexels or Pixabay B-roll.",
     "developerName": "JoggAI",

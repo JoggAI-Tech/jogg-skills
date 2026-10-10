@@ -54,6 +54,7 @@ function selectHome() {
 }
 
 try {
+  if (configIndex < 0 && !process.env.SMARTVIDEO_CONFIG && !process.env.SMARTVIDEO_HOME) process.env.SMARTVIDEO_HOME = path.join(homedir(), ".codex", "smartvideo-beta");
   const home = selectHome();
   const configPath = configIndex >= 0 ? path.resolve(args[configIndex + 1]) : process.env.SMARTVIDEO_CONFIG ? path.resolve(process.env.SMARTVIDEO_CONFIG) : path.join(home, "config.json");
   const config = existsSync(configPath) ? readJson(configPath) : {};

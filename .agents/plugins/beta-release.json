@@ -1,0 +1,76 @@
+{
+  "schema": "smartvideo_beta_release_v1",
+  "status": "published",
+  "dist_tag": "beta",
+  "git_branch": "beta",
+  "git_tag": "smart-video-v0.8.23-beta.20261010.2",
+  "plugin_name": "smart-video-beta",
+  "plugin_version": "0.8.23-beta.20261010.2",
+  "marketplace": "jogg-skills-beta",
+  "aggregate_version": "0.1.15-beta.20261010.2",
+  "packages": [
+    {
+      "name": "@joggai/smartvideo-cli",
+      "version": "0.0.8-beta.20261010.2",
+      "filename": "joggai-smartvideo-cli-0.0.8-beta.20261010.2.tgz",
+      "bytes": 69094221,
+      "integrity": "sha512-SG6Hrd3BDoY/Bd1l0rq8zco1HAcpiJJVuT16OW9F0qmET4FbIjr9tnkDLz66NTRbWLbuxq9BtPncwJ3Ge1MCwQ==",
+      "sha256": "67b3a2fb5e92955bd2ed7d461ea74d05ec11fb22ddb62d7b644aad0cc9dab649"
+    },
+    {
+      "name": "@joggai/smartvideo-speech",
+      "version": "0.1.1-beta.20261010.2",
+      "filename": "joggai-smartvideo-speech-0.1.1-beta.20261010.2.tgz",
+      "bytes": 7269,
+      "integrity": "sha512-QvH8xPjrZHuOVIC6isBIsEIVMpZEeTutEYBUIIioVzqNWRr+fcsGjevmkkGyPJWIeFggQGKv83bhB5FuuQuQGw==",
+      "sha256": "c93ef96e098a43e024efc0208b683bd2469b38398a9f345f723f925d576599e4"
+    },
+    {
+      "name": "@joggai/smartvideo-runtime",
+      "version": "0.1.12-beta.20261010.2",
+      "filename": "joggai-smartvideo-runtime-0.1.12-beta.20261010.2.tgz",
+      "bytes": 10441259,
+      "integrity": "sha512-aqRQ7RGZwgGgkXfNggWQkL7O3XCwi2MWAuzeZYn5qUR5IAXHJTc8ZjIurJKpiNNSPU9hwoY1DsQ3WJ4yrMh4IQ==",
+      "sha256": "82e07c3bb75a9a6c6cb74afcfb853f505232bd2446eac29727f9f652cac37588"
+    },
+    {
+      "name": "@joggai/smartvideo-renderer",
+      "version": "0.1.3-beta.20261010.2",
+      "filename": "joggai-smartvideo-renderer-0.1.3-beta.20261010.2.tgz",
+      "bytes": 1088,
+      "integrity": "sha512-kAMZX2D7hP79TMjX09vBc5VslpfYcp7/dZ+w+NtqtjGT4F3WAivBQmIv6cpcHjTcjFh8gmX4XTECGufdRlUOGA==",
+      "sha256": "ab2ff31b20c863b2fa8f478c9dc38ba072e04bfb6906c20625c8a86ded69a476"
+    },
+    {
+      "name": "@joggai/smartvideo",
+      "version": "0.1.15-beta.20261010.2",
+      "filename": "joggai-smartvideo-0.1.15-beta.20261010.2.tgz",
+      "bytes": 64070,
+      "integrity": "sha512-IL/FCjTYpcmTIAjwzTMR7l4TpuiyD67vgBpHkOIZHM0U+Bx5YG/nEHERfNlrZwVrtm+6lBD3TNlk8PdRLVKdKA==",
+      "sha256": "4b4243924b81fb9d0fe514e3af49172febab6a19ca075c0290028f5009cacb0a"
+    }
+  ],
+  "source_commits": {
+    "jogg-skills": "3d4c5d13fa7abad2f88b779126c27bc73f02d4ea",
+    "jogg-npm": "dd3f31af2424b51f4673ea8a99753a9d6da5ee9c",
+    "smartvideo": "169eba0dba33b9222fc7b16da8a3122c87a8b3d2"
+  },
+  "unchanged_dependencies": {
+    "@joggai/smartvideo-avatar": "0.1.3",
+    "@joggai/smartvideo-editor": "0.1.1",
+    "@joggai/smartvideo-registry": "0.1.0"
+  },
+  "limitations": [
+    "Native Windows speech execution and Intel macOS remain unverified.",
+    "Real Edge TTS and Whisper inference remain unverified.",
+    "Studio uses the existing checked-in editor distribution because baseline Studio source is incomplete.",
+    "Full Studio typecheck fails on baseline missing modules; extended HDR tests lack baseline image fixture. Renderer fallow audit reports unresolved findings; these commit hooks were excluded for this internal beta after lint/format passed."
+  ],
+  "installation": [
+    "codex plugin marketplace add JoggAI-Tech/jogg-skills --ref beta",
+    "codex plugin add smart-video-beta@jogg-skills-beta"
+  ],
+  "data_root": "~/.codex/smartvideo-beta",
+  "default_port": 51694,
+  "credentials": "separate macOS Keychain service and Windows DPAPI file"
+}

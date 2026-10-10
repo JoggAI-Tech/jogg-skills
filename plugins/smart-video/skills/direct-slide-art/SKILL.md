@@ -1,5 +1,5 @@
 ---
-name: direct-slide-art
+name: direct-slide-art-beta
 description: Create concise whole-video and per-slide art direction from a confirmed Smart Video Brief, script, Communication Intent, and Visual Intent. Use inside the Smart Video workflow after Storyboard confirmation and before UI UX Pro Max adaptation or Slide authoring. Do not use for semantic planning, HTML implementation, B-roll, Avatar, audio, timeline assembly, or rendering.
 ---
 

@@ -3,7 +3,7 @@ param([Parameter(ValueFromRemainingArguments = $true)][string[]]$PassThruArgs)
 Set-StrictMode -Version Latest
 $ErrorActionPreference = "Stop"
 
-$selectedHome = if ($env:SMARTVIDEO_HOME) { $env:SMARTVIDEO_HOME } else { Join-Path $env:USERPROFILE ".codex\smartvideo" }
+$selectedHome = if ($env:SMARTVIDEO_HOME) { $env:SMARTVIDEO_HOME } else { Join-Path $env:USERPROFILE ".codex\smartvideo-beta" }
 $configPath = Join-Path $selectedHome "config.json"
 for ($index = 0; $index -lt $PassThruArgs.Count; $index++) {
     if ($PassThruArgs[$index] -eq "--config" -and $index + 1 -lt $PassThruArgs.Count) { $configPath = $PassThruArgs[$index + 1]; break }
